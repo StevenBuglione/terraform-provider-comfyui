@@ -34,16 +34,18 @@ type workspaceResourceModel struct {
 	Name          types.String             `tfsdk:"name"`
 	Workflows     []workspaceWorkflowModel `tfsdk:"workflows"`
 	Layout        workspaceLayoutModel     `tfsdk:"layout"`
+	NodeLayout    workspaceNodeLayoutModel `tfsdk:"node_layout"`
 	OutputFile    types.String             `tfsdk:"output_file"`
 	WorkspaceJSON types.String             `tfsdk:"workspace_json"`
 	WorkflowCount types.Int64              `tfsdk:"workflow_count"`
 }
 
 type workspaceWorkflowModel struct {
-	Name         types.String  `tfsdk:"name"`
-	WorkflowJSON types.String  `tfsdk:"workflow_json"`
-	X            types.Float64 `tfsdk:"x"`
-	Y            types.Float64 `tfsdk:"y"`
+	Name         types.String                `tfsdk:"name"`
+	WorkflowJSON types.String                `tfsdk:"workflow_json"`
+	X            types.Float64               `tfsdk:"x"`
+	Y            types.Float64               `tfsdk:"y"`
+	Style        workspaceWorkflowStyleModel `tfsdk:"style"`
 }
 
 type workspaceLayoutModel struct {
@@ -55,6 +57,18 @@ type workspaceLayoutModel struct {
 	OriginY   types.Float64 `tfsdk:"origin_y"`
 }
 
+type workspaceWorkflowStyleModel struct {
+	GroupColor    types.String `tfsdk:"group_color"`
+	TitleFontSize types.Int64  `tfsdk:"title_font_size"`
+}
+
+type workspaceNodeLayoutModel struct {
+	Mode      types.String  `tfsdk:"mode"`
+	Direction types.String  `tfsdk:"direction"`
+	ColumnGap types.Float64 `tfsdk:"column_gap"`
+	RowGap    types.Float64 `tfsdk:"row_gap"`
+}
+
 type workspaceLayoutConfig struct {
 	Display   string
 	Direction string
@@ -62,6 +76,18 @@ type workspaceLayoutConfig struct {
 	Columns   int64
 	OriginX   float64
 	OriginY   float64
+}
+
+type workspaceWorkflowStyleConfig struct {
+	GroupColor    string
+	TitleFontSize int
+}
+
+type workspaceNodeLayoutConfig struct {
+	Mode      string
+	Direction string
+	ColumnGap float64
+	RowGap    float64
 }
 
 func NewWorkspaceResource() resource.Resource {
@@ -111,6 +137,20 @@ func (r *WorkspaceResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 							Optional:    true,
 							Description: "Optional absolute Y position override for this workflow island.",
 						},
+						"style": schema.SingleNestedAttribute{
+							Optional:    true,
+							Description: "Optional visual styling for this workflow island.",
+							Attributes: map[string]schema.Attribute{
+								"group_color": schema.StringAttribute{
+									Optional:    true,
+									Description: "Optional group color used when rendering the workflow island.",
+								},
+								"title_font_size": schema.Int64Attribute{
+									Optional:    true,
+									Description: "Optional title font size used when rendering the workflow island.",
+								},
+							},
+						},
 					},
 				},
 			},
@@ -141,6 +181,28 @@ func (r *WorkspaceResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 					"origin_y": schema.Float64Attribute{
 						Optional:    true,
 						Description: "Canvas origin offset on the Y axis.",
+					},
+				},
+			},
+			"node_layout": schema.SingleNestedAttribute{
+				Optional:    true,
+				Description: "Node readability controls applied to workflow nodes before builder layout is added.",
+				Attributes: map[string]schema.Attribute{
+					"mode": schema.StringAttribute{
+						Optional:    true,
+						Description: "Node layout mode. v1 supports dag only.",
+					},
+					"direction": schema.StringAttribute{
+						Optional:    true,
+						Description: "Node layout direction. v1 supports left_to_right only.",
+					},
+					"column_gap": schema.Float64Attribute{
+						Optional:    true,
+						Description: "Horizontal gap between nodes.",
+					},
+					"row_gap": schema.Float64Attribute{
+						Optional:    true,
+						Description: "Vertical gap between nodes.",
 					},
 				},
 			},
@@ -289,6 +351,10 @@ func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspace
 		return "", nil, workspaceLayoutConfig{}, fmt.Errorf("name must be provided")
 	}
 
+	if _, err := workspaceNodeLayoutConfigFromModel(model.NodeLayout); err != nil {
+		return "", nil, workspaceLayoutConfig{}, err
+	}
+
 	layout := workspaceLayoutConfig{
 		Display:   stringValue(model.Layout.Display),
 		Direction: stringValue(model.Layout.Direction),
@@ -310,6 +376,8 @@ func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspace
 			return "", nil, workspaceLayoutConfig{}, fmt.Errorf("workflow %q must include workflow_json", workflow.Name.ValueString())
 		}
 
+		_ = workspaceWorkflowStyleConfigFromModel(workflow.Style)
+
 		spec := workspaceWorkflowSpec{
 			Name:         workflow.Name.ValueString(),
 			WorkflowJSON: workflow.WorkflowJSON.ValueString(),
@@ -326,6 +394,43 @@ func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspace
 	}
 
 	return model.Name.ValueString(), specs, layout, nil
+}
+
+func workspaceWorkflowStyleConfigFromModel(model workspaceWorkflowStyleModel) workspaceWorkflowStyleConfig {
+	cfg := workspaceWorkflowStyleConfig{}
+	if !model.GroupColor.IsNull() && !model.GroupColor.IsUnknown() {
+		cfg.GroupColor = model.GroupColor.ValueString()
+	}
+	if !model.TitleFontSize.IsNull() && !model.TitleFontSize.IsUnknown() {
+		cfg.TitleFontSize = int(model.TitleFontSize.ValueInt64())
+	}
+	return cfg
+}
+
+func workspaceNodeLayoutConfigFromModel(model workspaceNodeLayoutModel) (workspaceNodeLayoutConfig, error) {
+	cfg := workspaceNodeLayoutConfig{
+		Mode:      "dag",
+		Direction: "left_to_right",
+	}
+
+	if !model.Mode.IsNull() && !model.Mode.IsUnknown() {
+		if mode := model.Mode.ValueString(); mode != "dag" {
+			return workspaceNodeLayoutConfig{}, fmt.Errorf("node_layout.mode must be dag")
+		}
+	}
+	if !model.Direction.IsNull() && !model.Direction.IsUnknown() {
+		if direction := model.Direction.ValueString(); direction != "left_to_right" {
+			return workspaceNodeLayoutConfig{}, fmt.Errorf("node_layout.direction must be left_to_right")
+		}
+	}
+	if !model.ColumnGap.IsNull() && !model.ColumnGap.IsUnknown() {
+		cfg.ColumnGap = model.ColumnGap.ValueFloat64()
+	}
+	if !model.RowGap.IsNull() && !model.RowGap.IsUnknown() {
+		cfg.RowGap = model.RowGap.ValueFloat64()
+	}
+
+	return cfg, nil
 }
 
 func validateWorkspaceLayout(layout workspaceLayoutConfig) error {
