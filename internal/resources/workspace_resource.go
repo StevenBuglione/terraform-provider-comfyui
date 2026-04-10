@@ -30,22 +30,22 @@ type WorkspaceResource struct {
 }
 
 type workspaceResourceModel struct {
-	ID            types.String             `tfsdk:"id"`
-	Name          types.String             `tfsdk:"name"`
-	Workflows     []workspaceWorkflowModel `tfsdk:"workflows"`
-	Layout        workspaceLayoutModel     `tfsdk:"layout"`
-	NodeLayout    workspaceNodeLayoutModel `tfsdk:"node_layout"`
-	OutputFile    types.String             `tfsdk:"output_file"`
-	WorkspaceJSON types.String             `tfsdk:"workspace_json"`
-	WorkflowCount types.Int64              `tfsdk:"workflow_count"`
+	ID            types.String              `tfsdk:"id"`
+	Name          types.String              `tfsdk:"name"`
+	Workflows     []workspaceWorkflowModel  `tfsdk:"workflows"`
+	Layout        workspaceLayoutModel      `tfsdk:"layout"`
+	NodeLayout    *workspaceNodeLayoutModel `tfsdk:"node_layout"`
+	OutputFile    types.String              `tfsdk:"output_file"`
+	WorkspaceJSON types.String              `tfsdk:"workspace_json"`
+	WorkflowCount types.Int64               `tfsdk:"workflow_count"`
 }
 
 type workspaceWorkflowModel struct {
-	Name         types.String                `tfsdk:"name"`
-	WorkflowJSON types.String                `tfsdk:"workflow_json"`
-	X            types.Float64               `tfsdk:"x"`
-	Y            types.Float64               `tfsdk:"y"`
-	Style        workspaceWorkflowStyleModel `tfsdk:"style"`
+	Name         types.String                 `tfsdk:"name"`
+	WorkflowJSON types.String                 `tfsdk:"workflow_json"`
+	X            types.Float64                `tfsdk:"x"`
+	Y            types.Float64                `tfsdk:"y"`
+	Style        *workspaceWorkflowStyleModel `tfsdk:"style"`
 }
 
 type workspaceLayoutModel struct {
@@ -396,8 +396,11 @@ func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspace
 	return model.Name.ValueString(), specs, layout, nodeLayout, nil
 }
 
-func workspaceWorkflowStyleConfigFromModel(model workspaceWorkflowStyleModel) workspaceWorkflowStyleConfig {
+func workspaceWorkflowStyleConfigFromModel(model *workspaceWorkflowStyleModel) workspaceWorkflowStyleConfig {
 	cfg := workspaceWorkflowStyleConfig{}
+	if model == nil {
+		return cfg
+	}
 	if !model.GroupColor.IsNull() && !model.GroupColor.IsUnknown() {
 		cfg.GroupColor = model.GroupColor.ValueString()
 	}
@@ -407,10 +410,14 @@ func workspaceWorkflowStyleConfigFromModel(model workspaceWorkflowStyleModel) wo
 	return cfg
 }
 
-func workspaceNodeLayoutConfigFromModel(model workspaceNodeLayoutModel) (workspaceNodeLayoutConfig, error) {
+func workspaceNodeLayoutConfigFromModel(model *workspaceNodeLayoutModel) (workspaceNodeLayoutConfig, error) {
 	cfg := workspaceNodeLayoutConfig{
 		Mode:      "dag",
 		Direction: "left_to_right",
+	}
+
+	if model == nil {
+		return cfg, nil
 	}
 
 	if !model.Mode.IsNull() && !model.Mode.IsUnknown() {

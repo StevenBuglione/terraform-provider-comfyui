@@ -30,7 +30,7 @@ func TestWorkspaceConfigFromModelBuildsSpecs(t *testing.T) {
 				Name:         types.StringValue("workflow-a"),
 				WorkflowJSON: types.StringValue(`{"1":{"class_type":"SourceNode","inputs":{"text":"hello"}}}`),
 				X:            types.Float64Value(25),
-				Style: workspaceWorkflowStyleModel{
+				Style: &workspaceWorkflowStyleModel{
 					GroupColor:    types.StringValue("#aabbcc"),
 					TitleFontSize: types.Int64Value(18),
 				},
@@ -42,7 +42,7 @@ func TestWorkspaceConfigFromModelBuildsSpecs(t *testing.T) {
 			OriginX: types.Float64Value(50),
 			OriginY: types.Float64Value(75),
 		},
-		NodeLayout: workspaceNodeLayoutModel{
+		NodeLayout: &workspaceNodeLayoutModel{
 			ColumnGap: types.Float64Value(80),
 			RowGap:    types.Float64Value(40),
 		},
@@ -83,7 +83,7 @@ func TestWorkspaceConfigFromModelBuildsSpecs(t *testing.T) {
 }
 
 func TestWorkspaceResourceWorkflowStyleConfigFromModel(t *testing.T) {
-	cfg := workspaceWorkflowStyleConfigFromModel(workspaceWorkflowStyleModel{
+	cfg := workspaceWorkflowStyleConfigFromModel(&workspaceWorkflowStyleModel{
 		GroupColor:    types.StringValue("#112233"),
 		TitleFontSize: types.Int64Value(24),
 	})
@@ -97,7 +97,7 @@ func TestWorkspaceResourceWorkflowStyleConfigFromModel(t *testing.T) {
 }
 
 func TestWorkspaceResourceNodeLayoutConfigFromModelDefaultsAndValidation(t *testing.T) {
-	cfg, err := workspaceNodeLayoutConfigFromModel(workspaceNodeLayoutModel{})
+	cfg, err := workspaceNodeLayoutConfigFromModel(&workspaceNodeLayoutModel{})
 	if err != nil {
 		t.Fatalf("workspaceNodeLayoutConfigFromModel returned error: %v", err)
 	}
@@ -108,7 +108,7 @@ func TestWorkspaceResourceNodeLayoutConfigFromModelDefaultsAndValidation(t *test
 		t.Fatalf("expected default direction %q, got %q", "left_to_right", cfg.Direction)
 	}
 
-	cfg, err = workspaceNodeLayoutConfigFromModel(workspaceNodeLayoutModel{
+	cfg, err = workspaceNodeLayoutConfigFromModel(&workspaceNodeLayoutModel{
 		ColumnGap: types.Float64Value(64),
 		RowGap:    types.Float64Value(32),
 	})
@@ -119,13 +119,13 @@ func TestWorkspaceResourceNodeLayoutConfigFromModelDefaultsAndValidation(t *test
 		t.Fatalf("unexpected node layout config: %+v", cfg)
 	}
 
-	if _, err := workspaceNodeLayoutConfigFromModel(workspaceNodeLayoutModel{
+	if _, err := workspaceNodeLayoutConfigFromModel(&workspaceNodeLayoutModel{
 		Mode: types.StringValue("grid"),
 	}); err == nil || err.Error() != "node_layout.mode must be dag" {
 		t.Fatalf("expected node_layout.mode error, got %v", err)
 	}
 
-	if _, err := workspaceNodeLayoutConfigFromModel(workspaceNodeLayoutModel{
+	if _, err := workspaceNodeLayoutConfigFromModel(&workspaceNodeLayoutModel{
 		Direction: types.StringValue("right_to_left"),
 	}); err == nil || err.Error() != "node_layout.direction must be left_to_right" {
 		t.Fatalf("expected node_layout.direction error, got %v", err)
@@ -266,5 +266,88 @@ func TestValidateWorkspaceLayoutRejectsInvalidCombinations(t *testing.T) {
 		if _, ok := layoutAttr.Attributes[attrName]; !ok {
 			t.Fatalf("expected layout schema to include %q", attrName)
 		}
+	}
+}
+
+// Regression test for omitted optional nested attributes (workflows[].style and node_layout)
+func TestWorkspaceConfigFromModelHandlesOmittedOptionalNestedAttrs(t *testing.T) {
+	model := workspaceResourceModel{
+		Name: types.StringValue("minimal-workspace"),
+		Workflows: []workspaceWorkflowModel{
+			{
+				Name:         types.StringValue("workflow-no-style"),
+				WorkflowJSON: types.StringValue(`{"1":{"class_type":"SourceNode"}}`),
+				Style:        nil, // Omitted style nested attribute
+			},
+		},
+		Layout: workspaceLayoutModel{
+			Display: types.StringValue("flex"),
+		},
+		NodeLayout: nil, // Omitted node_layout nested attribute
+	}
+
+	name, specs, layout, nodeLayout, err := workspaceConfigFromModel(model)
+	if err != nil {
+		t.Fatalf("workspaceConfigFromModel returned error: %v", err)
+	}
+
+	if name != "minimal-workspace" {
+		t.Fatalf("expected workspace name %q, got %q", "minimal-workspace", name)
+	}
+	if len(specs) != 1 {
+		t.Fatalf("expected 1 workflow spec, got %d", len(specs))
+	}
+
+	// Verify nil style results in empty config (defaults)
+	if specs[0].Style.GroupColor != "" {
+		t.Fatalf("expected empty group_color for nil style, got %q", specs[0].Style.GroupColor)
+	}
+	if specs[0].Style.TitleFontSize != 0 {
+		t.Fatalf("expected zero title_font_size for nil style, got %d", specs[0].Style.TitleFontSize)
+	}
+
+	// Verify nil node_layout results in default config
+	if nodeLayout.Mode != "dag" {
+		t.Fatalf("expected default mode %q for nil node_layout, got %q", "dag", nodeLayout.Mode)
+	}
+	if nodeLayout.Direction != "left_to_right" {
+		t.Fatalf("expected default direction %q for nil node_layout, got %q", "left_to_right", nodeLayout.Direction)
+	}
+	if nodeLayout.ColumnGap != 0 || nodeLayout.RowGap != 0 {
+		t.Fatalf("expected zero gaps for nil node_layout, got %f/%f", nodeLayout.ColumnGap, nodeLayout.RowGap)
+	}
+
+	if layout.Display != "flex" {
+		t.Fatalf("expected display %q, got %q", "flex", layout.Display)
+	}
+}
+
+// Regression test: workspaceWorkflowStyleConfigFromModel with nil input
+func TestWorkspaceWorkflowStyleConfigFromModelNil(t *testing.T) {
+	cfg := workspaceWorkflowStyleConfigFromModel(nil)
+
+	if cfg.GroupColor != "" {
+		t.Fatalf("expected empty group_color for nil model, got %q", cfg.GroupColor)
+	}
+	if cfg.TitleFontSize != 0 {
+		t.Fatalf("expected zero title_font_size for nil model, got %d", cfg.TitleFontSize)
+	}
+}
+
+// Regression test: workspaceNodeLayoutConfigFromModel with nil input
+func TestWorkspaceNodeLayoutConfigFromModelNil(t *testing.T) {
+	cfg, err := workspaceNodeLayoutConfigFromModel(nil)
+	if err != nil {
+		t.Fatalf("workspaceNodeLayoutConfigFromModel(nil) returned error: %v", err)
+	}
+
+	if cfg.Mode != "dag" {
+		t.Fatalf("expected default mode %q for nil model, got %q", "dag", cfg.Mode)
+	}
+	if cfg.Direction != "left_to_right" {
+		t.Fatalf("expected default direction %q for nil model, got %q", "left_to_right", cfg.Direction)
+	}
+	if cfg.ColumnGap != 0 || cfg.RowGap != 0 {
+		t.Fatalf("expected zero gaps for nil model, got %f/%f", cfg.ColumnGap, cfg.RowGap)
 	}
 }
