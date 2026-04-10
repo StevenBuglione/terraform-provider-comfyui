@@ -17,6 +17,7 @@ override.tf.json
 # IDE
 .idea/
 .vscode/
+.worktrees/
 *.swp
 *.swo
 *~
