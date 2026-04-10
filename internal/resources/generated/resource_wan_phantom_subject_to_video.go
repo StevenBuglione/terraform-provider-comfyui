@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -144,6 +145,11 @@ func (r *WanPhantomSubjectToVideoResource) Create(ctx context.Context, req resou
 	data.NegativeImgTextOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 	data.LatentOutput = types.StringValue(fmt.Sprintf("%s:3", data.ID.ValueString()))
 
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -162,9 +168,21 @@ func (r *WanPhantomSubjectToVideoResource) Update(ctx context.Context, req resou
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *WanPhantomSubjectToVideoResource) Delete(_ context.Context, _ resource.DeleteRequest, _ *resource.DeleteResponse) {
-	// Virtual resource — no server-side state to delete.
+func (r *WanPhantomSubjectToVideoResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data WanPhantomSubjectToVideoModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.DeleteNodeState(data.ID.ValueString())
 }

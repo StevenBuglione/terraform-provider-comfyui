@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -185,6 +186,11 @@ func (r *GeminiNanoBanana2Resource) Create(ctx context.Context, req resource.Cre
 	data.StringOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 	data.ThoughtImageOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -203,9 +209,21 @@ func (r *GeminiNanoBanana2Resource) Update(ctx context.Context, req resource.Upd
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *GeminiNanoBanana2Resource) Delete(_ context.Context, _ resource.DeleteRequest, _ *resource.DeleteResponse) {
-	// Virtual resource — no server-side state to delete.
+func (r *GeminiNanoBanana2Resource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data GeminiNanoBanana2Model
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.DeleteNodeState(data.ID.ValueString())
 }

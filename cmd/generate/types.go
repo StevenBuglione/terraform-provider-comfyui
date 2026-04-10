@@ -63,6 +63,16 @@ func clampInt64(v float64) int64 {
 
 var nonAlphanumRe = regexp.MustCompile(`[^a-zA-Z0-9]+`)
 
+var terraformReservedRootNames = map[string]bool{
+	"count":       true,
+	"for_each":    true,
+	"depends_on":  true,
+	"lifecycle":   true,
+	"provider":    true,
+	"provisioner": true,
+	"connection":  true,
+}
+
 // sanitizeName converts any input name to a valid Go/Terraform snake_case identifier.
 func sanitizeName(name string) string {
 	// Replace non-alphanumeric chars with underscores
@@ -77,6 +87,9 @@ func sanitizeName(name string) string {
 	}
 	if s == "" {
 		s = "unnamed"
+	}
+	if terraformReservedRootNames[s] {
+		s += "_value"
 	}
 	return s
 }

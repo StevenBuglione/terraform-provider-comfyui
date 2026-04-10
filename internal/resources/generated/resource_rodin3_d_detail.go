@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -86,6 +87,11 @@ func (r *Rodin3DDetailResource) Create(ctx context.Context, req resource.CreateR
 	data.X3dModelPathOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.GlbOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -104,9 +110,21 @@ func (r *Rodin3DDetailResource) Update(ctx context.Context, req resource.UpdateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *Rodin3DDetailResource) Delete(_ context.Context, _ resource.DeleteRequest, _ *resource.DeleteResponse) {
-	// Virtual resource — no server-side state to delete.
+func (r *Rodin3DDetailResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data Rodin3DDetailModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.DeleteNodeState(data.ID.ValueString())
 }

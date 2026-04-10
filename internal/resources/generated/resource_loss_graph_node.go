@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -72,6 +73,11 @@ func (r *LossGraphNodeResource) Create(ctx context.Context, req resource.CreateR
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("LossGraphNode")
 
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -90,9 +96,21 @@ func (r *LossGraphNodeResource) Update(ctx context.Context, req resource.UpdateR
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *LossGraphNodeResource) Delete(_ context.Context, _ resource.DeleteRequest, _ *resource.DeleteResponse) {
-	// Virtual resource — no server-side state to delete.
+func (r *LossGraphNodeResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data LossGraphNodeModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.DeleteNodeState(data.ID.ValueString())
 }

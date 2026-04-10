@@ -50,6 +50,8 @@ func TestSanitizeName(t *testing.T) {
 		{"", "unnamed"},
 		{"a.b.c", "a_b_c"},
 		{"already_clean", "already_clean"},
+		{"count", "count_value"},
+		{"for_each", "for_each_value"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {

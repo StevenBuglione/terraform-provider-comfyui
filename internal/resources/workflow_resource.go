@@ -175,9 +175,9 @@ func (r *WorkflowResource) Create(ctx context.Context, req resource.CreateReques
 	data.ID = types.StringValue(uuid.New().String())
 
 	// Parse the workflow JSON
-	prompt, diags := r.parseWorkflow(ctx, data)
-	if diags {
-		resp.Diagnostics.AddError("Invalid Workflow", "workflow_json must be provided with a valid JSON object")
+	prompt, err := r.parseWorkflow(ctx, data)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid Workflow", err.Error())
 		return
 	}
 
@@ -246,9 +246,9 @@ func (r *WorkflowResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
-	prompt, diags := r.parseWorkflow(ctx, data)
-	if diags {
-		resp.Diagnostics.AddError("Invalid Workflow", "workflow_json must be provided with a valid JSON object")
+	prompt, err := r.parseWorkflow(ctx, data)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid Workflow", err.Error())
 		return
 	}
 
@@ -298,23 +298,37 @@ func (r *WorkflowResource) Delete(ctx context.Context, req resource.DeleteReques
 	}
 }
 
-// parseWorkflow extracts the prompt map from workflow_json.
-// Returns (prompt, hadError).
-func (r *WorkflowResource) parseWorkflow(_ context.Context, data WorkflowModel) (map[string]interface{}, bool) {
-	if data.WorkflowJSON.IsNull() || data.WorkflowJSON.IsUnknown() || data.WorkflowJSON.ValueString() == "" {
-		return nil, true
+// parseWorkflow extracts the prompt map from workflow_json or assembles it
+// from registered virtual node resources referenced by node_ids.
+func (r *WorkflowResource) parseWorkflow(ctx context.Context, data WorkflowModel) (map[string]interface{}, error) {
+	if !data.WorkflowJSON.IsNull() && !data.WorkflowJSON.IsUnknown() && data.WorkflowJSON.ValueString() != "" {
+		var prompt map[string]interface{}
+		if err := json.Unmarshal([]byte(data.WorkflowJSON.ValueString()), &prompt); err != nil {
+			return nil, fmt.Errorf("workflow_json must be valid JSON: %w", err)
+		}
+
+		if len(prompt) == 0 {
+			return nil, fmt.Errorf("workflow_json must contain at least one node")
+		}
+
+		return prompt, nil
 	}
 
-	var prompt map[string]interface{}
-	if err := json.Unmarshal([]byte(data.WorkflowJSON.ValueString()), &prompt); err != nil {
-		return nil, true
+	if data.NodeIDs.IsNull() || data.NodeIDs.IsUnknown() {
+		return nil, fmt.Errorf("either workflow_json or node_ids must be provided")
 	}
 
-	if len(prompt) == 0 {
-		return nil, true
+	nodeIDs, diags := listValueToStrings(ctx, data.NodeIDs)
+	if diags.HasError() {
+		return nil, fmt.Errorf("node_ids must be a list of strings")
 	}
 
-	return prompt, false
+	assembled, err := AssembleWorkflowFromNodeIDs(nodeIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	return assembled.Prompt, nil
 }
 
 // executeWorkflow queues the prompt and optionally waits for completion.

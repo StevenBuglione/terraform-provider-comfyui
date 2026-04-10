@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -29,7 +30,7 @@ type RegexReplaceModel struct {
 	CaseInsensitive types.Bool   `tfsdk:"case_insensitive"`
 	Multiline       types.Bool   `tfsdk:"multiline"`
 	Dotall          types.Bool   `tfsdk:"dotall"`
-	Count           types.Int64  `tfsdk:"count"`
+	CountValue      types.Int64  `tfsdk:"count_value"`
 	StringOutput    types.String `tfsdk:"string_output"`
 }
 
@@ -83,7 +84,7 @@ func (r *RegexReplaceResource) Schema(_ context.Context, _ resource.SchemaReques
 				Description: "Input: BOOLEAN default: false",
 				Optional:    true,
 			},
-			"count": schema.Int64Attribute{
+			"count_value": schema.Int64Attribute{
 				Description: "Input: INT default: 0",
 				Optional:    true,
 				Validators: []validator.Int64{
@@ -112,6 +113,11 @@ func (r *RegexReplaceResource) Create(ctx context.Context, req resource.CreateRe
 	data.NodeID = types.StringValue("RegexReplace")
 	data.StringOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -130,9 +136,21 @@ func (r *RegexReplaceResource) Update(ctx context.Context, req resource.UpdateRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
+
+	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+		resp.Diagnostics.AddError("Failed to register node state", err.Error())
+		return
+	}
+
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *RegexReplaceResource) Delete(_ context.Context, _ resource.DeleteRequest, _ *resource.DeleteResponse) {
-	// Virtual resource — no server-side state to delete.
+func (r *RegexReplaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var data RegexReplaceModel
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.DeleteNodeState(data.ID.ValueString())
 }
