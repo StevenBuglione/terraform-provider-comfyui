@@ -11,14 +11,12 @@ resource "comfyui_workspace" "fixture" {
   name        = each.value.name
   output_file = "${path.module}/artifacts/generated/${each.key}.json"
   layout      = each.value.layout
-  node_layout = {}
 
   workflows = [
     for workflow_name in each.value.members : merge(
       {
         name          = title(replace(workflow_name, "_", " "))
         workflow_json = comfyui_workflow.fixture[workflow_name].assembled_json
-        style         = {}
       },
       lookup(lookup(each.value, "overrides", {}), workflow_name, {})
     )
@@ -38,7 +36,6 @@ resource "comfyui_workspace" "fixture_with_node_layout" {
       {
         name          = title(replace(workflow_name, "_", " "))
         workflow_json = comfyui_workflow.fixture[workflow_name].assembled_json
-        style         = {}
       },
       lookup(lookup(each.value, "overrides", {}), workflow_name, {})
     )

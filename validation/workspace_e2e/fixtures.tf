@@ -428,7 +428,7 @@ locals {
       }
       "2" = {
         class_type = "CLIPTextEncode"
-        inputs     = { text = "shared root prompt", clip = ["1", 1] }
+        inputs     = { text = "shared root prompt, cinematic lighting", clip = ["1", 1] }
       }
       "3" = {
         class_type = "CLIPTextEncode"
@@ -447,77 +447,43 @@ locals {
         inputs     = { text = "generic negative", clip = ["1", 1] }
       }
       "7" = {
+        class_type = "ConditioningCombine"
+        inputs     = { conditioning_1 = ["2", 0], conditioning_2 = ["3", 0] }
+      }
+      "8" = {
+        class_type = "ConditioningCombine"
+        inputs     = { conditioning_1 = ["7", 0], conditioning_2 = ["4", 0] }
+      }
+      "9" = {
+        class_type = "ConditioningCombine"
+        inputs     = { conditioning_1 = ["8", 0], conditioning_2 = ["5", 0] }
+      }
+      "10" = {
         class_type = "EmptyLatentImage"
         inputs     = { width = 512, height = 512, batch_size = 1 }
       }
-      "8" = {
+      "11" = {
         class_type = "KSampler"
         inputs = {
           model        = ["1", 0]
           seed         = 1111
-          steps        = 20
+          steps        = 24
           cfg          = 7.5
           sampler_name = "euler"
           scheduler    = "normal"
-          positive     = ["3", 0]
+          positive     = ["9", 0]
           negative     = ["6", 0]
-          latent_image = ["7", 0]
+          latent_image = ["10", 0]
           denoise      = 1.0
         }
-      }
-      "9" = {
-        class_type = "KSampler"
-        inputs = {
-          model        = ["1", 0]
-          seed         = 2222
-          steps        = 22
-          cfg          = 7.0
-          sampler_name = "euler"
-          scheduler    = "normal"
-          positive     = ["4", 0]
-          negative     = ["6", 0]
-          latent_image = ["7", 0]
-          denoise      = 1.0
-        }
-      }
-      "10" = {
-        class_type = "KSampler"
-        inputs = {
-          model        = ["1", 0]
-          seed         = 3333
-          steps        = 24
-          cfg          = 6.5
-          sampler_name = "euler"
-          scheduler    = "normal"
-          positive     = ["5", 0]
-          negative     = ["6", 0]
-          latent_image = ["7", 0]
-          denoise      = 1.0
-        }
-      }
-      "11" = {
-        class_type = "VAEDecode"
-        inputs     = { samples = ["8", 0], vae = ["1", 2] }
       }
       "12" = {
         class_type = "VAEDecode"
-        inputs     = { samples = ["9", 0], vae = ["1", 2] }
+        inputs     = { samples = ["11", 0], vae = ["1", 2] }
       }
       "13" = {
-        class_type = "VAEDecode"
-        inputs     = { samples = ["10", 0], vae = ["1", 2] }
-      }
-      "14" = {
         class_type = "SaveImage"
-        inputs     = { images = ["11", 0], filename_prefix = "triple_branch_A" }
-      }
-      "15" = {
-        class_type = "SaveImage"
-        inputs     = { images = ["12", 0], filename_prefix = "triple_branch_B" }
-      }
-      "16" = {
-        class_type = "SaveImage"
-        inputs     = { images = ["13", 0], filename_prefix = "triple_branch_C" }
+        inputs     = { images = ["12", 0], filename_prefix = "triple_branch_merge" }
       }
     }
   }
