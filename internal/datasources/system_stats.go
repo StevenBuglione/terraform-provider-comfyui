@@ -18,10 +18,10 @@ type SystemStatsDataSource struct {
 }
 
 type SystemStatsModel struct {
-	OS             types.String `tfsdk:"os"`
-	PythonVersion  types.String `tfsdk:"python_version"`
-	ComfyUIVersion types.String `tfsdk:"comfyui_version"`
-	EmbeddedPython types.Bool   `tfsdk:"embedded_python"`
+	OS             types.String  `tfsdk:"os"`
+	PythonVersion  types.String  `tfsdk:"python_version"`
+	ComfyUIVersion types.String  `tfsdk:"comfyui_version"`
+	EmbeddedPython types.Bool    `tfsdk:"embedded_python"`
 	Devices        []DeviceModel `tfsdk:"devices"`
 }
 

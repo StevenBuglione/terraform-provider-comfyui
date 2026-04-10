@@ -158,7 +158,8 @@ make testacc                # or: TF_ACC=1 go test ./... -v -timeout 120m
 python3 -m pytest scripts/extract/test_extractors.py -v
 
 # Regenerate node resources from node_specs.json
-make generate               # or: go generate ./...
+make generate               # or: go run ./cmd/generate
+make docs                   # or: go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name comfyui
 
 # Install locally for development
 make install
@@ -166,7 +167,11 @@ make install
 # Lint / format / vet
 make lint                   # golangci-lint run ./...
 make fmt                    # gofmt -s -w .
+make fmt-check              # fail if tracked Go files are unformatted
+make tidy                   # go mod tidy
 make vet                    # go vet ./...
+make verify                 # fmt-check + generate + vet + lint + test
+make hooks-install          # install pinned lefthook hooks locally
 
 # Clean build artifacts
 make clean
@@ -190,7 +195,10 @@ ComfyUI source (third_party/ComfyUI/)
               └─→ internal/resources/generated/registry.go    (AllResources() function)
 ```
 
-**Trigger**: `go generate ./...` (via `generate.go` directive) runs `cmd/generate`.
+**Triggers**:
+- `make generate` runs only the Go resource generator (`cmd/generate`)
+- `make docs` runs `tfplugindocs`
+- `go generate ./...` runs both via `generate.go`
 
 ## How to Add/Update Nodes
 

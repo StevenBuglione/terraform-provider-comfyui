@@ -1,0 +1,25 @@
+output:
+  - execution
+  - failure
+
+pre-commit:
+  commands:
+    format-go:
+      run: bash scripts/hooks/format_staged_go.sh
+    tidy-go-mod:
+      run: bash scripts/hooks/tidy_go_mod.sh
+    generate-resources:
+      run: bash scripts/hooks/generate_if_needed.sh
+
+pre-push:
+  commands:
+    verify-format:
+      run: bash scripts/hooks/verify_format_clean.sh
+    verify-generated:
+      run: bash scripts/hooks/verify_generated_clean.sh
+    test:
+      run: make test
+    vet:
+      run: make vet
+    lint:
+      run: make lint

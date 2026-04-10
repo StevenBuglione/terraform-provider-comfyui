@@ -14,6 +14,20 @@ func newTestClient(server *httptest.Server) *Client {
 	}
 }
 
+func mustEncodeJSON(t *testing.T, w http.ResponseWriter, v any) {
+	t.Helper()
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		t.Fatalf("failed to encode JSON response: %v", err)
+	}
+}
+
+func mustWriteBody(t *testing.T, w http.ResponseWriter, body string) {
+	t.Helper()
+	if _, err := w.Write([]byte(body)); err != nil {
+		t.Fatalf("failed to write response body: %v", err)
+	}
+}
+
 func TestNewClient(t *testing.T) {
 	c := NewClient("localhost", 8188, "my-key")
 	if c.Host != "localhost" {
@@ -41,7 +55,7 @@ func TestGetSystemStats(t *testing.T) {
 		if r.Method != "GET" {
 			t.Errorf("expected GET, got %s", r.Method)
 		}
-		json.NewEncoder(w).Encode(SystemStats{
+		mustEncodeJSON(t, w, SystemStats{
 			System: SystemInfo{
 				OS:             "linux",
 				PythonVersion:  "3.11.0",
@@ -84,7 +98,7 @@ func TestGetQueue(t *testing.T) {
 		if r.URL.Path != "/queue" {
 			t.Errorf("unexpected path: %s", r.URL.Path)
 		}
-		json.NewEncoder(w).Encode(QueueStatus{
+		mustEncodeJSON(t, w, QueueStatus{
 			QueueRunning: [][]interface{}{},
 			QueuePending: [][]interface{}{},
 		})
@@ -125,7 +139,7 @@ func TestQueuePrompt(t *testing.T) {
 			t.Error("request body missing 'prompt' key")
 		}
 
-		json.NewEncoder(w).Encode(QueueResponse{
+		mustEncodeJSON(t, w, QueueResponse{
 			PromptID:   "test-123",
 			Number:     1,
 			NodeErrors: map[string]interface{}{},
@@ -153,7 +167,7 @@ func TestQueuePrompt(t *testing.T) {
 
 func TestQueuePromptNodeErrors(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(QueueResponse{
+		mustEncodeJSON(t, w, QueueResponse{
 			PromptID: "err-456",
 			Number:   2,
 			NodeErrors: map[string]interface{}{
@@ -198,7 +212,7 @@ func TestGetHistory(t *testing.T) {
 				},
 			},
 		}
-		json.NewEncoder(w).Encode(resp)
+		mustEncodeJSON(t, w, resp)
 	}))
 	defer server.Close()
 
@@ -243,7 +257,7 @@ func TestGetObjectInfo(t *testing.T) {
 				OutputName:  []string{"LATENT"},
 			},
 		}
-		json.NewEncoder(w).Encode(resp)
+		mustEncodeJSON(t, w, resp)
 	}))
 	defer server.Close()
 
@@ -266,7 +280,7 @@ func TestGetObjectInfoSingle(t *testing.T) {
 		resp := map[string]NodeInfo{
 			"KSampler": {Name: "KSampler", Category: "sampling"},
 		}
-		json.NewEncoder(w).Encode(resp)
+		mustEncodeJSON(t, w, resp)
 	}))
 	defer server.Close()
 
@@ -337,7 +351,7 @@ func TestCheckOutputExists(t *testing.T) {
 func TestDoGetError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("internal error"))
+		mustWriteBody(t, w, "internal error")
 	}))
 	defer server.Close()
 
@@ -351,7 +365,7 @@ func TestDoGetError(t *testing.T) {
 func TestQueuePromptHTTPError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusServiceUnavailable)
-		w.Write([]byte("service unavailable"))
+		mustWriteBody(t, w, "service unavailable")
 	}))
 	defer server.Close()
 
@@ -369,7 +383,7 @@ func TestAPIKeyHeader(t *testing.T) {
 			if auth != "Bearer test-key" {
 				t.Errorf("expected auth header 'Bearer test-key', got '%s'", auth)
 			}
-			json.NewEncoder(w).Encode(SystemStats{})
+			mustEncodeJSON(t, w, SystemStats{})
 		}))
 		defer server.Close()
 
@@ -386,7 +400,7 @@ func TestAPIKeyHeader(t *testing.T) {
 			if auth != "" {
 				t.Errorf("expected no auth header, got '%s'", auth)
 			}
-			json.NewEncoder(w).Encode(SystemStats{})
+			mustEncodeJSON(t, w, SystemStats{})
 		}))
 		defer server.Close()
 
@@ -404,7 +418,7 @@ func TestAPIKeyHeaderOnPost(t *testing.T) {
 		if auth != "Bearer post-key" {
 			t.Errorf("expected auth header 'Bearer post-key', got '%s'", auth)
 		}
-		json.NewEncoder(w).Encode(QueueResponse{
+		mustEncodeJSON(t, w, QueueResponse{
 			PromptID:   "ok",
 			NodeErrors: map[string]interface{}{},
 		})

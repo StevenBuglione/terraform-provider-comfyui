@@ -26,4 +26,5 @@ override.tf.json
 Thumbs.db
 __pycache__/
 .pytest_cache/
+.bin/
 generate

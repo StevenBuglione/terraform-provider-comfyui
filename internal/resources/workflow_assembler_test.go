@@ -61,10 +61,10 @@ func TestIsConnectionRef_InvalidStrings(t *testing.T) {
 
 func TestParseConnectionRef_Valid(t *testing.T) {
 	tests := []struct {
-		name      string
-		input     string
-		wantUUID  string
-		wantSlot  int
+		name     string
+		input    string
+		wantUUID string
+		wantSlot int
 	}{
 		{"slot 0", "550e8400-e29b-41d4-a716-446655440000:0", "550e8400-e29b-41d4-a716-446655440000", 0},
 		{"slot 5", "abcdef01-2345-6789-abcd-ef0123456789:5", "abcdef01-2345-6789-abcd-ef0123456789", 5},
@@ -264,16 +264,16 @@ func TestAssembleWorkflow_ComplexSevenNodeWorkflow(t *testing.T) {
 			"batch_size": 1,
 		}},
 		{ID: ids[4], ClassType: "KSampler", Inputs: map[string]interface{}{
-			"model":               ids[0] + ":0",
-			"positive":            ids[1] + ":0",
-			"negative":            ids[2] + ":0",
-			"latent_image":        ids[3] + ":0",
-			"seed":                8566257,
-			"steps":               20,
-			"cfg":                 8.0,
-			"sampler_name":        "euler",
-			"scheduler":           "normal",
-			"denoise":             1.0,
+			"model":        ids[0] + ":0",
+			"positive":     ids[1] + ":0",
+			"negative":     ids[2] + ":0",
+			"latent_image": ids[3] + ":0",
+			"seed":         8566257,
+			"steps":        20,
+			"cfg":          8.0,
+			"sampler_name": "euler",
+			"scheduler":    "normal",
+			"denoise":      1.0,
 		}},
 		{ID: ids[5], ClassType: "VAEDecode", Inputs: map[string]interface{}{
 			"samples": ids[4] + ":0",
@@ -429,7 +429,7 @@ func TestAssembleWorkflow_JSONMatchesAPIFormat(t *testing.T) {
 
 	// Parse node "2" and verify connection reference format
 	var node2 struct {
-		ClassType string                 `json:"class_type"`
+		ClassType string                     `json:"class_type"`
 		Inputs    map[string]json.RawMessage `json:"inputs"`
 	}
 	if err := json.Unmarshal(parsed["2"], &node2); err != nil {

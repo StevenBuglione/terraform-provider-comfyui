@@ -314,7 +314,7 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 
 	attrType := tfAttributeType(inp.Type)
 
-	b.WriteString(fmt.Sprintf("%q: %s{\n", tfName, attrType))
+	fmt.Fprintf(&b, "%q: %s{\n", tfName, attrType)
 
 	// Description
 	descParts := []string{fmt.Sprintf("Input: %s", inp.Type)}
@@ -324,7 +324,7 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 	if inp.Default != nil {
 		descParts = append(descParts, fmt.Sprintf("default: %v", inp.Default))
 	}
-	b.WriteString(fmt.Sprintf("\t\t\t\tDescription: %q,\n", strings.Join(descParts, " ")))
+	fmt.Fprintf(&b, "\t\t\t\tDescription: %q,\n", strings.Join(descParts, " "))
 
 	// Required/Optional
 	if inp.Required {
@@ -340,12 +340,12 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 			rd.NeedsInt64Validator = true
 			minVal := clampInt64(*inp.Min)
 			maxVal := clampInt64(*inp.Max)
-			b.WriteString(fmt.Sprintf("\t\t\t\tValidators: []validator.Int64{\n\t\t\t\t\tint64validator.Between(%d, %d),\n\t\t\t\t},\n", minVal, maxVal))
+			fmt.Fprintf(&b, "\t\t\t\tValidators: []validator.Int64{\n\t\t\t\t\tint64validator.Between(%d, %d),\n\t\t\t\t},\n", minVal, maxVal)
 		}
 	case "FLOAT":
 		if inp.Min != nil && inp.Max != nil {
 			rd.NeedsFloat64Validator = true
-			b.WriteString(fmt.Sprintf("\t\t\t\tValidators: []validator.Float64{\n\t\t\t\t\tfloat64validator.Between(%v, %v),\n\t\t\t\t},\n", *inp.Min, *inp.Max))
+			fmt.Fprintf(&b, "\t\t\t\tValidators: []validator.Float64{\n\t\t\t\t\tfloat64validator.Between(%v, %v),\n\t\t\t\t},\n", *inp.Min, *inp.Max)
 		}
 	case "COMBO":
 		opts := inp.StringOptions()
@@ -353,7 +353,7 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 			rd.NeedsStringValidator = true
 			b.WriteString("\t\t\t\tValidators: []validator.String{\n\t\t\t\t\tstringvalidator.OneOf(\n")
 			for _, opt := range opts {
-				b.WriteString(fmt.Sprintf("\t\t\t\t\t\t%q,\n", opt))
+				fmt.Fprintf(&b, "\t\t\t\t\t\t%q,\n", opt)
 			}
 			b.WriteString("\t\t\t\t\t),\n\t\t\t\t},\n")
 		}
@@ -365,8 +365,8 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 
 func buildOutputAttribute(out Output, tfName string) string {
 	var b strings.Builder
-	b.WriteString(fmt.Sprintf("%q: schema.StringAttribute{\n", tfName))
-	b.WriteString(fmt.Sprintf("\t\t\t\tDescription: \"Output: %s (slot %d)\",\n", out.Type, out.SlotIndex))
+	fmt.Fprintf(&b, "%q: schema.StringAttribute{\n", tfName)
+	fmt.Fprintf(&b, "\t\t\t\tDescription: \"Output: %s (slot %d)\",\n", out.Type, out.SlotIndex)
 	b.WriteString("\t\t\t\tComputed: true,\n")
 	b.WriteString("\t\t\t\tPlanModifiers: []planmodifier.String{\n\t\t\t\t\tstringplanmodifier.UseStateForUnknown(),\n\t\t\t\t},\n")
 	b.WriteString("\t\t\t},")
