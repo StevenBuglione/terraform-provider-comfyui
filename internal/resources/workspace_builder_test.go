@@ -321,6 +321,21 @@ func testWorkspaceNodeInfo() map[string]client.NodeInfo {
 			Name:         "TargetNode",
 			DisplayName:  "Target Node",
 		},
+		"MergeNode": {
+			Input: client.NodeInputInfo{
+				Required: map[string]interface{}{
+					"source_a": []interface{}{"IMAGE", map[string]interface{}{}},
+					"source_b": []interface{}{"IMAGE", map[string]interface{}{}},
+					"strength": []interface{}{"FLOAT", map[string]interface{}{}},
+				},
+			},
+			InputOrder:   map[string][]string{"required": {"source_a", "source_b", "strength"}},
+			Output:       []string{"IMAGE"},
+			OutputName:   []string{"IMAGE"},
+			OutputIsList: []bool{false},
+			Name:         "MergeNode",
+			DisplayName:  "Merge Node",
+		},
 		"ComboNode": {
 			Input: client.NodeInputInfo{
 				Required: map[string]interface{}{
@@ -552,7 +567,7 @@ func TestWorkspaceBuilderEnforcesLeftToRightDAGOrdering(t *testing.T) {
 					"1": {"class_type": "SourceNode", "inputs": {"text": "source"}},
 					"2": {"class_type": "TargetNode", "inputs": {"source": ["1", 0], "strength": 0.3}},
 					"3": {"class_type": "TargetNode", "inputs": {"source": ["1", 0], "strength": 0.7}},
-					"4": {"class_type": "TargetNode", "inputs": {"source": ["2", 0], "strength": 0.5}}
+					"4": {"class_type": "MergeNode", "inputs": {"source_a": ["2", 0], "source_b": ["3", 0], "strength": 0.5}}
 				}`,
 			},
 		},
@@ -572,7 +587,7 @@ func TestWorkspaceBuilderEnforcesLeftToRightDAGOrdering(t *testing.T) {
 	// Nodes 2 and 3 are both branches from source
 	branch1 := subgraph.Nodes[1]
 	branch2 := subgraph.Nodes[2]
-	// Node 4 is the merge node (depends on node 2)
+	// Node 4 is the merge node (depends on both branches)
 	merge := subgraph.Nodes[3]
 
 	// Both branches should be to the right of the source
