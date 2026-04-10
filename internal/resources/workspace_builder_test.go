@@ -509,3 +509,154 @@ func TestBuildWorkspaceSubgraphPreservesWidgetAlignmentWhenRequiredWidgetMissing
 		t.Fatalf("expected widget alignment [nil, 0.5], got %#v", values)
 	}
 }
+
+func TestWorkspaceBuilderRespectsHeaderClearance(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"header-clearance-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "alpha"}},
+					"2": {"class_type": "TargetNode", "inputs": {"source": ["1", 0], "strength": 0.5}}
+				}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	group := subgraph.Groups[0]
+	firstNode := subgraph.Nodes[0]
+
+	minNodeY := group.Bounding[1] + 80
+	if firstNode.Pos[1] < minNodeY {
+		t.Fatalf("expected first node Y to be at least %v (group top %v + 80px header), got %v", minNodeY, group.Bounding[1], firstNode.Pos[1])
+	}
+}
+
+func TestWorkspaceBuilderEnforcesLeftToRightDAGOrdering(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"dag-ordering-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "source"}},
+					"2": {"class_type": "TargetNode", "inputs": {"source": ["1", 0], "strength": 0.3}},
+					"3": {"class_type": "TargetNode", "inputs": {"source": ["1", 0], "strength": 0.7}},
+					"4": {"class_type": "TargetNode", "inputs": {"source": ["2", 0], "strength": 0.5}}
+				}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	// Node 1 is the source
+	source := subgraph.Nodes[0]
+	// Nodes 2 and 3 are both branches from source
+	branch1 := subgraph.Nodes[1]
+	branch2 := subgraph.Nodes[2]
+	// Node 4 is the merge node (depends on node 2)
+	merge := subgraph.Nodes[3]
+
+	// Both branches should be to the right of the source
+	if branch1.Pos[0] <= source.Pos[0] {
+		t.Fatalf("expected branch1 (node 2) X position %v to be > source (node 1) X position %v", branch1.Pos[0], source.Pos[0])
+	}
+	if branch2.Pos[0] <= source.Pos[0] {
+		t.Fatalf("expected branch2 (node 3) X position %v to be > source (node 1) X position %v", branch2.Pos[0], source.Pos[0])
+	}
+
+	// Merge node should be to the right of both branches
+	if merge.Pos[0] <= branch1.Pos[0] {
+		t.Fatalf("expected merge (node 4) X position %v to be > branch1 (node 2) X position %v", merge.Pos[0], branch1.Pos[0])
+	}
+	if merge.Pos[0] <= branch2.Pos[0] {
+		t.Fatalf("expected merge (node 4) X position %v to be > branch2 (node 3) X position %v", merge.Pos[0], branch2.Pos[0])
+	}
+}
+
+func TestWorkspaceBuilderEnforcesNodeContainment(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"containment-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "alpha"}},
+					"2": {"class_type": "SourceNode", "inputs": {"text": "beta"}},
+					"3": {"class_type": "SourceNode", "inputs": {"text": "gamma"}}
+				}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	group := subgraph.Groups[0]
+	minY := group.Bounding[1] + 80
+
+	for i, node := range subgraph.Nodes {
+		if node.Pos[1] < minY {
+			t.Fatalf("node %d intrudes into header area: Y position %v is below minimum %v (group top %v + 80)", i, node.Pos[1], minY, group.Bounding[1])
+		}
+	}
+}
+
+func TestWorkspaceBuilderSerializesWorkflowStyle(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"style-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "styled"}}
+				}`,
+				Style: workspaceWorkflowStyleConfig{
+					GroupColor:    "#ff00ff",
+					TitleFontSize: 28,
+				},
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	group := subgraph.Groups[0]
+	if group.Color != "#ff00ff" {
+		t.Fatalf("expected group color %q, got %q", "#ff00ff", group.Color)
+	}
+	if group.FontSize != 28 {
+		t.Fatalf("expected group font size %d, got %d", 28, group.FontSize)
+	}
+}
