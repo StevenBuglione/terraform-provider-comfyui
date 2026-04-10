@@ -57,7 +57,7 @@ Fully implemented with **645 generated node resources** (one per ComfyUI node), 
 │   ├── workflow_history.go           # comfyui_workflow_history
 │   └── output.go                     # comfyui_output
 ├── third_party/ComfyUI/              # ComfyUI source (git submodule, pinned to tag)
-├── doc/terraform/provider/research/  # 26 comprehensive research docs (00–25)
+├── doc/terraform/provider/research/  # 27 comprehensive research docs (00–26)
 ├── .claude/skills/                   # Claude Code skills for this project
 │   ├── terraform-provider-research/  # Progressive research disclosure skill
 │   └── terraform-provider-dev/       # Hands-on development guidance skill
@@ -99,7 +99,7 @@ cd third_party/ComfyUI && git describe --tags
 
 ## Research Documentation
 
-Extensive research lives in `doc/terraform/provider/research/`. **26 files** covering every aspect of Terraform provider development. Use the `terraform-provider-research` skill for guided access, or browse directly:
+Extensive research lives in `doc/terraform/provider/research/`. **27 files** covering every aspect of Terraform provider development. Use the `terraform-provider-research` skill for guided access, or browse directly:
 
 | # | File | Topic |
 |---|------|-------|
@@ -129,15 +129,17 @@ Extensive research lives in `doc/terraform/provider/research/`. **26 files** cov
 | 23 | `23-makefile-and-dev-commands.md` | Makefile, dev commands |
 | 24 | `24-comfyui-provider-mapping.md` | ComfyUI API → Terraform mapping |
 | 25 | `25-provider-functions.md` | Provider functions (TF 1.8+) |
+| 26 | `26-partner-nodes-and-api-integrations.md` | Partner nodes, API providers, categories |
 
 ## Architecture Decisions
 
 1. **Plugin Framework only** — No SDKv2. All resources, data sources, and the provider use `terraform-plugin-framework`.
 2. **Single API focus** — Provider wraps the ComfyUI REST API exclusively.
-3. **Virtual node resources** — The 645 generated node resources are virtual/plan-only (no API calls in CRUD). They represent ComfyUI nodes in Terraform state for workflow composition; the actual execution happens through `comfyui_workflow`.
+3. **Virtual node resources** — The 645 generated node resources are virtual/plan-only (no API calls in CRUD). They represent ComfyUI nodes in Terraform state for workflow composition; the actual execution happens through `comfyui_workflow`. Of these, **180 are partner/API nodes** that call third-party AI services (see Partner Nodes section below).
 4. **Code generation pipeline** — Python AST extractors parse ComfyUI source → `node_specs.json` → Go generator produces one resource file per node + registry. This allows automated updates when ComfyUI adds/changes nodes.
 5. **Resources**: `comfyui_workflow` (hand-written, queues & executes workflows) + 645 generated node resources (one per ComfyUI node type, e.g., `comfyui_ksampler`, `comfyui_clip_text_encode`).
 6. **Data sources** (5): `comfyui_system_stats`, `comfyui_queue`, `comfyui_node_info`, `comfyui_workflow_history`, `comfyui_output`.
+7. **Multi-modal capabilities** — Through partner nodes, the provider supports image generation/editing, video generation, audio synthesis/processing, text/LLM chat, and 3D model generation — all orchestrated via `comfyui_workflow`.
 
 ## Commands
 
@@ -246,6 +248,27 @@ Key endpoints:
 
 - **terraform-provider-research** — Progressive disclosure of the 26 research docs. Invoke when you need to understand any Terraform provider concept.
 - **terraform-provider-dev** — Hands-on development guidance for implementing this specific provider. Invoke when writing code.
+
+## Partner Nodes (API Integrations)
+
+Of the 645 generated node resources, **180 are partner/API nodes** that integrate with
+third-party AI services. These nodes call external APIs (not the local ComfyUI server)
+and are organized into 5 categories:
+
+| Category | Nodes | Key Providers |
+|----------|-------|--------------|
+| **Video** | 77 | Kling (22), Vidu (13), Wan (8), ByteDance (4), Grok (4), MiniMax (4), PixVerse (4), Luma, Moonvalley, Runway, Sora |
+| **Image** | 61 | Recraft (15), BFL/Flux (5), Stability AI (5), Magnific (5), Gemini (3), Ideogram (3), Kling (3), Luma (3), OpenAI (3) |
+| **3D** | 26 | Tripo (8), Meshy (7), Tencent/Hunyuan3D (6), Rodin (5) |
+| **Audio** | 11 | ElevenLabs (8), Stability AI (3) |
+| **Text** | 5 | OpenAI (3), Gemini (2) |
+
+**Key points:**
+- All 180 partner nodes already have Terraform resources (generated alongside core nodes)
+- Partner nodes require API keys from their respective providers (e.g., `KLING_API_KEY`, `OPENAI_API_KEY`)
+- They follow the same virtual/plan-only pattern — actual execution happens through `comfyui_workflow`
+- Distinguished by `category` prefix `api node/` in `node_specs.json`
+- Full details: `doc/terraform/provider/research/26-partner-nodes-and-api-integrations.md`
 
 ## Safety
 
