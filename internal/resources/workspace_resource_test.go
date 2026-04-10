@@ -23,107 +23,6 @@ func TestWorkspaceResourceMetadata(t *testing.T) {
 	}
 }
 
-func TestWorkspaceResourceSchemaIncludesCSSInspiredLayoutContract(t *testing.T) {
-	r := NewWorkspaceResource()
-
-	var resp resource.SchemaResponse
-	r.Schema(context.Background(), resource.SchemaRequest{}, &resp)
-
-	for _, attrName := range []string{"name", "workflows", "layout", "output_file", "workspace_json", "workflow_count"} {
-		if _, ok := resp.Schema.Attributes[attrName]; !ok {
-			t.Fatalf("expected schema to include %q", attrName)
-		}
-	}
-
-	workflowsAttr, ok := resp.Schema.Attributes["workflows"].(schema.ListNestedAttribute)
-	if !ok {
-		t.Fatalf("expected workflows to be a ListNestedAttribute, got %T", resp.Schema.Attributes["workflows"])
-	}
-	if !workflowsAttr.Required {
-		t.Fatalf("expected workflows to be required")
-	}
-
-	for _, attrName := range []string{"name", "workflow_json", "x", "y"} {
-		if _, ok := workflowsAttr.NestedObject.Attributes[attrName]; !ok {
-			t.Fatalf("expected workflows nested schema to include %q", attrName)
-		}
-	}
-	if _, ok := workflowsAttr.NestedObject.Attributes["workflow_id"]; ok {
-		t.Fatalf("did not expect workflows nested schema to accept workflow_id")
-	}
-
-	layoutAttr, ok := resp.Schema.Attributes["layout"].(schema.SingleNestedAttribute)
-	if !ok {
-		t.Fatalf("expected layout to be a SingleNestedAttribute, got %T", resp.Schema.Attributes["layout"])
-	}
-	if !layoutAttr.Required {
-		t.Fatalf("expected layout to be required")
-	}
-
-	for _, attrName := range []string{
-		"display",
-		"direction",
-		"gap",
-		"columns",
-		"origin_x",
-		"origin_y",
-	} {
-		if _, ok := layoutAttr.Attributes[attrName]; !ok {
-			t.Fatalf("expected layout schema to include %q", attrName)
-		}
-	}
-	for _, attrName := range []string{"row_gap", "column_gap", "wrap", "justify_content", "align_items"} {
-		if _, ok := layoutAttr.Attributes[attrName]; ok {
-			t.Fatalf("did not expect unsupported layout attribute %q in v1 schema", attrName)
-		}
-	}
-}
-
-func TestValidateWorkspaceLayoutRejectsInvalidCombinations(t *testing.T) {
-	tests := []struct {
-		name   string
-		layout workspaceLayoutConfig
-		want   string
-	}{
-		{
-			name: "flex layout rejects columns",
-			layout: workspaceLayoutConfig{
-				Display: "flex",
-				Columns: 3,
-			},
-			want: "columns",
-		},
-		{
-			name: "grid layout rejects direction",
-			layout: workspaceLayoutConfig{
-				Display:   "grid",
-				Direction: "row",
-			},
-			want: "direction",
-		},
-		{
-			name: "flex layout rejects invalid direction",
-			layout: workspaceLayoutConfig{
-				Display:   "flex",
-				Direction: "rows",
-			},
-			want: "direction",
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			err := validateWorkspaceLayout(tc.layout)
-			if err == nil {
-				t.Fatalf("expected validation error")
-			}
-			if !strings.Contains(err.Error(), tc.want) {
-				t.Fatalf("expected error to mention %q, got %q", tc.want, err.Error())
-			}
-		})
-	}
-}
-
 func TestWorkspaceConfigFromModelBuildsSpecs(t *testing.T) {
 	model := workspaceResourceModel{
 		Name: types.StringValue("demo-workspace"),
@@ -196,5 +95,174 @@ func TestCleanupPreviousWorkspaceFileRemovesStaleFile(t *testing.T) {
 
 	if _, err := os.Stat(oldPath); !os.IsNotExist(err) {
 		t.Fatalf("expected old file to be removed, got err=%v", err)
+	}
+}
+
+func TestWorkspaceResourceSchemaIncludesCSSInspiredLayoutContract(t *testing.T) {
+	r := NewWorkspaceResource()
+
+	var resp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &resp)
+
+	for _, attrName := range []string{"name", "workflows", "layout", "output_file", "workspace_json", "workflow_count"} {
+		if _, ok := resp.Schema.Attributes[attrName]; !ok {
+			t.Fatalf("expected schema to include %q", attrName)
+		}
+	}
+
+	workflowsAttr, ok := resp.Schema.Attributes["workflows"].(schema.ListNestedAttribute)
+	if !ok {
+		t.Fatalf("expected workflows to be a ListNestedAttribute, got %T", resp.Schema.Attributes["workflows"])
+	}
+	if !workflowsAttr.Required {
+		t.Fatalf("expected workflows to be required")
+	}
+
+	for _, attrName := range []string{"name", "workflow_json", "x", "y"} {
+		if _, ok := workflowsAttr.NestedObject.Attributes[attrName]; !ok {
+			t.Fatalf("expected workflows nested schema to include %q", attrName)
+		}
+	}
+	if _, ok := workflowsAttr.NestedObject.Attributes["workflow_id"]; ok {
+		t.Fatalf("did not expect workflows nested schema to accept workflow_id")
+	}
+
+	// New style nested attribute under workflows[] (failing test until implemented)
+	styleAttr, ok := workflowsAttr.NestedObject.Attributes["style"].(schema.SingleNestedAttribute)
+	if !ok {
+		t.Fatalf("expected workflows to include a SingleNestedAttribute 'style', got %T", workflowsAttr.NestedObject.Attributes["style"])
+	}
+	for _, attrName := range []string{"group_color", "title_font_size"} {
+		if _, ok := styleAttr.Attributes[attrName]; !ok {
+			t.Fatalf("expected style schema to include %q", attrName)
+		}
+	}
+
+	layoutAttr, ok := resp.Schema.Attributes["layout"].(schema.SingleNestedAttribute)
+	if !ok {
+		t.Fatalf("expected layout to be a SingleNestedAttribute, got %T", resp.Schema.Attributes["layout"])
+	}
+	if !layoutAttr.Required {
+		t.Fatalf("expected layout to be required")
+	}
+
+	for _, attrName := range []string{
+		"display",
+		"direction",
+		"gap",
+		"columns",
+		"origin_x",
+		"origin_y",
+	} {
+		if _, ok := layoutAttr.Attributes[attrName]; !ok {
+			t.Fatalf("expected layout schema to include %q", attrName)
+		}
+	}
+	for _, attrName := range []string{"row_gap", "column_gap", "wrap", "justify_content", "align_items"} {
+		if _, ok := layoutAttr.Attributes[attrName]; ok {
+			t.Fatalf("did not expect unsupported layout attribute %q in v1 schema", attrName)
+		}
+	}
+
+	// New top-level node_layout attribute (failing test until implemented)
+	nodeLayoutAttr, ok := resp.Schema.Attributes["node_layout"].(schema.SingleNestedAttribute)
+	if !ok {
+		t.Fatalf("expected node_layout to be a SingleNestedAttribute, got %T", resp.Schema.Attributes["node_layout"])
+	}
+	for _, attrName := range []string{"mode", "direction", "column_gap", "row_gap"} {
+		if _, ok := nodeLayoutAttr.Attributes[attrName]; !ok {
+			t.Fatalf("expected node_layout schema to include %q", attrName)
+		}
+	}
+}
+
+func TestValidateWorkspaceLayoutRejectsInvalidCombinations(t *testing.T) {
+	tests := []struct {
+		name   string
+		layout workspaceLayoutConfig
+		want   string
+	}{
+		{
+			name: "flex layout rejects columns",
+			layout: workspaceLayoutConfig{
+				Display: "flex",
+				Columns: 3,
+			},
+			want: "columns",
+		},
+		{
+			name: "grid layout rejects direction",
+			layout: workspaceLayoutConfig{
+				Display:   "grid",
+				Direction: "row",
+			},
+			want: "direction",
+		},
+		{
+			name: "flex layout rejects invalid direction",
+			layout: workspaceLayoutConfig{
+				Display:   "flex",
+				Direction: "rows",
+			},
+			want: "direction",
+		},
+		{
+			name: "flex layout rejects ambiguous direction values (top_to_bottom)",
+			layout: workspaceLayoutConfig{
+				Display:   "flex",
+				Direction: "top_to_bottom",
+			},
+			want: "direction",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			err := validateWorkspaceLayout(tc.layout)
+			if err == nil {
+				t.Fatalf("expected validation error")
+			}
+			if !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("expected error to mention %q, got %q", tc.want, err.Error())
+			}
+		})
+	}
+}
+
+func TestValidateWorkspaceNodeLayoutRejectsInvalidMode(t *testing.T) {
+	// This test asserts the presence of the new node_layout schema and will fail until implemented.
+	r := NewWorkspaceResource()
+
+	var resp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &resp)
+
+	nodeLayoutAttr, ok := resp.Schema.Attributes["node_layout"].(schema.SingleNestedAttribute)
+	if !ok {
+		t.Fatalf("expected node_layout to be a SingleNestedAttribute, got %T", resp.Schema.Attributes["node_layout"])
+	}
+	// If the schema existed, validation would reject unsupported mode values like "manual".
+	if _, ok := nodeLayoutAttr.Attributes["mode"]; !ok {
+		t.Fatalf("expected node_layout schema to include 'mode'")
+	}
+}
+
+func TestValidateWorkflowStyleRejectsEmptyGroupColor(t *testing.T) {
+	// This test asserts the presence of workflows[].style.group_color and will fail until implemented.
+	r := NewWorkspaceResource()
+
+	var resp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &resp)
+
+	workflowsAttr, ok := resp.Schema.Attributes["workflows"].(schema.ListNestedAttribute)
+	if !ok {
+		t.Fatalf("expected workflows to be a ListNestedAttribute, got %T", resp.Schema.Attributes["workflows"])
+	}
+
+	styleAttr, ok := workflowsAttr.NestedObject.Attributes["style"].(schema.SingleNestedAttribute)
+	if !ok {
+		t.Fatalf("expected workflows to include a SingleNestedAttribute 'style', got %T", workflowsAttr.NestedObject.Attributes["style"])
+	}
+	if _, ok := styleAttr.Attributes["group_color"]; !ok {
+		t.Fatalf("expected style schema to include 'group_color'")
 	}
 }
