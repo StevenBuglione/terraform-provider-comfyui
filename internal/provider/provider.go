@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/datasources"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources/generated"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"

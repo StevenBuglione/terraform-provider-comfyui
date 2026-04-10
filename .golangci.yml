@@ -1,0 +1,25 @@
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+  disable:
+    # Generated code has repetitive patterns
+    - dupl
+    - gocyclo
+
+linters-settings:
+  errcheck:
+    exclude-functions:
+      - (github.com/hashicorp/terraform-plugin-framework/resource.CreateResponse).State.Set
+      - (github.com/hashicorp/terraform-plugin-framework/resource.ReadResponse).State.Set
+      - (github.com/hashicorp/terraform-plugin-framework/resource.UpdateResponse).State.Set
+
+issues:
+  exclude-dirs:
+    - third_party
+  max-issues-per-linter: 0
+  max-same-issues: 0

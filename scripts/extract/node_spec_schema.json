@@ -1,0 +1,220 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ComfyUI Node Specifications",
+  "description": "Schema for extracted ComfyUI node specifications used by the Terraform provider code generator",
+  "type": "object",
+  "required": ["version", "comfyui_version", "extracted_at", "nodes"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version (semver)",
+      "const": "1.0.0"
+    },
+    "comfyui_version": {
+      "type": "string",
+      "description": "ComfyUI version tag these specs were extracted from"
+    },
+    "extracted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of extraction"
+    },
+    "total_nodes": {
+      "type": "integer",
+      "description": "Total number of nodes in the specs array"
+    },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/NodeSpec" }
+    }
+  },
+  "definitions": {
+    "NodeSpec": {
+      "type": "object",
+      "required": ["node_id", "class_name", "category", "inputs", "outputs", "source"],
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "description": "ComfyUI node type identifier (used in class_type field of workflow JSON)"
+        },
+        "class_name": {
+          "type": "string",
+          "description": "Python class name implementing the node"
+        },
+        "display_name": {
+          "type": ["string", "null"],
+          "description": "Human-readable display name (from NODE_DISPLAY_NAME_MAPPINGS or schema)"
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "Node description/tooltip"
+        },
+        "category": {
+          "type": "string",
+          "description": "Node category path (e.g., 'sampling', 'loaders', 'conditioning')"
+        },
+        "function_name": {
+          "type": "string",
+          "description": "Python method name that executes the node (FUNCTION attribute)"
+        },
+        "is_output_node": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this is an output node (OUTPUT_NODE = True)"
+        },
+        "is_deprecated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the node is marked deprecated"
+        },
+        "is_experimental": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the node is marked experimental"
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/InputSpec" },
+          "description": "All inputs (required + optional), ordered"
+        },
+        "hidden_inputs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/HiddenInputSpec" },
+          "description": "Hidden inputs injected by runtime (PROMPT, EXTRA_PNGINFO, UNIQUE_ID)"
+        },
+        "outputs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/OutputSpec" },
+          "description": "Node outputs, ordered by slot index"
+        },
+        "source": {
+          "$ref": "#/definitions/SourceInfo",
+          "description": "Where this node was extracted from"
+        },
+        "terraform_resource_name": {
+          "type": "string",
+          "description": "Generated Terraform resource name (e.g., 'comfyui_ksampler')"
+        }
+      }
+    },
+    "InputSpec": {
+      "type": "object",
+      "required": ["name", "type", "required"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Input parameter name"
+        },
+        "type": {
+          "type": "string",
+          "description": "ComfyUI type (STRING, INT, FLOAT, BOOLEAN, MODEL, CLIP, VAE, IMAGE, MASK, CONDITIONING, LATENT, CONTROL_NET, etc.)"
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this input is required"
+        },
+        "is_link_type": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this type is a node connection (MODEL, CLIP, etc.) vs a direct value (INT, STRING, etc.)"
+        },
+        "default": {
+          "description": "Default value if any (type varies: string, number, boolean, null)"
+        },
+        "min": {
+          "type": ["number", "null"],
+          "description": "Minimum value for numeric types"
+        },
+        "max": {
+          "type": ["number", "null"],
+          "description": "Maximum value for numeric types"
+        },
+        "step": {
+          "type": ["number", "null"],
+          "description": "Step/increment for numeric types"
+        },
+        "options": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "Enum options for Combo/selection types"
+        },
+        "multiline": {
+          "type": ["boolean", "null"],
+          "description": "Whether STRING input supports multiline"
+        },
+        "dynamic_options": {
+          "type": ["boolean", "null"],
+          "description": "True if options are resolved at runtime (e.g., folder_paths.get_filename_list)"
+        },
+        "dynamic_options_source": {
+          "type": ["string", "null"],
+          "description": "Python expression that generates dynamic options (for documentation)"
+        },
+        "tooltip": {
+          "type": ["string", "null"],
+          "description": "Tooltip/help text for this input"
+        },
+        "display_name": {
+          "type": ["string", "null"],
+          "description": "Human-readable input label if different from name"
+        }
+      }
+    },
+    "HiddenInputSpec": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Hidden input name"
+        },
+        "type": {
+          "type": "string",
+          "description": "Hidden input type (PROMPT, EXTRA_PNGINFO, UNIQUE_ID, etc.)"
+        }
+      }
+    },
+    "OutputSpec": {
+      "type": "object",
+      "required": ["name", "type", "slot_index"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Output name (from RETURN_NAMES or auto-generated)"
+        },
+        "type": {
+          "type": "string",
+          "description": "Output type (MODEL, CLIP, VAE, IMAGE, LATENT, CONDITIONING, etc.)"
+        },
+        "slot_index": {
+          "type": "integer",
+          "description": "Position index in the output tuple (0-based)"
+        },
+        "is_list": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this output produces a list of values"
+        }
+      }
+    },
+    "SourceInfo": {
+      "type": "object",
+      "required": ["file", "pattern"],
+      "properties": {
+        "file": {
+          "type": "string",
+          "description": "Source file path relative to ComfyUI root"
+        },
+        "pattern": {
+          "type": "string",
+          "enum": ["v1_core", "v1_extras", "v3_extras", "v3_api"],
+          "description": "Registration pattern used by this node"
+        },
+        "line_number": {
+          "type": ["integer", "null"],
+          "description": "Approximate line number of class definition"
+        }
+      }
+    }
+  }
+}
