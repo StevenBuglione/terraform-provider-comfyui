@@ -21,6 +21,9 @@ Built with the **Terraform Plugin Framework** (not SDKv2). Language: Go. License
 .
 ├── CLAUDE.md                  # This file — project instructions for AI agents
 ├── LICENSE                    # MIT License
+├── third_party/ComfyUI/       # ComfyUI source (git submodule, pinned to tag)
+├── scripts/                   # Helper scripts
+│   └── update-comfyui.sh     # Re-pin ComfyUI submodule to a new tag
 ├── doc/terraform/provider/research/  # 26 comprehensive research docs (00–25)
 ├── .claude/skills/            # Claude Code skills for this project
 │   ├── terraform-provider-research/  # Progressive research disclosure skill
@@ -31,6 +34,35 @@ Built with the **Terraform Plugin Framework** (not SDKv2). Language: Go. License
 ├── internal/client/           # (planned) ComfyUI API client
 └── examples/                  # (planned) HCL usage examples
 ```
+
+## ComfyUI Submodule
+
+The full ComfyUI source is included as a **git submodule** at `third_party/ComfyUI/` for AI
+agent code inspection. This is read-only reference — never modify ComfyUI source directly.
+
+```bash
+# After cloning this repo, initialize the submodule:
+git submodule update --init
+
+# Update to a new ComfyUI version:
+./scripts/update-comfyui.sh v0.19.0
+
+# Check current pinned version:
+cd third_party/ComfyUI && git describe --tags
+```
+
+**Current version:** v0.18.5
+
+### Key ComfyUI paths for agent inspection
+
+| Path | What's There |
+|------|-------------|
+| `third_party/ComfyUI/nodes.py` | Core built-in nodes |
+| `third_party/ComfyUI/comfy_extras/` | Additional node implementations |
+| `third_party/ComfyUI/comfy/` | Core engine (model loading, sampling, etc.) |
+| `third_party/ComfyUI/server.py` | REST API server implementation |
+| `third_party/ComfyUI/execution.py` | Workflow execution engine |
+| `third_party/ComfyUI/folder_paths.py` | Model/output path management |
 
 ## Research Documentation
 
