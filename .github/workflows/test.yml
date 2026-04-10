@@ -42,7 +42,7 @@ jobs:
         with:
           go-version-file: 'go.mod'
           cache: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - run: go generate ./...
