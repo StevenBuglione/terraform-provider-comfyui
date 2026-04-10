@@ -3,36 +3,69 @@
 ## Project Overview
 
 Terraform provider for [ComfyUI](https://github.com/comfyanonymous/ComfyUI), a node-based Stable Diffusion GUI.
-Built with the **Terraform Plugin Framework** (not SDKv2). Language: Go. License: MIT.
+Built with the **Terraform Plugin Framework** (not SDKv2). Language: Go + Python. License: MIT.
+
+Fully implemented with **645 generated node resources** (one per ComfyUI node), **1 hand-written workflow resource**, and **5 data sources**.
 
 ## Tech Stack
 
-- Go 1.21+
+- Go 1.25+ (provider, code generator)
+- Python 3.12+ (node extraction pipeline)
 - Terraform Plugin Framework (`terraform-plugin-framework`)
-- Terraform Plugin Testing (`terraform-plugin-testing`)
 - Terraform Plugin Log (`terraform-plugin-log`)
-- Terraform Plugin Docs (`terraform-plugin-docs`)
 - GoReleaser for builds/releases
-- GitHub Actions for CI/CD
+- GitHub Actions for CI/CD (test + release workflows)
+- Dependabot for dependency updates
 
 ## Key Directories
 
 ```
 .
-├── CLAUDE.md                  # This file — project instructions for AI agents
-├── LICENSE                    # MIT License
-├── third_party/ComfyUI/       # ComfyUI source (git submodule, pinned to tag)
-├── scripts/                   # Helper scripts
-│   └── update-comfyui.sh     # Re-pin ComfyUI submodule to a new tag
+├── CLAUDE.md                         # This file — project instructions for AI agents
+├── LICENSE                           # MIT License
+├── main.go                           # Provider entry point
+├── generate.go                       # go:generate directive → cmd/generate
+├── GNUmakefile                       # Build, test, generate, lint targets
+├── cmd/generate/                     # Go code generator (node_specs.json → Go files)
+│   ├── main.go                       # Generator entry point
+│   ├── templates.go                  # Go template definitions
+│   ├── types.go                      # Shared types and helper functions
+│   └── generate_test.go              # Generator unit tests
+├── scripts/extract/                  # Python extraction pipeline
+│   ├── extract_v1_nodes.py           # V1-pattern node extractor (AST parsing)
+│   ├── extract_v3_nodes.py           # V3-pattern node extractor (ComfyNode subclass)
+│   ├── merge_specs.py                # Merges V1+V3 extracts into node_specs.json
+│   ├── node_specs.json               # Generated: all 645 node specifications
+│   ├── node_spec_schema.json         # JSON schema for node specs
+│   └── test_extractors.py            # 16 Python tests (pytest)
+├── scripts/update-comfyui.sh         # Re-pin ComfyUI submodule to a new tag
+├── internal/provider/                # Provider implementation (1 file)
+│   └── provider.go                   # ComfyUIProvider: schema, configure, resource/DS registration
+├── internal/client/                  # HTTP client for ComfyUI REST API
+│   ├── client.go                     # Client implementation (all API methods)
+│   ├── client_test.go                # Client unit tests (httptest-based)
+│   └── types.go                      # API response types
+├── internal/resources/               # Hand-written resources
+│   └── workflow_resource.go          # comfyui_workflow: queue & execute workflows
+├── internal/resources/generated/     # 645 generated node resources + registry
+│   ├── registry.go                   # AllResources() — lists all generated constructors
+│   └── resource_*.go                 # One file per ComfyUI node (e.g., resource_ksampler.go)
+├── internal/datasources/             # 5 data sources
+│   ├── system_stats.go               # comfyui_system_stats
+│   ├── queue.go                      # comfyui_queue
+│   ├── node_info.go                  # comfyui_node_info
+│   ├── workflow_history.go           # comfyui_workflow_history
+│   └── output.go                     # comfyui_output
+├── third_party/ComfyUI/              # ComfyUI source (git submodule, pinned to tag)
 ├── doc/terraform/provider/research/  # 26 comprehensive research docs (00–25)
-├── .claude/skills/            # Claude Code skills for this project
+├── .claude/skills/                   # Claude Code skills for this project
 │   ├── terraform-provider-research/  # Progressive research disclosure skill
 │   └── terraform-provider-dev/       # Hands-on development guidance skill
-├── internal/provider/         # (planned) Provider implementation
-├── internal/resources/        # (planned) Resource implementations
-├── internal/datasources/      # (planned) Data source implementations
-├── internal/client/           # (planned) ComfyUI API client
-└── examples/                  # (planned) HCL usage examples
+├── .github/workflows/                # CI/CD
+│   ├── test.yml                      # Build + test + verify generated code
+│   └── release.yml                   # GoReleaser + GPG signing on tag push
+├── .goreleaser.yml                   # GoReleaser configuration
+└── .golangci.yml                     # Linter configuration
 ```
 
 ## ComfyUI Submodule
