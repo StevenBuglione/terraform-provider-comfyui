@@ -9,9 +9,39 @@ VENV_DIR="$RUNTIME_DIR/.venv"
 PID_FILE="$RUNTIME_DIR/comfyui.pid"
 LOG_FILE="$RUNTIME_DIR/logs/comfyui.log"
 DB_FILE="$RUNTIME_DIR/comfyui.sqlite3"
-PORT="${COMFYUI_PORT:-8188}"
 HOST="${COMFYUI_HOST:-127.0.0.1}"
 REQUIREMENTS_FILE="$ROOT_DIR/third_party/ComfyUI/requirements.txt"
+
+# Find a free port: honor explicit COMFYUI_PORT if set, else auto-select
+find_free_port() {
+  local start_port="${1:-8188}"
+  local max_attempts=50
+  local port="$start_port"
+  
+  for ((i = 0; i < max_attempts; i++)); do
+    if ! nc -z "$HOST" "$port" 2>/dev/null; then
+      echo "$port"
+      return 0
+    fi
+    ((port++))
+  done
+  
+  echo "Failed to find free port starting from $start_port" >&2
+  return 1
+}
+
+if [[ -n "${COMFYUI_PORT:-}" ]]; then
+  PORT="$COMFYUI_PORT"
+  if nc -z "$HOST" "$PORT" 2>/dev/null; then
+    echo "Error: Explicitly requested port $PORT is already in use" >&2
+    exit 1
+  fi
+else
+  PORT="$(find_free_port 8188)"
+  if [[ -z "$PORT" ]]; then
+    exit 1
+  fi
+fi
 
 mkdir -p "$RUNTIME_DIR/logs" "$BASE_DIR/custom_nodes/workspace_e2e/subgraphs" "$BASE_DIR/user/default"
 touch "$BASE_DIR/custom_nodes/workspace_e2e/__init__.py"
@@ -62,6 +92,7 @@ WORKSPACE_E2E_RUNTIME_DIR=$RUNTIME_DIR
 WORKSPACE_E2E_BASE_DIR=$BASE_DIR
 WORKSPACE_E2E_HOST=$HOST
 WORKSPACE_E2E_PORT=$PORT
+WORKSPACE_E2E_BASE_URL=http://$HOST:$PORT
 WORKSPACE_E2E_LOG_FILE=$LOG_FILE
 EOF
     echo "ComfyUI ready"

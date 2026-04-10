@@ -39,9 +39,13 @@ test('verifies staged workspaces in the real ComfyUI canvas', async ({ page }) =
       expect(metrics.backwardLinks).toEqual([]);
       expect(metrics.groups.every((group) => group.fullyVisible)).toBe(true);
 
-      // NOTE: ComfyUI/LiteGraph does not preserve group color/font_size from workflow JSON
-      // These properties are captured in metrics for observability but cannot be asserted
-      // See: validation/workspace_e2e/browser/tests/README.md#litegraph-limitations
+      // Verify styled group in mixed_overrides workspace
+      if (workspaceName === 'mixed_overrides') {
+        const compactRefGroup = metrics.groups.find((g) => g.title === 'Compact Reference');
+        expect(compactRefGroup).toBeDefined();
+        expect(compactRefGroup?.color).toBe('#ff00ff');
+        expect(compactRefGroup?.fontSize).toBe(28);
+      }
 
       const initialPosition = await getFirstNodePosition(page);
       const movedPosition = await dragFirstNode(page, 48, 36);
