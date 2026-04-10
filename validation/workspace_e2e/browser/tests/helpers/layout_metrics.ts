@@ -6,6 +6,7 @@ export type LayoutMetrics = {
   ungroupedNodes: number[];
   groupOverlaps: Array<{ a: string; b: string; area: number }>;
   nodeOverlaps: Array<{ a: number; b: number; area: number }>;
+  intraGroupNodeOverlaps: Array<{ group: string; a: number; b: number; area: number }>;
   headerOverlaps: Array<{ group: string; nodeIds: number[] }>;
   bodyContainmentViolations: Array<{ group: string; nodeIds: number[]; edges: string[] }>;
   backwardLinks: Array<{ fromNode: number; toNode: number; fromX: number; toX: number }>;
@@ -104,23 +105,33 @@ export async function readLayoutMetrics(page: Page): Promise<LayoutMetrics> {
     }
 
     const nodeOverlaps: Array<{ a: number; b: number; area: number }> = [];
+    const intraGroupNodeOverlaps: Array<{ group: string; a: number; b: number; area: number }> = [];
     for (let left = 0; left < nodes.length; left++) {
       for (let right = left + 1; right < nodes.length; right++) {
         if (nodes[left].groupIndex === null || nodes[right].groupIndex === null) {
           continue;
         }
-        if (nodes[left].groupIndex === nodes[right].groupIndex) {
+
+        const area = overlapArea(nodes[left].rect, nodes[right].rect);
+        if (area <= 0) {
           continue;
         }
 
-        const area = overlapArea(nodes[left].rect, nodes[right].rect);
-        if (area > 0) {
-          nodeOverlaps.push({
+        if (nodes[left].groupIndex === nodes[right].groupIndex) {
+          intraGroupNodeOverlaps.push({
+            group: groups[nodes[left].groupIndex].title,
             a: nodes[left].id,
             b: nodes[right].id,
             area,
           });
+          continue;
         }
+
+        nodeOverlaps.push({
+          a: nodes[left].id,
+          b: nodes[right].id,
+          area,
+        });
       }
     }
 
@@ -200,6 +211,7 @@ export async function readLayoutMetrics(page: Page): Promise<LayoutMetrics> {
       ungroupedNodes: nodes.filter((node) => node.groupIndex === null).map((node) => node.id),
       groupOverlaps,
       nodeOverlaps,
+      intraGroupNodeOverlaps,
       headerOverlaps,
       bodyContainmentViolations,
       backwardLinks,

@@ -13,10 +13,15 @@ import (
 const (
 	defaultWorkflowGap       = 320.0
 	defaultNodeYSpacing      = 140.0
+	defaultNodeWidth         = 240.0
+	defaultNodeHeight        = 120.0
+	defaultNodeEdgePadding   = 40.0
+	nodeHeightBase           = 62.0
+	nodeHeightPerRow         = 20.0
 	defaultGroupHeaderHeight = 40.0
 	defaultGroupBodyTopPad   = 40.0
-	defaultNodeColumnGap     = 260.0
-	defaultNodeRowGap        = 140.0
+	defaultNodeColumnGap     = defaultNodeWidth + defaultNodeEdgePadding
+	defaultNodeRowGap        = defaultNodeHeight + defaultNodeEdgePadding
 	defaultGroupFontSize     = 24
 )
 
@@ -480,14 +485,41 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 	if rowGap <= 0 {
 		rowGap = defaultNodeRowGap
 	}
+	nodePadding := rowGap - defaultNodeHeight
+	if nodePadding < 0 {
+		nodePadding = 0
+	}
+
+	rowHeights := make(map[int]float64)
+	maxRow := 0
+	for _, node := range nodes {
+		row := int(nodeRows[node.ID])
+		if node.Size[1] > rowHeights[row] {
+			rowHeights[row] = node.Size[1]
+		}
+		if row > maxRow {
+			maxRow = row
+		}
+	}
+
+	rowOffsets := make(map[int]float64, maxRow+1)
+	currentY := 0.0
+	for row := 0; row <= maxRow; row++ {
+		rowOffsets[row] = currentY
+		height := rowHeights[row]
+		if height == 0 {
+			height = defaultNodeHeight
+		}
+		currentY += height + nodePadding
+	}
 
 	// Position nodes
 	for _, node := range nodes {
 		level := levels[node.ID]
-		row := nodeRows[node.ID]
+		row := int(nodeRows[node.ID])
 
 		x := float64(level) * columnGap
-		y := row * rowGap
+		y := rowOffsets[row]
 
 		nodes[nodeIndexByID[node.ID]].Pos = []float64{x, y}
 	}
@@ -500,7 +532,7 @@ func buildWorkspaceNode(nodeID int, classType string, info client.NodeInfo, orde
 		ID:         nodeID,
 		Type:       classType,
 		Pos:        []float64{baseX, baseY},
-		Size:       []float64{240, 120},
+		Size:       []float64{defaultNodeWidth, estimateWorkspaceNodeHeight(len(orderedInputs), len(info.Output))},
 		Flags:      map[string]interface{}{},
 		Order:      order,
 		Mode:       0,
@@ -549,6 +581,20 @@ func buildWorkspaceNode(nodeID int, classType string, info client.NodeInfo, orde
 	}
 
 	return node, widgetValues
+}
+
+func estimateWorkspaceNodeHeight(inputCount, outputCount int) float64 {
+	rowCount := inputCount
+	if outputCount > rowCount {
+		rowCount = outputCount
+	}
+
+	height := nodeHeightBase + float64(rowCount)*nodeHeightPerRow
+	if height < defaultNodeHeight {
+		return defaultNodeHeight
+	}
+
+	return height
 }
 
 func lookupNodeInputType(info client.NodeInfo, inputName string) string {

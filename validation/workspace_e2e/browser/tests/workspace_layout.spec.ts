@@ -34,6 +34,7 @@ test('verifies staged workspaces in the real ComfyUI canvas', async ({ page }) =
       expect(metrics.ungroupedNodes).toEqual([]);
       expect(metrics.groupOverlaps).toEqual([]);
       expect(metrics.nodeOverlaps).toEqual([]);
+      expect(metrics.intraGroupNodeOverlaps).toEqual([]);
       expect(metrics.headerOverlaps).toEqual([]);
       expect(metrics.bodyContainmentViolations).toEqual([]);
       expect(metrics.backwardLinks).toEqual([]);

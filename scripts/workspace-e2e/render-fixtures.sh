@@ -10,6 +10,7 @@ TFRC_FILE="$RUNTIME_DIR/terraform.tfrc"
 
 mkdir -p "$RUNTIME_DIR" "$GENERATED_DIR"
 rm -f "$GENERATED_DIR"/*.json
+rm -f "$FIXTURE_DIR/terraform.tfstate" "$FIXTURE_DIR/terraform.tfstate.backup"
 
 cleanup() {
   rm -f "$TFRC_FILE"

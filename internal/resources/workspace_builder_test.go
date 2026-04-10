@@ -393,6 +393,28 @@ func testWorkspaceNodeInfo() map[string]client.NodeInfo {
 			Name:         "MultiWidgetNode",
 			DisplayName:  "Multi Widget Node",
 		},
+		"SamplerNode": {
+			Input: client.NodeInputInfo{
+				Required: map[string]interface{}{
+					"model":        []interface{}{"MODEL", map[string]interface{}{}},
+					"seed":         []interface{}{"INT", map[string]interface{}{}},
+					"steps":        []interface{}{"INT", map[string]interface{}{}},
+					"cfg":          []interface{}{"FLOAT", map[string]interface{}{}},
+					"sampler_name": []interface{}{[]interface{}{"euler", "heun"}, map[string]interface{}{}},
+					"scheduler":    []interface{}{[]interface{}{"normal", "karras"}, map[string]interface{}{}},
+					"positive":     []interface{}{"CONDITIONING", map[string]interface{}{}},
+					"negative":     []interface{}{"CONDITIONING", map[string]interface{}{}},
+					"latent_image": []interface{}{"LATENT", map[string]interface{}{}},
+					"denoise":      []interface{}{"FLOAT", map[string]interface{}{}},
+				},
+			},
+			InputOrder:   map[string][]string{"required": {"model", "seed", "steps", "cfg", "sampler_name", "scheduler", "positive", "negative", "latent_image", "denoise"}},
+			Output:       []string{"LATENT"},
+			OutputName:   []string{"LATENT"},
+			OutputIsList: []bool{false},
+			Name:         "SamplerNode",
+			DisplayName:  "Sampler Node",
+		},
 	}
 }
 
@@ -815,5 +837,101 @@ func TestWorkspaceBuilderHonorsPreferredRowInColumnSorting(t *testing.T) {
 	// Verify node 3 is at parent-b's row
 	if node3.Pos[1] != node2.Pos[1] {
 		t.Fatalf("expected node 3 at same Y as parent (node 2): %v, got %v", node2.Pos[1], node3.Pos[1])
+	}
+}
+
+func TestBuildWorkspaceNodeExpandsHeightForDenseControlNodes(t *testing.T) {
+	info := testWorkspaceNodeInfo()["SamplerNode"]
+	orderedInputs, err := orderedNodeInputs(info)
+	if err != nil {
+		t.Fatalf("orderedNodeInputs returned error: %v", err)
+	}
+
+	node, _ := buildWorkspaceNode(
+		1,
+		"SamplerNode",
+		info,
+		orderedInputs,
+		map[string]interface{}{
+			"seed":         7,
+			"steps":        20,
+			"cfg":          7.0,
+			"sampler_name": "euler",
+			"scheduler":    "normal",
+			"denoise":      1.0,
+		},
+		0,
+		0,
+		0,
+		0,
+	)
+
+	if node.Size[1] != 262 {
+		t.Fatalf("expected dense control node height 262, got %v", node.Size[1])
+	}
+}
+
+func TestWorkspaceBuilderUsesActualNodeHeightsForVerticalSpacing(t *testing.T) {
+	nodes := []workspaceNode{
+		{ID: 1, Type: "SamplerNode", Pos: []float64{0, 0}, Size: []float64{240, 262}},
+		{ID: 2, Type: "VAEDecode", Pos: []float64{0, 0}, Size: []float64{240, 120}},
+		{ID: 3, Type: "SaveImage", Pos: []float64{0, 0}, Size: []float64{240, 120}},
+	}
+	nodeIndexByID := map[int]int{1: 0, 2: 1, 3: 2}
+
+	if err := layoutWorkflowNodesLeftToRight(nodes, nodeIndexByID, nil, testWorkspaceNodeLayout()); err != nil {
+		t.Fatalf("layoutWorkflowNodesLeftToRight returned error: %v", err)
+	}
+
+	const expectedNodePadding = 40.0
+	if nodes[1].Pos[1] < nodes[0].Pos[1]+nodes[0].Size[1]+expectedNodePadding {
+		t.Fatalf("expected second node below first node bottom + padding, got first=%v second=%v", nodes[0], nodes[1])
+	}
+	if nodes[2].Pos[1] < nodes[1].Pos[1]+nodes[1].Size[1]+expectedNodePadding {
+		t.Fatalf("expected third node below second node bottom + padding, got second=%v third=%v", nodes[1], nodes[2])
+	}
+}
+
+func TestWorkspaceBuilderDefaultsToReadableColumnGap(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"column-gap-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "hello"}},
+					"2": {"class_type": "TargetNode", "inputs": {"source": ["1", 0], "strength": 0.5}}
+				}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	if gap := subgraph.Nodes[1].Pos[0] - subgraph.Nodes[0].Pos[0]; gap < 280 {
+		t.Fatalf("expected default column gap to be at least 280, got %v", gap)
+	}
+}
+
+func TestWorkspaceBuilderDefaultsToReadableRowGap(t *testing.T) {
+	nodes := []workspaceNode{
+		{ID: 1, Type: "SourceNode", Pos: []float64{0, 0}, Size: []float64{240, 120}},
+		{ID: 2, Type: "SourceNode", Pos: []float64{0, 0}, Size: []float64{240, 120}},
+	}
+	nodeIndexByID := map[int]int{1: 0, 2: 1}
+
+	if err := layoutWorkflowNodesLeftToRight(nodes, nodeIndexByID, nil, testWorkspaceNodeLayout()); err != nil {
+		t.Fatalf("layoutWorkflowNodesLeftToRight returned error: %v", err)
+	}
+
+	if gap := nodes[1].Pos[1] - (nodes[0].Pos[1] + nodes[0].Size[1]); gap < 40 {
+		t.Fatalf("expected default row gap to leave at least 40px edge padding, got %v", gap)
 	}
 }
