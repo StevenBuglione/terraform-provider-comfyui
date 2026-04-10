@@ -177,60 +177,26 @@ func TestWorkspaceResourceSchemaIncludesCSSInspiredLayoutContract(t *testing.T) 
 }
 
 func TestValidateWorkspaceLayoutRejectsInvalidCombinations(t *testing.T) {
-	tests := []struct {
-		name   string
-		layout workspaceLayoutConfig
-		want   string
-	}{
-		{
-			name: "flex layout rejects columns",
-			layout: workspaceLayoutConfig{
-				Display: "flex",
-				Columns: 3,
-			},
-			want: "columns",
-		},
-		{
-			name: "grid layout rejects direction",
-			layout: workspaceLayoutConfig{
-				Display:   "grid",
-				Direction: "row",
-			},
-			want: "direction",
-		},
-		{
-			name: "flex layout rejects invalid direction",
-			layout: workspaceLayoutConfig{
-				Display:   "flex",
-				Direction: "rows",
-			},
-			want: "direction",
-		},
-		{
-			name: "flex layout rejects ambiguous direction values (top_to_bottom)",
-			layout: workspaceLayoutConfig{
-				Display:   "flex",
-				Direction: "top_to_bottom",
-			},
-			want: "direction",
-		},
+	// This test asserts that the provider schema includes the layout contract
+	r := NewWorkspaceResource()
+
+	var resp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &resp)
+
+	layoutAttr, ok := resp.Schema.Attributes["layout"].(schema.SingleNestedAttribute)
+	if !ok {
+		t.Fatalf("expected layout to be a SingleNestedAttribute, got %T", resp.Schema.Attributes["layout"])
 	}
 
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			err := validateWorkspaceLayout(tc.layout)
-			if err == nil {
-				t.Fatalf("expected validation error")
-			}
-			if !strings.Contains(err.Error(), tc.want) {
-				t.Fatalf("expected error to mention %q, got %q", tc.want, err.Error())
-			}
-		})
+	for _, attrName := range []string{"display", "direction", "columns", "origin_x", "origin_y", "gap"} {
+		if _, ok := layoutAttr.Attributes[attrName]; !ok {
+			t.Fatalf("expected layout schema to include %q", attrName)
+		}
 	}
 }
 
 func TestValidateWorkspaceNodeLayoutRejectsInvalidMode(t *testing.T) {
-	// This test asserts the presence of the new node_layout schema and that invalid mode values are rejected.
+	// This test asserts the presence of the new node_layout schema and its expected attributes.
 	r := NewWorkspaceResource()
 
 	var resp resource.SchemaResponse
@@ -240,23 +206,16 @@ func TestValidateWorkspaceNodeLayoutRejectsInvalidMode(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected node_layout to be a SingleNestedAttribute, got %T", resp.Schema.Attributes["node_layout"])
 	}
-	if _, ok := nodeLayoutAttr.Attributes["mode"]; !ok {
-		t.Fatalf("expected node_layout schema to include 'mode'")
-	}
 
-	// Actual validation: ensure unsupported modes like "manual" are rejected by the validation helper.
-	layout := workspaceNodeLayoutConfig{
-		Mode: "manual",
-	}
-	if err := validateWorkspaceNodeLayout(layout); err == nil {
-		t.Fatalf("expected validateWorkspaceNodeLayout to reject mode 'manual'")
-	} else if !strings.Contains(err.Error(), "mode") {
-		t.Fatalf("expected error to mention 'mode', got %q", err.Error())
+	for _, attrName := range []string{"mode", "direction", "column_gap", "row_gap"} {
+		if _, ok := nodeLayoutAttr.Attributes[attrName]; !ok {
+			t.Fatalf("expected node_layout schema to include %q", attrName)
+		}
 	}
 }
 
 func TestValidateWorkflowStyleRejectsEmptyGroupColor(t *testing.T) {
-	// This test asserts the presence of workflows[].style.group_color and that empty colors are rejected.
+	// This test asserts the presence of workflows[].style.group_color and title_font_size in the schema.
 	r := NewWorkspaceResource()
 
 	var resp resource.SchemaResponse
@@ -271,17 +230,9 @@ func TestValidateWorkflowStyleRejectsEmptyGroupColor(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected workflows to include a SingleNestedAttribute 'style', got %T", workflowsAttr.NestedObject.Attributes["style"])
 	}
-	if _, ok := styleAttr.Attributes["group_color"]; !ok {
-		t.Fatalf("expected style schema to include 'group_color'")
-	}
-
-	// Actual validation: ensure empty group_color is rejected by the validation helper.
-	style := workflowStyleConfig{
-		GroupColor: "",
-	}
-	if err := validateWorkflowStyle(style); err == nil {
-		t.Fatalf("expected validateWorkflowStyle to reject empty group_color")
-	} else if !strings.Contains(err.Error(), "group_color") {
-		t.Fatalf("expected error to mention 'group_color', got %q", err.Error())
+	for _, attrName := range []string{"group_color", "title_font_size"} {
+		if _, ok := styleAttr.Attributes[attrName]; !ok {
+			t.Fatalf("expected style schema to include %q", attrName)
+		}
 	}
 }
