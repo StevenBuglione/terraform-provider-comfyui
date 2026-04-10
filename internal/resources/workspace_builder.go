@@ -21,6 +21,15 @@ type workspaceWorkflowSpec struct {
 	Y            *float64
 }
 
+type renderedWorkspaceWorkflow struct {
+	spec   workspaceWorkflowSpec
+	nodes  []workspaceNode
+	links  []workspaceLink
+	group  *workspaceGroup
+	width  float64
+	height float64
+}
+
 type workspaceSubgraph struct {
 	Name     string                 `json:"name"`
 	Version  int                    `json:"version"`
@@ -127,6 +136,7 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 	nextNodeID := 1
 	nextLinkID := 1
 	globalOrder := 0
+	renderedWorkflows := make([]renderedWorkspaceWorkflow, 0, len(workflows))
 
 	for workflowIndex, workflow := range workflows {
 		var prompt map[string]promptNode
@@ -145,17 +155,11 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 			nextNodeID++
 		}
 
-		baseX, baseY := workflowBasePosition(workflowIndex, layout, gap)
-		if workflow.X != nil {
-			baseX = *workflow.X
-		}
-		if workflow.Y != nil {
-			baseY = *workflow.Y
-		}
-
 		nodeIndexByID := make(map[int]int, len(originalIDs))
 		inputOrders := make(map[int][]string, len(originalIDs))
 		workflowNodeIDs := make([]int, 0, len(originalIDs))
+		workflowNodes := make([]workspaceNode, 0, len(originalIDs))
+		workflowLinks := make([]workspaceLink, 0, len(originalIDs))
 
 		for nodeIndex, originalID := range originalIDs {
 			nodeData := prompt[originalID]
@@ -168,10 +172,10 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 			if err != nil {
 				return nil, fmt.Errorf("workflow %q: node type %q: %w", workflow.Name, nodeData.ClassType, err)
 			}
-			node, widgetValues := buildWorkspaceNode(idMap[originalID], nodeData.ClassType, info, orderedInputs, nodeData.Inputs, baseX, baseY, nodeIndex, globalOrder)
+			node, widgetValues := buildWorkspaceNode(idMap[originalID], nodeData.ClassType, info, orderedInputs, nodeData.Inputs, 0, 0, nodeIndex, globalOrder)
 			node.WidgetsValues = widgetValues
-			subgraph.Nodes = append(subgraph.Nodes, node)
-			nodeIndexByID[node.ID] = len(subgraph.Nodes) - 1
+			workflowNodes = append(workflowNodes, node)
+			nodeIndexByID[node.ID] = len(workflowNodes) - 1
 			inputOrders[node.ID] = orderedInputs
 			workflowNodeIDs = append(workflowNodeIDs, node.ID)
 			globalOrder++
@@ -180,7 +184,7 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 		for _, originalID := range originalIDs {
 			nodeData := prompt[originalID]
 			targetNodeID := idMap[originalID]
-			targetNode := &subgraph.Nodes[nodeIndexByID[targetNodeID]]
+			targetNode := &workflowNodes[nodeIndexByID[targetNodeID]]
 			orderedInputs := inputOrders[targetNodeID]
 
 			for inputIndex, inputName := range orderedInputs {
@@ -208,9 +212,9 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 					TargetSlot: inputIndex,
 					Type:       linkType,
 				}
-				subgraph.Links = append(subgraph.Links, link)
+				workflowLinks = append(workflowLinks, link)
 				targetNode.Inputs[inputIndex].Link = nextLinkID
-				originNode := &subgraph.Nodes[nodeIndexByID[originNodeID]]
+				originNode := &workflowNodes[nodeIndexByID[originNodeID]]
 				if originSlot < 0 || originSlot >= len(originNode.Outputs) {
 					return nil, fmt.Errorf("workflow %q: node %d output slot %d is out of range", workflow.Name, originNodeID, originSlot)
 				}
@@ -219,8 +223,42 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 			}
 		}
 
+		var group *workspaceGroup
 		if workflow.Name != "" && len(workflowNodeIDs) > 0 {
-			subgraph.Groups = append(subgraph.Groups, buildWorkspaceGroup(len(subgraph.Groups)+1, workflow.Name, workflowNodeIDs, nodeIndexByID, subgraph.Nodes))
+			builtGroup := buildWorkspaceGroup(workflowIndex+1, workflow.Name, workflowNodeIDs, nodeIndexByID, workflowNodes)
+			group = &builtGroup
+		}
+
+		rendered := renderedWorkspaceWorkflow{
+			spec:  workflow,
+			nodes: workflowNodes,
+			links: workflowLinks,
+			group: group,
+		}
+		if group != nil {
+			rendered.width = group.Bounding[2]
+			rendered.height = group.Bounding[3]
+		} else {
+			rendered.width, rendered.height = workflowNodeBounds(workflowNodes)
+		}
+		renderedWorkflows = append(renderedWorkflows, rendered)
+	}
+
+	autoPositions := workflowBasePositions(renderedWorkflows, layout, gap)
+	for workflowIndex, rendered := range renderedWorkflows {
+		baseX, baseY := autoPositions[workflowIndex][0], autoPositions[workflowIndex][1]
+		if rendered.spec.X != nil {
+			baseX = *rendered.spec.X
+		}
+		if rendered.spec.Y != nil {
+			baseY = *rendered.spec.Y
+		}
+
+		translatedNodes := translateWorkflowNodes(rendered.nodes, baseX, baseY)
+		subgraph.Nodes = append(subgraph.Nodes, translatedNodes...)
+		subgraph.Links = append(subgraph.Links, rendered.links...)
+		if rendered.group != nil {
+			subgraph.Groups = append(subgraph.Groups, translateWorkflowGroup(*rendered.group, baseX, baseY))
 		}
 	}
 
@@ -468,4 +506,104 @@ func workflowBasePosition(workflowIndex int, layout workspaceLayoutConfig, gap f
 		}
 		return layout.OriginX + float64(workflowIndex)*gap, layout.OriginY
 	}
+}
+
+func workflowBasePositions(workflows []renderedWorkspaceWorkflow, layout workspaceLayoutConfig, gap float64) [][2]float64 {
+	positions := make([][2]float64, len(workflows))
+
+	switch layout.Display {
+	case "grid":
+		columns := int(layout.Columns)
+		if columns <= 0 {
+			columns = 1
+		}
+
+		columnWidths := make([]float64, columns)
+		rowHeights := make([]float64, 0, (len(workflows)+columns-1)/columns)
+		for index, workflow := range workflows {
+			column := index % columns
+			row := index / columns
+			if row >= len(rowHeights) {
+				rowHeights = append(rowHeights, 0)
+			}
+			if workflow.width > columnWidths[column] {
+				columnWidths[column] = workflow.width
+			}
+			if workflow.height > rowHeights[row] {
+				rowHeights[row] = workflow.height
+			}
+		}
+
+		for index := range workflows {
+			column := index % columns
+			row := index / columns
+			x := layout.OriginX
+			for prevColumn := 0; prevColumn < column; prevColumn++ {
+				x += columnWidths[prevColumn] + gap
+			}
+			y := layout.OriginY
+			for prevRow := 0; prevRow < row; prevRow++ {
+				y += rowHeights[prevRow] + gap
+			}
+			positions[index] = [2]float64{x, y}
+		}
+	default:
+		nextX := layout.OriginX
+		nextY := layout.OriginY
+		for index, workflow := range workflows {
+			positions[index] = [2]float64{nextX, nextY}
+			if layout.Direction == "column" {
+				nextY += workflow.height + gap
+				continue
+			}
+			nextX += workflow.width + gap
+		}
+	}
+
+	return positions
+}
+
+func workflowNodeBounds(nodes []workspaceNode) (float64, float64) {
+	if len(nodes) == 0 {
+		return 0, 0
+	}
+
+	minX, minY := nodes[0].Pos[0], nodes[0].Pos[1]
+	maxX, maxY := nodes[0].Pos[0]+nodes[0].Size[0], nodes[0].Pos[1]+nodes[0].Size[1]
+	for _, node := range nodes[1:] {
+		if node.Pos[0] < minX {
+			minX = node.Pos[0]
+		}
+		if node.Pos[1] < minY {
+			minY = node.Pos[1]
+		}
+		if node.Pos[0]+node.Size[0] > maxX {
+			maxX = node.Pos[0] + node.Size[0]
+		}
+		if node.Pos[1]+node.Size[1] > maxY {
+			maxY = node.Pos[1] + node.Size[1]
+		}
+	}
+
+	return maxX - minX, maxY - minY
+}
+
+func translateWorkflowNodes(nodes []workspaceNode, xOffset, yOffset float64) []workspaceNode {
+	translated := make([]workspaceNode, len(nodes))
+	copy(translated, nodes)
+	for index := range translated {
+		translated[index].Pos = []float64{translated[index].Pos[0] + xOffset, translated[index].Pos[1] + yOffset}
+	}
+	return translated
+}
+
+func translateWorkflowGroup(group workspaceGroup, xOffset, yOffset float64) workspaceGroup {
+	translated := group
+	translated.Bounding = []float64{
+		group.Bounding[0] + xOffset,
+		group.Bounding[1] + yOffset,
+		group.Bounding[2],
+		group.Bounding[3],
+	}
+	return translated
 }
