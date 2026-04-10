@@ -191,6 +191,91 @@ func TestBuildWorkspaceSubgraphFlexColumnLayoutStacksVertically(t *testing.T) {
 	}
 }
 
+func TestBuildWorkspaceSubgraphGridLayoutUsesWorkflowBoundsBetweenRows(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"grid-bounds-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "a"}},
+					"2": {"class_type": "SourceNode", "inputs": {"text": "b"}},
+					"3": {"class_type": "SourceNode", "inputs": {"text": "c"}},
+					"4": {"class_type": "SourceNode", "inputs": {"text": "d"}},
+					"5": {"class_type": "SourceNode", "inputs": {"text": "e"}},
+					"6": {"class_type": "SourceNode", "inputs": {"text": "f"}}
+				}`,
+			},
+			{
+				Name:         "workflow-b",
+				WorkflowJSON: `{"1": {"class_type": "SourceNode", "inputs": {"text": "beta"}}}`,
+			},
+			{
+				Name:         "workflow-c",
+				WorkflowJSON: `{"1": {"class_type": "SourceNode", "inputs": {"text": "gamma"}}}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display: "grid",
+			Columns: 2,
+			Gap:     180,
+		},
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	firstGroup := subgraph.Groups[0]
+	thirdGroup := subgraph.Groups[2]
+	firstGroupBottom := firstGroup.Bounding[1] + firstGroup.Bounding[3]
+	expectedMinY := firstGroupBottom + 180
+
+	if thirdGroup.Bounding[1] < expectedMinY {
+		t.Fatalf("expected second grid row group to start at or below %v, got %v", expectedMinY, thirdGroup.Bounding[1])
+	}
+}
+
+func TestBuildWorkspaceSubgraphFlexColumnUsesWorkflowBoundsBetweenItems(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"column-bounds-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "a"}},
+					"2": {"class_type": "SourceNode", "inputs": {"text": "b"}},
+					"3": {"class_type": "SourceNode", "inputs": {"text": "c"}},
+					"4": {"class_type": "SourceNode", "inputs": {"text": "d"}},
+					"5": {"class_type": "SourceNode", "inputs": {"text": "e"}}
+				}`,
+			},
+			{
+				Name:         "workflow-b",
+				WorkflowJSON: `{"1": {"class_type": "SourceNode", "inputs": {"text": "beta"}}}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "column",
+			Gap:       150,
+		},
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	firstGroup := subgraph.Groups[0]
+	secondGroup := subgraph.Groups[1]
+	firstGroupBottom := firstGroup.Bounding[1] + firstGroup.Bounding[3]
+	expectedMinY := firstGroupBottom + 150
+
+	if secondGroup.Bounding[1] < expectedMinY {
+		t.Fatalf("expected second flex item group to start at or below %v, got %v", expectedMinY, secondGroup.Bounding[1])
+	}
+}
+
 func testWorkspaceNodeInfo() map[string]client.NodeInfo {
 	return map[string]client.NodeInfo{
 		"SourceNode": {

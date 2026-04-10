@@ -75,9 +75,15 @@ hooks-run-pre-commit: $(LEFTHOOK)
 hooks-run-pre-push: $(LEFTHOOK)
 	$(LEFTHOOK) run pre-push
 
+workspace-e2e-browser-install:
+	cd validation/workspace_e2e/browser && npm install && npx playwright install chromium
+
+workspace-e2e:
+	./scripts/workspace-e2e/run.sh && cd validation/workspace_e2e/browser && npx playwright test tests/workspace_layout.spec.ts --project=chromium
+
 verify: fmt-check generate vet lint test
 
 clean:
 	rm -f $(BINARY)
 
-.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs tools hooks-install hooks-run-pre-commit hooks-run-pre-push verify clean
+.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs tools hooks-install hooks-run-pre-commit hooks-run-pre-push workspace-e2e-browser-install workspace-e2e verify clean

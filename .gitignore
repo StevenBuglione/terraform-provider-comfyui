@@ -29,3 +29,9 @@ __pycache__/
 .pytest_cache/
 .bin/
 generate
+validation/workspace_e2e/.runtime/
+validation/workspace_e2e/artifacts/generated/
+validation/workspace_e2e/artifacts/browser/
+validation/workspace_e2e/browser/node_modules/
+validation/workspace_e2e/browser/test-results/
+validation/workspace_e2e/browser/playwright-report/

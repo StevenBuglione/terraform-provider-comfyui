@@ -196,7 +196,11 @@ make test
 make lint
 make docs
 make hooks-install
+make workspace-e2e-browser-install
+make workspace-e2e
 ```
+
+`make workspace-e2e` launches a disposable local ComfyUI from `third_party/ComfyUI`, renders the `validation/workspace_e2e` stress fixtures through `comfyui_workspace`, and verifies the real browser canvas with Playwright. Evidence lands under `validation/workspace_e2e/artifacts/browser/` as screenshots and metrics JSON files. In this repo, "clean and usable" means each staged workspace loads in ComfyUI, every workflow group remains visible, and the captured metrics show zero cross-group overlaps.
 
 Generated node resources come from extracted ComfyUI metadata and are checked in under `internal/resources/generated`. For deeper project structure and development guidance, see [CLAUDE.md](./CLAUDE.md).
 
