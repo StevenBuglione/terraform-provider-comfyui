@@ -138,8 +138,9 @@ Extensive research lives in `doc/terraform/provider/research/`. **27 files** cov
 3. **Virtual node resources** — The 645 generated node resources are virtual/plan-only (no API calls in CRUD). They represent ComfyUI nodes in Terraform state for workflow composition; the actual execution happens through `comfyui_workflow`. Of these, **180 are partner/API nodes** that call third-party AI services (see Partner Nodes section below).
 4. **Code generation pipeline** — Python AST extractors parse ComfyUI source → `node_specs.json` → Go generator produces one resource file per node + registry. This allows automated updates when ComfyUI adds/changes nodes.
 5. **Resources**: `comfyui_workflow` (hand-written, queues & executes workflows) + 645 generated node resources (one per ComfyUI node type, e.g., `comfyui_ksampler`, `comfyui_clip_text_encode`).
-6. **Data sources** (5): `comfyui_system_stats`, `comfyui_queue`, `comfyui_node_info`, `comfyui_workflow_history`, `comfyui_output`.
+6. **Data sources** (6): `comfyui_system_stats`, `comfyui_queue`, `comfyui_node_info`, `comfyui_workflow_history`, `comfyui_output`, `comfyui_provider_info`.
 7. **Multi-modal capabilities** — Through partner nodes, the provider supports image generation/editing, video generation, audio synthesis/processing, text/LLM chat, and 3D model generation — all orchestrated via `comfyui_workflow`.
+8. **Version alignment** — The provider version is tightly coupled to the ComfyUI version it was generated from. The ComfyUI version (`v0.18.5`) is embedded in `generated.ComfyUIVersion`, exposed via the `comfyui_provider_info` data source, and logged at provider startup. The `node_specs.json` records the exact ComfyUI version and extraction timestamp. See "Versioning" section below.
 
 ## Commands
 
@@ -221,7 +222,40 @@ python3 -m pytest scripts/extract/test_extractors.py -v
 - Generated code: Never edit files in `internal/resources/generated/` — regenerate instead
 - Documentation: Generated via tfplugindocs from schema + templates (doc 13)
 - Commits: Conventional Commits format
-- Versioning: Semantic Versioning (doc 15)
+- Versioning: See "Versioning" section below
+
+## Versioning
+
+The provider version is **tightly coupled to the ComfyUI version** it was generated from.
+
+### Version Sources
+
+| Source | Location | Example |
+|--------|----------|---------|
+| ComfyUI version | `node_specs.json` → `comfyui_version` | `v0.18.5` |
+| Generated constant | `internal/resources/generated/registry.go` → `ComfyUIVersion` | `v0.18.5` |
+| Provider version | `main.go` → `version` (set by GoReleaser ldflags) | `0.18.5` |
+| Node count | `internal/resources/generated/registry.go` → `NodeCount` | `645` |
+| Extraction timestamp | `internal/resources/generated/registry.go` → `ExtractedAt` | ISO 8601 |
+
+### How Version Flows
+
+1. `scripts/update-comfyui.sh v0.19.0` → pins submodule to tag
+2. Python extractors → `node_specs.json` with `comfyui_version` field
+3. `go run ./cmd/generate` → reads `comfyui_version` from JSON, embeds as `generated.ComfyUIVersion` constant
+4. Provider schema description includes ComfyUI version and node count
+5. `comfyui_provider_info` data source exposes `comfyui_version`, `provider_version`, `node_count`, `extracted_at`
+6. Provider logs ComfyUI version at startup via `tflog.Info`
+
+### Querying Version at Runtime
+
+```hcl
+data "comfyui_provider_info" "current" {}
+
+output "compatibility" {
+  value = "Provider ${data.comfyui_provider_info.current.provider_version} for ComfyUI ${data.comfyui_provider_info.current.comfyui_version} (${data.comfyui_provider_info.current.node_count} nodes)"
+}
+```
 
 ## Test Suite
 
@@ -229,6 +263,7 @@ python3 -m pytest scripts/extract/test_extractors.py -v
 |------|-----------|-------|---------|
 | Code generator (`cmd/generate/`) | Go `testing` | 9 tests | `go test ./cmd/generate/ -v` |
 | HTTP client (`internal/client/`) | Go `testing` + `httptest` | 15 tests | `go test ./internal/client/ -v` |
+| Data sources (`internal/datasources/`) | Go `testing` | 2 tests | `go test ./internal/datasources/ -v` |
 | Python extractors (`scripts/extract/`) | pytest | 16 tests | `python3 -m pytest scripts/extract/test_extractors.py -v` |
 
 ## ComfyUI API Reference

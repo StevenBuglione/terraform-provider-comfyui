@@ -134,6 +134,15 @@ package generated
 
 import "github.com/hashicorp/terraform-plugin-framework/resource"
 
+// ComfyUIVersion is the version of ComfyUI that these resources were generated from.
+const ComfyUIVersion = "{{ .ComfyUIVersion }}"
+
+// NodeCount is the total number of generated node resources.
+const NodeCount = {{ .NodeCount }}
+
+// ExtractedAt is the timestamp when node specs were extracted.
+const ExtractedAt = "{{ .ExtractedAt }}"
+
 // AllResources returns constructor functions for all generated ComfyUI node resources.
 func AllResources() []func() resource.Resource {
 	return []func() resource.Resource{

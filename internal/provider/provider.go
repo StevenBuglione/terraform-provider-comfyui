@@ -44,7 +44,11 @@ func (p *ComfyUIProvider) Metadata(_ context.Context, _ provider.MetadataRequest
 
 func (p *ComfyUIProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Terraform provider for ComfyUI - a node-based Stable Diffusion GUI",
+		Description: fmt.Sprintf(
+			"Terraform provider for ComfyUI - a node-based Stable Diffusion GUI. "+
+				"Generated from ComfyUI %s with %d node resources.",
+			generated.ComfyUIVersion, generated.NodeCount,
+		),
 		Attributes: map[string]schema.Attribute{
 			"host": schema.StringAttribute{
 				Description: "ComfyUI server host. Can also be set with COMFYUI_HOST environment variable. Defaults to localhost.",
@@ -64,7 +68,13 @@ func (p *ComfyUIProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 }
 
 func (p *ComfyUIProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
-	tflog.Info(ctx, "Configuring ComfyUI provider")
+	tflog.Info(ctx, "Configuring ComfyUI provider",
+		map[string]interface{}{
+			"provider_version": p.version,
+			"comfyui_version":  generated.ComfyUIVersion,
+			"node_count":       generated.NodeCount,
+		},
+	)
 
 	var config ComfyUIProviderModel
 	resp.Diagnostics.Append(req.Config.Get(ctx, &config)...)
@@ -122,5 +132,6 @@ func (p *ComfyUIProvider) DataSources(_ context.Context) []func() datasource.Dat
 		datasources.NewNodeInfoDataSource,
 		datasources.NewWorkflowHistoryDataSource,
 		datasources.NewOutputDataSource,
+		datasources.NewProviderInfoDataSource(p.version),
 	}
 }

@@ -17,9 +17,11 @@ import (
 // --- JSON structures matching node_specs.json ---
 
 type NodeSpecs struct {
-	Version  string `json:"version"`
-	Nodes    []Node `json:"nodes"`
-	Total    int    `json:"total_nodes"`
+	Version        string `json:"version"`
+	ComfyUIVersion string `json:"comfyui_version"`
+	ExtractedAt    string `json:"extracted_at"`
+	Nodes          []Node `json:"nodes"`
+	Total          int    `json:"total_nodes"`
 }
 
 type Node struct {
@@ -104,7 +106,10 @@ type OutputRef struct {
 }
 
 type RegistryData struct {
-	Constructors []string
+	Constructors   []string
+	ComfyUIVersion string
+	NodeCount      int
+	ExtractedAt    string
 }
 
 func main() {
@@ -179,8 +184,13 @@ func main() {
 	// Sort constructors for deterministic output
 	sort.Strings(constructors)
 
-	// Generate registry
-	regData := RegistryData{Constructors: constructors}
+	// Generate registry with version metadata
+	regData := RegistryData{
+		Constructors:   constructors,
+		ComfyUIVersion: specs.ComfyUIVersion,
+		NodeCount:      generated,
+		ExtractedAt:    specs.ExtractedAt,
+	}
 	var regBuf bytes.Buffer
 	if err := regTmpl.Execute(&regBuf, regData); err != nil {
 		log.Fatalf("Failed to execute registry template: %v", err)

@@ -4,6 +4,9 @@ set -euo pipefail
 # Update the ComfyUI submodule to a specific tag version.
 # Usage: ./scripts/update-comfyui.sh <tag>
 # Example: ./scripts/update-comfyui.sh v0.19.0
+#
+# After updating, you must re-run the extraction pipeline and code generator
+# to regenerate node resources for the new ComfyUI version.
 
 SUBMODULE_PATH="third_party/ComfyUI"
 
@@ -39,7 +42,12 @@ git add "$SUBMODULE_PATH"
 
 echo ""
 echo "==> ComfyUI submodule pinned to ${TAG} (${COMMIT_SHA})"
-echo "==> Run 'git commit' to save this change."
+echo ""
+echo "Next steps:"
+echo "  1. Re-extract node specs:      python3 scripts/extract/merge.py"
+echo "  2. Regenerate Go resources:     go run ./cmd/generate"
+echo "  3. Build and test:              go build ./... && go test ./..."
+echo "  4. Commit all changes:          git add -A && git commit"
 echo ""
 echo "Suggested commit message:"
-echo "  chore: update ComfyUI submodule to ${TAG}"
+echo "  feat: update ComfyUI to ${TAG} and regenerate node resources"
