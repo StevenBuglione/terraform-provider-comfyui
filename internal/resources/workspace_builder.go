@@ -10,8 +10,13 @@ import (
 )
 
 const (
-	defaultWorkflowGap  = 320.0
-	defaultNodeYSpacing = 140.0
+	defaultWorkflowGap       = 320.0
+	defaultNodeYSpacing      = 140.0
+	defaultGroupHeaderHeight = 40.0
+	defaultGroupBodyTopPad   = 40.0
+	defaultNodeColumnGap     = 260.0
+	defaultNodeRowGap        = 140.0
+	defaultGroupFontSize     = 24
 )
 
 type workspaceWorkflowSpec struct {
@@ -116,9 +121,6 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 		return nil, fmt.Errorf("at least one workflow is required")
 	}
 
-	// nodeLayout is available for future DAG-based node positioning
-	_ = nodeLayout
-
 	gap := layout.Gap
 	if gap <= 0 {
 		gap = defaultWorkflowGap
@@ -176,6 +178,7 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 			if err != nil {
 				return nil, fmt.Errorf("workflow %q: node type %q: %w", workflow.Name, nodeData.ClassType, err)
 			}
+			// Build nodes at (0,0) temporarily; layoutWorkflowNodesLeftToRight will position them
 			node, widgetValues := buildWorkspaceNode(idMap[originalID], nodeData.ClassType, info, orderedInputs, nodeData.Inputs, 0, 0, nodeIndex, globalOrder)
 			node.WidgetsValues = widgetValues
 			workflowNodes = append(workflowNodes, node)
@@ -227,9 +230,14 @@ func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layo
 			}
 		}
 
+		// Apply DAG-based left-to-right layout with configurable spacing
+		if err := layoutWorkflowNodesLeftToRight(workflowNodes, nodeIndexByID, workflowLinks, nodeLayout); err != nil {
+			return nil, fmt.Errorf("workflow %q: %w", workflow.Name, err)
+		}
+
 		var group *workspaceGroup
 		if workflow.Name != "" && len(workflowNodeIDs) > 0 {
-			builtGroup := buildWorkspaceGroup(workflowIndex+1, workflow.Name, workflowNodeIDs, nodeIndexByID, workflowNodes)
+			builtGroup := buildWorkspaceGroup(workflowIndex+1, workflow.Name, workflowNodeIDs, nodeIndexByID, workflowNodes, workflow.Style)
 			group = &builtGroup
 		}
 
@@ -338,11 +346,139 @@ func orderedNodeInputs(info client.NodeInfo) ([]string, error) {
 	return ordered, nil
 }
 
+// layoutWorkflowNodesLeftToRight positions nodes in a left-to-right DAG layout.
+// Uses longest-upstream-path for column assignment and average-parent-row for vertical placement.
+func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int]int, links []workspaceLink, nodeLayout workspaceNodeLayoutConfig) error {
+	if len(nodes) == 0 {
+		return nil
+	}
+
+	// Build dependency graph
+	upstreamLinks := make(map[int][]int)   // node ID -> list of upstream node IDs
+	downstreamLinks := make(map[int][]int) // node ID -> list of downstream node IDs
+	for _, link := range links {
+		upstreamLinks[link.TargetID] = append(upstreamLinks[link.TargetID], link.OriginID)
+		downstreamLinks[link.OriginID] = append(downstreamLinks[link.OriginID], link.TargetID)
+	}
+
+	// Compute longest upstream path (column level) for each node
+	levels := make(map[int]int)
+	var computeLevel func(nodeID int) int
+	computeLevel = func(nodeID int) int {
+		if level, ok := levels[nodeID]; ok {
+			return level
+		}
+		maxUpstreamLevel := -1
+		for _, upstreamID := range upstreamLinks[nodeID] {
+			upstreamLevel := computeLevel(upstreamID)
+			if upstreamLevel > maxUpstreamLevel {
+				maxUpstreamLevel = upstreamLevel
+			}
+		}
+		levels[nodeID] = maxUpstreamLevel + 1
+		return levels[nodeID]
+	}
+
+	for _, node := range nodes {
+		computeLevel(node.ID)
+	}
+
+	// Group nodes by column (level)
+	columnNodes := make(map[int][]int)
+	for nodeID, level := range levels {
+		columnNodes[level] = append(columnNodes[level], nodeID)
+	}
+
+	// Sort nodes within each column by preferred row
+	// Preferred row = average parent row if parents exist, otherwise original prompt order (node index)
+	for level := range columnNodes {
+		nodeIDs := columnNodes[level]
+		sort.Slice(nodeIDs, func(i, j int) bool {
+			// Use original node index as stable tie-breaker
+			indexI := nodeIndexByID[nodeIDs[i]]
+			indexJ := nodeIndexByID[nodeIDs[j]]
+			return indexI < indexJ
+		})
+	}
+
+	// Assign row positions within columns
+	// First pass: assign preferred rows
+	nodeRows := make(map[int]float64)
+	columnMaxRow := make(map[int]float64)
+
+	// Process columns left to right
+	maxLevel := 0
+	for level := range columnNodes {
+		if level > maxLevel {
+			maxLevel = level
+		}
+	}
+
+	for level := 0; level <= maxLevel; level++ {
+		nodeIDs, ok := columnNodes[level]
+		if !ok {
+			continue
+		}
+
+		usedRows := make(map[float64]bool)
+		for _, nodeID := range nodeIDs {
+			var preferredRow float64
+			parents := upstreamLinks[nodeID]
+			if len(parents) > 0 {
+				// Average parent row
+				totalRow := 0.0
+				for _, parentID := range parents {
+					totalRow += nodeRows[parentID]
+				}
+				preferredRow = totalRow / float64(len(parents))
+			} else {
+				// Use original node index as preferred row for source nodes
+				preferredRow = float64(nodeIndexByID[nodeID])
+			}
+
+			// Find first available row at or below preferred row
+			finalRow := preferredRow
+			for usedRows[finalRow] {
+				finalRow++
+			}
+			nodeRows[nodeID] = finalRow
+			usedRows[finalRow] = true
+
+			if finalRow > columnMaxRow[level] {
+				columnMaxRow[level] = finalRow
+			}
+		}
+	}
+
+	// Apply spacing configuration
+	columnGap := nodeLayout.ColumnGap
+	if columnGap <= 0 {
+		columnGap = defaultNodeColumnGap
+	}
+	rowGap := nodeLayout.RowGap
+	if rowGap <= 0 {
+		rowGap = defaultNodeRowGap
+	}
+
+	// Position nodes
+	for _, node := range nodes {
+		level := levels[node.ID]
+		row := nodeRows[node.ID]
+
+		x := float64(level) * columnGap
+		y := row * rowGap
+
+		nodes[nodeIndexByID[node.ID]].Pos = []float64{x, y}
+	}
+
+	return nil
+}
+
 func buildWorkspaceNode(nodeID int, classType string, info client.NodeInfo, orderedInputs []string, rawInputs map[string]interface{}, baseX, baseY float64, nodeIndex int, order int) (workspaceNode, []interface{}) {
 	node := workspaceNode{
 		ID:         nodeID,
 		Type:       classType,
-		Pos:        []float64{baseX, baseY + float64(nodeIndex)*defaultNodeYSpacing},
+		Pos:        []float64{baseX, baseY},
 		Size:       []float64{240, 120},
 		Flags:      map[string]interface{}{},
 		Order:      order,
@@ -457,7 +593,7 @@ func inputExists(inputs map[string]interface{}, inputName string) bool {
 	return ok
 }
 
-func buildWorkspaceGroup(groupID int, title string, workflowNodeIDs []int, nodeIndexByID map[int]int, nodes []workspaceNode) workspaceGroup {
+func buildWorkspaceGroup(groupID int, title string, workflowNodeIDs []int, nodeIndexByID map[int]int, nodes []workspaceNode, style workspaceWorkflowStyleConfig) workspaceGroup {
 	minX, minY := 0.0, 0.0
 	maxX, maxY := 0.0, 0.0
 
@@ -484,14 +620,36 @@ func buildWorkspaceGroup(groupID int, title string, workflowNodeIDs []int, nodeI
 		}
 	}
 
-	padding := 40.0
+	headerHeight := defaultGroupHeaderHeight
+	bodyTopPad := defaultGroupBodyTopPad
+	sidePad := 40.0
+	bottomPad := 40.0
 
-	return workspaceGroup{
+	// Group bounding box starts above the first node by header + body padding
+	groupTop := minY - headerHeight - bodyTopPad
+	groupLeft := minX - sidePad
+	groupWidth := (maxX - minX) + sidePad*2
+	groupHeight := (maxY - groupTop) + bottomPad
+
+	group := workspaceGroup{
 		ID:       groupID,
 		Title:    title,
-		Bounding: []float64{minX - padding, minY - padding, (maxX - minX) + padding*2, (maxY - minY) + padding*2},
+		Bounding: []float64{groupLeft, groupTop, groupWidth, groupHeight},
 		Flags:    map[string]interface{}{},
 	}
+
+	// Apply style fields
+	if style.GroupColor != "" {
+		group.Color = style.GroupColor
+	}
+	if style.TitleFontSize > 0 {
+		group.FontSize = style.TitleFontSize
+	} else if style.TitleFontSize == 0 {
+		// Use default font size
+		group.FontSize = defaultGroupFontSize
+	}
+
+	return group
 }
 
 func workflowBasePositions(workflows []renderedWorkspaceWorkflow, layout workspaceLayoutConfig, gap float64) [][2]float64 {
