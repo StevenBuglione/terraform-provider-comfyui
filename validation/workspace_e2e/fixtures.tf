@@ -518,7 +518,7 @@ locals {
       }
       overrides = {
         compact_reference = {
-          x = 840
+          x = 1840
           y = 120
           style = {
             group_color    = "#ff00ff"
