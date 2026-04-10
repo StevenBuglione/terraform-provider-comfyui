@@ -230,7 +230,7 @@ func TestValidateWorkspaceLayoutRejectsInvalidCombinations(t *testing.T) {
 }
 
 func TestValidateWorkspaceNodeLayoutRejectsInvalidMode(t *testing.T) {
-	// This test asserts the presence of the new node_layout schema and will fail until implemented.
+	// This test asserts the presence of the new node_layout schema and that invalid mode values are rejected.
 	r := NewWorkspaceResource()
 
 	var resp resource.SchemaResponse
@@ -240,14 +240,23 @@ func TestValidateWorkspaceNodeLayoutRejectsInvalidMode(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected node_layout to be a SingleNestedAttribute, got %T", resp.Schema.Attributes["node_layout"])
 	}
-	// If the schema existed, validation would reject unsupported mode values like "manual".
 	if _, ok := nodeLayoutAttr.Attributes["mode"]; !ok {
 		t.Fatalf("expected node_layout schema to include 'mode'")
+	}
+
+	// Actual validation: ensure unsupported modes like "manual" are rejected by the validation helper.
+	layout := workspaceNodeLayoutConfig{
+		Mode: "manual",
+	}
+	if err := validateWorkspaceNodeLayout(layout); err == nil {
+		t.Fatalf("expected validateWorkspaceNodeLayout to reject mode 'manual'")
+	} else if !strings.Contains(err.Error(), "mode") {
+		t.Fatalf("expected error to mention 'mode', got %q", err.Error())
 	}
 }
 
 func TestValidateWorkflowStyleRejectsEmptyGroupColor(t *testing.T) {
-	// This test asserts the presence of workflows[].style.group_color and will fail until implemented.
+	// This test asserts the presence of workflows[].style.group_color and that empty colors are rejected.
 	r := NewWorkspaceResource()
 
 	var resp resource.SchemaResponse
@@ -264,5 +273,15 @@ func TestValidateWorkflowStyleRejectsEmptyGroupColor(t *testing.T) {
 	}
 	if _, ok := styleAttr.Attributes["group_color"]; !ok {
 		t.Fatalf("expected style schema to include 'group_color'")
+	}
+
+	// Actual validation: ensure empty group_color is rejected by the validation helper.
+	style := workflowStyleConfig{
+		GroupColor: "",
+	}
+	if err := validateWorkflowStyle(style); err == nil {
+		t.Fatalf("expected validateWorkflowStyle to reject empty group_color")
+	} else if !strings.Contains(err.Error(), "group_color") {
+		t.Fatalf("expected error to mention 'group_color', got %q", err.Error())
 	}
 }
