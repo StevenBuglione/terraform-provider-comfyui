@@ -127,14 +127,29 @@ resource "comfyui_workspace" "gallery" {
     origin_y = 80
   }
 
+  node_layout = {
+    mode       = "dag"
+    direction  = "left_to_right"
+    column_gap = 200
+    row_gap    = 60
+  }
+
   workflows = [
     {
       name          = "Landscape"
       workflow_json = comfyui_workflow.landscape.assembled_json
+      style = {
+        group_color     = "#3b82f6"
+        title_font_size = 18
+      }
     },
     {
       name          = "Portrait"
       workflow_json = comfyui_workflow.portrait.assembled_json
+      style = {
+        group_color     = "#a855f7"
+        title_font_size = 18
+      }
     }
   ]
 }

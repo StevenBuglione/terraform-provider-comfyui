@@ -155,6 +155,8 @@ Most generated `comfyui_*` node resources are virtual. They define typed node in
 - accept multiple API-format workflows, including `comfyui_workflow.*.assembled_json`
 - compose them into one UI-oriented workspace/subgraph export
 - position workflow islands with a typed, CSS-inspired `layout` block (`display`, `direction`, `gap`, `columns`, `origin_*`)
+- style individual workflows via per-workflow `group_color` and `title_font_size` settings
+- control internal node layout within each workflow via top-level `node_layout` settings (`mode`, `direction`, `column_gap`, `row_gap`)
 - write the composed workspace JSON to `output_file`
 
 Unlike `comfyui_workflow` file-only export, `comfyui_workspace` still needs a live ComfyUI connection so it can fetch node metadata from `/object_info` and build UI slot/widget information.
@@ -200,7 +202,7 @@ make workspace-e2e-browser-install
 make workspace-e2e
 ```
 
-`make workspace-e2e` launches a disposable local ComfyUI from `third_party/ComfyUI`, renders the `validation/workspace_e2e` stress fixtures through `comfyui_workspace`, and verifies the real browser canvas with Playwright. Evidence lands under `validation/workspace_e2e/artifacts/browser/` as screenshots and metrics JSON files. In this repo, "clean and usable" means each staged workspace loads in ComfyUI, every workflow group remains visible, and the captured metrics show zero cross-group overlaps.
+`make workspace-e2e` launches a disposable local ComfyUI from `third_party/ComfyUI` (auto-selecting a free local port if 8188 is busy), renders the `validation/workspace_e2e` stress fixtures through `comfyui_workspace`, and verifies the real browser canvas with Playwright. Evidence lands under `validation/workspace_e2e/artifacts/browser/` as screenshots and metrics JSON files. In this repo, "clean and usable" means each staged workspace loads in ComfyUI, every workflow group remains visible, and the captured metrics show zero cross-group overlaps, zero header overlaps, zero body containment violations, zero backward links, and correctly styled group rendering.
 
 Generated node resources come from extracted ComfyUI metadata and are checked in under `internal/resources/generated`. For deeper project structure and development guidance, see [CLAUDE.md](./CLAUDE.md).
 
