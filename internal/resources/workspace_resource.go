@@ -310,7 +310,7 @@ func (r *WorkspaceResource) buildWorkspaceState(ctx context.Context, data *works
 		return
 	}
 
-	name, specs, layout, err := workspaceConfigFromModel(*data)
+	name, specs, layout, nodeLayout, err := workspaceConfigFromModel(*data)
 	if err != nil {
 		diags.AddError("Invalid Workspace Configuration", err.Error())
 		return
@@ -322,7 +322,7 @@ func (r *WorkspaceResource) buildWorkspaceState(ctx context.Context, data *works
 		return
 	}
 
-	subgraph, err := buildWorkspaceSubgraph(name, specs, layout, objectInfo)
+	subgraph, err := buildWorkspaceSubgraph(name, specs, layout, nodeLayout, objectInfo)
 	if err != nil {
 		diags.AddError("Failed to Build Workspace", err.Error())
 		return
@@ -346,13 +346,14 @@ func (r *WorkspaceResource) buildWorkspaceState(ctx context.Context, data *works
 	}
 }
 
-func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspaceWorkflowSpec, workspaceLayoutConfig, error) {
+func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspaceWorkflowSpec, workspaceLayoutConfig, workspaceNodeLayoutConfig, error) {
 	if model.Name.IsNull() || model.Name.IsUnknown() || model.Name.ValueString() == "" {
-		return "", nil, workspaceLayoutConfig{}, fmt.Errorf("name must be provided")
+		return "", nil, workspaceLayoutConfig{}, workspaceNodeLayoutConfig{}, fmt.Errorf("name must be provided")
 	}
 
-	if _, err := workspaceNodeLayoutConfigFromModel(model.NodeLayout); err != nil {
-		return "", nil, workspaceLayoutConfig{}, err
+	nodeLayout, err := workspaceNodeLayoutConfigFromModel(model.NodeLayout)
+	if err != nil {
+		return "", nil, workspaceLayoutConfig{}, workspaceNodeLayoutConfig{}, err
 	}
 
 	layout := workspaceLayoutConfig{
@@ -364,23 +365,22 @@ func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspace
 		OriginY:   float64Value(model.Layout.OriginY),
 	}
 	if err := validateWorkspaceLayout(layout); err != nil {
-		return "", nil, workspaceLayoutConfig{}, err
+		return "", nil, workspaceLayoutConfig{}, workspaceNodeLayoutConfig{}, err
 	}
 
 	specs := make([]workspaceWorkflowSpec, 0, len(model.Workflows))
 	for _, workflow := range model.Workflows {
 		if workflow.Name.IsNull() || workflow.Name.IsUnknown() || workflow.Name.ValueString() == "" {
-			return "", nil, workspaceLayoutConfig{}, fmt.Errorf("each workflow entry must include a name")
+			return "", nil, workspaceLayoutConfig{}, workspaceNodeLayoutConfig{}, fmt.Errorf("each workflow entry must include a name")
 		}
 		if workflow.WorkflowJSON.IsNull() || workflow.WorkflowJSON.IsUnknown() || workflow.WorkflowJSON.ValueString() == "" {
-			return "", nil, workspaceLayoutConfig{}, fmt.Errorf("workflow %q must include workflow_json", workflow.Name.ValueString())
+			return "", nil, workspaceLayoutConfig{}, workspaceNodeLayoutConfig{}, fmt.Errorf("workflow %q must include workflow_json", workflow.Name.ValueString())
 		}
-
-		_ = workspaceWorkflowStyleConfigFromModel(workflow.Style)
 
 		spec := workspaceWorkflowSpec{
 			Name:         workflow.Name.ValueString(),
 			WorkflowJSON: workflow.WorkflowJSON.ValueString(),
+			Style:        workspaceWorkflowStyleConfigFromModel(workflow.Style),
 		}
 		if !workflow.X.IsNull() && !workflow.X.IsUnknown() {
 			x := workflow.X.ValueFloat64()
@@ -393,7 +393,7 @@ func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspace
 		specs = append(specs, spec)
 	}
 
-	return model.Name.ValueString(), specs, layout, nil
+	return model.Name.ValueString(), specs, layout, nodeLayout, nil
 }
 
 func workspaceWorkflowStyleConfigFromModel(model workspaceWorkflowStyleModel) workspaceWorkflowStyleConfig {

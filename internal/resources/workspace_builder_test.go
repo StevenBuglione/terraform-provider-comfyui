@@ -6,6 +6,13 @@ import (
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 )
 
+func testWorkspaceNodeLayout() workspaceNodeLayoutConfig {
+	return workspaceNodeLayoutConfig{
+		Mode:      "dag",
+		Direction: "left_to_right",
+	}
+}
+
 func TestBuildWorkspaceSubgraphSingleWorkflow(t *testing.T) {
 	subgraph, err := buildWorkspaceSubgraph(
 		"demo-workspace",
@@ -22,6 +29,7 @@ func TestBuildWorkspaceSubgraphSingleWorkflow(t *testing.T) {
 			Display:   "flex",
 			Direction: "row",
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err != nil {
@@ -90,6 +98,7 @@ func TestBuildWorkspaceSubgraphRenumbersMultipleWorkflows(t *testing.T) {
 			Direction: "row",
 			Gap:       200,
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err != nil {
@@ -139,6 +148,7 @@ func TestBuildWorkspaceSubgraphGridLayoutUsesColumnsAndOrigin(t *testing.T) {
 			OriginX: 50,
 			OriginY: 25,
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err != nil {
@@ -174,6 +184,7 @@ func TestBuildWorkspaceSubgraphFlexColumnLayoutStacksVertically(t *testing.T) {
 			OriginX:   10,
 			OriginY:   20,
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err != nil {
@@ -220,6 +231,7 @@ func TestBuildWorkspaceSubgraphGridLayoutUsesWorkflowBoundsBetweenRows(t *testin
 			Columns: 2,
 			Gap:     180,
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err != nil {
@@ -260,6 +272,7 @@ func TestBuildWorkspaceSubgraphFlexColumnUsesWorkflowBoundsBetweenItems(t *testi
 			Direction: "column",
 			Gap:       150,
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err != nil {
@@ -384,6 +397,7 @@ func TestBuildWorkspaceSubgraphRejectsOutOfRangeOutputSlot(t *testing.T) {
 			Display:   "flex",
 			Direction: "row",
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err == nil {
@@ -406,6 +420,7 @@ func TestBuildWorkspaceSubgraphTreatsListMetadataInputsAsCombo(t *testing.T) {
 			Display:   "flex",
 			Direction: "row",
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err != nil {
@@ -433,6 +448,7 @@ func TestBuildWorkspaceSubgraphRejectsMissingInputOrder(t *testing.T) {
 			Display:   "flex",
 			Direction: "row",
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err == nil {
@@ -455,6 +471,7 @@ func TestBuildWorkspaceSubgraphRejectsInvalidInputOrderEntries(t *testing.T) {
 			Display:   "flex",
 			Direction: "row",
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err == nil {
@@ -477,6 +494,7 @@ func TestBuildWorkspaceSubgraphPreservesWidgetAlignmentWhenRequiredWidgetMissing
 			Display:   "flex",
 			Direction: "row",
 		},
+		testWorkspaceNodeLayout(),
 		testWorkspaceNodeInfo(),
 	)
 	if err != nil {

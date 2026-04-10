@@ -19,6 +19,7 @@ type workspaceWorkflowSpec struct {
 	WorkflowJSON string
 	X            *float64
 	Y            *float64
+	Style        workspaceWorkflowStyleConfig
 }
 
 type renderedWorkspaceWorkflow struct {
@@ -107,13 +108,16 @@ type promptNode struct {
 	Inputs    map[string]interface{} `json:"inputs"`
 }
 
-func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layout workspaceLayoutConfig, nodeInfo map[string]client.NodeInfo) (*workspaceSubgraph, error) {
+func buildWorkspaceSubgraph(name string, workflows []workspaceWorkflowSpec, layout workspaceLayoutConfig, nodeLayout workspaceNodeLayoutConfig, nodeInfo map[string]client.NodeInfo) (*workspaceSubgraph, error) {
 	if err := validateWorkspaceLayout(layout); err != nil {
 		return nil, err
 	}
 	if len(workflows) == 0 {
 		return nil, fmt.Errorf("at least one workflow is required")
 	}
+
+	// nodeLayout is available for future DAG-based node positioning
+	_ = nodeLayout
 
 	gap := layout.Gap
 	if gap <= 0 {

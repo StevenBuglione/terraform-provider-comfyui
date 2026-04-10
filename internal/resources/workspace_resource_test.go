@@ -48,7 +48,7 @@ func TestWorkspaceConfigFromModelBuildsSpecs(t *testing.T) {
 		},
 	}
 
-	name, specs, layout, err := workspaceConfigFromModel(model)
+	name, specs, layout, nodeLayout, err := workspaceConfigFromModel(model)
 	if err != nil {
 		t.Fatalf("workspaceConfigFromModel returned error: %v", err)
 	}
@@ -65,8 +65,20 @@ func TestWorkspaceConfigFromModelBuildsSpecs(t *testing.T) {
 	if specs[0].X == nil || *specs[0].X != 25 {
 		t.Fatalf("expected workflow X override 25, got %#v", specs[0].X)
 	}
+	if specs[0].Style.GroupColor != "#aabbcc" {
+		t.Fatalf("expected workflow style group_color %q, got %q", "#aabbcc", specs[0].Style.GroupColor)
+	}
+	if specs[0].Style.TitleFontSize != 18 {
+		t.Fatalf("expected workflow style title_font_size %d, got %d", 18, specs[0].Style.TitleFontSize)
+	}
 	if layout.Display != "grid" || layout.Columns != 2 || layout.OriginX != 50 || layout.OriginY != 75 {
 		t.Fatalf("unexpected layout config: %+v", layout)
+	}
+	if nodeLayout.Mode != "dag" || nodeLayout.Direction != "left_to_right" {
+		t.Fatalf("unexpected node layout mode/direction: %+v", nodeLayout)
+	}
+	if nodeLayout.ColumnGap != 80 || nodeLayout.RowGap != 40 {
+		t.Fatalf("expected node layout gaps 80/40, got %f/%f", nodeLayout.ColumnGap, nodeLayout.RowGap)
 	}
 }
 
