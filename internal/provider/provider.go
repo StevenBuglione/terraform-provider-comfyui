@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources/generated"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -107,9 +108,17 @@ func (p *ComfyUIProvider) Configure(ctx context.Context, req provider.ConfigureR
 }
 
 func (p *ComfyUIProvider) Resources(_ context.Context) []func() resource.Resource {
-	return generated.AllResources()
+	all := generated.AllResources()
+	all = append(all, resources.NewWorkflowResource)
+	return all
 }
 
 func (p *ComfyUIProvider) DataSources(_ context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		datasources.NewSystemStatsDataSource,
+		datasources.NewQueueDataSource,
+		datasources.NewNodeInfoDataSource,
+		datasources.NewWorkflowHistoryDataSource,
+		datasources.NewOutputDataSource,
+	}
 }
