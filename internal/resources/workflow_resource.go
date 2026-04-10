@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
@@ -39,6 +41,18 @@ type WorkflowModel struct {
 	Status            types.String `tfsdk:"status"`
 	Outputs           types.String `tfsdk:"outputs"`
 	Error             types.String `tfsdk:"error"`
+
+	// Metadata
+	Name        types.String `tfsdk:"name"`
+	Description types.String `tfsdk:"description"`
+	Tags        types.List   `tfsdk:"tags"`
+	Category    types.String `tfsdk:"category"`
+
+	// File output
+	OutputFile types.String `tfsdk:"output_file"`
+
+	// Computed
+	AssembledJSON types.String `tfsdk:"assembled_json"`
 }
 
 func NewWorkflowResource() resource.Resource {
@@ -106,6 +120,31 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Computed:    true,
 				Description: "Error message if execution failed.",
 			},
+			"name": schema.StringAttribute{
+				Optional:    true,
+				Description: "Human-readable name for this workflow.",
+			},
+			"description": schema.StringAttribute{
+				Optional:    true,
+				Description: "Description of what this workflow does.",
+			},
+			"tags": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: "Tags for categorizing and searching workflows (e.g., 'landscape', 'portrait', 'video').",
+			},
+			"category": schema.StringAttribute{
+				Optional:    true,
+				Description: "Workflow category (e.g., 'txt2img', 'img2img', 'video', 'audio', '3d').",
+			},
+			"output_file": schema.StringAttribute{
+				Optional:    true,
+				Description: "File path to write the assembled workflow JSON. The file is in ComfyUI API format and can be loaded by ComfyUI.",
+			},
+			"assembled_json": schema.StringAttribute{
+				Computed:    true,
+				Description: "The assembled workflow in ComfyUI API format JSON. Populated when workflow_json is provided or node assembly is complete.",
+			},
 		},
 	}
 }
@@ -142,9 +181,27 @@ func (r *WorkflowResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
+	// Store assembled JSON
+	if prompt != nil {
+		jsonBytes, _ := json.MarshalIndent(prompt, "", "  ")
+		data.AssembledJSON = types.StringValue(string(jsonBytes))
+	}
+
+	// Write file if output_file is set
+	if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
+		if err := r.writeWorkflowFile(ctx, data.OutputFile.ValueString(), prompt); err != nil {
+			resp.Diagnostics.AddError("Failed to write workflow file", err.Error())
+			return
+		}
+	}
+
 	if !data.Execute.ValueBool() {
 		data.PromptID = types.StringValue("")
-		data.Status = types.StringValue("pending")
+		if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
+			data.Status = types.StringValue("file_only")
+		} else {
+			data.Status = types.StringValue("pending")
+		}
 		data.Outputs = types.StringValue("{}")
 		data.Error = types.StringValue("")
 		resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -195,9 +252,27 @@ func (r *WorkflowResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
+	// Store assembled JSON
+	if prompt != nil {
+		jsonBytes, _ := json.MarshalIndent(prompt, "", "  ")
+		data.AssembledJSON = types.StringValue(string(jsonBytes))
+	}
+
+	// Write file if output_file is set
+	if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
+		if err := r.writeWorkflowFile(ctx, data.OutputFile.ValueString(), prompt); err != nil {
+			resp.Diagnostics.AddError("Failed to write workflow file", err.Error())
+			return
+		}
+	}
+
 	if !data.Execute.ValueBool() {
 		data.PromptID = types.StringValue("")
-		data.Status = types.StringValue("pending")
+		if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
+			data.Status = types.StringValue("file_only")
+		} else {
+			data.Status = types.StringValue("pending")
+		}
 		data.Outputs = types.StringValue("{}")
 		data.Error = types.StringValue("")
 		resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -212,8 +287,15 @@ func (r *WorkflowResource) Update(ctx context.Context, req resource.UpdateReques
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *WorkflowResource) Delete(_ context.Context, _ resource.DeleteRequest, _ *resource.DeleteResponse) {
-	// Workflow executions are ephemeral — nothing to clean up server-side.
+func (r *WorkflowResource) Delete(ctx context.Context, req resource.DeleteRequest, _ *resource.DeleteResponse) {
+	var data WorkflowModel
+	req.State.Get(ctx, &data)
+
+	// Clean up output file if it was written
+	if !data.OutputFile.IsNull() && data.OutputFile.ValueString() != "" {
+		os.Remove(data.OutputFile.ValueString())
+		tflog.Info(ctx, "Removed workflow file", map[string]interface{}{"path": data.OutputFile.ValueString()})
+	}
 }
 
 // parseWorkflow extracts the prompt map from workflow_json.
@@ -299,4 +381,24 @@ func (r *WorkflowResource) updateFromHistoryEntry(data *WorkflowModel, entry *cl
 	}
 
 	data.Error = types.StringValue("")
+}
+
+// writeWorkflowFile creates parent directories and writes the prompt as JSON.
+func (r *WorkflowResource) writeWorkflowFile(ctx context.Context, filePath string, prompt map[string]interface{}) error {
+	dir := filepath.Dir(filePath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("creating directory %s: %w", dir, err)
+	}
+
+	jsonBytes, err := json.MarshalIndent(prompt, "", "  ")
+	if err != nil {
+		return fmt.Errorf("marshaling workflow JSON: %w", err)
+	}
+
+	if err := os.WriteFile(filePath, jsonBytes, 0644); err != nil {
+		return fmt.Errorf("writing file %s: %w", filePath, err)
+	}
+
+	tflog.Info(ctx, "Wrote workflow JSON file", map[string]interface{}{"path": filePath})
+	return nil
 }

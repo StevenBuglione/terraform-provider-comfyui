@@ -111,6 +111,7 @@ func (p *ComfyUIProvider) Configure(ctx context.Context, req provider.ConfigureR
 func (p *ComfyUIProvider) Resources(_ context.Context) []func() resource.Resource {
 	all := generated.AllResources()
 	all = append(all, resources.NewWorkflowResource)
+	all = append(all, resources.NewWorkflowCollectionResource)
 	return all
 }
 
