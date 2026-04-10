@@ -355,11 +355,9 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 	}
 
 	// Build dependency graph
-	upstreamLinks := make(map[int][]int)   // node ID -> list of upstream node IDs
-	downstreamLinks := make(map[int][]int) // node ID -> list of downstream node IDs
+	upstreamLinks := make(map[int][]int) // node ID -> list of upstream node IDs
 	for _, link := range links {
 		upstreamLinks[link.TargetID] = append(upstreamLinks[link.TargetID], link.OriginID)
-		downstreamLinks[link.OriginID] = append(downstreamLinks[link.OriginID], link.TargetID)
 	}
 
 	// Compute longest upstream path (column level) for each node
@@ -644,6 +642,12 @@ func buildWorkspaceGroup(groupID int, title string, workflowNodeIDs []int, nodeI
 	}
 
 	headerHeight := defaultGroupHeaderHeight
+	if style.TitleFontSize > 0 {
+		computedHeaderHeight := float64(style.TitleFontSize) * 1.5
+		if computedHeaderHeight > headerHeight {
+			headerHeight = computedHeaderHeight
+		}
+	}
 	bodyTopPad := defaultGroupBodyTopPad
 	sidePad := 40.0
 	bottomPad := 40.0

@@ -83,10 +83,13 @@ func TestWorkspaceConfigFromModelBuildsSpecs(t *testing.T) {
 }
 
 func TestWorkspaceResourceWorkflowStyleConfigFromModel(t *testing.T) {
-	cfg := workspaceWorkflowStyleConfigFromModel(&workspaceWorkflowStyleModel{
+	cfg, err := workspaceWorkflowStyleConfigFromModel(&workspaceWorkflowStyleModel{
 		GroupColor:    types.StringValue("#112233"),
 		TitleFontSize: types.Int64Value(24),
 	})
+	if err != nil {
+		t.Fatalf("workspaceWorkflowStyleConfigFromModel returned error: %v", err)
+	}
 
 	if cfg.GroupColor != "#112233" {
 		t.Fatalf("expected group color %q, got %q", "#112233", cfg.GroupColor)
@@ -129,6 +132,18 @@ func TestWorkspaceResourceNodeLayoutConfigFromModelDefaultsAndValidation(t *test
 		Direction: types.StringValue("right_to_left"),
 	}); err == nil || err.Error() != "node_layout.direction must be left_to_right" {
 		t.Fatalf("expected node_layout.direction error, got %v", err)
+	}
+
+	if _, err := workspaceNodeLayoutConfigFromModel(&workspaceNodeLayoutModel{
+		ColumnGap: types.Float64Value(0),
+	}); err == nil || err.Error() != "node_layout.column_gap must be positive" {
+		t.Fatalf("expected node_layout.column_gap error, got %v", err)
+	}
+
+	if _, err := workspaceNodeLayoutConfigFromModel(&workspaceNodeLayoutModel{
+		RowGap: types.Float64Value(-10),
+	}); err == nil || err.Error() != "node_layout.row_gap must be positive" {
+		t.Fatalf("expected node_layout.row_gap error, got %v", err)
 	}
 }
 
@@ -324,13 +339,42 @@ func TestWorkspaceConfigFromModelHandlesOmittedOptionalNestedAttrs(t *testing.T)
 
 // Regression test: workspaceWorkflowStyleConfigFromModel with nil input
 func TestWorkspaceWorkflowStyleConfigFromModelNil(t *testing.T) {
-	cfg := workspaceWorkflowStyleConfigFromModel(nil)
+	cfg, err := workspaceWorkflowStyleConfigFromModel(nil)
+	if err != nil {
+		t.Fatalf("workspaceWorkflowStyleConfigFromModel(nil) returned error: %v", err)
+	}
 
 	if cfg.GroupColor != "" {
 		t.Fatalf("expected empty group_color for nil model, got %q", cfg.GroupColor)
 	}
 	if cfg.TitleFontSize != 0 {
 		t.Fatalf("expected zero title_font_size for nil model, got %d", cfg.TitleFontSize)
+	}
+}
+
+func TestWorkspaceWorkflowStyleConfigFromModelRejectsInvalidFontSize(t *testing.T) {
+	if _, err := workspaceWorkflowStyleConfigFromModel(&workspaceWorkflowStyleModel{
+		TitleFontSize: types.Int64Value(0),
+	}); err == nil || err.Error() != "workflows.style.title_font_size must be between 1 and 200" {
+		t.Fatalf("expected title_font_size validation error, got %v", err)
+	}
+
+	if _, err := workspaceWorkflowStyleConfigFromModel(&workspaceWorkflowStyleModel{
+		TitleFontSize: types.Int64Value(201),
+	}); err == nil || err.Error() != "workflows.style.title_font_size must be between 1 and 200" {
+		t.Fatalf("expected title_font_size upper bound error, got %v", err)
+	}
+}
+
+func TestWorkspaceWorkflowStyleConfigFromModelAllowsEmptyGroupColor(t *testing.T) {
+	cfg, err := workspaceWorkflowStyleConfigFromModel(&workspaceWorkflowStyleModel{
+		GroupColor: types.StringValue(""),
+	})
+	if err != nil {
+		t.Fatalf("workspaceWorkflowStyleConfigFromModel returned error: %v", err)
+	}
+	if cfg.GroupColor != "" {
+		t.Fatalf("expected empty group_color to remain empty, got %q", cfg.GroupColor)
 	}
 }
 

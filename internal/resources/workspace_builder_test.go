@@ -676,6 +676,39 @@ func TestWorkspaceBuilderSerializesWorkflowStyle(t *testing.T) {
 	}
 }
 
+func TestWorkspaceBuilderExpandsHeaderForLargeFontSize(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"large-font-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "styled"}}
+				}`,
+				Style: workspaceWorkflowStyleConfig{
+					TitleFontSize: 60,
+				},
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	group := subgraph.Groups[0]
+	firstNode := subgraph.Nodes[0]
+	expectedClearance := 130.0 // max(40, 60*1.5) + 40 body padding
+	if firstNode.Pos[1]-group.Bounding[1] < expectedClearance {
+		t.Fatalf("expected at least %vpx of clearance for large title font, got %v", expectedClearance, firstNode.Pos[1]-group.Bounding[1])
+	}
+}
+
 func TestWorkspaceBuilderDetectsCycles(t *testing.T) {
 	_, err := buildWorkspaceSubgraph(
 		"cyclic-workspace",

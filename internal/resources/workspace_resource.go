@@ -377,10 +377,15 @@ func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspace
 			return "", nil, workspaceLayoutConfig{}, workspaceNodeLayoutConfig{}, fmt.Errorf("workflow %q must include workflow_json", workflow.Name.ValueString())
 		}
 
+		style, err := workspaceWorkflowStyleConfigFromModel(workflow.Style)
+		if err != nil {
+			return "", nil, workspaceLayoutConfig{}, workspaceNodeLayoutConfig{}, err
+		}
+
 		spec := workspaceWorkflowSpec{
 			Name:         workflow.Name.ValueString(),
 			WorkflowJSON: workflow.WorkflowJSON.ValueString(),
-			Style:        workspaceWorkflowStyleConfigFromModel(workflow.Style),
+			Style:        style,
 		}
 		if !workflow.X.IsNull() && !workflow.X.IsUnknown() {
 			x := workflow.X.ValueFloat64()
@@ -396,18 +401,22 @@ func workspaceConfigFromModel(model workspaceResourceModel) (string, []workspace
 	return model.Name.ValueString(), specs, layout, nodeLayout, nil
 }
 
-func workspaceWorkflowStyleConfigFromModel(model *workspaceWorkflowStyleModel) workspaceWorkflowStyleConfig {
+func workspaceWorkflowStyleConfigFromModel(model *workspaceWorkflowStyleModel) (workspaceWorkflowStyleConfig, error) {
 	cfg := workspaceWorkflowStyleConfig{}
 	if model == nil {
-		return cfg
+		return cfg, nil
 	}
 	if !model.GroupColor.IsNull() && !model.GroupColor.IsUnknown() {
 		cfg.GroupColor = model.GroupColor.ValueString()
 	}
 	if !model.TitleFontSize.IsNull() && !model.TitleFontSize.IsUnknown() {
-		cfg.TitleFontSize = int(model.TitleFontSize.ValueInt64())
+		fontSize := int(model.TitleFontSize.ValueInt64())
+		if fontSize < 1 || fontSize > 200 {
+			return workspaceWorkflowStyleConfig{}, fmt.Errorf("workflows.style.title_font_size must be between 1 and 200")
+		}
+		cfg.TitleFontSize = fontSize
 	}
-	return cfg
+	return cfg, nil
 }
 
 func workspaceNodeLayoutConfigFromModel(model *workspaceNodeLayoutModel) (workspaceNodeLayoutConfig, error) {
@@ -431,10 +440,18 @@ func workspaceNodeLayoutConfigFromModel(model *workspaceNodeLayoutModel) (worksp
 		}
 	}
 	if !model.ColumnGap.IsNull() && !model.ColumnGap.IsUnknown() {
-		cfg.ColumnGap = model.ColumnGap.ValueFloat64()
+		gap := model.ColumnGap.ValueFloat64()
+		if gap <= 0 {
+			return workspaceNodeLayoutConfig{}, fmt.Errorf("node_layout.column_gap must be positive")
+		}
+		cfg.ColumnGap = gap
 	}
 	if !model.RowGap.IsNull() && !model.RowGap.IsUnknown() {
-		cfg.RowGap = model.RowGap.ValueFloat64()
+		gap := model.RowGap.ValueFloat64()
+		if gap <= 0 {
+			return workspaceNodeLayoutConfig{}, fmt.Errorf("node_layout.row_gap must be positive")
+		}
+		cfg.RowGap = gap
 	}
 
 	return cfg, nil
