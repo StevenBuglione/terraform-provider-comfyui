@@ -122,6 +122,7 @@ func (p *ComfyUIProvider) Resources(_ context.Context) []func() resource.Resourc
 	all := generated.AllResources()
 	all = append(all, resources.NewWorkflowResource)
 	all = append(all, resources.NewWorkflowCollectionResource)
+	all = append(all, resources.NewWorkspaceResource)
 	return all
 }
 

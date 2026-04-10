@@ -148,6 +148,17 @@ Most generated `comfyui_*` node resources are virtual. They define typed node in
 - write the assembled graph to `output_file`
 - execute immediately, export only, or do both
 
+### `comfyui_workspace`
+
+`comfyui_workspace` is a layout-aware meta resource. It can:
+
+- accept multiple API-format workflows, including `comfyui_workflow.*.assembled_json`
+- compose them into one UI-oriented workspace/subgraph export
+- position workflow islands with a typed, CSS-inspired `layout` block (`display`, `direction`, `gap`, `columns`, `origin_*`)
+- write the composed workspace JSON to `output_file`
+
+Unlike `comfyui_workflow` file-only export, `comfyui_workspace` still needs a live ComfyUI connection so it can fetch node metadata from `/object_info` and build UI slot/widget information.
+
 ### Data sources
 
 Use data sources to inspect live server state, look up workflow history, resolve output files, or confirm provider metadata generated from the current ComfyUI extraction.
@@ -161,6 +172,7 @@ Use data sources to inspect live server state, look up workflow history, resolve
 - [Workflow JSON](./examples/resources/workflow_json/main.tf): submit raw ComfyUI API-format JSON
 - [Workflow file export](./examples/resources/workflow_file/main.tf): write assembled workflows to disk with or without execution
 - [Workflow collections](./examples/resources/collection/main.tf): group workflows and emit an index manifest
+- [Workspace export](./examples/resources/workspace/main.tf): compose multiple workflows into one layout-aware workspace export
 - [Video generation](./examples/resources/video_gen/main.tf): partner-node video workflows for Kling and Seedance
 - [Data sources](./examples/data-sources/main.tf): inspect system stats, queue state, node metadata, history, outputs, and provider metadata
 
