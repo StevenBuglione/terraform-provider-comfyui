@@ -420,12 +420,112 @@ locals {
         inputs     = { images = ["12", 0], filename_prefix = "negative_matrix" }
       }
     }
+
+    triple_branch_merge = {
+      "1" = {
+        class_type = "CheckpointLoaderSimple"
+        inputs     = { ckpt_name = "v1-5-pruned-emaonly.safetensors" }
+      }
+      "2" = {
+        class_type = "CLIPTextEncode"
+        inputs     = { text = "shared root prompt", clip = ["1", 1] }
+      }
+      "3" = {
+        class_type = "CLIPTextEncode"
+        inputs     = { text = "branch A: sunset atmosphere", clip = ["1", 1] }
+      }
+      "4" = {
+        class_type = "CLIPTextEncode"
+        inputs     = { text = "branch B: morning mist", clip = ["1", 1] }
+      }
+      "5" = {
+        class_type = "CLIPTextEncode"
+        inputs     = { text = "branch C: midday harsh light", clip = ["1", 1] }
+      }
+      "6" = {
+        class_type = "CLIPTextEncode"
+        inputs     = { text = "generic negative", clip = ["1", 1] }
+      }
+      "7" = {
+        class_type = "EmptyLatentImage"
+        inputs     = { width = 512, height = 512, batch_size = 1 }
+      }
+      "8" = {
+        class_type = "KSampler"
+        inputs = {
+          model        = ["1", 0]
+          seed         = 1111
+          steps        = 20
+          cfg          = 7.5
+          sampler_name = "euler"
+          scheduler    = "normal"
+          positive     = ["3", 0]
+          negative     = ["6", 0]
+          latent_image = ["7", 0]
+          denoise      = 1.0
+        }
+      }
+      "9" = {
+        class_type = "KSampler"
+        inputs = {
+          model        = ["1", 0]
+          seed         = 2222
+          steps        = 22
+          cfg          = 7.0
+          sampler_name = "euler"
+          scheduler    = "normal"
+          positive     = ["4", 0]
+          negative     = ["6", 0]
+          latent_image = ["7", 0]
+          denoise      = 1.0
+        }
+      }
+      "10" = {
+        class_type = "KSampler"
+        inputs = {
+          model        = ["1", 0]
+          seed         = 3333
+          steps        = 24
+          cfg          = 6.5
+          sampler_name = "euler"
+          scheduler    = "normal"
+          positive     = ["5", 0]
+          negative     = ["6", 0]
+          latent_image = ["7", 0]
+          denoise      = 1.0
+        }
+      }
+      "11" = {
+        class_type = "VAEDecode"
+        inputs     = { samples = ["8", 0], vae = ["1", 2] }
+      }
+      "12" = {
+        class_type = "VAEDecode"
+        inputs     = { samples = ["9", 0], vae = ["1", 2] }
+      }
+      "13" = {
+        class_type = "VAEDecode"
+        inputs     = { samples = ["10", 0], vae = ["1", 2] }
+      }
+      "14" = {
+        class_type = "SaveImage"
+        inputs     = { images = ["11", 0], filename_prefix = "triple_branch_A" }
+      }
+      "15" = {
+        class_type = "SaveImage"
+        inputs     = { images = ["12", 0], filename_prefix = "triple_branch_B" }
+      }
+      "16" = {
+        class_type = "SaveImage"
+        inputs     = { images = ["13", 0], filename_prefix = "triple_branch_C" }
+      }
+    }
   }
 
   workspace_definitions = {
     dense_grid = {
       name    = "dense-grid"
-      members = ["compact_reference", "branchy_landscape", "tall_prompt_ladder", "dual_sampler_variants", "postprocess_cluster", "negative_matrix"]
+      members = ["compact_reference", "branchy_landscape", "tall_prompt_ladder", "dual_sampler_variants", "postprocess_cluster", "negative_matrix", "triple_branch_merge"]
       layout = {
         display  = "grid"
         columns  = 2
@@ -444,10 +544,20 @@ locals {
         origin_x = 160
         origin_y = 100
       }
+      node_layout = {
+        mode       = "dag"
+        direction  = "left_to_right"
+        column_gap = 280
+        row_gap    = 160
+      }
       overrides = {
         compact_reference = {
           x = 840
           y = 120
+          style = {
+            group_color    = "#ff00ff"
+            title_font_size = 28
+          }
         }
         negative_matrix = {
           x = 180
@@ -468,7 +578,7 @@ locals {
     }
     wide_gallery = {
       name    = "wide-gallery"
-      members = ["compact_reference", "branchy_landscape", "negative_matrix", "postprocess_cluster", "dual_sampler_variants"]
+      members = ["compact_reference", "branchy_landscape", "negative_matrix", "postprocess_cluster", "dual_sampler_variants", "triple_branch_merge"]
       layout = {
         display   = "flex"
         direction = "row"
