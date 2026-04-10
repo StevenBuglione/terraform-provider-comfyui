@@ -490,24 +490,6 @@ func buildWorkspaceGroup(groupID int, title string, workflowNodeIDs []int, nodeI
 	}
 }
 
-func workflowBasePosition(workflowIndex int, layout workspaceLayoutConfig, gap float64) (float64, float64) {
-	switch layout.Display {
-	case "grid":
-		columns := int(layout.Columns)
-		if columns <= 0 {
-			columns = 1
-		}
-		column := workflowIndex % columns
-		row := workflowIndex / columns
-		return layout.OriginX + float64(column)*gap, layout.OriginY + float64(row)*gap
-	default:
-		if layout.Direction == "column" {
-			return layout.OriginX, layout.OriginY + float64(workflowIndex)*gap
-		}
-		return layout.OriginX + float64(workflowIndex)*gap, layout.OriginY
-	}
-}
-
 func workflowBasePositions(workflows []renderedWorkspaceWorkflow, layout workspaceLayoutConfig, gap float64) [][2]float64 {
 	positions := make([][2]float64, len(workflows))
 
