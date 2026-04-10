@@ -132,32 +132,82 @@ Extensive research lives in `doc/terraform/provider/research/`. **26 files** cov
 
 ## Architecture Decisions
 
-1. **Plugin Framework only** — No SDKv2. All resources, data sources, and functions use `terraform-plugin-framework`.
+1. **Plugin Framework only** — No SDKv2. All resources, data sources, and the provider use `terraform-plugin-framework`.
 2. **Single API focus** — Provider wraps the ComfyUI REST API exclusively.
-3. **Proposed resources**: `comfyui_workflow`, `comfyui_workflow_execution`, `comfyui_uploaded_image`, `comfyui_uploaded_mask`
-4. **Proposed data sources**: `comfyui_system_stats`, `comfyui_queue`, `comfyui_node_info`, `comfyui_workflow_history`, `comfyui_output`
-5. **Proposed functions**: `parse_workflow_json`, `node_output_name`
+3. **Virtual node resources** — The 645 generated node resources are virtual/plan-only (no API calls in CRUD). They represent ComfyUI nodes in Terraform state for workflow composition; the actual execution happens through `comfyui_workflow`.
+4. **Code generation pipeline** — Python AST extractors parse ComfyUI source → `node_specs.json` → Go generator produces one resource file per node + registry. This allows automated updates when ComfyUI adds/changes nodes.
+5. **Resources**: `comfyui_workflow` (hand-written, queues & executes workflows) + 645 generated node resources (one per ComfyUI node type, e.g., `comfyui_ksampler`, `comfyui_clip_text_encode`).
+6. **Data sources** (5): `comfyui_system_stats`, `comfyui_queue`, `comfyui_node_info`, `comfyui_workflow_history`, `comfyui_output`.
 
-## Commands (planned)
+## Commands
 
 ```bash
-# Build
-go build -o terraform-provider-comfyui
+# Build the provider binary
+make build                  # or: go build -o terraform-provider-comfyui
 
-# Run tests
-go test ./... -v
+# Run Go unit tests (cmd/generate + internal/client)
+make test                   # or: go test ./... -v -timeout 120s
 
 # Run acceptance tests (requires running ComfyUI instance)
-TF_ACC=1 go test ./... -v -timeout 120m
+make testacc                # or: TF_ACC=1 go test ./... -v -timeout 120m
 
-# Generate documentation
-go generate ./...
+# Run Python extractor tests (16 tests)
+python3 -m pytest scripts/extract/test_extractors.py -v
+
+# Regenerate node resources from node_specs.json
+make generate               # or: go generate ./...
 
 # Install locally for development
-go install .
+make install
 
-# Lint
-golangci-lint run ./...
+# Lint / format / vet
+make lint                   # golangci-lint run ./...
+make fmt                    # gofmt -s -w .
+make vet                    # go vet ./...
+
+# Clean build artifacts
+make clean
+```
+
+## Code Generation Pipeline
+
+The provider's 645 node resources are generated automatically from ComfyUI source code:
+
+```
+ComfyUI source (third_party/ComfyUI/)
+  │
+  ├─→ extract_v1_nodes.py   (AST-parses nodes.py + comfy_extras/ for V1-pattern nodes)
+  ├─→ extract_v3_nodes.py   (AST-parses V3-pattern nodes using io.ComfyNode/define_schema)
+  │
+  └─→ merge_specs.py        (deduplicates, validates, writes node_specs.json)
+        │
+        └─→ cmd/generate/main.go  (reads node_specs.json, applies Go templates)
+              │
+              ├─→ internal/resources/generated/resource_*.go  (645 resource files)
+              └─→ internal/resources/generated/registry.go    (AllResources() function)
+```
+
+**Trigger**: `go generate ./...` (via `generate.go` directive) runs `cmd/generate`.
+
+## How to Add/Update Nodes
+
+When a new ComfyUI version adds or changes nodes:
+
+```bash
+# 1. Update ComfyUI submodule to new tag
+./scripts/update-comfyui.sh v0.19.0
+
+# 2. Run Python extractors to regenerate node_specs.json
+python3 scripts/extract/extract_v1_nodes.py third_party/ComfyUI > v1.json
+python3 scripts/extract/extract_v3_nodes.py third_party/ComfyUI > v3.json
+python3 scripts/extract/merge_specs.py v1.json v3.json > scripts/extract/node_specs.json
+
+# 3. Regenerate Go resource files
+make generate
+
+# 4. Build and test
+make build && make test
+python3 -m pytest scripts/extract/test_extractors.py -v
 ```
 
 ## Conventions
@@ -165,10 +215,19 @@ golangci-lint run ./...
 - Follow HashiCorp naming: resources as `comfyui_<noun>`, data sources as `comfyui_<noun>`
 - Attributes: snake_case, Required/Optional/Computed per schema design patterns (doc 06)
 - Errors: Use diagnostics system, never panic (doc 09)
-- Testing: Acceptance tests for every resource/data source (doc 10), unit tests for logic (doc 11)
+- Testing: Unit tests for client and generator (Go), extraction pipeline tests (Python/pytest)
+- Generated code: Never edit files in `internal/resources/generated/` — regenerate instead
 - Documentation: Generated via tfplugindocs from schema + templates (doc 13)
 - Commits: Conventional Commits format
 - Versioning: Semantic Versioning (doc 15)
+
+## Test Suite
+
+| Area | Framework | Count | Command |
+|------|-----------|-------|---------|
+| Code generator (`cmd/generate/`) | Go `testing` | 9 tests | `go test ./cmd/generate/ -v` |
+| HTTP client (`internal/client/`) | Go `testing` + `httptest` | 15 tests | `go test ./internal/client/ -v` |
+| Python extractors (`scripts/extract/`) | pytest | 16 tests | `python3 -m pytest scripts/extract/test_extractors.py -v` |
 
 ## ComfyUI API Reference
 
