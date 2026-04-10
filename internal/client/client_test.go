@@ -148,10 +148,12 @@ func TestQueuePrompt(t *testing.T) {
 	defer server.Close()
 
 	c := newTestClient(server)
-	resp, err := c.QueuePrompt(map[string]interface{}{
-		"1": map[string]interface{}{
-			"class_type": "KSampler",
-			"inputs":     map[string]interface{}{},
+	resp, err := c.QueuePrompt(QueuePromptRequest{
+		Prompt: map[string]interface{}{
+			"1": map[string]interface{}{
+				"class_type": "KSampler",
+				"inputs":     map[string]interface{}{},
+			},
 		},
 	})
 	if err != nil {
@@ -162,6 +164,64 @@ func TestQueuePrompt(t *testing.T) {
 	}
 	if resp.Number != 1 {
 		t.Errorf("expected number=1, got %d", resp.Number)
+	}
+}
+
+func TestQueuePrompt_IncludesWrapperFields(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]interface{}
+		if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+			t.Fatalf("failed to decode request body: %v", err)
+		}
+
+		if body["prompt_id"] != "prompt-123" {
+			t.Fatalf("expected prompt_id to be sent, got %#v", body["prompt_id"])
+		}
+		if body["client_id"] != "client-456" {
+			t.Fatalf("expected client_id to be sent, got %#v", body["client_id"])
+		}
+
+		extraData, ok := body["extra_data"].(map[string]interface{})
+		if !ok {
+			t.Fatalf("expected extra_data object, got %#v", body["extra_data"])
+		}
+		if extraData["tenant"] != "dev" {
+			t.Fatalf("expected extra_data.tenant=dev, got %#v", extraData["tenant"])
+		}
+
+		targets, ok := body["partial_execution_targets"].([]interface{})
+		if !ok || len(targets) != 2 {
+			t.Fatalf("expected partial_execution_targets to be sent, got %#v", body["partial_execution_targets"])
+		}
+
+		mustEncodeJSON(t, w, QueueResponse{
+			PromptID:   "prompt-123",
+			Number:     9,
+			NodeErrors: map[string]interface{}{},
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	resp, err := c.QueuePrompt(QueuePromptRequest{
+		Prompt: map[string]interface{}{
+			"1": map[string]interface{}{
+				"class_type": "KSampler",
+				"inputs":     map[string]interface{}{},
+			},
+		},
+		PromptID: "prompt-123",
+		ClientID: "client-456",
+		ExtraData: map[string]interface{}{
+			"tenant": "dev",
+		},
+		PartialExecutionTargets: []string{"3", "5"},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if resp.Number != 9 {
+		t.Fatalf("expected number 9, got %d", resp.Number)
 	}
 }
 
@@ -180,7 +240,7 @@ func TestQueuePromptNodeErrors(t *testing.T) {
 	defer server.Close()
 
 	c := newTestClient(server)
-	resp, err := c.QueuePrompt(map[string]interface{}{})
+	resp, err := c.QueuePrompt(QueuePromptRequest{Prompt: map[string]interface{}{}})
 	if err == nil {
 		t.Fatal("expected error for node errors response")
 	}
@@ -370,7 +430,7 @@ func TestQueuePromptHTTPError(t *testing.T) {
 	defer server.Close()
 
 	c := newTestClient(server)
-	_, err := c.QueuePrompt(map[string]interface{}{})
+	_, err := c.QueuePrompt(QueuePromptRequest{Prompt: map[string]interface{}{}})
 	if err == nil {
 		t.Fatal("expected error for 503 response")
 	}
@@ -426,7 +486,7 @@ func TestAPIKeyHeaderOnPost(t *testing.T) {
 	defer server.Close()
 
 	c := &Client{HTTPClient: server.Client(), BaseURL: server.URL, APIKey: "post-key"}
-	_, err := c.QueuePrompt(map[string]interface{}{})
+	_, err := c.QueuePrompt(QueuePromptRequest{Prompt: map[string]interface{}{}})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

@@ -1,5 +1,14 @@
 package client
 
+// QueuePromptRequest is submitted to POST /prompt.
+type QueuePromptRequest struct {
+	Prompt                  map[string]interface{} `json:"prompt"`
+	PromptID                string                 `json:"prompt_id,omitempty"`
+	ClientID                string                 `json:"client_id,omitempty"`
+	ExtraData               map[string]interface{} `json:"extra_data,omitempty"`
+	PartialExecutionTargets []string               `json:"partial_execution_targets,omitempty"`
+}
+
 // QueueResponse is returned by POST /prompt
 type QueueResponse struct {
 	PromptID   string                 `json:"prompt_id"`

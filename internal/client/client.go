@@ -29,11 +29,25 @@ func NewClient(host string, port int64, apiKey string) *Client {
 	}
 }
 
-// QueuePrompt submits a workflow for execution
-func (c *Client) QueuePrompt(prompt map[string]interface{}) (*QueueResponse, error) {
-	body, err := json.Marshal(map[string]interface{}{
-		"prompt": prompt,
-	})
+// QueuePrompt submits a workflow for execution.
+func (c *Client) QueuePrompt(request QueuePromptRequest) (*QueueResponse, error) {
+	bodyMap := map[string]interface{}{
+		"prompt": request.Prompt,
+	}
+	if request.PromptID != "" {
+		bodyMap["prompt_id"] = request.PromptID
+	}
+	if request.ClientID != "" {
+		bodyMap["client_id"] = request.ClientID
+	}
+	if len(request.ExtraData) > 0 {
+		bodyMap["extra_data"] = request.ExtraData
+	}
+	if len(request.PartialExecutionTargets) > 0 {
+		bodyMap["partial_execution_targets"] = request.PartialExecutionTargets
+	}
+
+	body, err := json.Marshal(bodyMap)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal prompt: %w", err)
 	}

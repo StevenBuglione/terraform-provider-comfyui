@@ -123,6 +123,8 @@ func (p *ComfyUIProvider) Resources(_ context.Context) []func() resource.Resourc
 	all = append(all, resources.NewWorkflowResource)
 	all = append(all, resources.NewWorkflowCollectionResource)
 	all = append(all, resources.NewWorkspaceResource)
+	all = append(all, resources.NewPromptArtifactResource)
+	all = append(all, resources.NewWorkspaceArtifactResource)
 	return all
 }
 
@@ -133,6 +135,10 @@ func (p *ComfyUIProvider) DataSources(_ context.Context) []func() datasource.Dat
 		datasources.NewNodeInfoDataSource,
 		datasources.NewWorkflowHistoryDataSource,
 		datasources.NewOutputDataSource,
+		datasources.NewPromptJSONDataSource,
+		datasources.NewPromptToWorkspaceDataSource,
+		datasources.NewWorkspaceJSONDataSource,
+		datasources.NewWorkspaceToPromptDataSource,
 		datasources.NewProviderInfoDataSource(p.version),
 	}
 }

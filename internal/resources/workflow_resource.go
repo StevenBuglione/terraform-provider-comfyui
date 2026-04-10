@@ -38,6 +38,9 @@ type WorkflowModel struct {
 	WaitForCompletion types.Bool   `tfsdk:"wait_for_completion"`
 	TimeoutSeconds    types.Int64  `tfsdk:"timeout_seconds"`
 	PromptID          types.String `tfsdk:"prompt_id"`
+	ClientID          types.String `tfsdk:"client_id"`
+	ExtraDataJSON     types.String `tfsdk:"extra_data_json"`
+	PartialTargets    types.List   `tfsdk:"partial_execution_targets"`
 	Status            types.String `tfsdk:"status"`
 	Outputs           types.String `tfsdk:"outputs"`
 	Error             types.String `tfsdk:"error"`
@@ -53,6 +56,13 @@ type WorkflowModel struct {
 
 	// Computed
 	AssembledJSON types.String `tfsdk:"assembled_json"`
+}
+
+type workflowExecutionRequestConfig struct {
+	PromptID                string
+	ClientID                string
+	ExtraDataJSON           string
+	PartialExecutionTargets []string
 }
 
 func NewWorkflowResource() resource.Resource {
@@ -102,11 +112,22 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Description: "Maximum seconds to wait for workflow execution. Defaults to 300.",
 			},
 			"prompt_id": schema.StringAttribute{
+				Optional:    true,
 				Computed:    true,
-				Description: "ComfyUI prompt ID assigned after submission.",
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
-				},
+				Description: "Optional ComfyUI prompt ID to submit. If omitted, ComfyUI assigns one.",
+			},
+			"client_id": schema.StringAttribute{
+				Optional:    true,
+				Description: "Optional ComfyUI client_id to include in the /prompt request wrapper.",
+			},
+			"extra_data_json": schema.StringAttribute{
+				Optional:    true,
+				Description: "Optional JSON object to include as extra_data in the /prompt request wrapper.",
+			},
+			"partial_execution_targets": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: "Optional list of node IDs to send as partial_execution_targets in the /prompt request wrapper.",
 			},
 			"status": schema.StringAttribute{
 				Computed:    true,
@@ -342,7 +363,31 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		"node_count": len(prompt),
 	})
 
-	queueResp, err := r.client.QueuePrompt(prompt)
+	partialTargets := []string{}
+	if !data.PartialTargets.IsNull() && !data.PartialTargets.IsUnknown() {
+		targets, targetDiags := listValueToStrings(ctx, data.PartialTargets)
+		diags.Append(targetDiags...)
+		if diags.HasError() {
+			return
+		}
+		partialTargets = targets
+	}
+
+	queueReq, err := buildQueuePromptRequest(prompt, workflowExecutionRequestConfig{
+		PromptID:                stringValue(data.PromptID),
+		ClientID:                stringValue(data.ClientID),
+		ExtraDataJSON:           stringValue(data.ExtraDataJSON),
+		PartialExecutionTargets: partialTargets,
+	})
+	if err != nil {
+		data.PromptID = types.StringValue("")
+		data.Status = types.StringValue("error")
+		data.Outputs = types.StringValue("{}")
+		data.Error = types.StringValue(fmt.Sprintf("Failed to prepare prompt request: %s", err.Error()))
+		return
+	}
+
+	queueResp, err := r.client.QueuePrompt(queueReq)
 	if err != nil {
 		data.PromptID = types.StringValue("")
 		data.Status = types.StringValue("error")
@@ -378,6 +423,36 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 	}
 
 	r.updateFromHistoryEntry(data, entry)
+}
+
+func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecutionRequestConfig) (client.QueuePromptRequest, error) {
+	request := client.QueuePromptRequest{
+		Prompt:                  prompt,
+		PromptID:                config.PromptID,
+		ClientID:                config.ClientID,
+		PartialExecutionTargets: append([]string(nil), config.PartialExecutionTargets...),
+	}
+
+	extraData := map[string]interface{}{}
+	if config.ExtraDataJSON != "" {
+		if err := json.Unmarshal([]byte(config.ExtraDataJSON), &extraData); err != nil {
+			return client.QueuePromptRequest{}, fmt.Errorf("extra_data_json must be valid JSON: %w", err)
+		}
+	}
+
+	extraPNGInfo, _ := extraData["extra_pnginfo"].(map[string]interface{})
+	if extraPNGInfo == nil {
+		extraPNGInfo = map[string]interface{}{}
+	}
+	if _, ok := extraPNGInfo["prompt"]; !ok {
+		extraPNGInfo["prompt"] = prompt
+	}
+	if len(extraPNGInfo) > 0 {
+		extraData["extra_pnginfo"] = extraPNGInfo
+	}
+	request.ExtraData = extraData
+
+	return request, nil
 }
 
 func (r *WorkflowResource) updateFromHistoryEntry(data *WorkflowModel, entry *client.HistoryEntry) {
