@@ -675,3 +675,116 @@ func TestWorkspaceBuilderSerializesWorkflowStyle(t *testing.T) {
 		t.Fatalf("expected group font size %d, got %d", 28, group.FontSize)
 	}
 }
+
+func TestWorkspaceBuilderDetectsCycles(t *testing.T) {
+	_, err := buildWorkspaceSubgraph(
+		"cyclic-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "hello", "upstream": ["2", 0]}},
+					"2": {"class_type": "TargetNode", "inputs": {"source": ["1", 0], "strength": 0.5}}
+				}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err == nil {
+		t.Fatalf("expected cycle detection to return an error")
+	}
+}
+
+func TestWorkspaceBuilderRoundsMergeRowAnchor(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"merge-row-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "top"}},
+					"2": {"class_type": "SourceNode", "inputs": {"text": "middle"}},
+					"3": {"class_type": "SourceNode", "inputs": {"text": "bottom"}},
+					"4": {"class_type": "MergeNode", "inputs": {"source_a": ["1", 0], "source_b": ["3", 0], "strength": 0.5}}
+				}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	// Nodes 1, 2, 3 are sources in column 0, rows 0, 1, 2
+	node1 := subgraph.Nodes[0] // row 0
+	node3 := subgraph.Nodes[2] // row 2
+	merge := subgraph.Nodes[3] // merges nodes 1 and 3
+
+	// Average of row 0 and row 2 is 1.0 (already rounded)
+	// Merge node should be at row 1
+	expectedMergeRow := (node1.Pos[1] + node3.Pos[1]) / 2.0
+	if merge.Pos[1] != expectedMergeRow {
+		t.Fatalf("expected merge node at Y position %v (rounded average of parents), got %v", expectedMergeRow, merge.Pos[1])
+	}
+}
+
+func TestWorkspaceBuilderHonorsPreferredRowInColumnSorting(t *testing.T) {
+	subgraph, err := buildWorkspaceSubgraph(
+		"preferred-row-workspace",
+		[]workspaceWorkflowSpec{
+			{
+				Name: "workflow-a",
+				WorkflowJSON: `{
+					"1": {"class_type": "SourceNode", "inputs": {"text": "parent-a"}},
+					"2": {"class_type": "SourceNode", "inputs": {"text": "parent-b"}},
+					"3": {"class_type": "TargetNode", "inputs": {"source": ["2", 0], "strength": 0.2}},
+					"4": {"class_type": "TargetNode", "inputs": {"source": ["1", 0], "strength": 0.1}}
+				}`,
+			},
+		},
+		workspaceLayoutConfig{
+			Display:   "flex",
+			Direction: "row",
+		},
+		testWorkspaceNodeLayout(),
+		testWorkspaceNodeInfo(),
+	)
+	if err != nil {
+		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
+	}
+
+	// Node 1 is parent-a (row 0), Node 2 is parent-b (row 1)
+	// Node 3 (prompt order 2) depends on node 2 -> preferred row 1
+	// Node 4 (prompt order 3) depends on node 1 -> preferred row 0
+	// Even though node 3 comes first in prompt order, node 4 should be placed first (row 0)
+	// because preferred row takes precedence over prompt order
+	node1 := subgraph.Nodes[0] // parent-a, row 0
+	node2 := subgraph.Nodes[1] // parent-b, row 1
+	node4 := subgraph.Nodes[3] // depends on node 1
+	node3 := subgraph.Nodes[2] // depends on node 2
+
+	// Node 4 should be above node 3 (smaller Y) because its preferred row is 0 < 1
+	if node4.Pos[1] >= node3.Pos[1] {
+		t.Fatalf("expected node 4 (preferred row 0) to be above node 3 (preferred row 1), got Y positions: node4=%v, node3=%v", node4.Pos[1], node3.Pos[1])
+	}
+
+	// Verify node 4 is at parent-a's row
+	if node4.Pos[1] != node1.Pos[1] {
+		t.Fatalf("expected node 4 at same Y as parent (node 1): %v, got %v", node1.Pos[1], node4.Pos[1])
+	}
+
+	// Verify node 3 is at parent-b's row
+	if node3.Pos[1] != node2.Pos[1] {
+		t.Fatalf("expected node 3 at same Y as parent (node 2): %v, got %v", node2.Pos[1], node3.Pos[1])
+	}
+}

@@ -3,6 +3,7 @@ package resources
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"sort"
 	"strconv"
 
@@ -362,25 +363,38 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 	}
 
 	// Compute longest upstream path (column level) for each node
+	// Use cycle detection to prevent stack overflow
 	levels := make(map[int]int)
-	var computeLevel func(nodeID int) int
-	computeLevel = func(nodeID int) int {
+	visiting := make(map[int]bool)
+	var computeLevel func(nodeID int) (int, error)
+	computeLevel = func(nodeID int) (int, error) {
 		if level, ok := levels[nodeID]; ok {
-			return level
+			return level, nil
 		}
+		if visiting[nodeID] {
+			return 0, fmt.Errorf("cycle detected in workflow graph at node %d", nodeID)
+		}
+		visiting[nodeID] = true
+		defer func() { visiting[nodeID] = false }()
+
 		maxUpstreamLevel := -1
 		for _, upstreamID := range upstreamLinks[nodeID] {
-			upstreamLevel := computeLevel(upstreamID)
+			upstreamLevel, err := computeLevel(upstreamID)
+			if err != nil {
+				return 0, err
+			}
 			if upstreamLevel > maxUpstreamLevel {
 				maxUpstreamLevel = upstreamLevel
 			}
 		}
 		levels[nodeID] = maxUpstreamLevel + 1
-		return levels[nodeID]
+		return levels[nodeID], nil
 	}
 
 	for _, node := range nodes {
-		computeLevel(node.ID)
+		if _, err := computeLevel(node.ID); err != nil {
+			return err
+		}
 	}
 
 	// Group nodes by column (level)
@@ -389,24 +403,7 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 		columnNodes[level] = append(columnNodes[level], nodeID)
 	}
 
-	// Sort nodes within each column by preferred row
-	// Preferred row = average parent row if parents exist, otherwise original prompt order (node index)
-	for level := range columnNodes {
-		nodeIDs := columnNodes[level]
-		sort.Slice(nodeIDs, func(i, j int) bool {
-			// Use original node index as stable tie-breaker
-			indexI := nodeIndexByID[nodeIDs[i]]
-			indexJ := nodeIndexByID[nodeIDs[j]]
-			return indexI < indexJ
-		})
-	}
-
-	// Assign row positions within columns
-	// First pass: assign preferred rows
-	nodeRows := make(map[int]float64)
-	columnMaxRow := make(map[int]float64)
-
-	// Process columns left to right
+	// Find max level
 	maxLevel := 0
 	for level := range columnNodes {
 		if level > maxLevel {
@@ -414,27 +411,53 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 		}
 	}
 
+	// Assign row positions within columns
+	// Process columns left to right
+	nodeRows := make(map[int]float64)
+	preferredRows := make(map[int]float64)
+	columnMaxRow := make(map[int]float64)
+
 	for level := 0; level <= maxLevel; level++ {
 		nodeIDs, ok := columnNodes[level]
 		if !ok {
 			continue
 		}
 
-		usedRows := make(map[float64]bool)
+		// Compute preferred rows for this column
 		for _, nodeID := range nodeIDs {
-			var preferredRow float64
 			parents := upstreamLinks[nodeID]
 			if len(parents) > 0 {
-				// Average parent row
+				// Average parent row, rounded
 				totalRow := 0.0
 				for _, parentID := range parents {
 					totalRow += nodeRows[parentID]
 				}
-				preferredRow = totalRow / float64(len(parents))
+				preferredRows[nodeID] = math.Round(totalRow / float64(len(parents)))
 			} else {
 				// Use original node index as preferred row for source nodes
-				preferredRow = float64(nodeIndexByID[nodeID])
+				preferredRows[nodeID] = float64(nodeIndexByID[nodeID])
 			}
+		}
+
+		// Sort nodes within this column by preferred row, then original prompt order
+		sort.SliceStable(nodeIDs, func(i, j int) bool {
+			prefI := preferredRows[nodeIDs[i]]
+			prefJ := preferredRows[nodeIDs[j]]
+			if prefI != prefJ {
+				return prefI < prefJ
+			}
+			// Tie-breaker: original node index (prompt order)
+			indexI := nodeIndexByID[nodeIDs[i]]
+			indexJ := nodeIndexByID[nodeIDs[j]]
+			return indexI < indexJ
+		})
+		columnNodes[level] = nodeIDs
+
+		// Assign final row positions with collision resolution
+		usedRows := make(map[float64]bool)
+		for _, nodeID := range nodeIDs {
+			// Use precomputed preferred row
+			preferredRow := preferredRows[nodeID]
 
 			// Find first available row at or below preferred row
 			finalRow := preferredRow
