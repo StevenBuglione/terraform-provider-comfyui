@@ -708,9 +708,8 @@ func TestWorkspaceBuilderRoundsMergeRowAnchor(t *testing.T) {
 				Name: "workflow-a",
 				WorkflowJSON: `{
 					"1": {"class_type": "SourceNode", "inputs": {"text": "top"}},
-					"2": {"class_type": "SourceNode", "inputs": {"text": "middle"}},
-					"3": {"class_type": "SourceNode", "inputs": {"text": "bottom"}},
-					"4": {"class_type": "MergeNode", "inputs": {"source_a": ["1", 0], "source_b": ["3", 0], "strength": 0.5}}
+					"2": {"class_type": "SourceNode", "inputs": {"text": "bottom"}},
+					"3": {"class_type": "MergeNode", "inputs": {"source_a": ["1", 0], "source_b": ["2", 0], "strength": 0.5}}
 				}`,
 			},
 		},
@@ -725,16 +724,13 @@ func TestWorkspaceBuilderRoundsMergeRowAnchor(t *testing.T) {
 		t.Fatalf("buildWorkspaceSubgraph returned error: %v", err)
 	}
 
-	// Nodes 1, 2, 3 are sources in column 0, rows 0, 1, 2
-	node1 := subgraph.Nodes[0] // row 0
-	node3 := subgraph.Nodes[2] // row 2
-	merge := subgraph.Nodes[3] // merges nodes 1 and 3
+	// Nodes 1 and 2 are sources in column 0, rows 0 and 1.
+	// Their average row anchor is 0.5, which must round to row 1.
+	node2 := subgraph.Nodes[1]
+	merge := subgraph.Nodes[2]
 
-	// Average of row 0 and row 2 is 1.0 (already rounded)
-	// Merge node should be at row 1
-	expectedMergeRow := (node1.Pos[1] + node3.Pos[1]) / 2.0
-	if merge.Pos[1] != expectedMergeRow {
-		t.Fatalf("expected merge node at Y position %v (rounded average of parents), got %v", expectedMergeRow, merge.Pos[1])
+	if merge.Pos[1] != node2.Pos[1] {
+		t.Fatalf("expected merge node at rounded parent row %v, got %v", node2.Pos[1], merge.Pos[1])
 	}
 }
 
