@@ -50,27 +50,24 @@ This remains the mechanism for arranging multiple workflows across the shared Co
 
 ### 2. Add workflow presentation controls
 
-Extend each `workflows` entry with an optional presentation block, tentatively named `style`.
+Extend each `workflows` entry with an optional `style` block.
 
-The block should support:
+The v1 block should expose only styling that the live ComfyUI group renderer is proven to support:
 
-- `background_color`
-- `border_color`
-- `border_width`
-- `border_radius`
-- `header_background_color`
-- `title_color`
+- `group_color`
 - `title_font_size`
 
 Defaults:
 
 - every field remains optional
 - omitting the block produces a readable default container
-- setting only one or two fields is allowed; the provider fills the rest with defaults
+- setting one field is allowed; the provider fills the rest with defaults
+
+This design is intentionally constrained to renderable fields. The live ComfyUI group object currently serializes only `color` and `font_size`, and its `draw()` implementation uses that same single color for the header fill, body fill, border stroke, resize handle, and title text. Separate border/header/title color controls are therefore out of scope for v1 because they cannot be guaranteed to render.
 
 ### 3. Add internal node layout controls
 
-Extend the resource with an internal node layout block, tentatively named `node_layout`.
+Extend the resource with an internal `node_layout` block.
 
 Default behavior:
 
@@ -79,12 +76,18 @@ Default behavior:
 
 Initial surface:
 
-- `mode` — initially only `dag`
-- `direction` — initially `left_to_right`, with room for future `top_to_bottom`
+- `mode` — only `dag`
+- `direction` — only `left_to_right` in v1
 - `column_gap`
 - `row_gap`
 
 The default should improve readability without requiring any new Terraform arguments.
+
+Validation:
+
+- reject any `mode` other than `dag`
+- reject any `direction` other than `left_to_right`
+- return explicit diagnostics when unsupported values are requested
 
 ## Provider Behavior Design
 
@@ -101,16 +104,28 @@ Rules:
 - nodes must remain inside the workflow body area
 - body padding remains separate from header padding
 
+Default geometry:
+
+- minimum header band height: `40px`
+- default body top padding below the header band: `40px`
+- therefore the first node must begin at least `80px` below the group top in the default case
+
+This replaces the current effective `40px` clearance baseline that caused title crowding.
+
 ### 2. Default internal node layout: left-to-right DAG
 
 Inside each workflow island:
 
 1. parse the prompt graph and build dependency relationships
-2. assign nodes to horizontal levels based on upstream dependencies
-3. place source nodes in the leftmost column
-4. place downstream nodes progressively to the right
-5. stack sibling branches vertically within a column
-6. center or rebalance merge nodes as needed for readability
+2. topologically order nodes with stable tie-breaking based on original prompt order
+3. assign each node a horizontal level equal to the longest upstream path into that node
+4. place source nodes in the leftmost column
+5. place downstream nodes progressively to the right using `column_gap`
+6. within each column, sort nodes by:
+   - average parent row if the node has parents
+   - otherwise original prompt order
+7. for merge nodes, use the rounded average of parent rows as the preferred row anchor, then resolve collisions by shifting downward within the column
+8. place sibling branches vertically using `row_gap`
 
 Expected outcome:
 
@@ -142,13 +157,26 @@ This preserves the existing “best of both worlds” behavior:
 
 ## Serialization Design
 
-The exported group JSON should include the chosen styling values through the existing group structure where possible.
+The exported group JSON should include only styling values that the live ComfyUI group renderer reads and serializes.
 
-Current JSON already supports `workspaceGroup.Color`; the implementation should map the richer Terraform styling surface into the ComfyUI-exported group shape as far as the runtime supports it. Where ComfyUI group JSON has limits, the provider should:
+### Supported mapping table
 
-- serialize supported styling fields directly
-- keep unsupported fields out of the exported JSON rather than inventing incompatible keys
-- document any styling fields that are provider-level abstractions versus directly serialized values
+| Terraform field | Exported group field | Runtime effect |
+| --- | --- | --- |
+| `workflows[].style.group_color` | `groups[].color` | Drives the header fill, body fill, border stroke, resize handle, and title text color together |
+| `workflows[].style.title_font_size` | `groups[].font_size` | Drives the title text size and header/titlebar height |
+
+### Unsupported in v1
+
+The following are deliberately excluded because the current live group renderer does not serialize or render them as distinct fields:
+
+- separate border color
+- separate header background color
+- separate title text color
+- border width
+- border radius
+
+Unsupported styling fields must not be added to the Terraform surface until a concrete ComfyUI runtime field and rendering path is identified.
 
 ## Validation Strategy
 
@@ -176,9 +204,9 @@ Extend the Playwright harness so it proves:
 
 Reuse the current browser-e2e fixtures and add focused cases for:
 
-- title/header collision regression
-- branch-heavy internal workflow readability
-- styled workflow islands with distinct header/background treatment
+- title/header collision regression using a fixture where the first node would have overlapped under the old `40px` clearance
+- branch-heavy internal workflow readability using a workflow with three parallel branches merging into a shared downstream node
+- styled workflow islands using a non-default `group_color` plus non-default `title_font_size`
 
 ## Implementation Boundaries
 
@@ -202,8 +230,8 @@ Each unit should remain understandable and testable on its own.
 Mitigation:
 
 - serialize only supported fields
-- keep defaults readable even if some styling options are provider-side only
-- document any field with runtime limitations
+- keep the v1 Terraform styling surface limited to renderable fields
+- expand the styling surface only after tracing a concrete runtime field and draw path in ComfyUI
 
 ### Risk: DAG layout becomes too aggressive for hand-positioned workflows
 
