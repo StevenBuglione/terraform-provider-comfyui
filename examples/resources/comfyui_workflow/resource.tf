@@ -1,5 +1,5 @@
 resource "comfyui_workflow" "example" {
-  workflow_api_json = jsonencode({
+  workflow_json = jsonencode({
     "1" = {
       class_type = "KSampler"
       inputs = {

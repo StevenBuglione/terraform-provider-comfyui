@@ -9,7 +9,7 @@
 terraform {
   required_providers {
     comfyui = {
-      source  = "registry.terraform.io/StevenBuglione/comfyui"
+      source  = "StevenBuglione/comfyui"
       version = "~> 0.1"
     }
   }

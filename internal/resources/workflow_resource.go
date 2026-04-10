@@ -81,7 +81,7 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"node_ids": schema.ListAttribute{
 				Optional:    true,
 				ElementType: types.StringType,
-				Description: "List of node resource IDs to include in the workflow. Reserved for future use with virtual node resources.",
+				Description: "List of node resource IDs to include when assembling a workflow from virtual node resources.",
 			},
 			"execute": schema.BoolAttribute{
 				Optional:    true,
