@@ -26,13 +26,22 @@ test('verifies staged workspaces in the real ComfyUI canvas', async ({ page }) =
       expect(loaded.nodeCount).toBeGreaterThan(0);
       expect(loaded.groupCount).toBeGreaterThan(0);
 
+      await page.waitForTimeout(200);
+
       const metrics = await readLayoutMetrics(page);
       expect(metrics.nodeCount).toBe(loaded.nodeCount);
       expect(metrics.groupCount).toBe(loaded.groupCount);
       expect(metrics.ungroupedNodes).toEqual([]);
       expect(metrics.groupOverlaps).toEqual([]);
       expect(metrics.nodeOverlaps).toEqual([]);
+      expect(metrics.headerOverlaps).toEqual([]);
+      expect(metrics.bodyContainmentViolations).toEqual([]);
+      expect(metrics.backwardLinks).toEqual([]);
       expect(metrics.groups.every((group) => group.fullyVisible)).toBe(true);
+
+      // NOTE: ComfyUI/LiteGraph does not preserve group color/font_size from workflow JSON
+      // These properties are captured in metrics for observability but cannot be asserted
+      // See: validation/workspace_e2e/browser/tests/README.md#litegraph-limitations
 
       const initialPosition = await getFirstNodePosition(page);
       const movedPosition = await dragFirstNode(page, 48, 36);
