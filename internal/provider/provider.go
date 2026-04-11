@@ -136,8 +136,10 @@ func (p *ComfyUIProvider) DataSources(_ context.Context) []func() datasource.Dat
 		datasources.NewWorkflowHistoryDataSource,
 		datasources.NewOutputDataSource,
 		datasources.NewPromptJSONDataSource,
+		datasources.NewPromptValidationDataSource,
 		datasources.NewPromptToWorkspaceDataSource,
 		datasources.NewWorkspaceJSONDataSource,
+		datasources.NewWorkspaceValidationDataSource,
 		datasources.NewWorkspaceToPromptDataSource,
 		datasources.NewProviderInfoDataSource(p.version),
 	}

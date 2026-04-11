@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/artifacts"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/validation"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -31,19 +34,21 @@ type WorkflowResource struct {
 }
 
 type WorkflowModel struct {
-	ID                types.String `tfsdk:"id"`
-	WorkflowJSON      types.String `tfsdk:"workflow_json"`
-	NodeIDs           types.List   `tfsdk:"node_ids"`
-	Execute           types.Bool   `tfsdk:"execute"`
-	WaitForCompletion types.Bool   `tfsdk:"wait_for_completion"`
-	TimeoutSeconds    types.Int64  `tfsdk:"timeout_seconds"`
-	PromptID          types.String `tfsdk:"prompt_id"`
-	ClientID          types.String `tfsdk:"client_id"`
-	ExtraDataJSON     types.String `tfsdk:"extra_data_json"`
-	PartialTargets    types.List   `tfsdk:"partial_execution_targets"`
-	Status            types.String `tfsdk:"status"`
-	Outputs           types.String `tfsdk:"outputs"`
-	Error             types.String `tfsdk:"error"`
+	ID                    types.String `tfsdk:"id"`
+	WorkflowJSON          types.String `tfsdk:"workflow_json"`
+	NodeIDs               types.List   `tfsdk:"node_ids"`
+	Execute               types.Bool   `tfsdk:"execute"`
+	WaitForCompletion     types.Bool   `tfsdk:"wait_for_completion"`
+	TimeoutSeconds        types.Int64  `tfsdk:"timeout_seconds"`
+	ValidateBeforeExecute types.Bool   `tfsdk:"validate_before_execute"`
+	PromptID              types.String `tfsdk:"prompt_id"`
+	ClientID              types.String `tfsdk:"client_id"`
+	ExtraDataJSON         types.String `tfsdk:"extra_data_json"`
+	PartialTargets        types.List   `tfsdk:"partial_execution_targets"`
+	Status                types.String `tfsdk:"status"`
+	Outputs               types.String `tfsdk:"outputs"`
+	Error                 types.String `tfsdk:"error"`
+	ValidationSummaryJSON types.String `tfsdk:"validation_summary_json"`
 
 	// Metadata
 	Name        types.String `tfsdk:"name"`
@@ -111,6 +116,12 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Default:     int64default.StaticInt64(300),
 				Description: "Maximum seconds to wait for workflow execution. Defaults to 300.",
 			},
+			"validate_before_execute": schema.BoolAttribute{
+				Optional:    true,
+				Computed:    true,
+				Default:     booldefault.StaticBool(true),
+				Description: "Whether to validate the prompt against live /object_info metadata before queueing execution. Defaults to true.",
+			},
 			"prompt_id": schema.StringAttribute{
 				Optional:    true,
 				Computed:    true,
@@ -140,6 +151,10 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"error": schema.StringAttribute{
 				Computed:    true,
 				Description: "Error message if execution failed.",
+			},
+			"validation_summary_json": schema.StringAttribute{
+				Computed:    true,
+				Description: "Structured JSON summary of semantic validation results when workflow preflight validation runs.",
 			},
 			"name": schema.StringAttribute{
 				Optional:    true,
@@ -218,6 +233,7 @@ func (r *WorkflowResource) Create(ctx context.Context, req resource.CreateReques
 
 	if !data.Execute.ValueBool() {
 		data.PromptID = types.StringValue("")
+		data.ValidationSummaryJSON = types.StringValue("")
 		if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
 			data.Status = types.StringValue("file_only")
 		} else {
@@ -289,6 +305,7 @@ func (r *WorkflowResource) Update(ctx context.Context, req resource.UpdateReques
 
 	if !data.Execute.ValueBool() {
 		data.PromptID = types.StringValue("")
+		data.ValidationSummaryJSON = types.StringValue("")
 		if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
 			data.Status = types.StringValue("file_only")
 		} else {
@@ -359,6 +376,41 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		return
 	}
 
+	if validationEnabled(data.ValidateBeforeExecute) {
+		report, err := r.validatePromptForExecution(prompt)
+		if err != nil {
+			data.PromptID = types.StringValue("")
+			data.Status = types.StringValue("error")
+			data.Outputs = types.StringValue("{}")
+			data.Error = types.StringValue(fmt.Sprintf("Failed to validate prompt: %s", err.Error()))
+			diags.AddError("Unable to validate workflow", err.Error())
+			return
+		}
+
+		summaryJSON, err := report.JSON()
+		if err != nil {
+			data.PromptID = types.StringValue("")
+			data.Status = types.StringValue("error")
+			data.Outputs = types.StringValue("{}")
+			data.Error = types.StringValue(fmt.Sprintf("Failed to encode validation summary: %s", err.Error()))
+			diags.AddError("Unable to encode validation summary", err.Error())
+			return
+		}
+		data.ValidationSummaryJSON = types.StringValue(summaryJSON)
+
+		if !report.Valid {
+			data.PromptID = types.StringValue("")
+			data.Status = types.StringValue("error")
+			data.Outputs = types.StringValue("{}")
+			joinedErrors := strings.Join(report.Errors, "\n- ")
+			data.Error = types.StringValue(fmt.Sprintf("Workflow validation failed:\n- %s", joinedErrors))
+			diags.AddError("Workflow validation failed", fmt.Sprintf("The workflow failed semantic validation:\n- %s", joinedErrors))
+			return
+		}
+	} else {
+		data.ValidationSummaryJSON = types.StringValue("")
+	}
+
 	tflog.Info(ctx, "Submitting workflow to ComfyUI", map[string]interface{}{
 		"node_count": len(prompt),
 	})
@@ -423,6 +475,29 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 	}
 
 	r.updateFromHistoryEntry(data, entry)
+}
+
+func (r *WorkflowResource) validatePromptForExecution(prompt map[string]interface{}) (validation.Report, error) {
+	rawPrompt, err := json.Marshal(prompt)
+	if err != nil {
+		return validation.Report{}, fmt.Errorf("marshal prompt for validation: %w", err)
+	}
+
+	parsedPrompt, err := artifacts.ParsePromptJSON(string(rawPrompt))
+	if err != nil {
+		return validation.Report{}, fmt.Errorf("parse prompt for validation: %w", err)
+	}
+
+	nodeInfo, err := r.client.GetObjectInfo()
+	if err != nil {
+		return validation.Report{}, err
+	}
+
+	return validation.ValidatePrompt(parsedPrompt, nodeInfo, validation.Options{RequireOutputNode: true}), nil
+}
+
+func validationEnabled(value types.Bool) bool {
+	return value.IsNull() || value.IsUnknown() || value.ValueBool()
 }
 
 func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecutionRequestConfig) (client.QueuePromptRequest, error) {

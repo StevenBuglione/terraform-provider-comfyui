@@ -2,11 +2,17 @@ package resources
 
 import (
 	"context"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"testing"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	resourceschema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func TestBuildQueuePromptRequest_PreservesExplicitMetadataAndAddsPromptPNGInfo(t *testing.T) {
@@ -127,5 +133,170 @@ func TestWorkflowSchema_PromptIDDoesNotReusePriorState(t *testing.T) {
 	}
 	if len(promptIDAttr.PlanModifiers) != 0 {
 		t.Fatalf("expected prompt_id to avoid plan modifiers that reuse prior state, got %d", len(promptIDAttr.PlanModifiers))
+	}
+}
+
+func TestWorkflowSchema_ValidationPreflightAttributes(t *testing.T) {
+	r := NewWorkflowResource().(*WorkflowResource)
+	var resp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &resp)
+
+	validateAttr, ok := resp.Schema.Attributes["validate_before_execute"].(resourceschema.BoolAttribute)
+	if !ok {
+		t.Fatalf("expected validate_before_execute to be a bool attribute, got %#v", resp.Schema.Attributes["validate_before_execute"])
+	}
+	if !validateAttr.Optional || !validateAttr.Computed || validateAttr.Default == nil {
+		t.Fatalf("expected validate_before_execute to be optional, computed, and defaulted, got %#v", validateAttr)
+	}
+
+	summaryAttr, ok := resp.Schema.Attributes["validation_summary_json"].(resourceschema.StringAttribute)
+	if !ok {
+		t.Fatalf("expected validation_summary_json to be a string attribute, got %#v", resp.Schema.Attributes["validation_summary_json"])
+	}
+	if !summaryAttr.Computed {
+		t.Fatalf("expected validation_summary_json to be computed, got %#v", summaryAttr)
+	}
+}
+
+func newWorkflowTestClient(server *httptest.Server) *client.Client {
+	return &client.Client{
+		HTTPClient: server.Client(),
+		BaseURL:    server.URL,
+	}
+}
+
+func mustEncodeResourceJSON(t *testing.T, w http.ResponseWriter, v any) {
+	t.Helper()
+	if err := json.NewEncoder(w).Encode(v); err != nil {
+		t.Fatalf("failed to encode JSON response: %v", err)
+	}
+}
+
+func TestExecuteWorkflow_ValidationFailureBlocksQueueing(t *testing.T) {
+	objectInfoHits := 0
+	promptHits := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/object_info":
+			objectInfoHits++
+			mustEncodeResourceJSON(t, w, map[string]client.NodeInfo{
+				"SaveImage": {
+					Input: client.NodeInputInfo{
+						Required: map[string]interface{}{
+							"images": []interface{}{"IMAGE"},
+						},
+						Hidden: map[string]interface{}{
+							"prompt": "PROMPT",
+						},
+					},
+					InputOrder: map[string][]string{
+						"required": {"images"},
+					},
+					OutputNode: true,
+				},
+			})
+		case "/prompt":
+			promptHits++
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "should-not-run",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(true),
+	}
+	prompt := map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "SaveImage",
+			"inputs": map[string]interface{}{
+				"filename_prefix": "ComfyUI",
+			},
+		},
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), prompt, &data, &diags)
+	if !diags.HasError() {
+		t.Fatal("expected semantic validation failure to add diagnostics")
+	}
+	if objectInfoHits != 1 {
+		t.Fatalf("expected /object_info to be called once, got %d", objectInfoHits)
+	}
+	if promptHits != 0 {
+		t.Fatalf("expected /prompt not to be called after validation failure, got %d", promptHits)
+	}
+	if data.ValidationSummaryJSON.IsNull() || data.ValidationSummaryJSON.ValueString() == "" {
+		t.Fatal("expected validation_summary_json to be populated")
+	}
+
+	var summary map[string]interface{}
+	if err := json.Unmarshal([]byte(data.ValidationSummaryJSON.ValueString()), &summary); err != nil {
+		t.Fatalf("validation_summary_json should be valid JSON: %v", err)
+	}
+	if summary["valid"] != false {
+		t.Fatalf("expected validation summary to mark prompt invalid, got %#v", summary["valid"])
+	}
+}
+
+func TestExecuteWorkflow_DisabledValidationSkipsPreflight(t *testing.T) {
+	objectInfoHits := 0
+	promptHits := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/object_info":
+			objectInfoHits++
+			http.Error(w, "should not validate", http.StatusInternalServerError)
+		case "/prompt":
+			promptHits++
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "queued-123",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(false),
+	}
+	prompt := map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "SaveImage",
+			"inputs": map[string]interface{}{
+				"filename_prefix": "ComfyUI",
+			},
+		},
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), prompt, &data, &diags)
+	if diags.HasError() {
+		t.Fatalf("expected validation to be skipped, got diagnostics %v", diags)
+	}
+	if objectInfoHits != 0 {
+		t.Fatalf("expected /object_info not to be called when validation is disabled, got %d", objectInfoHits)
+	}
+	if promptHits != 1 {
+		t.Fatalf("expected /prompt to be called once, got %d", promptHits)
+	}
+	if data.Status.ValueString() != "queued" {
+		t.Fatalf("expected queued status, got %q", data.Status.ValueString())
 	}
 }
