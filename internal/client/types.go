@@ -1,5 +1,7 @@
 package client
 
+import "encoding/json"
+
 // QueuePromptRequest is submitted to POST /prompt.
 type QueuePromptRequest struct {
 	Prompt                  map[string]interface{} `json:"prompt"`
@@ -104,4 +106,29 @@ type NodeInputInfo struct {
 	Required map[string]interface{} `json:"required"`
 	Optional map[string]interface{} `json:"optional"`
 	Hidden   map[string]interface{} `json:"hidden"`
+}
+
+type UploadResponse struct {
+	Name      string `json:"name"`
+	Subfolder string `json:"subfolder"`
+	Type      string `json:"type"`
+}
+
+type RemoteFileReference struct {
+	Filename  string `json:"filename"`
+	Subfolder string `json:"subfolder,omitempty"`
+	Type      string `json:"type,omitempty"`
+}
+
+func (r RemoteFileReference) JSON() (string, error) {
+	data, err := json.Marshal(r)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
+type DownloadViewResponse struct {
+	Content     []byte
+	ContentType string
 }

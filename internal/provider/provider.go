@@ -125,6 +125,9 @@ func (p *ComfyUIProvider) Resources(_ context.Context) []func() resource.Resourc
 	all = append(all, resources.NewWorkspaceResource)
 	all = append(all, resources.NewPromptArtifactResource)
 	all = append(all, resources.NewWorkspaceArtifactResource)
+	all = append(all, resources.NewUploadedImageResource)
+	all = append(all, resources.NewUploadedMaskResource)
+	all = append(all, resources.NewOutputArtifactResource)
 	return all
 }
 

@@ -15,8 +15,10 @@ This provider uses a node-per-resource model: generated Terraform resources desc
 - Model ComfyUI graphs as typed Terraform resources instead of hand-editing raw workflow JSON.
 - Assemble workflows from `node_ids` or submit raw ComfyUI API-format JSON directly.
 - Export workflow files, execute runs, or do both from the same `comfyui_workflow` resource.
+- Import, translate, and validate native prompt/workspace artifacts before execution.
+- Upload input images or masks to ComfyUI and materialize remote outputs back to local disk.
 - Organize reusable workflow sets with `comfyui_workflow_collection`.
-- Inspect server state with six data sources: `comfyui_system_stats`, `comfyui_queue`, `comfyui_node_info`, `comfyui_workflow_history`, `comfyui_output`, and `comfyui_provider_info`.
+- Inspect server state plus artifact import/translation/validation surfaces with provider data sources.
 
 ## Requirements
 
@@ -164,6 +166,16 @@ Unlike `comfyui_workflow` file-only export, `comfyui_workspace` still needs a li
 ### Data sources
 
 Use data sources to inspect live server state, look up workflow history, resolve output files, or confirm provider metadata generated from the current ComfyUI extraction.
+
+### Artifact round-trip and file lifecycle
+
+The provider also exposes dedicated artifact-management surfaces for AI harness workflows:
+
+- `comfyui_prompt_json` / `comfyui_workspace_json` import and normalize native ComfyUI artifacts.
+- `comfyui_prompt_to_workspace` / `comfyui_workspace_to_prompt` translate between API prompt JSON and workspace JSON with explicit fidelity reporting.
+- `comfyui_prompt_validation` / `comfyui_workspace_validation` validate artifacts against live `/object_info` metadata before execution.
+- `comfyui_uploaded_image` and `comfyui_uploaded_mask` manage ComfyUI-backed uploads.
+- `comfyui_output_artifact` downloads a remote ComfyUI file from `/view` into a Terraform-managed local artifact.
 
 ## Examples
 

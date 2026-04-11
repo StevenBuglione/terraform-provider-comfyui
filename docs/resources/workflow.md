@@ -40,13 +40,18 @@ resource "comfyui_workflow" "example" {
 ### Optional
 
 - `category` (String) Workflow category (e.g., 'txt2img', 'img2img', 'video', 'audio', '3d').
+- `client_id` (String) Optional ComfyUI client_id to include in the /prompt request wrapper.
 - `description` (String) Description of what this workflow does.
 - `execute` (Boolean) Whether to submit the workflow for execution. Defaults to true.
+- `extra_data_json` (String) Optional JSON object to include as extra_data in the /prompt request wrapper.
 - `name` (String) Human-readable name for this workflow.
 - `node_ids` (List of String) List of node resource IDs to include when assembling a workflow from virtual node resources.
 - `output_file` (String) File path to write the assembled workflow JSON. The file is in ComfyUI API format and can be loaded by ComfyUI.
+- `partial_execution_targets` (List of String) Optional list of node IDs to send as partial_execution_targets in the /prompt request wrapper.
+- `prompt_id` (String) Optional ComfyUI prompt ID to submit. If omitted, ComfyUI assigns one.
 - `tags` (List of String) Tags for categorizing and searching workflows (e.g., 'landscape', 'portrait', 'video').
 - `timeout_seconds` (Number) Maximum seconds to wait for workflow execution. Defaults to 300.
+- `validate_before_execute` (Boolean) Whether to validate the prompt against live /object_info metadata before queueing execution. Defaults to true.
 - `wait_for_completion` (Boolean) Whether to wait for execution to finish before marking the resource as created. Defaults to true.
 - `workflow_json` (String) JSON string containing the full ComfyUI workflow (API format). Each top-level key is a node ID mapping to an object with class_type and inputs.
 
@@ -56,5 +61,5 @@ resource "comfyui_workflow" "example" {
 - `error` (String) Error message if execution failed.
 - `id` (String) Unique identifier for this workflow resource instance.
 - `outputs` (String) JSON string of execution outputs (images, audio, etc.).
-- `prompt_id` (String) ComfyUI prompt ID assigned after submission.
 - `status` (String) Execution status: pending, queued, running, completed, or error.
+- `validation_summary_json` (String) Structured JSON summary of semantic validation results when workflow preflight validation runs.

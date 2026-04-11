@@ -5,7 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
+	"net/url"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -189,8 +193,11 @@ func (c *Client) GetObjectInfoSingle(nodeType string) (*NodeInfo, error) {
 
 // GetViewURL constructs the URL for viewing an output file
 func (c *Client) GetViewURL(filename, subfolder, outputType string) string {
-	return fmt.Sprintf("%s/view?filename=%s&subfolder=%s&type=%s",
-		c.BaseURL, filename, subfolder, outputType)
+	values := url.Values{}
+	values.Set("filename", filename)
+	values.Set("subfolder", subfolder)
+	values.Set("type", outputType)
+	return fmt.Sprintf("%s/view?%s", c.BaseURL, values.Encode())
 }
 
 // CheckOutputExists checks if an output file exists by making a HEAD request
@@ -214,8 +221,42 @@ func (c *Client) CheckOutputExists(filename, subfolder, outputType string) (bool
 	return resp.StatusCode == http.StatusOK, nil
 }
 
+func (c *Client) UploadImage(filePath string, filename string, subfolder string, uploadType string, overwrite bool) (*UploadResponse, error) {
+	return c.uploadFile("/upload/image", filePath, filename, subfolder, uploadType, overwrite, "")
+}
+
+func (c *Client) UploadMask(filePath string, filename string, subfolder string, uploadType string, overwrite bool, originalRef RemoteFileReference) (*UploadResponse, error) {
+	originalRefJSON, err := originalRef.JSON()
+	if err != nil {
+		return nil, fmt.Errorf("marshal original_ref: %w", err)
+	}
+	return c.uploadFile("/upload/mask", filePath, filename, subfolder, uploadType, overwrite, originalRefJSON)
+}
+
+func (c *Client) DownloadView(filename, subfolder, outputType string) (*DownloadViewResponse, error) {
+	resp, err := c.doGetRaw(c.GetViewURL(filename, subfolder, outputType))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	content, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	return &DownloadViewResponse{
+		Content:     content,
+		ContentType: resp.Header.Get("Content-Type"),
+	}, nil
+}
+
 func (c *Client) doGet(path string) (*http.Response, error) {
 	url := c.BaseURL + path
+	return c.doGetRaw(url)
+}
+
+func (c *Client) doGetRaw(url string) (*http.Response, error) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
@@ -237,4 +278,75 @@ func (c *Client) doGet(path string) (*http.Response, error) {
 	}
 
 	return resp, nil
+}
+
+func (c *Client) uploadFile(endpoint string, filePath string, filename string, subfolder string, uploadType string, overwrite bool, originalRefJSON string) (*UploadResponse, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("open %s: %w", filePath, err)
+	}
+	defer file.Close()
+
+	if filename == "" {
+		filename = filepath.Base(filePath)
+	}
+
+	var body bytes.Buffer
+	writer := multipart.NewWriter(&body)
+
+	part, err := writer.CreateFormFile("image", filename)
+	if err != nil {
+		return nil, fmt.Errorf("create multipart file: %w", err)
+	}
+	if _, err := io.Copy(part, file); err != nil {
+		return nil, fmt.Errorf("copy multipart file: %w", err)
+	}
+	if err := writer.WriteField("type", uploadType); err != nil {
+		return nil, fmt.Errorf("write type field: %w", err)
+	}
+	if err := writer.WriteField("subfolder", subfolder); err != nil {
+		return nil, fmt.Errorf("write subfolder field: %w", err)
+	}
+	if overwrite {
+		if err := writer.WriteField("overwrite", "true"); err != nil {
+			return nil, fmt.Errorf("write overwrite field: %w", err)
+		}
+	}
+	if originalRefJSON != "" {
+		if err := writer.WriteField("original_ref", originalRefJSON); err != nil {
+			return nil, fmt.Errorf("write original_ref field: %w", err)
+		}
+	}
+	if err := writer.Close(); err != nil {
+		return nil, fmt.Errorf("close multipart writer: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", c.BaseURL+endpoint, &body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	if c.APIKey != "" {
+		req.Header.Set("Authorization", "Bearer "+c.APIKey)
+	}
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status %d: %s", resp.StatusCode, string(respBody))
+	}
+
+	var result UploadResponse
+	if err := json.Unmarshal(respBody, &result); err != nil {
+		return nil, fmt.Errorf("failed to decode upload response: %w", err)
+	}
+	return &result, nil
 }

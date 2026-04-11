@@ -2,8 +2,11 @@ package client
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -506,5 +509,145 @@ func TestAPIKeyHeaderOnHead(t *testing.T) {
 	_, err := c.CheckOutputExists("test.png", "", "output")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+func TestUploadImage(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "source.png")
+	if err := os.WriteFile(path, []byte("image-bytes"), 0644); err != nil {
+		t.Fatalf("failed to write source file: %v", err)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/upload/image" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("failed to parse multipart form: %v", err)
+		}
+		if got := r.FormValue("type"); got != "input" {
+			t.Fatalf("expected type=input, got %q", got)
+		}
+		if got := r.FormValue("subfolder"); got != "fixtures" {
+			t.Fatalf("expected subfolder=fixtures, got %q", got)
+		}
+		if got := r.FormValue("overwrite"); got != "true" {
+			t.Fatalf("expected overwrite=true, got %q", got)
+		}
+
+		file, header, err := r.FormFile("image")
+		if err != nil {
+			t.Fatalf("missing image form file: %v", err)
+		}
+		defer file.Close()
+		if header.Filename != "renamed.png" {
+			t.Fatalf("expected uploaded filename renamed.png, got %q", header.Filename)
+		}
+		body, err := io.ReadAll(file)
+		if err != nil {
+			t.Fatalf("failed to read uploaded file: %v", err)
+		}
+		if string(body) != "image-bytes" {
+			t.Fatalf("unexpected uploaded body: %q", string(body))
+		}
+
+		mustEncodeJSON(t, w, UploadResponse{
+			Name:      "renamed.png",
+			Subfolder: "fixtures",
+			Type:      "input",
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	resp, err := c.UploadImage(path, "renamed.png", "fixtures", "input", true)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if resp.Name != "renamed.png" || resp.Subfolder != "fixtures" || resp.Type != "input" {
+		t.Fatalf("unexpected upload response: %#v", resp)
+	}
+}
+
+func TestUploadMask(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "mask.png")
+	if err := os.WriteFile(path, []byte("mask-bytes"), 0644); err != nil {
+		t.Fatalf("failed to write mask file: %v", err)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/upload/mask" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("failed to parse multipart form: %v", err)
+		}
+		if got := r.FormValue("overwrite"); got != "true" {
+			t.Fatalf("expected overwrite=true, got %q", got)
+		}
+		if got := r.FormValue("original_ref"); got != `{"filename":"original.png","subfolder":"masks","type":"output"}` {
+			t.Fatalf("unexpected original_ref payload: %q", got)
+		}
+
+		file, _, err := r.FormFile("image")
+		if err != nil {
+			t.Fatalf("missing image form file: %v", err)
+		}
+		defer file.Close()
+		body, err := io.ReadAll(file)
+		if err != nil {
+			t.Fatalf("failed to read uploaded file: %v", err)
+		}
+		if string(body) != "mask-bytes" {
+			t.Fatalf("unexpected uploaded body: %q", string(body))
+		}
+
+		mustEncodeJSON(t, w, UploadResponse{
+			Name: "mask.png",
+			Type: "input",
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	resp, err := c.UploadMask(path, "", "", "input", true, RemoteFileReference{
+		Filename:  "original.png",
+		Subfolder: "masks",
+		Type:      "output",
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if resp.Name != "mask.png" || resp.Type != "input" {
+		t.Fatalf("unexpected upload response: %#v", resp)
+	}
+}
+
+func TestDownloadView(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/view" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+		query := r.URL.Query()
+		if query.Get("filename") != "image.png" || query.Get("subfolder") != "outputs" || query.Get("type") != "output" {
+			t.Fatalf("unexpected query params: %v", query)
+		}
+		w.Header().Set("Content-Type", "image/png")
+		mustWriteBody(t, w, "png-bytes")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	resp, err := c.DownloadView("image.png", "outputs", "output")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if string(resp.Content) != "png-bytes" {
+		t.Fatalf("unexpected download body: %q", string(resp.Content))
+	}
+	if resp.ContentType != "image/png" {
+		t.Fatalf("expected content_type=image/png, got %q", resp.ContentType)
 	}
 }
