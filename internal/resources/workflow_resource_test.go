@@ -156,6 +156,9 @@ func TestWorkflowSchema_ValidationPreflightAttributes(t *testing.T) {
 	if !summaryAttr.Computed {
 		t.Fatalf("expected validation_summary_json to be computed, got %#v", summaryAttr)
 	}
+	if len(summaryAttr.PlanModifiers) != 1 {
+		t.Fatalf("expected validation_summary_json to keep prior state when unknown, got %#v", summaryAttr.PlanModifiers)
+	}
 }
 
 func newWorkflowTestClient(server *httptest.Server) *client.Client {
@@ -298,5 +301,55 @@ func TestExecuteWorkflow_DisabledValidationSkipsPreflight(t *testing.T) {
 	}
 	if data.Status.ValueString() != "queued" {
 		t.Fatalf("expected queued status, got %q", data.Status.ValueString())
+	}
+}
+
+func TestExecuteWorkflow_ObjectInfoFailureReturnsDiagnostic(t *testing.T) {
+	objectInfoHits := 0
+	promptHits := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/object_info":
+			objectInfoHits++
+			http.Error(w, "metadata unavailable", http.StatusInternalServerError)
+		case "/prompt":
+			promptHits++
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "should-not-run",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(true),
+	}
+	prompt := map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "SaveImage",
+			"inputs": map[string]interface{}{
+				"filename_prefix": "ComfyUI",
+			},
+		},
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), prompt, &data, &diags)
+	if !diags.HasError() {
+		t.Fatal("expected object_info fetch failure to add diagnostics")
+	}
+	if objectInfoHits != 1 {
+		t.Fatalf("expected /object_info to be called once, got %d", objectInfoHits)
+	}
+	if promptHits != 0 {
+		t.Fatalf("expected /prompt not to be called after metadata fetch failure, got %d", promptHits)
 	}
 }

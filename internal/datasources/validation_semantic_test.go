@@ -152,6 +152,24 @@ func TestWorkspaceValidationStateFromInput_ReturnsTranslationAndValidation(t *te
 	}
 }
 
+func TestPromptValidationStateFromInput_AllowsPartialPromptWithoutOutputNode(t *testing.T) {
+	state, err := promptValidationStateFromInput("", `{
+	  "1": {
+	    "class_type": "LoadImage",
+	    "inputs": {
+	      "image": "input.png"
+	    }
+	  }
+	}`, validationTestNodeInfo())
+	if err != nil {
+		t.Fatalf("promptValidationStateFromInput returned error: %v", err)
+	}
+
+	if !state.Valid.ValueBool() {
+		t.Fatalf("expected partial prompt without output node to remain valid, got %v", state.Errors)
+	}
+}
+
 func TestPromptValidationDataSourceSchema_ValidatesPathAndJSONSelection(t *testing.T) {
 	ds := NewPromptValidationDataSource().(*PromptValidationDataSource)
 	var resp datasource.SchemaResponse

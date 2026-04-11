@@ -92,10 +92,6 @@ func ValidatePrompt(prompt *artifacts.Prompt, nodeInfo map[string]client.NodeInf
 	if opts.RequireOutputNode && !hasOutputNode {
 		report.AddError("prompt does not include any node marked output_node=true")
 	}
-
-	report.ErrorCount = len(report.Errors)
-	report.WarningCount = len(report.Warnings)
-	report.Valid = report.ErrorCount == 0
 	return report
 }
 

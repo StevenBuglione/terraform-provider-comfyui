@@ -197,7 +197,7 @@ func workspaceValidationStateFromInput(path string, raw string, nodeInfo map[str
 		return WorkspaceValidationModel{}, err
 	}
 
-	validationReport := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{RequireOutputNode: true})
+	validationReport := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{RequireOutputNode: false})
 	return WorkspaceValidationModel{
 		Path:                         stringValueOrNull(path),
 		JSON:                         stringValueOrNull(raw),

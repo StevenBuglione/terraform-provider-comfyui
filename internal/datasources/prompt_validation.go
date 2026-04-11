@@ -153,7 +153,7 @@ func promptValidationStateFromInput(path string, raw string, nodeInfo map[string
 		return PromptValidationModel{}, err
 	}
 
-	report := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{RequireOutputNode: true})
+	report := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{RequireOutputNode: false})
 	return PromptValidationModel{
 		Path:               stringValueOrNull(path),
 		JSON:               stringValueOrNull(raw),
