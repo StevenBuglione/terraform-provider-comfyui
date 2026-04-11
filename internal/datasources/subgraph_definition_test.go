@@ -13,7 +13,7 @@ import (
 )
 
 func TestSubgraphDefinitionStateFromEntry_NormalizesEditorNativeJSON(t *testing.T) {
-	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Brightness and Contrast.json")
+	fixturePath := filepath.Join("..", "testdata", "blueprints", "brightness-and-contrast.json")
 	raw, err := os.ReadFile(fixturePath)
 	if err != nil {
 		t.Fatalf("failed to read blueprint fixture: %v", err)
@@ -58,7 +58,7 @@ func TestSubgraphDefinitionStateFromEntry_RejectsNullEntry(t *testing.T) {
 }
 
 func TestSubgraphDefinitionStateFromEntry_PreservesRawInfoJSON(t *testing.T) {
-	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Brightness and Contrast.json")
+	fixturePath := filepath.Join("..", "testdata", "blueprints", "brightness-and-contrast.json")
 	raw, err := os.ReadFile(fixturePath)
 	if err != nil {
 		t.Fatalf("failed to read blueprint fixture: %v", err)
@@ -79,7 +79,7 @@ func TestSubgraphDefinitionStateFromEntry_PreservesRawInfoJSON(t *testing.T) {
 }
 
 func TestSubgraphDefinitionStateFromEntry_PreservesNullInfoJSON(t *testing.T) {
-	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Brightness and Contrast.json")
+	fixturePath := filepath.Join("..", "testdata", "blueprints", "brightness-and-contrast.json")
 	raw, err := os.ReadFile(fixturePath)
 	if err != nil {
 		t.Fatalf("failed to read blueprint fixture: %v", err)

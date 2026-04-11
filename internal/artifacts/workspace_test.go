@@ -145,7 +145,7 @@ func TestParseWorkspaceJSON_InitializesExtraMapWhenOmitted(t *testing.T) {
 }
 
 func TestParseWorkspaceJSON_RoundTripsUpstreamBlueprintFields(t *testing.T) {
-	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Brightness and Contrast.json")
+	fixturePath := filepath.Join("..", "testdata", "blueprints", "brightness-and-contrast.json")
 	raw, err := os.ReadFile(fixturePath)
 	if err != nil {
 		t.Fatalf("failed to read blueprint fixture: %v", err)
@@ -192,7 +192,7 @@ func TestParseWorkspaceJSON_RoundTripsUpstreamBlueprintFields(t *testing.T) {
 }
 
 func TestParseWorkspaceJSON_PreservesTopLevelBlueprintConfig(t *testing.T) {
-	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Text to Image (Z-Image-Turbo).json")
+	fixturePath := filepath.Join("..", "testdata", "blueprints", "text-to-image-zimage-turbo.json")
 	raw, err := os.ReadFile(fixturePath)
 	if err != nil {
 		t.Fatalf("failed to read blueprint fixture: %v", err)

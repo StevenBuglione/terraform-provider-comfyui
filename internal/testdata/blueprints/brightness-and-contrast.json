@@ -1,0 +1,71 @@
+{
+  "id": "workspace-brightness-contrast",
+  "revision": 0,
+  "last_node_id": 140,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 139,
+      "type": "Subgraph",
+      "pos": [
+        320,
+        180
+      ],
+      "size": [
+        315,
+        182
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "title": "Brightness and Contrast",
+      "inputs": [
+        {
+          "name": "image",
+          "label": "image",
+          "localized_name": "images.image0",
+          "type": "IMAGE",
+          "shape": 7,
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "label": "image",
+          "localized_name": "images.image0",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": []
+        }
+      ],
+      "widgets_values": []
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "916dff42-6166-4d45-b028-04eaf69fbb35",
+        "name": "Brightness and Contrast",
+        "version": 1,
+        "state": {},
+        "revision": 0,
+        "config": {},
+        "inputNode": {},
+        "outputNode": {},
+        "inputs": [],
+        "outputs": [],
+        "widgets": [],
+        "nodes": [],
+        "links": [],
+        "groups": [],
+        "extra": {},
+        "category": "Image Tools/Color adjust"
+      }
+    ]
+  },
+  "extra": {},
+  "version": 0.4
+}

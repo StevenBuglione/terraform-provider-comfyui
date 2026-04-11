@@ -1,0 +1,45 @@
+{
+  "id": "workspace-zimage-turbo",
+  "revision": 0,
+  "last_node_id": 1,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        80,
+        120
+      ],
+      "size": [
+        315,
+        98
+      ],
+      "flags": {},
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "slot_index": 0,
+          "links": []
+        }
+      ],
+      "widgets_values": [
+        "z-image-turbo.safetensors"
+      ]
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "workflowRendererVersion": "LG"
+  },
+  "proxyWidgets": [
+    {
+      "node_id": 1,
+      "widget": "ckpt_name"
+    }
+  ],
+  "version": 0.4
+}
