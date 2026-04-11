@@ -125,6 +125,7 @@ func (p *ComfyUIProvider) Resources(_ context.Context) []func() resource.Resourc
 	all = append(all, resources.NewWorkspaceResource)
 	all = append(all, resources.NewPromptArtifactResource)
 	all = append(all, resources.NewWorkspaceArtifactResource)
+	all = append(all, resources.NewSubgraphResource)
 	all = append(all, resources.NewUploadedImageResource)
 	all = append(all, resources.NewUploadedMaskResource)
 	all = append(all, resources.NewOutputArtifactResource)
@@ -144,6 +145,8 @@ func (p *ComfyUIProvider) DataSources(_ context.Context) []func() datasource.Dat
 		datasources.NewWorkspaceJSONDataSource,
 		datasources.NewWorkspaceValidationDataSource,
 		datasources.NewWorkspaceToPromptDataSource,
+		datasources.NewSubgraphCatalogDataSource,
+		datasources.NewSubgraphDefinitionDataSource,
 		datasources.NewProviderInfoDataSource(p.version),
 	}
 }

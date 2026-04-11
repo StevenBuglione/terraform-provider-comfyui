@@ -85,3 +85,54 @@ func TestProviderRegistersFileLifecycleResources(t *testing.T) {
 		}
 	}
 }
+
+func TestProviderRegistersSubgraphSurface(t *testing.T) {
+	p := &ComfyUIProvider{version: "test"}
+
+	resourceFactories := p.Resources(context.Background())
+	resourceTypes := make([]string, 0, len(resourceFactories))
+	for _, factory := range resourceFactories {
+		r := factory()
+		var resp resource.MetadataResponse
+		r.Metadata(context.Background(), resource.MetadataRequest{ProviderTypeName: "comfyui"}, &resp)
+		resourceTypes = append(resourceTypes, resp.TypeName)
+	}
+
+	dataSourceFactories := p.DataSources(context.Background())
+	dataSourceTypes := make([]string, 0, len(dataSourceFactories))
+	for _, factory := range dataSourceFactories {
+		ds := factory()
+		var resp datasource.MetadataResponse
+		ds.Metadata(context.Background(), datasource.MetadataRequest{ProviderTypeName: "comfyui"}, &resp)
+		dataSourceTypes = append(dataSourceTypes, resp.TypeName)
+	}
+
+	requiredResources := map[string]bool{
+		"comfyui_subgraph": false,
+	}
+	for _, typeName := range resourceTypes {
+		if _, ok := requiredResources[typeName]; ok {
+			requiredResources[typeName] = true
+		}
+	}
+	for typeName, found := range requiredResources {
+		if !found {
+			t.Fatalf("expected provider to register %s, got %v", typeName, resourceTypes)
+		}
+	}
+
+	requiredDataSources := map[string]bool{
+		"comfyui_subgraph_catalog":    false,
+		"comfyui_subgraph_definition": false,
+	}
+	for _, typeName := range dataSourceTypes {
+		if _, ok := requiredDataSources[typeName]; ok {
+			requiredDataSources[typeName] = true
+		}
+	}
+	for typeName, found := range requiredDataSources {
+		if !found {
+			t.Fatalf("expected provider to register %s, got %v", typeName, dataSourceTypes)
+		}
+	}
+}

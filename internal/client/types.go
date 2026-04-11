@@ -132,3 +132,20 @@ type DownloadViewResponse struct {
 	Content     []byte
 	ContentType string
 }
+
+type GlobalSubgraphInfo struct {
+	NodePack string `json:"node_pack"`
+}
+
+type GlobalSubgraphCatalogEntry struct {
+	Source string             `json:"source"`
+	Name   string             `json:"name"`
+	Info   GlobalSubgraphInfo `json:"info"`
+}
+
+type GlobalSubgraphDefinition struct {
+	Source string             `json:"source"`
+	Name   string             `json:"name"`
+	Info   GlobalSubgraphInfo `json:"info"`
+	Data   string             `json:"data"`
+}

@@ -191,6 +191,36 @@ func (c *Client) GetObjectInfoSingle(nodeType string) (*NodeInfo, error) {
 	return &info, nil
 }
 
+// GetGlobalSubgraphs retrieves the sanitized /global_subgraphs catalog.
+func (c *Client) GetGlobalSubgraphs() (map[string]GlobalSubgraphCatalogEntry, error) {
+	resp, err := c.doGet("/global_subgraphs")
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var result map[string]GlobalSubgraphCatalogEntry
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("failed to decode global_subgraphs catalog: %w", err)
+	}
+	return result, nil
+}
+
+// GetGlobalSubgraph retrieves a sanitized /global_subgraphs/{id} definition.
+func (c *Client) GetGlobalSubgraph(id string) (*GlobalSubgraphDefinition, error) {
+	resp, err := c.doGet(fmt.Sprintf("/global_subgraphs/%s", id))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var result *GlobalSubgraphDefinition
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("failed to decode global_subgraphs definition: %w", err)
+	}
+	return result, nil
+}
+
 // GetViewURL constructs the URL for viewing an output file
 func (c *Client) GetViewURL(filename, subfolder, outputType string) string {
 	values := url.Values{}

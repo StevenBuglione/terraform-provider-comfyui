@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -362,6 +363,94 @@ func TestGetObjectInfoSingle(t *testing.T) {
 	_, err = c.GetObjectInfoSingle("NonExistent")
 	if err == nil {
 		t.Fatal("expected error for non-existent node type")
+	}
+}
+
+func TestGetGlobalSubgraphs(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/global_subgraphs" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+
+		mustEncodeJSON(t, w, map[string]GlobalSubgraphCatalogEntry{
+			"catalog-id": {
+				Source: "templates",
+				Name:   "Brightness and Contrast",
+				Info: GlobalSubgraphInfo{
+					NodePack: "comfyui",
+				},
+			},
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	catalog, err := c.GetGlobalSubgraphs()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	entry, ok := catalog["catalog-id"]
+	if !ok {
+		t.Fatalf("expected catalog entry to be present, got %#v", catalog)
+	}
+	if entry.Source != "templates" {
+		t.Fatalf("expected source templates, got %q", entry.Source)
+	}
+	if entry.Info.NodePack != "comfyui" {
+		t.Fatalf("expected node_pack comfyui, got %q", entry.Info.NodePack)
+	}
+}
+
+func TestGetGlobalSubgraph(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/global_subgraphs/catalog-id" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+
+		mustEncodeJSON(t, w, GlobalSubgraphDefinition{
+			Source: "templates",
+			Name:   "Brightness and Contrast",
+			Info: GlobalSubgraphInfo{
+				NodePack: "comfyui",
+			},
+			Data: `{"revision":0,"last_node_id":140,"last_link_id":0,"nodes":[],"links":[],"groups":[],"definitions":{"subgraphs":[{"id":"916dff42-6166-4d45-b028-04eaf69fbb35","category":"Image Tools/Color adjust"}]},"extra":{},"version":0.4}`,
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	definition, err := c.GetGlobalSubgraph("catalog-id")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if definition == nil {
+		t.Fatal("expected definition response")
+	}
+	if definition.Name != "Brightness and Contrast" {
+		t.Fatalf("expected name to round-trip, got %q", definition.Name)
+	}
+	if !strings.Contains(definition.Data, `"category":"Image Tools/Color adjust"`) {
+		t.Fatalf("expected raw data JSON to round-trip, got %s", definition.Data)
+	}
+}
+
+func TestGetGlobalSubgraph_NullResponse(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/global_subgraphs/missing-id" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+		mustWriteBody(t, w, "null")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	definition, err := c.GetGlobalSubgraph("missing-id")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if definition != nil {
+		t.Fatalf("expected nil definition for null response, got %#v", definition)
 	}
 }
 

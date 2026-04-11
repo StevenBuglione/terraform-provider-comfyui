@@ -1,6 +1,11 @@
 package artifacts
 
-import "testing"
+import (
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+)
 
 func TestParseWorkspaceJSON_PreservesEditorFields(t *testing.T) {
 	raw := `{
@@ -121,5 +126,101 @@ func TestWorkspaceJSON_DoesNotInjectEmptyDefinitions(t *testing.T) {
 
 	if contains(raw, `"definitions"`) {
 		t.Fatalf("expected workspace JSON to omit empty definitions, got %s", raw)
+	}
+}
+
+func TestParseWorkspaceJSON_InitializesExtraMapWhenOmitted(t *testing.T) {
+	workspace, err := ParseWorkspaceJSON(`{
+	  "id": "workspace-plain",
+	  "nodes": [],
+	  "groups": []
+	}`)
+	if err != nil {
+		t.Fatalf("ParseWorkspaceJSON returned error: %v", err)
+	}
+
+	if workspace.Extra == nil {
+		t.Fatal("expected Extra to be initialized even when omitted from input")
+	}
+}
+
+func TestParseWorkspaceJSON_RoundTripsUpstreamBlueprintFields(t *testing.T) {
+	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Brightness and Contrast.json")
+	raw, err := os.ReadFile(fixturePath)
+	if err != nil {
+		t.Fatalf("failed to read blueprint fixture: %v", err)
+	}
+
+	workspace, err := ParseWorkspaceJSON(string(raw))
+	if err != nil {
+		t.Fatalf("ParseWorkspaceJSON returned error: %v", err)
+	}
+
+	if len(workspace.Nodes) != 1 {
+		t.Fatalf("expected 1 top-level node, got %d", len(workspace.Nodes))
+	}
+	if workspace.Nodes[0].Title != "Brightness and Contrast" {
+		t.Fatalf("expected top-level node title to round-trip, got %q", workspace.Nodes[0].Title)
+	}
+	if len(workspace.Definitions.Subgraphs) != 1 {
+		t.Fatalf("expected 1 subgraph definition, got %d", len(workspace.Definitions.Subgraphs))
+	}
+
+	normalized, err := workspace.JSON()
+	if err != nil {
+		t.Fatalf("workspace.JSON returned error: %v", err)
+	}
+
+	for _, needle := range []string{
+		`"flags": {}`,
+		`"order": 2`,
+		`"mode": 0`,
+		`"title": "Brightness and Contrast"`,
+		`"localized_name": "images.image0"`,
+		`"shape": 7`,
+		`"state": {`,
+		`"config": {}`,
+		`"inputNode": {`,
+		`"outputNode": {`,
+		`"widgets": []`,
+		`"category": "Image Tools/Color adjust"`,
+	} {
+		if !strings.Contains(normalized, needle) {
+			t.Fatalf("expected normalized blueprint JSON to preserve %s, got %s", needle, normalized)
+		}
+	}
+}
+
+func TestParseWorkspaceJSON_PreservesTopLevelBlueprintConfig(t *testing.T) {
+	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Text to Image (Z-Image-Turbo).json")
+	raw, err := os.ReadFile(fixturePath)
+	if err != nil {
+		t.Fatalf("failed to read blueprint fixture: %v", err)
+	}
+
+	workspace, err := ParseWorkspaceJSON(string(raw))
+	if err != nil {
+		t.Fatalf("ParseWorkspaceJSON returned error: %v", err)
+	}
+
+	if workspace.Config == nil {
+		t.Fatal("expected top-level config object to be preserved")
+	}
+
+	normalized, err := workspace.JSON()
+	if err != nil {
+		t.Fatalf("workspace.JSON returned error: %v", err)
+	}
+
+	for _, needle := range []string{
+		`"config": {}`,
+		`"proxyWidgets": [`,
+		`"slot_index": 0`,
+		`"flags": {}`,
+		`"workflowRendererVersion": "LG"`,
+	} {
+		if !strings.Contains(normalized, needle) {
+			t.Fatalf("expected normalized blueprint JSON to preserve %s, got %s", needle, normalized)
+		}
 	}
 }
