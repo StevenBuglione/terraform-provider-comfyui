@@ -208,7 +208,7 @@ func (c *Client) GetGlobalSubgraphs() (map[string]GlobalSubgraphCatalogEntry, er
 
 // GetGlobalSubgraph retrieves a sanitized /global_subgraphs/{id} definition.
 func (c *Client) GetGlobalSubgraph(id string) (*GlobalSubgraphDefinition, error) {
-	resp, err := c.doGet(fmt.Sprintf("/global_subgraphs/%s", id))
+	resp, err := c.doGet(fmt.Sprintf("/global_subgraphs/%s", url.PathEscape(id)))
 	if err != nil {
 		return nil, err
 	}

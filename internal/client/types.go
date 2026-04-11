@@ -1,6 +1,9 @@
 package client
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // QueuePromptRequest is submitted to POST /prompt.
 type QueuePromptRequest struct {
@@ -135,6 +138,38 @@ type DownloadViewResponse struct {
 
 type GlobalSubgraphInfo struct {
 	NodePack string `json:"node_pack"`
+	rawJSON  json.RawMessage
+}
+
+func (i *GlobalSubgraphInfo) UnmarshalJSON(data []byte) error {
+	i.rawJSON = append(i.rawJSON[:0], data...)
+
+	if bytes.Equal(bytes.TrimSpace(data), []byte("null")) {
+		i.NodePack = ""
+		return nil
+	}
+
+	type alias struct {
+		NodePack string `json:"node_pack"`
+	}
+	var decoded alias
+	if err := json.Unmarshal(data, &decoded); err != nil {
+		return err
+	}
+
+	i.NodePack = decoded.NodePack
+	return nil
+}
+
+func (i GlobalSubgraphInfo) MarshalJSON() ([]byte, error) {
+	if len(i.rawJSON) > 0 {
+		return append([]byte(nil), i.rawJSON...), nil
+	}
+
+	type alias struct {
+		NodePack string `json:"node_pack"`
+	}
+	return json.Marshal(alias{NodePack: i.NodePack})
 }
 
 type GlobalSubgraphCatalogEntry struct {

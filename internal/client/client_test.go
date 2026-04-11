@@ -454,6 +454,52 @@ func TestGetGlobalSubgraph_NullResponse(t *testing.T) {
 	}
 }
 
+func TestGetGlobalSubgraphs_PreservesUnknownInfoFields(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/global_subgraphs" {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+
+		mustWriteBody(t, w, `{"catalog-id":{"source":"templates","name":"Brightness and Contrast","info":{"node_pack":"comfyui","category":"Image Tools","experimental":true}}}`)
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	catalog, err := c.GetGlobalSubgraphs()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	entry := catalog["catalog-id"]
+	infoJSON, err := json.Marshal(entry.Info)
+	if err != nil {
+		t.Fatalf("marshal info: %v", err)
+	}
+	if string(infoJSON) != `{"node_pack":"comfyui","category":"Image Tools","experimental":true}` {
+		t.Fatalf("expected raw info JSON to preserve unknown fields, got %s", infoJSON)
+	}
+}
+
+func TestGetGlobalSubgraph_EscapesIDPathSegment(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.RequestURI != "/global_subgraphs/catalog%2Fid%3Fwith%23chars" {
+			t.Fatalf("unexpected request URI: %s", r.RequestURI)
+		}
+
+		mustWriteBody(t, w, `{"source":"templates","name":"Brightness and Contrast","info":{"node_pack":"comfyui"},"data":"{}"}`)
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	definition, err := c.GetGlobalSubgraph("catalog/id?with#chars")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if definition == nil {
+		t.Fatal("expected definition response")
+	}
+}
+
 func TestGetViewURL(t *testing.T) {
 	c := &Client{BaseURL: "http://localhost:8188"}
 	url := c.GetViewURL("image.png", "outputs", "output")

@@ -2,8 +2,10 @@ package datasources
 
 import (
 	"context"
+	"encoding/json"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 
@@ -52,5 +54,50 @@ func TestSubgraphDefinitionStateFromEntry_RejectsNullEntry(t *testing.T) {
 	_, err := subgraphDefinitionStateFromEntry("missing-id", nil)
 	if err == nil {
 		t.Fatal("expected nil entry to return an error")
+	}
+}
+
+func TestSubgraphDefinitionStateFromEntry_PreservesRawInfoJSON(t *testing.T) {
+	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Brightness and Contrast.json")
+	raw, err := os.ReadFile(fixturePath)
+	if err != nil {
+		t.Fatalf("failed to read blueprint fixture: %v", err)
+	}
+
+	var entry client.GlobalSubgraphDefinition
+	if err := json.Unmarshal([]byte(`{"source":"templates","name":"Brightness and Contrast","info":{"node_pack":"comfyui","category":"Image Tools","experimental":true},"data":`+strconv.Quote(string(raw))+`}`), &entry); err != nil {
+		t.Fatalf("unmarshal entry: %v", err)
+	}
+
+	state, err := subgraphDefinitionStateFromEntry("catalog-id", &entry)
+	if err != nil {
+		t.Fatalf("subgraphDefinitionStateFromEntry returned error: %v", err)
+	}
+	if state.InfoJSON.ValueString() != `{"node_pack":"comfyui","category":"Image Tools","experimental":true}` {
+		t.Fatalf("expected raw info_json to preserve unknown fields, got %s", state.InfoJSON.ValueString())
+	}
+}
+
+func TestSubgraphDefinitionStateFromEntry_PreservesNullInfoJSON(t *testing.T) {
+	fixturePath := filepath.Join("..", "..", "third_party", "ComfyUI", "blueprints", "Brightness and Contrast.json")
+	raw, err := os.ReadFile(fixturePath)
+	if err != nil {
+		t.Fatalf("failed to read blueprint fixture: %v", err)
+	}
+
+	var entry client.GlobalSubgraphDefinition
+	if err := json.Unmarshal([]byte(`{"source":"templates","name":"Brightness and Contrast","info":null,"data":`+strconv.Quote(string(raw))+`}`), &entry); err != nil {
+		t.Fatalf("unmarshal entry: %v", err)
+	}
+
+	state, err := subgraphDefinitionStateFromEntry("catalog-id", &entry)
+	if err != nil {
+		t.Fatalf("subgraphDefinitionStateFromEntry returned error: %v", err)
+	}
+	if !state.NodePack.IsNull() {
+		t.Fatalf("expected node_pack to be null, got %q", state.NodePack.ValueString())
+	}
+	if state.InfoJSON.ValueString() != "null" {
+		t.Fatalf("expected info_json to preserve null, got %s", state.InfoJSON.ValueString())
 	}
 }
