@@ -3,12 +3,12 @@
 page_title: "comfyui_mask_composite Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI MaskComposite node [mask]
+  ComfyUI MaskComposite node [mask] Source: comfy_extras/nodes_mask.py:244 (v3_extras).
 ---
 
 # comfyui_mask_composite (Resource)
 
-ComfyUI MaskComposite node [mask]
+ComfyUI MaskComposite node [mask] Source: comfy_extras/nodes_mask.py:244 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI MaskComposite node [mask]
 
 ### Required
 
-- `destination` (String) Input: MASK (link)
-- `operation` (String) Input: COMBO
-- `source` (String) Input: MASK (link)
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `destination` (String) Input: MASK. Link input.
+- `operation` (String) Input: COMBO.
+- `source` (String) Input: MASK. Link input.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -45,44 +45,44 @@ func (r *MoonvalleyVideo2VideoNodeResource) Metadata(_ context.Context, req reso
 
 func (r *MoonvalleyVideo2VideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI MoonvalleyVideo2VideoNode node — Moonvalley Marey Video to Video [api node/video/Moonvalley Marey]",
+		MarkdownDescription: "ComfyUI MoonvalleyVideo2VideoNode node — Moonvalley Marey Video to Video [api node/video/Moonvalley Marey] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_moonvalley.py:285 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: Describes the video to generate.",
+				Required:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: <synthetic> <scene cut> gopro, bright, contrast, static, overexposed, vignette, artifacts, still, noise, texture, scanlines, videogame, 360 camera, VR, transition, flare, saturation, distorted, warped, wide angle, saturated, vibrant, glowing, cross dissolve, cheesy, ugly hands, mutated hands, mutant, disfigured, extra fingers, blown out, horrible, blurry, worst quality, bad, dissolve, melt, fade in, fade out, wobbly, weird, low quality, plastic, stock footage, video camera, boring",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"<synthetic> <scene cut> gopro, bright, contrast, static, overexposed, vignette, artifacts, still, noise, texture, scanlines, videogame, 360 camera, VR, transition, flare, saturation, distorted, warped, wide angle, saturated, vibrant, glowing, cross dissolve, cheesy, ugly hands, mutated hands, mutant, disfigured, extra fingers, blown out, horrible, blurry, worst quality, bad, dissolve, melt, fade in, fade out, wobbly, weird, low quality, plastic, stock footage, video camera, boring\". Supports multiline text. Tooltip: Negative prompt text.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 9",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 9. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Random seed value.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
 			"video": schema.StringAttribute{
-				Description: "Input: VIDEO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VIDEO. Link input. Tooltip: The reference video used to generate the output video. Must be at least 5 seconds long. Videos longer than 5s will be automatically trimmed. Only MP4 format supported.",
+				Required:            true,
 			},
 			"control_type": schema.StringAttribute{
-				Description: "Input: COMBO default: Motion Transfer",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"Motion Transfer\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"Motion Transfer",
@@ -91,22 +91,22 @@ func (r *MoonvalleyVideo2VideoNodeResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"motion_intensity": schema.Int64Attribute{
-				Description: "Input: INT default: 100",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 100. Allowed range: 0 to 100. Step: 1. Tooltip: Only used if control_type is 'Motion Transfer'.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 60",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 60. Allowed range: 60 to 100. Step: 1. Tooltip: Number of inference steps.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(60, 100),
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_style_v3_realistic_image Resource - comfyui"
 subcategory: ""
 description: |-
-  Select realistic_image style and optional substyle. [api node/image/Recraft]
+  Select realistic_image style and optional substyle. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:223 (v3_api).
 ---
 
 # comfyui_recraft_style_v3_realistic_image (Resource)
 
-Select realistic_image style and optional substyle. [api node/image/Recraft]
+Select realistic_image style and optional substyle. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:223 (v3_api).
 
 
 
@@ -17,10 +17,10 @@ Select realistic_image style and optional substyle. [api node/image/Recraft]
 
 ### Required
 
-- `substyle` (String) Input: COMBO
+- `substyle` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_v3_substyles(cls.RECRAFT_STYLE).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `recraft_style_output` (String) Output: RecraftIO.STYLEV3 (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `recraft_style_output` (String) Output: RecraftIO.STYLEV3 (slot 0).

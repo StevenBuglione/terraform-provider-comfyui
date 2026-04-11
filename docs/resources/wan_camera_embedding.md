@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_camera_embedding Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI WanCameraEmbedding node [camera]
+  ComfyUI WanCameraEmbedding node [camera] Source: comfy_extras/nodes_camera_trajectory.py:151 (v3_extras).
 ---
 
 # comfyui_wan_camera_embedding (Resource)
 
-ComfyUI WanCameraEmbedding node [camera]
+ComfyUI WanCameraEmbedding node [camera] Source: comfy_extras/nodes_camera_trajectory.py:151 (v3_extras).
 
 
 
@@ -17,24 +17,24 @@ ComfyUI WanCameraEmbedding node [camera]
 
 ### Required
 
-- `camera_pose` (String) Input: COMBO default: Static
-- `height` (Number) Input: INT default: 480
-- `length` (Number) Input: INT default: 81
-- `width` (Number) Input: INT default: 832
+- `camera_pose` (String) Input: COMBO. Default: "Static".
+- `height` (Number) Input: INT. Default: 480. Minimum value: 16. Step: 16.
+- `length` (Number) Input: INT. Default: 81. Minimum value: 1. Step: 4.
+- `width` (Number) Input: INT. Default: 832. Minimum value: 16. Step: 16.
 
 ### Optional
 
-- `cx` (Number) Input: FLOAT default: 0.5
-- `cy` (Number) Input: FLOAT default: 0.5
-- `fx` (Number) Input: FLOAT default: 0.5
-- `fy` (Number) Input: FLOAT default: 0.5
-- `speed` (Number) Input: FLOAT default: 1
+- `cx` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
+- `cy` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
+- `fx` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.000000001.
+- `fy` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.000000001.
+- `speed` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.1.
 
 ### Read-Only
 
-- `camera_embedding_output` (String) Output: WAN_CAMERA_EMBEDDING (slot 0)
-- `height_output` (String) Output: INT (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `length_output` (String) Output: INT (slot 3)
-- `node_id` (String) ComfyUI node class type
-- `width_output` (String) Output: INT (slot 1)
+- `camera_embedding_output` (String) Output: WAN_CAMERA_EMBEDDING (slot 0).
+- `height_output` (String) Output: INT (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `length_output` (String) Output: INT (slot 3).
+- `node_id` (String) ComfyUI node class type.
+- `width_output` (String) Output: INT (slot 1).

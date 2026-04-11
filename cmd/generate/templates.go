@@ -66,18 +66,18 @@ func (r *{{ .StructName }}Resource) Metadata(_ context.Context, req resource.Met
 
 func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: {{ .Description | printf "%q" }},
+		MarkdownDescription: {{ .Description | printf "%q" }},
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
 				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
 				Computed:    true,
-				Description: "ComfyUI node class type",
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

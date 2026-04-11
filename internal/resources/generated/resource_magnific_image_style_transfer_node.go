@@ -47,51 +47,51 @@ func (r *MagnificImageStyleTransferNodeResource) Metadata(_ context.Context, req
 
 func (r *MagnificImageStyleTransferNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Transfer the style from a reference image to your input image. [api node/image/Magnific]",
+		MarkdownDescription: "Transfer the style from a reference image to your input image. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:399 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: The image to apply style transfer to.",
+				Required:            true,
 			},
 			"reference_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: The reference image to extract style from.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text.",
+				Required:            true,
 			},
 			"style_strength": schema.Int64Attribute{
-				Description: "Input: INT default: 100",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 100. Allowed range: 0 to 100. Tooltip: Percentage of style strength.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"structure_strength": schema.Int64Attribute{
-				Description: "Input: INT default: 50",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Maintains the structure of the original image.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"flavor": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Style transfer flavor.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"faithful",
@@ -105,8 +105,8 @@ func (r *MagnificImageStyleTransferNodeResource) Schema(_ context.Context, _ res
 				},
 			},
 			"engine": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Processing engine selection.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"balanced",
@@ -122,16 +122,16 @@ func (r *MagnificImageStyleTransferNodeResource) Schema(_ context.Context, _ res
 				},
 			},
 			"portrait_mode": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Enable portrait mode for facial enhancements.",
+				Required:            true,
 			},
 			"fixed_generation": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: When disabled, expect each generation to introduce a degree of randomness, leading to more diverse outcomes.",
+				Required:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

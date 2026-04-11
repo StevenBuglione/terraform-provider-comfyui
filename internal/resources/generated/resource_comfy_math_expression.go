@@ -38,40 +38,40 @@ func (r *ComfyMathExpressionResource) Metadata(_ context.Context, req resource.M
 
 func (r *ComfyMathExpressionResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI MathExpressionNode node — Math Expression [math]",
+		MarkdownDescription: "ComfyUI MathExpressionNode node — Math Expression [math] Source: comfy_extras/nodes_math.py:60 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"expression": schema.StringAttribute{
-				Description: "Input: STRING default: a + b",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"a + b\". Supports multiline text.",
+				Required:            true,
 			},
 			"values": schema.StringAttribute{
-				Description: "Input: COMFY_AUTOGROW_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+				Required:            true,
 			},
 			"float_output": schema.StringAttribute{
-				Description: "Output: FLOAT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: FLOAT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"int_output": schema.StringAttribute{
-				Description: "Output: INT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

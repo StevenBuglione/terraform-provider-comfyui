@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_set_default_combine Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI ConditioningSetDefaultAndCombine node — Cond Set Default Combine [advanced/hooks/cond single]
+  (EXPERIMENTAL) ComfyUI ConditioningSetDefaultAndCombine node — Cond Set Default Combine [advanced/hooks/cond single] Source: comfy_extras/nodes_hooks.py:202 (v1_extras).
 ---
 
 # comfyui_conditioning_set_default_combine (Resource)
 
-(EXPERIMENTAL) ComfyUI ConditioningSetDefaultAndCombine node — Cond Set Default Combine [advanced/hooks/cond single]
+(EXPERIMENTAL) ComfyUI ConditioningSetDefaultAndCombine node — Cond Set Default Combine [advanced/hooks/cond single] Source: comfy_extras/nodes_hooks.py:202 (v1_extras).
 
 
 
@@ -17,15 +17,15 @@ description: |-
 
 ### Required
 
-- `cond` (String) Input: CONDITIONING (link)
-- `cond_default` (String) Input: CONDITIONING (link)
+- `cond` (String) Input: CONDITIONING. Link input.
+- `cond_default` (String) Input: CONDITIONING. Link input.
 
 ### Optional
 
-- `hooks` (String) Input: HOOKS (link)
+- `hooks` (String) Input: HOOKS. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

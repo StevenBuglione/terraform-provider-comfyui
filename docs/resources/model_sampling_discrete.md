@@ -3,12 +3,12 @@
 page_title: "comfyui_model_sampling_discrete Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelSamplingDiscrete node — ModelSamplingDiscrete [advanced/model]
+  ComfyUI ModelSamplingDiscrete node — ModelSamplingDiscrete [advanced/model] Source: comfy_extras/nodes_model_advanced.py:51 (v1_extras).
 ---
 
 # comfyui_model_sampling_discrete (Resource)
 
-ComfyUI ModelSamplingDiscrete node — ModelSamplingDiscrete [advanced/model]
+ComfyUI ModelSamplingDiscrete node — ModelSamplingDiscrete [advanced/model] Source: comfy_extras/nodes_model_advanced.py:51 (v1_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ModelSamplingDiscrete node — ModelSamplingDiscrete [advanced/model]
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `sampling` (String) Input: COMBO
-- `zsnr` (Boolean) Input: BOOLEAN default: false
+- `model` (String) Input: MODEL. Link input.
+- `sampling` (String) Input: COMBO.
+- `zsnr` (Boolean) Input: BOOLEAN. Default: false.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

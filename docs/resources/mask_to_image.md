@@ -3,12 +3,12 @@
 page_title: "comfyui_mask_to_image Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI MaskToImage node — Convert Mask to Image [mask]
+  ComfyUI MaskToImage node — Convert Mask to Image [mask] Source: comfy_extras/nodes_mask.py:105 (v3_extras).
 ---
 
 # comfyui_mask_to_image (Resource)
 
-ComfyUI MaskToImage node — Convert Mask to Image [mask]
+ComfyUI MaskToImage node — Convert Mask to Image [mask] Source: comfy_extras/nodes_mask.py:105 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI MaskToImage node — Convert Mask to Image [mask]
 
 ### Required
 
-- `mask` (String) Input: MASK (link)
+- `mask` (String) Input: MASK. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

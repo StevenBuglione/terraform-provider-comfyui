@@ -43,61 +43,61 @@ func (r *MeshyRigModelNodeResource) Metadata(_ context.Context, req resource.Met
 
 func (r *MeshyRigModelNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Provides a rigged character in standard formats. Auto-rigging is currently not suitable for untextured meshes, non-humanoid assets, or humanoid assets with unclear limb and body structure. [api node/3d/Meshy]",
+		MarkdownDescription: "Provides a rigged character in standard formats. Auto-rigging is currently not suitable for untextured meshes, non-humanoid assets, or humanoid assets with unclear limb and body structure. [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:571 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"meshy_task_id": schema.StringAttribute{
-				Description: "Input: MESHY_TASK_ID (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MESHY_TASK_ID. Link input.",
+				Required:            true,
 			},
 			"height_meters": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1.7",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1.7. Allowed range: 0.1 to 15. Tooltip: The approximate height of the character model in meters. This aids in scaling and rigging accuracy.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 15),
 				},
 			},
 			"texture_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: The model's UV-unwrapped base color texture image.",
+				Optional:            true,
 			},
 			"model_file_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"rig_task_id_output": schema.StringAttribute{
-				Description: "Output: MESHY_RIGGED_TASK_ID (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: MESHY_RIGGED_TASK_ID (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"glb_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_GLB (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_GLB (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"fbx_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_FBX (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_FBX (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

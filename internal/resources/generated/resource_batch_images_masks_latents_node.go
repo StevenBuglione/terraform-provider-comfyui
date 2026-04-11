@@ -36,29 +36,29 @@ func (r *BatchImagesMasksLatentsNodeResource) Metadata(_ context.Context, req re
 
 func (r *BatchImagesMasksLatentsNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI BatchImagesMasksLatentsNode node — Batch Images/Masks/Latents [util]",
+		MarkdownDescription: "ComfyUI BatchImagesMasksLatentsNode node — Batch Images/Masks/Latents [util] Source: comfy_extras/nodes_post_processing.py:627 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"inputs": schema.StringAttribute{
-				Description: "Input: COMFY_AUTOGROW_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+				Required:            true,
 			},
 			"comfy_matchtype_v3_output": schema.StringAttribute{
-				Description: "Output: COMFY_MATCHTYPE_V3 (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: COMFY_MATCHTYPE_V3 (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_perturbed_attention_guidance Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI PerturbedAttentionGuidance node [model_patches/unet]
+  ComfyUI PerturbedAttentionGuidance node [model_patches/unet] Source: comfy_extras/nodes_pag.py:13 (v3_extras).
 ---
 
 # comfyui_perturbed_attention_guidance (Resource)
 
-ComfyUI PerturbedAttentionGuidance node [model_patches/unet]
+ComfyUI PerturbedAttentionGuidance node [model_patches/unet] Source: comfy_extras/nodes_pag.py:13 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI PerturbedAttentionGuidance node [model_patches/unet]
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `scale` (Number) Input: FLOAT default: 3
+- `model` (String) Input: MODEL. Link input.
+- `scale` (Number) Input: FLOAT. Default: 3. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

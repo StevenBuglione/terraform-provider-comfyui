@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_euler_cf_gpp Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SamplerEulerCFGpp node — SamplerEulerCFG++ [_for_testing]
+  (EXPERIMENTAL) ComfyUI SamplerEulerCFGpp node — SamplerEulerCFG++ [_for_testing] Source: comfy_extras/nodes_advanced_samplers.py:89 (v3_extras).
 ---
 
 # comfyui_sampler_euler_cf_gpp (Resource)
 
-(EXPERIMENTAL) ComfyUI SamplerEulerCFGpp node — SamplerEulerCFG++ [_for_testing]
+(EXPERIMENTAL) ComfyUI SamplerEulerCFGpp node — SamplerEulerCFG++ [_for_testing] Source: comfy_extras/nodes_advanced_samplers.py:89 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `version` (String) Input: COMBO
+- `version` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

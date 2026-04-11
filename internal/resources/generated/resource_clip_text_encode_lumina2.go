@@ -38,37 +38,37 @@ func (r *CLIPTextEncodeLumina2Resource) Metadata(_ context.Context, req resource
 
 func (r *CLIPTextEncodeLumina2Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Encodes a system prompt and a user prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning]",
+		MarkdownDescription: "Encodes a system prompt and a user prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning] Source: comfy_extras/nodes_lumina2.py:66 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"system_prompt": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(cls.SYSTEM_PROMPT.keys()).",
+				Required:            true,
 			},
 			"user_prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: The text to be encoded.",
+				Required:            true,
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input. Tooltip: The CLIP model used for encoding the text.",
+				Required:            true,
 			},
 			"conditioning_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

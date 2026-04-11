@@ -3,12 +3,12 @@
 page_title: "comfyui_style_model_apply Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StyleModelApply node — Apply Style Model [conditioning/style_model]
+  ComfyUI StyleModelApply node — Apply Style Model [conditioning/style_model] Source: nodes.py:1085 (v1_core).
 ---
 
 # comfyui_style_model_apply (Resource)
 
-ComfyUI StyleModelApply node — Apply Style Model [conditioning/style_model]
+ComfyUI StyleModelApply node — Apply Style Model [conditioning/style_model] Source: nodes.py:1085 (v1_core).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI StyleModelApply node — Apply Style Model [conditioning/style_model]
 
 ### Required
 
-- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT (link)
-- `conditioning` (String) Input: CONDITIONING (link)
-- `strength` (Number) Input: FLOAT default: 1
-- `strength_type` (String) Input: COMBO
-- `style_model` (String) Input: STYLE_MODEL (link)
+- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.001.
+- `strength_type` (String) Input: COMBO.
+- `style_model` (String) Input: STYLE_MODEL. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

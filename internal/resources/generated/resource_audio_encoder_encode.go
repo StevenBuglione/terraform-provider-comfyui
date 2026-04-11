@@ -37,33 +37,33 @@ func (r *AudioEncoderEncodeResource) Metadata(_ context.Context, req resource.Me
 
 func (r *AudioEncoderEncodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI AudioEncoderEncode node [conditioning]",
+		MarkdownDescription: "ComfyUI AudioEncoderEncode node [conditioning] Source: comfy_extras/nodes_audio_encoder.py:33 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"audio_encoder": schema.StringAttribute{
-				Description: "Input: AUDIO_ENCODER (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO_ENCODER. Link input.",
+				Required:            true,
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO. Link input.",
+				Required:            true,
 			},
 			"audio_encoder_output_output": schema.StringAttribute{
-				Description: "Output: AUDIO_ENCODER_OUTPUT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO_ENCODER_OUTPUT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

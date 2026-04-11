@@ -39,36 +39,36 @@ func (r *TrimVideoLatentResource) Metadata(_ context.Context, req resource.Metad
 
 func (r *TrimVideoLatentResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI TrimVideoLatent node [latent/video]",
+		MarkdownDescription: "ComfyUI TrimVideoLatent node [latent/video] Source: comfy_extras/nodes_wan.py:373 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"samples": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"trim_amount": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 99999.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 99999),
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

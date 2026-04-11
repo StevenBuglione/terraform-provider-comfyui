@@ -41,44 +41,44 @@ func (r *VAEEncodeForInpaintResource) Metadata(_ context.Context, req resource.M
 
 func (r *VAEEncodeForInpaintResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI VAEEncodeForInpaint node — VAE Encode (for Inpainting) [latent/inpaint]",
+		MarkdownDescription: "ComfyUI VAEEncodeForInpaint node — VAE Encode (for Inpainting) [latent/inpaint] Source: nodes.py:386 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"pixels": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"mask": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MASK. Link input.",
+				Required:            true,
 			},
 			"grow_mask_by": schema.Int64Attribute{
-				Description: "Input: INT default: 6",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 6. Allowed range: 0 to 64. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 64),
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -37,37 +37,37 @@ func (r *SaveVideoResource) Metadata(_ context.Context, req resource.MetadataReq
 
 func (r *SaveVideoResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Saves the input images to your ComfyUI output directory. [image/video]",
+		MarkdownDescription: "Saves the input images to your ComfyUI output directory. [image/video] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video.py:68 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"video": schema.StringAttribute{
-				Description: "Input: VIDEO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VIDEO. Link input. Tooltip: The video to save.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: video/ComfyUI",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"video/ComfyUI\". Tooltip: The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes.",
+				Required:            true,
 			},
 			"format": schema.StringAttribute{
-				Description: "Input: COMBO default: auto",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Dynamic options are resolved by ComfyUI at runtime from: Types.VideoContainer.as_input(). Tooltip: The format to save the video as.",
+				Required:            true,
 			},
 			"codec": schema.StringAttribute{
-				Description: "Input: COMBO default: auto",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Dynamic options are resolved by ComfyUI at runtime from: Types.VideoCodec.as_input(). Tooltip: The codec to use for the video.",
+				Required:            true,
 			},
 		},
 	}

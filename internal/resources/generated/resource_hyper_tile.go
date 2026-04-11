@@ -42,54 +42,54 @@ func (r *HyperTileResource) Metadata(_ context.Context, req resource.MetadataReq
 
 func (r *HyperTileResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI HyperTile node [model_patches/unet]",
+		MarkdownDescription: "ComfyUI HyperTile node [model_patches/unet] Source: comfy_extras/nodes_hypertile.py:25 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"tile_size": schema.Int64Attribute{
-				Description: "Input: INT default: 256",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 256. Allowed range: 1 to 2048.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 2048),
 				},
 			},
 			"swap_size": schema.Int64Attribute{
-				Description: "Input: INT default: 2",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 2. Allowed range: 1 to 128.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 128),
 				},
 			},
 			"max_depth": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 10.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 10),
 				},
 			},
 			"scale_depth": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Required:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

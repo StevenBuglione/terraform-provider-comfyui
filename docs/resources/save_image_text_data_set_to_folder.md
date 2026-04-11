@@ -3,12 +3,12 @@
 page_title: "comfyui_save_image_text_data_set_to_folder Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SaveImageTextDataSetToFolderNode node — Save Image and Text Dataset to Folder [dataset]
+  (EXPERIMENTAL) ComfyUI SaveImageTextDataSetToFolderNode node — Save Image and Text Dataset to Folder [dataset] Source: comfy_extras/nodes_dataset.py:244 (v3_extras).
 ---
 
 # comfyui_save_image_text_data_set_to_folder (Resource)
 
-(EXPERIMENTAL) ComfyUI SaveImageTextDataSetToFolderNode node — Save Image and Text Dataset to Folder [dataset]
+(EXPERIMENTAL) ComfyUI SaveImageTextDataSetToFolderNode node — Save Image and Text Dataset to Folder [dataset] Source: comfy_extras/nodes_dataset.py:244 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: image
-- `folder_name` (String) Input: STRING default: dataset
-- `images` (String) Input: IMAGE (link)
-- `texts` (String) Input: STRING
+- `filename_prefix` (String) Input: STRING. Default: "image". Tooltip: Prefix for saved image filenames.
+- `folder_name` (String) Input: STRING. Default: "dataset". Tooltip: Name of the folder to save images to (inside output directory).
+- `images` (String) Input: IMAGE. Link input. Tooltip: List of images to save.
+- `texts` (String) Input: STRING. Tooltip: List of text captions to save.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

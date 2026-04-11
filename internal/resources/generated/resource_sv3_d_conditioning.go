@@ -47,73 +47,73 @@ func (r *Sv3DConditioningResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *Sv3DConditioningResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SV3D_Conditioning node [conditioning/3d_models]",
+		MarkdownDescription: "ComfyUI SV3D_Conditioning node [conditioning/3d_models] Source: comfy_extras/nodes_stable3d.py:110 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip_vision": schema.StringAttribute{
-				Description: "Input: CLIP_VISION (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP_VISION. Link input.",
+				Required:            true,
 			},
 			"init_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 576",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 576. Minimum value: 16. Step: 8.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 576",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 576. Minimum value: 16. Step: 8.",
+				Required:            true,
 			},
 			"video_frames": schema.Int64Attribute{
-				Description: "Input: INT default: 21",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 21. Allowed range: 1 to 4096.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4096),
 				},
 			},
 			"elevation": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -90 to 90. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-90, 90),
 				},
 			},
 			"positive_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"negative_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

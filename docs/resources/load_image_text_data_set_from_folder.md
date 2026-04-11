@@ -3,12 +3,12 @@
 page_title: "comfyui_load_image_text_data_set_from_folder Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LoadImageTextDataSetFromFolderNode node — Load Image and Text Dataset from Folder [dataset]
+  (EXPERIMENTAL) ComfyUI LoadImageTextDataSetFromFolderNode node — Load Image and Text Dataset from Folder [dataset] Source: comfy_extras/nodes_dataset.py:82 (v3_extras).
 ---
 
 # comfyui_load_image_text_data_set_from_folder (Resource)
 
-(EXPERIMENTAL) ComfyUI LoadImageTextDataSetFromFolderNode node — Load Image and Text Dataset from Folder [dataset]
+(EXPERIMENTAL) ComfyUI LoadImageTextDataSetFromFolderNode node — Load Image and Text Dataset from Folder [dataset] Source: comfy_extras/nodes_dataset.py:82 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `folder` (String) Input: COMBO
+- `folder` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_input_subfolders(). Tooltip: The folder to load images from.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `images_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `texts_output` (String) Output: STRING (slot 1)
+- `id` (String) Unique identifier for this node instance.
+- `images_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `texts_output` (String) Output: STRING (slot 1).

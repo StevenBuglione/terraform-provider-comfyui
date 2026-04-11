@@ -3,12 +3,12 @@
 page_title: "comfyui_split_audio_channels Resource - comfyui"
 subcategory: ""
 description: |-
-  Separates the audio into left and right channels. [audio]
+  Separates the audio into left and right channels. [audio] Source: comfy_extras/nodes_audio.py:415 (v3_extras).
 ---
 
 # comfyui_split_audio_channels (Resource)
 
-Separates the audio into left and right channels. [audio]
+Separates the audio into left and right channels. [audio] Source: comfy_extras/nodes_audio.py:415 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ Separates the audio into left and right channels. [audio]
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
+- `audio` (String) Input: AUDIO. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `left_output` (String) Output: AUDIO (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `right_output` (String) Output: AUDIO (slot 1)
+- `id` (String) Unique identifier for this node instance.
+- `left_output` (String) Output: AUDIO (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `right_output` (String) Output: AUDIO (slot 1).

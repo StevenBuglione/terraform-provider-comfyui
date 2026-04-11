@@ -3,12 +3,12 @@
 page_title: "comfyui_loss_graph_node Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LossGraphNode node — Plot Loss Graph [training]
+  (EXPERIMENTAL) ComfyUI LossGraphNode node — Plot Loss Graph [training] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_train.py:1389 (v3_extras).
 ---
 
 # comfyui_loss_graph_node (Resource)
 
-(EXPERIMENTAL) ComfyUI LossGraphNode node — Plot Loss Graph [training]
+(EXPERIMENTAL) ComfyUI LossGraphNode node — Plot Loss Graph [training] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_train.py:1389 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: loss_graph
-- `loss` (String) Input: LOSS_MAP (link)
+- `filename_prefix` (String) Input: STRING. Default: "loss_graph". Tooltip: Prefix for the saved loss graph image.
+- `loss` (String) Input: LOSS_MAP. Link input. Tooltip: Loss map from training node.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

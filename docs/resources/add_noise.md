@@ -3,12 +3,12 @@
 page_title: "comfyui_add_noise Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI AddNoise node [_for_testing/custom_sampling/noise]
+  (EXPERIMENTAL) ComfyUI AddNoise node [_for_testing/custom_sampling/noise] Source: comfy_extras/nodes_custom_sampler.py:982 (v3_extras).
 ---
 
 # comfyui_add_noise (Resource)
 
-(EXPERIMENTAL) ComfyUI AddNoise node [_for_testing/custom_sampling/noise]
+(EXPERIMENTAL) ComfyUI AddNoise node [_for_testing/custom_sampling/noise] Source: comfy_extras/nodes_custom_sampler.py:982 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `latent_image` (String) Input: LATENT (link)
-- `model` (String) Input: MODEL (link)
-- `noise` (String) Input: NOISE (link)
-- `sigmas` (String) Input: SIGMAS (link)
+- `latent_image` (String) Input: LATENT. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `noise` (String) Input: NOISE. Link input.
+- `sigmas` (String) Input: SIGMAS. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

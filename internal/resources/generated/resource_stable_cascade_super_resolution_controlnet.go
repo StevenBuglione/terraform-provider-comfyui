@@ -39,47 +39,47 @@ func (r *StableCascadeSuperResolutionControlnetResource) Metadata(_ context.Cont
 
 func (r *StableCascadeSuperResolutionControlnetResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI StableCascade_SuperResolutionControlnet node [_for_testing/stable_cascade]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI StableCascade_SuperResolutionControlnet node [_for_testing/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:117 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"controlnet_input_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"stage_c_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"stage_b_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

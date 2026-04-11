@@ -3,12 +3,12 @@
 page_title: "comfyui_tripo_retarget_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TripoRetargetNode node — Tripo: Retarget rigged model [api node/3d/Tripo]
+  ComfyUI TripoRetargetNode node — Tripo: Retarget rigged model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:610 (v3_api).
 ---
 
 # comfyui_tripo_retarget_node (Resource)
 
-ComfyUI TripoRetargetNode node — Tripo: Retarget rigged model [api node/3d/Tripo]
+ComfyUI TripoRetargetNode node — Tripo: Retarget rigged model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:610 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI TripoRetargetNode node — Tripo: Retarget rigged model [api node/3d/Tri
 
 ### Required
 
-- `animation` (String) Input: COMBO
-- `original_model_task_id` (String) Input: RIG_TASK_ID (link)
+- `animation` (String) Input: COMBO.
+- `original_model_task_id` (String) Input: RIG_TASK_ID. Link input.
 
 ### Read-Only
 
-- `glb_output` (String) Output: FILE_3D_GLB (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `model_file_output` (String) Output: STRING (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `retarget_task_id_output` (String) Output: RETARGET_TASK_ID (slot 1)
+- `glb_output` (String) Output: FILE_3D_GLB (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `model_file_output` (String) Output: STRING (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `retarget_task_id_output` (String) Output: RETARGET_TASK_ID (slot 1).

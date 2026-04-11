@@ -40,45 +40,45 @@ func (r *LumaConceptsNodeResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *LumaConceptsNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Camera Concepts for use with Luma Text to Video and Luma Image to Video nodes. [api node/video/Luma]",
+		MarkdownDescription: "Camera Concepts for use with Luma Text to Video and Luma Image to Video nodes. [api node/video/Luma] Source: comfy_api_nodes/nodes_luma.py:80 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"concept1": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_luma_concepts(include_none=True).",
+				Required:            true,
 			},
 			"concept2": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_luma_concepts(include_none=True).",
+				Required:            true,
 			},
 			"concept3": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_luma_concepts(include_none=True).",
+				Required:            true,
 			},
 			"concept4": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_luma_concepts(include_none=True).",
+				Required:            true,
 			},
 			"luma_concepts": schema.StringAttribute{
-				Description: "Input: LumaIO.LUMA_CONCEPTS (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: LumaIO.LUMA_CONCEPTS. Link input. Tooltip: Optional Camera Concepts to add to the ones chosen here.",
+				Optional:            true,
 			},
 			"luma_concepts_output": schema.StringAttribute{
-				Description: "Output: LumaIO.LUMA_CONCEPTS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LumaIO.LUMA_CONCEPTS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

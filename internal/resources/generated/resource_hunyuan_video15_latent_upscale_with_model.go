@@ -44,33 +44,33 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Metadata(_ context.Contex
 
 func (r *HunyuanVideo15LatentUpscaleWithModelResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI HunyuanVideo15LatentUpscaleWithModel node — Hunyuan Video 15 Latent Upscale With Model [latent]",
+		MarkdownDescription: "ComfyUI HunyuanVideo15LatentUpscaleWithModel node — Hunyuan Video 15 Latent Upscale With Model [latent] Source: comfy_extras/nodes_hunyuan.py:222 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: LATENT_UPSCALE_MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT_UPSCALE_MODEL. Link input.",
+				Required:            true,
 			},
 			"samples": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"upscale_method": schema.StringAttribute{
-				Description: "Input: COMBO default: bilinear",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"bilinear\".",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"nearest-exact",
@@ -82,22 +82,22 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Schema(_ context.Context,
 				},
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 1280",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1280. Allowed range: 0 to 16384. Step: 8.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 16384),
 				},
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 720",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 720. Allowed range: 0 to 16384. Step: 8.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 16384),
 				},
 			},
 			"crop": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"disabled",
@@ -106,8 +106,8 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Schema(_ context.Context,
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

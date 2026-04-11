@@ -3,12 +3,12 @@
 page_title: "comfyui_k_sampler_select Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI KSamplerSelect node [sampling/custom_sampling/samplers]
+  ComfyUI KSamplerSelect node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:377 (v3_extras).
 ---
 
 # comfyui_k_sampler_select (Resource)
 
-ComfyUI KSamplerSelect node [sampling/custom_sampling/samplers]
+ComfyUI KSamplerSelect node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:377 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI KSamplerSelect node [sampling/custom_sampling/samplers]
 
 ### Required
 
-- `sampler_name` (String) Input: COMBO
+- `sampler_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.SAMPLER_NAMES.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_checkpoint_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  (DEPRECATED) ComfyUI CheckpointLoader node — Load Checkpoint With Config (DEPRECATED) [advanced/loaders]
+  (DEPRECATED) ComfyUI CheckpointLoader node — Load Checkpoint With Config (DEPRECATED) [advanced/loaders] Source: nodes.py:570 (v1_core).
 ---
 
 # comfyui_checkpoint_loader (Resource)
 
-(DEPRECATED) ComfyUI CheckpointLoader node — Load Checkpoint With Config (DEPRECATED) [advanced/loaders]
+(DEPRECATED) ComfyUI CheckpointLoader node — Load Checkpoint With Config (DEPRECATED) [advanced/loaders] Source: nodes.py:570 (v1_core).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `ckpt_name` (String) Input: COMBO
-- `config_name` (String) Input: COMBO
+- `ckpt_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints').
+- `config_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('configs').
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `vae_output` (String) Output: VAE (slot 2)
+- `clip_output` (String) Output: CLIP (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `vae_output` (String) Output: VAE (slot 2).

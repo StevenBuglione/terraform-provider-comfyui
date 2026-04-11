@@ -39,41 +39,41 @@ func (r *CLIPTextEncodePixArtAlphaResource) Metadata(_ context.Context, req reso
 
 func (r *CLIPTextEncodePixArtAlphaResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Encodes text and sets the resolution conditioning for PixArt Alpha. Does not apply to PixArt Sigma. [advanced/conditioning]",
+		MarkdownDescription: "Encodes text and sets the resolution conditioning for PixArt Alpha. Does not apply to PixArt Sigma. [advanced/conditioning] Source: comfy_extras/nodes_pixart.py:5 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 0.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 0.",
+				Required:            true,
 			},
 			"text": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input.",
+				Required:            true,
 			},
 			"conditioning_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

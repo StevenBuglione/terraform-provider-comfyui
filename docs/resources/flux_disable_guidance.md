@@ -3,12 +3,12 @@
 page_title: "comfyui_flux_disable_guidance Resource - comfyui"
 subcategory: ""
 description: |-
-  This node completely disables the guidance embed on Flux and Flux like models [advanced/conditioning/flux]
+  This node completely disables the guidance embed on Flux and Flux like models [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:82 (v3_extras).
 ---
 
 # comfyui_flux_disable_guidance (Resource)
 
-This node completely disables the guidance embed on Flux and Flux like models [advanced/conditioning/flux]
+This node completely disables the guidance embed on Flux and Flux like models [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:82 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ This node completely disables the guidance embed on Flux and Flux like models [a
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
+- `conditioning` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

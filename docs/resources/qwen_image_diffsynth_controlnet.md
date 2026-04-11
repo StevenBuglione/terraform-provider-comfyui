@@ -3,12 +3,12 @@
 page_title: "comfyui_qwen_image_diffsynth_controlnet Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI QwenImageDiffsynthControlnet node — QwenImageDiffsynthControlnet [advanced/loaders/qwen]
+  (EXPERIMENTAL) ComfyUI QwenImageDiffsynthControlnet node — QwenImageDiffsynthControlnet [advanced/loaders/qwen] Source: comfy_extras/nodes_model_patch.py:444 (v1_extras).
 ---
 
 # comfyui_qwen_image_diffsynth_controlnet (Resource)
 
-(EXPERIMENTAL) ComfyUI QwenImageDiffsynthControlnet node — QwenImageDiffsynthControlnet [advanced/loaders/qwen]
+(EXPERIMENTAL) ComfyUI QwenImageDiffsynthControlnet node — QwenImageDiffsynthControlnet [advanced/loaders/qwen] Source: comfy_extras/nodes_model_patch.py:444 (v1_extras).
 
 
 
@@ -17,18 +17,18 @@ description: |-
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: MODEL (link)
-- `model_patch` (String) Input: MODEL_PATCH (link)
-- `strength` (Number) Input: FLOAT default: 1
-- `vae` (String) Input: VAE (link)
+- `image` (String) Input: IMAGE. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `model_patch` (String) Input: MODEL_PATCH. Link input.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `vae` (String) Input: VAE. Link input.
 
 ### Optional
 
-- `mask` (String) Input: MASK (link)
+- `mask` (String) Input: MASK. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

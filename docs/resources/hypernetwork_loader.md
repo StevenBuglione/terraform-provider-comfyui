@@ -3,12 +3,12 @@
 page_title: "comfyui_hypernetwork_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI HypernetworkLoader node [loaders]
+  ComfyUI HypernetworkLoader node [loaders] Source: comfy_extras/nodes_hypernetwork.py:100 (v3_extras).
 ---
 
 # comfyui_hypernetwork_loader (Resource)
 
-ComfyUI HypernetworkLoader node [loaders]
+ComfyUI HypernetworkLoader node [loaders] Source: comfy_extras/nodes_hypernetwork.py:100 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI HypernetworkLoader node [loaders]
 
 ### Required
 
-- `hypernetwork_name` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
-- `strength` (Number) Input: FLOAT default: 1
+- `hypernetwork_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('hypernetworks').
+- `model` (String) Input: MODEL. Link input.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

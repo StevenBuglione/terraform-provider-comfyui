@@ -40,40 +40,40 @@ func (r *LumaReferenceNodeResource) Metadata(_ context.Context, req resource.Met
 
 func (r *LumaReferenceNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Holds an image and weight for use with Luma Generate Image node. [api node/image/Luma]",
+		MarkdownDescription: "Holds an image and weight for use with Luma Generate Image node. [api node/image/Luma] Source: comfy_api_nodes/nodes_luma.py:41 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Image to use as reference.",
+				Required:            true,
 			},
 			"weight": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Weight of image reference.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"luma_ref": schema.StringAttribute{
-				Description: "Input: LumaIO.LUMA_REF (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: LumaIO.LUMA_REF. Link input.",
+				Optional:            true,
 			},
 			"luma_ref_output": schema.StringAttribute{
-				Description: "Output: LumaIO.LUMA_REF (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LumaIO.LUMA_REF (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

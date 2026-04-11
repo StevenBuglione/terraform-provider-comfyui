@@ -3,12 +3,12 @@
 page_title: "comfyui_flux_guidance Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI FluxGuidance node [advanced/conditioning/flux]
+  ComfyUI FluxGuidance node [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:59 (v3_extras).
 ---
 
 # comfyui_flux_guidance (Resource)
 
-ComfyUI FluxGuidance node [advanced/conditioning/flux]
+ComfyUI FluxGuidance node [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:59 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI FluxGuidance node [advanced/conditioning/flux]
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `guidance` (Number) Input: FLOAT default: 3.5
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `guidance` (Number) Input: FLOAT. Default: 3.5. Allowed range: 0 to 100. Step: 0.1.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -46,25 +46,25 @@ func (r *WanTextToImageAPIResource) Metadata(_ context.Context, req resource.Met
 
 func (r *WanTextToImageAPIResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generates an image based on a text prompt. [api node/image/Wan]",
+		MarkdownDescription: "Generates an image based on a text prompt. [api node/image/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:58 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Model to use.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"wan2.5-t2i-preview",
@@ -72,45 +72,45 @@ func (r *WanTextToImageAPIResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.",
+				Required:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Negative prompt describing what to avoid.",
+				Optional:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Allowed range: 768 to 1440. Step: 32.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(768, 1440),
 				},
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Allowed range: 768 to 1440. Step: 32.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(768, 1440),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"prompt_extend": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.",
+				Optional:            true,
 			},
 			"watermark": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_eleven_labs_text_to_sound_effects Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate sound effects from text descriptions. [api node/audio/ElevenLabs]
+  Generate sound effects from text descriptions. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:456 (v3_api).
 ---
 
 # comfyui_eleven_labs_text_to_sound_effects (Resource)
 
-Generate sound effects from text descriptions. [api node/audio/ElevenLabs]
+Generate sound effects from text descriptions. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:456 (v3_api).
 
 
 
@@ -17,12 +17,12 @@ Generate sound effects from text descriptions. [api node/audio/ElevenLabs]
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `output_format` (String) Input: COMBO
-- `text` (String) Input: STRING default:
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for sound effect generation.
+- `output_format` (String) Input: COMBO. Tooltip: Audio output format.
+- `text` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of the sound effect to generate.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

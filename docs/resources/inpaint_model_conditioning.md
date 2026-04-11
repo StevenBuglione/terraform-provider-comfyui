@@ -3,12 +3,12 @@
 page_title: "comfyui_inpaint_model_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI InpaintModelConditioning node — InpaintModelConditioning [conditioning/inpaint]
+  ComfyUI InpaintModelConditioning node — InpaintModelConditioning [conditioning/inpaint] Source: nodes.py:427 (v1_core).
 ---
 
 # comfyui_inpaint_model_conditioning (Resource)
 
-ComfyUI InpaintModelConditioning node — InpaintModelConditioning [conditioning/inpaint]
+ComfyUI InpaintModelConditioning node — InpaintModelConditioning [conditioning/inpaint] Source: nodes.py:427 (v1_core).
 
 
 
@@ -17,17 +17,17 @@ ComfyUI InpaintModelConditioning node — InpaintModelConditioning [conditioning
 
 ### Required
 
-- `mask` (String) Input: MASK (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `noise_mask` (Boolean) Input: BOOLEAN default: true
-- `pixels` (String) Input: IMAGE (link)
-- `positive` (String) Input: CONDITIONING (link)
-- `vae` (String) Input: VAE (link)
+- `mask` (String) Input: MASK. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `noise_mask` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Add a noise mask to the latent so sampling will only happen within the mask. Might improve results or completely break things depending on the model.
+- `pixels` (String) Input: IMAGE. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

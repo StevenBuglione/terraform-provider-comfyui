@@ -47,40 +47,40 @@ func (r *MagnificImageRelightNodeResource) Metadata(_ context.Context, req resou
 
 func (r *MagnificImageRelightNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Relight an image with lighting adjustments and optional reference-based light transfer. [api node/image/Magnific]",
+		MarkdownDescription: "Relight an image with lighting adjustments and optional reference-based light transfer. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:549 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: The image to relight.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Descriptive guidance for lighting. Supports emphasis notation (1-1.4).",
+				Required:            true,
 			},
 			"light_transfer_strength": schema.Int64Attribute{
-				Description: "Input: INT default: 100",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 100. Allowed range: 0 to 100. Tooltip: Intensity of light transfer application.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"style": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Stylistic output preference.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"standard",
@@ -94,28 +94,28 @@ func (r *MagnificImageRelightNodeResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"interpolate_from_original": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Restricts generation freedom to match original more closely.",
+				Required:            true,
 			},
 			"change_background": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Modifies background based on prompt/reference.",
+				Required:            true,
 			},
 			"preserve_details": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Maintains texture and fine details from original.",
+				Required:            true,
 			},
 			"advanced_settings": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Fine-tuning options for advanced lighting control.",
+				Required:            true,
 			},
 			"reference_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Optional reference image to transfer lighting from.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

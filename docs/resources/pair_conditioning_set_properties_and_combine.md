@@ -3,12 +3,12 @@
 page_title: "comfyui_pair_conditioning_set_properties_and_combine Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI PairConditioningSetPropertiesAndCombine node — Cond Pair Set Props Combine [advanced/hooks/cond pair]
+  (EXPERIMENTAL) ComfyUI PairConditioningSetPropertiesAndCombine node — Cond Pair Set Props Combine [advanced/hooks/cond pair] Source: comfy_extras/nodes_hooks.py:51 (v1_extras).
 ---
 
 # comfyui_pair_conditioning_set_properties_and_combine (Resource)
 
-(EXPERIMENTAL) ComfyUI PairConditioningSetPropertiesAndCombine node — Cond Pair Set Props Combine [advanced/hooks/cond pair]
+(EXPERIMENTAL) ComfyUI PairConditioningSetPropertiesAndCombine node — Cond Pair Set Props Combine [advanced/hooks/cond pair] Source: comfy_extras/nodes_hooks.py:51 (v1_extras).
 
 
 
@@ -17,22 +17,22 @@ description: |-
 
 ### Required
 
-- `negative` (String) Input: CONDITIONING (link)
-- `negative_new` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
-- `positive_new` (String) Input: CONDITIONING (link)
-- `set_cond_area` (String) Input: COMBO
-- `strength` (Number) Input: FLOAT default: 1
+- `negative` (String) Input: CONDITIONING. Link input.
+- `negative_new` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `positive_new` (String) Input: CONDITIONING. Link input.
+- `set_cond_area` (String) Input: COMBO.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Optional
 
-- `hooks` (String) Input: HOOKS (link)
-- `mask` (String) Input: MASK (link)
-- `timesteps` (String) Input: TIMESTEPS_RANGE (link)
+- `hooks` (String) Input: HOOKS. Link input.
+- `mask` (String) Input: MASK. Link input.
+- `timesteps` (String) Input: TIMESTEPS_RANGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

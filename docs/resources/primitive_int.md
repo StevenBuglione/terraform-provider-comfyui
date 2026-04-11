@@ -3,12 +3,12 @@
 page_title: "comfyui_primitive_int Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Int node — Int [utils/primitive]
+  ComfyUI Int node — Int [utils/primitive] Source: comfy_extras/nodes_primitive.py:44 (v3_extras).
 ---
 
 # comfyui_primitive_int (Resource)
 
-ComfyUI Int node — Int [utils/primitive]
+ComfyUI Int node — Int [utils/primitive] Source: comfy_extras/nodes_primitive.py:44 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI Int node — Int [utils/primitive]
 
 ### Required
 
-- `value` (Number) Input: INT
+- `value` (Number) Input: INT.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `int_output` (String) Output: INT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `int_output` (String) Output: INT (slot 0).
+- `node_id` (String) ComfyUI node class type.

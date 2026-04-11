@@ -44,56 +44,56 @@ func (r *Wan2ImageToVideoAPIResource) Metadata(_ context.Context, req resource.M
 
 func (r *Wan2ImageToVideoAPIResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate a video from a first-frame image, with optional last-frame image and audio. [api node/video/Wan]",
+		MarkdownDescription: "Generate a video from a first-frame image, with optional last-frame image and audio. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:979 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"first_frame": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: First frame image. The output aspect ratio is derived from this image.",
+				Required:            true,
 			},
 			"last_frame": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Last frame image. The model generates a video transitioning from first to last frame.",
+				Optional:            true,
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: AUDIO. Link input. Tooltip: Audio for driving video generation (e.g., lip sync, beat-matched motion). Duration: 2s-30s. If not provided, the model automatically generates matching background music or sound effects.",
+				Optional:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"prompt_extend": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.",
+				Required:            true,
 			},
 			"watermark": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.",
+				Required:            true,
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

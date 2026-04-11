@@ -40,43 +40,43 @@ func (r *LatentFromBatchResource) Metadata(_ context.Context, req resource.Metad
 
 func (r *LatentFromBatchResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI LatentFromBatch node — Latent From Batch [latent/batch]",
+		MarkdownDescription: "ComfyUI LatentFromBatch node — Latent From Batch [latent/batch] Source: nodes.py:1237 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"samples": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"batch_index": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 63.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 63),
 				},
 			},
 			"length": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 64.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 64),
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

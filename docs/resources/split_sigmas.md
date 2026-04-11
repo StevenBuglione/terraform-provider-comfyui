@@ -3,12 +3,12 @@
 page_title: "comfyui_split_sigmas Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SplitSigmas node [sampling/custom_sampling/sigmas]
+  ComfyUI SplitSigmas node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:202 (v3_extras).
 ---
 
 # comfyui_split_sigmas (Resource)
 
-ComfyUI SplitSigmas node [sampling/custom_sampling/sigmas]
+ComfyUI SplitSigmas node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:202 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI SplitSigmas node [sampling/custom_sampling/sigmas]
 
 ### Required
 
-- `sigmas` (String) Input: SIGMAS (link)
-- `step` (Number) Input: INT default: 0
+- `sigmas` (String) Input: SIGMAS. Link input.
+- `step` (Number) Input: INT. Default: 0. Allowed range: 0 to 10000.
 
 ### Read-Only
 
-- `high_sigmas_output` (String) Output: SIGMAS (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `low_sigmas_output` (String) Output: SIGMAS (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `high_sigmas_output` (String) Output: SIGMAS (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `low_sigmas_output` (String) Output: SIGMAS (slot 1).
+- `node_id` (String) ComfyUI node class type.

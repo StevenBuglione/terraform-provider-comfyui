@@ -3,12 +3,12 @@
 page_title: "comfyui_stable_cascade_super_resolution_controlnet Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI StableCascade_SuperResolutionControlnet node [_for_testing/stable_cascade]
+  (EXPERIMENTAL) ComfyUI StableCascade_SuperResolutionControlnet node [_for_testing/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:117 (v3_extras).
 ---
 
 # comfyui_stable_cascade_super_resolution_controlnet (Resource)
 
-(EXPERIMENTAL) ComfyUI StableCascade_SuperResolutionControlnet node [_for_testing/stable_cascade]
+(EXPERIMENTAL) ComfyUI StableCascade_SuperResolutionControlnet node [_for_testing/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:117 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `vae` (String) Input: VAE (link)
+- `image` (String) Input: IMAGE. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `controlnet_input_output` (String) Output: IMAGE (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `stage_b_output` (String) Output: LATENT (slot 2)
-- `stage_c_output` (String) Output: LATENT (slot 1)
+- `controlnet_input_output` (String) Output: IMAGE (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `stage_b_output` (String) Output: LATENT (slot 2).
+- `stage_c_output` (String) Output: LATENT (slot 1).

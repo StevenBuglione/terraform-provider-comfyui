@@ -3,12 +3,12 @@
 page_title: "comfyui_luma_reference_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Holds an image and weight for use with Luma Generate Image node. [api node/image/Luma]
+  Holds an image and weight for use with Luma Generate Image node. [api node/image/Luma] Source: comfy_api_nodes/nodes_luma.py:41 (v3_api).
 ---
 
 # comfyui_luma_reference_node (Resource)
 
-Holds an image and weight for use with Luma Generate Image node. [api node/image/Luma]
+Holds an image and weight for use with Luma Generate Image node. [api node/image/Luma] Source: comfy_api_nodes/nodes_luma.py:41 (v3_api).
 
 
 
@@ -17,15 +17,15 @@ Holds an image and weight for use with Luma Generate Image node. [api node/image
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `weight` (Number) Input: FLOAT default: 1
+- `image` (String) Input: IMAGE. Link input. Tooltip: Image to use as reference.
+- `weight` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Weight of image reference.
 
 ### Optional
 
-- `luma_ref` (String) Input: LumaIO.LUMA_REF (link)
+- `luma_ref` (String) Input: LumaIO.LUMA_REF. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `luma_ref_output` (String) Output: LumaIO.LUMA_REF (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `luma_ref_output` (String) Output: LumaIO.LUMA_REF (slot 0).
+- `node_id` (String) ComfyUI node class type.

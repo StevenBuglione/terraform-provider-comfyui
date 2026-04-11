@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_create_style_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Create a custom style from reference images. Upload 1-5 images to use as style references. Total size of all images is limited to 5 MB. [api node/image/Recraft]
+  Create a custom style from reference images. Upload 1-5 images to use as style references. Total size of all images is limited to 5 MB. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:328 (v3_api).
 ---
 
 # comfyui_recraft_create_style_node (Resource)
 
-Create a custom style from reference images. Upload 1-5 images to use as style references. Total size of all images is limited to 5 MB. [api node/image/Recraft]
+Create a custom style from reference images. Upload 1-5 images to use as style references. Total size of all images is limited to 5 MB. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:328 (v3_api).
 
 
 
@@ -17,11 +17,11 @@ Create a custom style from reference images. Upload 1-5 images to use as style r
 
 ### Required
 
-- `images` (String) Input: COMFY_AUTOGROW_V3
-- `style` (String) Input: COMBO
+- `images` (String) Input: COMFY_AUTOGROW_V3.
+- `style` (String) Input: COMBO. Tooltip: The base style of the generated images.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `style_id_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `style_id_output` (String) Output: STRING (slot 0).

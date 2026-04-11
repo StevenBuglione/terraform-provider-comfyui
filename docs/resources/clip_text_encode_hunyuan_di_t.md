@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_hunyuan_di_t Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPTextEncodeHunyuanDiT node [advanced/conditioning]
+  ComfyUI CLIPTextEncodeHunyuanDiT node [advanced/conditioning] Source: comfy_extras/nodes_hunyuan.py:12 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_hunyuan_di_t (Resource)
 
-ComfyUI CLIPTextEncodeHunyuanDiT node [advanced/conditioning]
+ComfyUI CLIPTextEncodeHunyuanDiT node [advanced/conditioning] Source: comfy_extras/nodes_hunyuan.py:12 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI CLIPTextEncodeHunyuanDiT node [advanced/conditioning]
 
 ### Required
 
-- `bert` (String) Input: STRING
-- `clip` (String) Input: CLIP (link)
-- `mt5xl` (String) Input: STRING
+- `bert` (String) Input: STRING. Supports multiline text.
+- `clip` (String) Input: CLIP. Link input.
+- `mt5xl` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

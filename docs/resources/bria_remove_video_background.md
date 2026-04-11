@@ -3,12 +3,12 @@
 page_title: "comfyui_bria_remove_video_background Resource - comfyui"
 subcategory: ""
 description: |-
-  Remove the background from a video using Bria.  [api node/video/Bria]
+  Remove the background from a video using Bria. [api node/video/Bria] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bria.py:241 (v3_api).
 ---
 
 # comfyui_bria_remove_video_background (Resource)
 
-Remove the background from a video using Bria.  [api node/video/Bria]
+Remove the background from a video using Bria. [api node/video/Bria] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bria.py:241 (v3_api).
 
 
 
@@ -17,12 +17,12 @@ Remove the background from a video using Bria.  [api node/video/Bria]
 
 ### Required
 
-- `background_color` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
-- `video` (String) Input: VIDEO (link)
+- `background_color` (String) Input: COMBO. Tooltip: Background color for the output video.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
+- `video` (String) Input: VIDEO. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

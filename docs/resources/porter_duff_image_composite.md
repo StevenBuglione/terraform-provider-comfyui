@@ -3,12 +3,12 @@
 page_title: "comfyui_porter_duff_image_composite Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI PorterDuffImageComposite node — Porter-Duff Image Composite [mask/compositing]
+  ComfyUI PorterDuffImageComposite node — Porter-Duff Image Composite [mask/compositing] Source: comfy_extras/nodes_compositing.py:107 (v3_extras).
 ---
 
 # comfyui_porter_duff_image_composite (Resource)
 
-ComfyUI PorterDuffImageComposite node — Porter-Duff Image Composite [mask/compositing]
+ComfyUI PorterDuffImageComposite node — Porter-Duff Image Composite [mask/compositing] Source: comfy_extras/nodes_compositing.py:107 (v3_extras).
 
 
 
@@ -17,15 +17,15 @@ ComfyUI PorterDuffImageComposite node — Porter-Duff Image Composite [mask/comp
 
 ### Required
 
-- `destination` (String) Input: IMAGE (link)
-- `destination_alpha` (String) Input: MASK (link)
-- `mode` (String) Input: COMBO
-- `source` (String) Input: IMAGE (link)
-- `source_alpha` (String) Input: MASK (link)
+- `destination` (String) Input: IMAGE. Link input.
+- `destination_alpha` (String) Input: MASK. Link input.
+- `mode` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
+- `source` (String) Input: IMAGE. Link input.
+- `source_alpha` (String) Input: MASK. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `mask_output` (String) Output: MASK (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `mask_output` (String) Output: MASK (slot 1).
+- `node_id` (String) ComfyUI node class type.

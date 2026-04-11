@@ -42,54 +42,54 @@ func (r *CropByBBoxesResource) Metadata(_ context.Context, req resource.Metadata
 
 func (r *CropByBBoxesResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Crop and resize regions from the input image batch based on provided bounding boxes. [image/preprocessors]",
+		MarkdownDescription: "Crop and resize regions from the input image batch based on provided bounding boxes. [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:650 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"bboxes": schema.StringAttribute{
-				Description: "Input: BOUNDING_BOX (link)",
-				Required:    true,
+				MarkdownDescription: "Input: BOUNDING_BOX. Link input.",
+				Required:            true,
 			},
 			"output_width": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 8. Tooltip: Width each crop is resized to.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 4096),
 				},
 			},
 			"output_height": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 8. Tooltip: Height each crop is resized to.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 4096),
 				},
 			},
 			"padding": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 1024. Step: 1. Tooltip: Extra padding in pixels added on each side of the bbox before cropping.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 1024),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

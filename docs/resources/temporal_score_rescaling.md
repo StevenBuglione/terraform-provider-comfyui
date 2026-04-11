@@ -5,8 +5,7 @@ subcategory: ""
 description: |-
   [Post-CFG Function]
   TSR - Temporal Score Rescaling (2510.01184)
-  Rescaling the model's score or noise to steer the sampling diversity.
-  [model_patches/unet]
+  Rescaling the model's score or noise to steer the sampling diversity. [model_patches/unet] Source: comfy_extras/nodes_eps.py:81 (v3_extras).
 ---
 
 # comfyui_temporal_score_rescaling (Resource)
@@ -14,8 +13,7 @@ description: |-
 [Post-CFG Function]
 TSR - Temporal Score Rescaling (2510.01184)
 
-Rescaling the model's score or noise to steer the sampling diversity.
- [model_patches/unet]
+Rescaling the model's score or noise to steer the sampling diversity. [model_patches/unet] Source: comfy_extras/nodes_eps.py:81 (v3_extras).
 
 
 
@@ -24,12 +22,14 @@ Rescaling the model's score or noise to steer the sampling diversity.
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `tsr_k` (Number) Input: FLOAT default: 0.95
-- `tsr_sigma` (Number) Input: FLOAT default: 1
+- `model` (String) Input: MODEL. Link input.
+- `tsr_k` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0.01 to 100. Step: 0.001. Tooltip: Controls the rescaling strength.
+Lower k produces more detailed results; higher k produces smoother results in image generation. Setting k = 1 disables rescaling.
+- `tsr_sigma` (Number) Input: FLOAT. Default: 1. Allowed range: 0.01 to 100. Step: 0.001. Tooltip: Controls how early rescaling takes effect.
+Larger values take effect earlier.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `patched_model_output` (String) Output: MODEL (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `patched_model_output` (String) Output: MODEL (slot 0).

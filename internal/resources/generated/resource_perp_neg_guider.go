@@ -43,55 +43,55 @@ func (r *PerpNegGuiderResource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *PerpNegGuiderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI PerpNegGuider node [_for_testing]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI PerpNegGuider node [_for_testing] Source: comfy_extras/nodes_perpneg.py:125 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"positive": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"negative": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"empty_conditioning": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"cfg": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"neg_scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"guider_output": schema.StringAttribute{
-				Description: "Output: GUIDER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: GUIDER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

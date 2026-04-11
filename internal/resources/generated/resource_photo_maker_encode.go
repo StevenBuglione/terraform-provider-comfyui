@@ -39,41 +39,41 @@ func (r *PhotoMakerEncodeResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *PhotoMakerEncodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI PhotoMakerEncode node [_for_testing/photomaker]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI PhotoMakerEncode node [_for_testing/photomaker] Source: comfy_extras/nodes_photomaker.py:147 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"photomaker": schema.StringAttribute{
-				Description: "Input: PHOTOMAKER (link)",
-				Required:    true,
+				MarkdownDescription: "Input: PHOTOMAKER. Link input.",
+				Required:            true,
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input.",
+				Required:            true,
 			},
 			"text": schema.StringAttribute{
-				Description: "Input: STRING default: photograph of photomaker",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"photograph of photomaker\". Supports multiline text.",
+				Required:            true,
 			},
 			"conditioning_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

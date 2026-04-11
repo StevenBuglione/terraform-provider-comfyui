@@ -3,12 +3,12 @@
 page_title: "comfyui_image_processing_node Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI ImageProcessingNode node [dataset/image]
+  (EXPERIMENTAL) ComfyUI ImageProcessingNode node [dataset/image] Source: comfy_extras/nodes_dataset.py:312 (v3_extras).
 ---
 
 # comfyui_image_processing_node (Resource)
 
-(EXPERIMENTAL) ComfyUI ImageProcessingNode node [dataset/image]
+(EXPERIMENTAL) ComfyUI ImageProcessingNode node [dataset/image] Source: comfy_extras/nodes_dataset.py:312 (v3_extras).
 
 
 
@@ -17,6 +17,6 @@ description: |-
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `images_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `images_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

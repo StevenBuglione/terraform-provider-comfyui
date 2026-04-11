@@ -3,12 +3,12 @@
 page_title: "comfyui_load3_d Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI Load3D node — Load 3D & Animation [3d]
+  (EXPERIMENTAL) ComfyUI Load3D node — Load 3D & Animation [3d] Source: comfy_extras/nodes_load_3d.py:15 (v3_extras).
 ---
 
 # comfyui_load3_d (Resource)
 
-(EXPERIMENTAL) ComfyUI Load3D node — Load 3D & Animation [3d]
+(EXPERIMENTAL) ComfyUI Load3D node — Load 3D & Animation [3d] Source: comfy_extras/nodes_load_3d.py:15 (v3_extras).
 
 
 
@@ -17,19 +17,19 @@ description: |-
 
 ### Required
 
-- `height` (Number) Input: INT default: 1024
-- `image` (String) Input: LOAD_3D (link)
-- `model_file` (String) Input: COMBO
-- `width` (Number) Input: INT default: 1024
+- `height` (Number) Input: INT. Default: 1024. Allowed range: 1 to 4096. Step: 1.
+- `image` (String) Input: LOAD_3D. Link input.
+- `model_file` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: sorted(files).
+- `width` (Number) Input: INT. Default: 1024. Allowed range: 1 to 4096. Step: 1.
 
 ### Read-Only
 
-- `camera_info_output` (String) Output: LOAD3D_CAMERA (slot 4)
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `mask_output` (String) Output: MASK (slot 1)
-- `mesh_path_output` (String) Output: STRING (slot 2)
-- `model_3d_output` (String) Output: FILE_3D (slot 6)
-- `node_id` (String) ComfyUI node class type
-- `normal_output` (String) Output: IMAGE (slot 3)
-- `recording_video_output` (String) Output: VIDEO (slot 5)
+- `camera_info_output` (String) Output: LOAD3D_CAMERA (slot 4).
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `mask_output` (String) Output: MASK (slot 1).
+- `mesh_path_output` (String) Output: STRING (slot 2).
+- `model_3d_output` (String) Output: FILE_3D (slot 6).
+- `node_id` (String) ComfyUI node class type.
+- `normal_output` (String) Output: IMAGE (slot 3).
+- `recording_video_output` (String) Output: VIDEO (slot 5).

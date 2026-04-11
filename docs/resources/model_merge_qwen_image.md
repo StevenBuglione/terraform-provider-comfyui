@@ -3,12 +3,12 @@
 page_title: "comfyui_model_merge_qwen_image Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelMergeQwenImage node — ModelMergeQwenImage [advanced/model_merging/model_specific]
+  ComfyUI ModelMergeQwenImage node — ModelMergeQwenImage [advanced/model_merging/model_specific] Source: comfy_extras/nodes_model_merging_model_specific.py:317 (v1_extras).
 ---
 
 # comfyui_model_merge_qwen_image (Resource)
 
-ComfyUI ModelMergeQwenImage node — ModelMergeQwenImage [advanced/model_merging/model_specific]
+ComfyUI ModelMergeQwenImage node — ModelMergeQwenImage [advanced/model_merging/model_specific] Source: comfy_extras/nodes_model_merging_model_specific.py:317 (v1_extras).
 
 
 
@@ -17,77 +17,77 @@ ComfyUI ModelMergeQwenImage node — ModelMergeQwenImage [advanced/model_merging
 
 ### Required
 
-- `img_in` (String) Input: COMBO
-- `model1` (String) Input: MODEL (link)
-- `model2` (String) Input: MODEL (link)
-- `pos_embeds` (String) Input: COMBO
-- `proj_out` (String) Input: COMBO
-- `time_text_embed` (String) Input: COMBO
-- `transformer_blocks_0` (String) Input: COMBO
-- `transformer_blocks_1` (String) Input: COMBO
-- `transformer_blocks_10` (String) Input: COMBO
-- `transformer_blocks_11` (String) Input: COMBO
-- `transformer_blocks_12` (String) Input: COMBO
-- `transformer_blocks_13` (String) Input: COMBO
-- `transformer_blocks_14` (String) Input: COMBO
-- `transformer_blocks_15` (String) Input: COMBO
-- `transformer_blocks_16` (String) Input: COMBO
-- `transformer_blocks_17` (String) Input: COMBO
-- `transformer_blocks_18` (String) Input: COMBO
-- `transformer_blocks_19` (String) Input: COMBO
-- `transformer_blocks_2` (String) Input: COMBO
-- `transformer_blocks_20` (String) Input: COMBO
-- `transformer_blocks_21` (String) Input: COMBO
-- `transformer_blocks_22` (String) Input: COMBO
-- `transformer_blocks_23` (String) Input: COMBO
-- `transformer_blocks_24` (String) Input: COMBO
-- `transformer_blocks_25` (String) Input: COMBO
-- `transformer_blocks_26` (String) Input: COMBO
-- `transformer_blocks_27` (String) Input: COMBO
-- `transformer_blocks_28` (String) Input: COMBO
-- `transformer_blocks_29` (String) Input: COMBO
-- `transformer_blocks_3` (String) Input: COMBO
-- `transformer_blocks_30` (String) Input: COMBO
-- `transformer_blocks_31` (String) Input: COMBO
-- `transformer_blocks_32` (String) Input: COMBO
-- `transformer_blocks_33` (String) Input: COMBO
-- `transformer_blocks_34` (String) Input: COMBO
-- `transformer_blocks_35` (String) Input: COMBO
-- `transformer_blocks_36` (String) Input: COMBO
-- `transformer_blocks_37` (String) Input: COMBO
-- `transformer_blocks_38` (String) Input: COMBO
-- `transformer_blocks_39` (String) Input: COMBO
-- `transformer_blocks_4` (String) Input: COMBO
-- `transformer_blocks_40` (String) Input: COMBO
-- `transformer_blocks_41` (String) Input: COMBO
-- `transformer_blocks_42` (String) Input: COMBO
-- `transformer_blocks_43` (String) Input: COMBO
-- `transformer_blocks_44` (String) Input: COMBO
-- `transformer_blocks_45` (String) Input: COMBO
-- `transformer_blocks_46` (String) Input: COMBO
-- `transformer_blocks_47` (String) Input: COMBO
-- `transformer_blocks_48` (String) Input: COMBO
-- `transformer_blocks_49` (String) Input: COMBO
-- `transformer_blocks_5` (String) Input: COMBO
-- `transformer_blocks_50` (String) Input: COMBO
-- `transformer_blocks_51` (String) Input: COMBO
-- `transformer_blocks_52` (String) Input: COMBO
-- `transformer_blocks_53` (String) Input: COMBO
-- `transformer_blocks_54` (String) Input: COMBO
-- `transformer_blocks_55` (String) Input: COMBO
-- `transformer_blocks_56` (String) Input: COMBO
-- `transformer_blocks_57` (String) Input: COMBO
-- `transformer_blocks_58` (String) Input: COMBO
-- `transformer_blocks_59` (String) Input: COMBO
-- `transformer_blocks_6` (String) Input: COMBO
-- `transformer_blocks_7` (String) Input: COMBO
-- `transformer_blocks_8` (String) Input: COMBO
-- `transformer_blocks_9` (String) Input: COMBO
-- `txt_in` (String) Input: COMBO
-- `txt_norm` (String) Input: COMBO
+- `img_in` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `model1` (String) Input: MODEL. Link input.
+- `model2` (String) Input: MODEL. Link input.
+- `pos_embeds` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `proj_out` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `time_text_embed` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_0` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_1` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_10` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_11` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_12` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_13` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_14` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_15` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_16` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_17` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_18` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_19` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_2` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_20` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_21` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_22` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_23` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_24` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_25` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_26` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_27` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_28` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_29` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_3` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_30` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_31` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_32` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_33` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_34` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_35` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_36` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_37` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_38` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_39` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_4` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_40` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_41` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_42` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_43` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_44` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_45` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_46` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_47` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_48` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_49` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_5` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_50` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_51` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_52` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_53` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_54` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_55` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_56` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_57` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_58` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_59` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_6` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_7` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_8` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `transformer_blocks_9` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `txt_in` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `txt_norm` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

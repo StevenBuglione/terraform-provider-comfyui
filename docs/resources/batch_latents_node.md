@@ -3,12 +3,12 @@
 page_title: "comfyui_batch_latents_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI BatchLatentsNode node — Batch Latents [latent]
+  ComfyUI BatchLatentsNode node — Batch Latents [latent] Source: comfy_extras/nodes_post_processing.py:606 (v3_extras).
 ---
 
 # comfyui_batch_latents_node (Resource)
 
-ComfyUI BatchLatentsNode node — Batch Latents [latent]
+ComfyUI BatchLatentsNode node — Batch Latents [latent] Source: comfy_extras/nodes_post_processing.py:606 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI BatchLatentsNode node — Batch Latents [latent]
 
 ### Required
 
-- `latents` (String) Input: COMFY_AUTOGROW_V3
+- `latents` (String) Input: COMFY_AUTOGROW_V3.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

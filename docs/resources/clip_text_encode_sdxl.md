@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_sdxl Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPTextEncodeSDXL node [advanced/conditioning]
+  ComfyUI CLIPTextEncodeSDXL node [advanced/conditioning] Source: comfy_extras/nodes_clip_sdxl.py:28 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_sdxl (Resource)
 
-ComfyUI CLIPTextEncodeSDXL node [advanced/conditioning]
+ComfyUI CLIPTextEncodeSDXL node [advanced/conditioning] Source: comfy_extras/nodes_clip_sdxl.py:28 (v3_extras).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI CLIPTextEncodeSDXL node [advanced/conditioning]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `crop_h` (Number) Input: INT default: 0
-- `crop_w` (Number) Input: INT default: 0
-- `height` (Number) Input: INT default: 1024
-- `target_height` (Number) Input: INT default: 1024
-- `target_width` (Number) Input: INT default: 1024
-- `text_g` (String) Input: STRING
-- `text_l` (String) Input: STRING
-- `width` (Number) Input: INT default: 1024
+- `clip` (String) Input: CLIP. Link input.
+- `crop_h` (Number) Input: INT. Default: 0. Minimum value: 0.
+- `crop_w` (Number) Input: INT. Default: 0. Minimum value: 0.
+- `height` (Number) Input: INT. Default: 1024. Minimum value: 0.
+- `target_height` (Number) Input: INT. Default: 1024. Minimum value: 0.
+- `target_width` (Number) Input: INT. Default: 1024. Minimum value: 0.
+- `text_g` (String) Input: STRING. Supports multiline text.
+- `text_l` (String) Input: STRING. Supports multiline text.
+- `width` (Number) Input: INT. Default: 1024. Minimum value: 0.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_tencent3_d_part_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Automatically perform component identification and generation based on the model structure. [api node/3d/Tencent]
+  Automatically perform component identification and generation based on the model structure. [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:566 (v3_api).
 ---
 
 # comfyui_tencent3_d_part_node (Resource)
 
-Automatically perform component identification and generation based on the model structure. [api node/3d/Tencent]
+Automatically perform component identification and generation based on the model structure. [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:566 (v3_api).
 
 
 
@@ -17,11 +17,11 @@ Automatically perform component identification and generation based on the model
 
 ### Required
 
-- `model_3d` (String) Input: COMFY_MULTITYPED_V3
-- `seed` (Number) Input: INT default: 0
+- `model_3d` (String) Input: COMFY_MULTITYPED_V3. Tooltip: 3D model in FBX format. Model should have less than 30000 faces.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `fbx_output` (String) Output: FILE_3D_FBX (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `fbx_output` (String) Output: FILE_3D_FBX (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

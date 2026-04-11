@@ -40,40 +40,40 @@ func (r *Flux2SchedulerResource) Metadata(_ context.Context, req resource.Metada
 
 func (r *Flux2SchedulerResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Flux2Scheduler node [sampling/custom_sampling/schedulers]",
+		MarkdownDescription: "ComfyUI Flux2Scheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_flux.py:213 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 20",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 20. Allowed range: 1 to 4096.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4096),
 				},
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 16. Step: 1.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 16. Step: 1.",
+				Required:            true,
 			},
 			"sigmas_output": schema.StringAttribute{
-				Description: "Output: SIGMAS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SIGMAS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -42,48 +42,48 @@ func (r *SdPoseKeypointExtractorResource) Metadata(_ context.Context, req resour
 
 func (r *SdPoseKeypointExtractorResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Extract pose keypoints from images using the SDPose model: https://huggingface.co/Comfy-Org/SDPose/tree/main/checkpoints [image/preprocessors]",
+		MarkdownDescription: "Extract pose keypoints from images using the SDPose model: https://huggingface.co/Comfy-Org/SDPose/tree/main/checkpoints [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:416 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"batch_size": schema.Int64Attribute{
-				Description: "Input: INT default: 16",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 16. Allowed range: 1 to 10000. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 10000),
 				},
 			},
 			"bboxes": schema.StringAttribute{
-				Description: "Input: BOUNDING_BOX (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: BOUNDING_BOX. Link input. Tooltip: Optional bounding boxes for more accurate detections. Required for multi-person detection.",
+				Optional:            true,
 			},
 			"keypoints_output": schema.StringAttribute{
-				Description: "Output: POSE_KEYPOINT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: POSE_KEYPOINT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

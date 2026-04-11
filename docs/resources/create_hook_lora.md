@@ -3,12 +3,12 @@
 page_title: "comfyui_create_hook_lora Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CreateHookLora node — Create Hook LoRA [advanced/hooks/create]
+  (EXPERIMENTAL) ComfyUI CreateHookLora node — Create Hook LoRA [advanced/hooks/create] Source: comfy_extras/nodes_hooks.py:289 (v1_extras).
 ---
 
 # comfyui_create_hook_lora (Resource)
 
-(EXPERIMENTAL) ComfyUI CreateHookLora node — Create Hook LoRA [advanced/hooks/create]
+(EXPERIMENTAL) ComfyUI CreateHookLora node — Create Hook LoRA [advanced/hooks/create] Source: comfy_extras/nodes_hooks.py:289 (v1_extras).
 
 
 
@@ -17,16 +17,16 @@ description: |-
 
 ### Required
 
-- `lora_name` (String) Input: COMBO
-- `strength_clip` (Number) Input: FLOAT default: 1
-- `strength_model` (Number) Input: FLOAT default: 1
+- `lora_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('loras').
+- `strength_clip` (Number) Input: FLOAT. Default: 1. Allowed range: -20 to 20. Step: 0.01.
+- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -20 to 20. Step: 0.01.
 
 ### Optional
 
-- `prev_hooks` (String) Input: HOOKS (link)
+- `prev_hooks` (String) Input: HOOKS. Link input.
 
 ### Read-Only
 
-- `hooks_output` (String) Output: HOOKS (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `hooks_output` (String) Output: HOOKS (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

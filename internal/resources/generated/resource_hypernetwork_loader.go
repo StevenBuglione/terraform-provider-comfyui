@@ -40,40 +40,40 @@ func (r *HypernetworkLoaderResource) Metadata(_ context.Context, req resource.Me
 
 func (r *HypernetworkLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI HypernetworkLoader node [loaders]",
+		MarkdownDescription: "ComfyUI HypernetworkLoader node [loaders] Source: comfy_extras/nodes_hypernetwork.py:100 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"hypernetwork_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('hypernetworks').",
+				Required:            true,
 			},
 			"strength": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_hunyuan3_dv2_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Hunyuan3Dv2Conditioning node [conditioning/video_models]
+  ComfyUI Hunyuan3Dv2Conditioning node [conditioning/video_models] Source: comfy_extras/nodes_hunyuan3d.py:38 (v3_extras).
 ---
 
 # comfyui_hunyuan3_dv2_conditioning (Resource)
 
-ComfyUI Hunyuan3Dv2Conditioning node [conditioning/video_models]
+ComfyUI Hunyuan3Dv2Conditioning node [conditioning/video_models] Source: comfy_extras/nodes_hunyuan3d.py:38 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI Hunyuan3Dv2Conditioning node [conditioning/video_models]
 
 ### Required
 
-- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT (link)
+- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

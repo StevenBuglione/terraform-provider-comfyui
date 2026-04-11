@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_text_to_video_api Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates a video based on a text prompt. [api node/video/Wan]
+  Generates a video based on a text prompt. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:309 (v3_api).
 ---
 
 # comfyui_wan_text_to_video_api (Resource)
 
-Generates a video based on a text prompt. [api node/video/Wan]
+Generates a video based on a text prompt. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:309 (v3_api).
 
 
 
@@ -17,23 +17,23 @@ Generates a video based on a text prompt. [api node/video/Wan]
 
 ### Required
 
-- `model` (String) Input: COMBO default: wan2.6-t2v
-- `prompt` (String) Input: STRING default:
+- `model` (String) Input: COMBO. Default: "wan2.6-t2v". Tooltip: Model to use.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.
 
 ### Optional
 
-- `audio` (String) Input: AUDIO (link)
-- `duration` (Number) Input: INT default: 5
-- `generate_audio` (Boolean) Input: BOOLEAN default: false
-- `negative_prompt` (String) Input: STRING default:
-- `prompt_extend` (Boolean) Input: BOOLEAN default: true
-- `seed` (Number) Input: INT default: 0
-- `shot_type` (String) Input: COMBO
-- `size` (String) Input: COMBO default: 720p: 1:1 (960x960)
-- `watermark` (Boolean) Input: BOOLEAN default: false
+- `audio` (String) Input: AUDIO. Link input. Tooltip: Audio must contain a clear, loud voice, without extraneous noise or background music.
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 5 to 15. Step: 5. Tooltip: A 15-second duration is available only for the Wan 2.6 model.
+- `generate_audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: If no audio input is provided, generate audio automatically.
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative prompt describing what to avoid.
+- `prompt_extend` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `shot_type` (String) Input: COMBO. Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts. This parameter takes effect only when prompt_extend is True.
+- `size` (String) Input: COMBO. Default: "720p: 1:1 (960x960)".
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

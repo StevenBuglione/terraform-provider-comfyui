@@ -3,12 +3,12 @@
 page_title: "comfyui_open_ai_dalle2 Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates images synchronously via OpenAI's DALL·E 2 endpoint. [api node/image/OpenAI]
+  Generates images synchronously via OpenAI's DALL·E 2 endpoint. [api node/image/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:92 (v3_api).
 ---
 
 # comfyui_open_ai_dalle2 (Resource)
 
-Generates images synchronously via OpenAI's DALL·E 2 endpoint. [api node/image/OpenAI]
+Generates images synchronously via OpenAI's DALL·E 2 endpoint. [api node/image/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:92 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Generates images synchronously via OpenAI's DALL·E 2 endpoint. [api node/image/
 
 ### Required
 
-- `prompt` (String) Input: STRING default:
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt for DALL·E.
 
 ### Optional
 
-- `image` (String) Input: IMAGE (link)
-- `mask` (String) Input: MASK (link)
-- `n` (Number) Input: INT default: 1
-- `seed` (Number) Input: INT default: 0
-- `size` (String) Input: COMBO default: 1024x1024
+- `image` (String) Input: IMAGE. Link input. Tooltip: Optional reference image for image editing.
+- `mask` (String) Input: MASK. Link input. Tooltip: Optional mask for inpainting (white areas will be replaced).
+- `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1. Tooltip: How many images to generate.
+- `seed` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: not implemented yet in backend.
+- `size` (String) Input: COMBO. Default: "1024x1024". Tooltip: Image size.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

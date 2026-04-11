@@ -3,12 +3,12 @@
 page_title: "comfyui_meshy_texture_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI MeshyTextureNode node — Meshy: Texture Model [api node/3d/Meshy]
+  ComfyUI MeshyTextureNode node — Meshy: Texture Model [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:718 (v3_api).
 ---
 
 # comfyui_meshy_texture_node (Resource)
 
-ComfyUI MeshyTextureNode node — Meshy: Texture Model [api node/3d/Meshy]
+ComfyUI MeshyTextureNode node — Meshy: Texture Model [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:718 (v3_api).
 
 
 
@@ -17,21 +17,21 @@ ComfyUI MeshyTextureNode node — Meshy: Texture Model [api node/3d/Meshy]
 
 ### Required
 
-- `enable_original_uv` (Boolean) Input: BOOLEAN default: true
-- `meshy_task_id` (String) Input: MESHY_TASK_ID (link)
-- `model` (String) Input: COMBO
-- `pbr` (Boolean) Input: BOOLEAN default: false
-- `text_style_prompt` (String) Input: STRING default:
+- `enable_original_uv` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Use the original UV of the model instead of generating new UVs. When enabled, Meshy preserves existing textures from the uploaded model. If the model has no original UV, the quality of the output might not be as good.
+- `meshy_task_id` (String) Input: MESHY_TASK_ID. Link input.
+- `model` (String) Input: COMBO.
+- `pbr` (Boolean) Input: BOOLEAN. Default: false.
+- `text_style_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Describe your desired texture style of the object using text. Maximum 600 characters.Maximum 600 characters. Cannot be used at the same time as 'image_style'.
 
 ### Optional
 
-- `image_style` (String) Input: IMAGE (link)
+- `image_style` (String) Input: IMAGE. Link input. Tooltip: A 2d image to guide the texturing process. Can not be used at the same time with 'text_style_prompt'.
 
 ### Read-Only
 
-- `fbx_output` (String) Output: FILE_3D_FBX (slot 3)
-- `glb_output` (String) Output: FILE_3D_GLB (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `meshy_task_id_output` (String) Output: MODEL_TASK_ID (slot 1)
-- `model_file_output` (String) Output: STRING (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `fbx_output` (String) Output: FILE_3D_FBX (slot 3).
+- `glb_output` (String) Output: FILE_3D_GLB (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `meshy_task_id_output` (String) Output: MODEL_TASK_ID (slot 1).
+- `model_file_output` (String) Output: STRING (slot 0).
+- `node_id` (String) ComfyUI node class type.

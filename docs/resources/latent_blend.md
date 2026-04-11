@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_blend Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentBlend node — Latent Blend [_for_testing]
+  ComfyUI LatentBlend node — Latent Blend [_for_testing] Source: nodes.py:1446 (v1_core).
 ---
 
 # comfyui_latent_blend (Resource)
 
-ComfyUI LatentBlend node — Latent Blend [_for_testing]
+ComfyUI LatentBlend node — Latent Blend [_for_testing] Source: nodes.py:1446 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI LatentBlend node — Latent Blend [_for_testing]
 
 ### Required
 
-- `blend_factor` (Number) Input: FLOAT default: 0.5
-- `samples1` (String) Input: LATENT (link)
-- `samples2` (String) Input: LATENT (link)
+- `blend_factor` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
+- `samples1` (String) Input: LATENT. Link input.
+- `samples2` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

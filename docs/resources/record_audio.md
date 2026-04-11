@@ -3,12 +3,12 @@
 page_title: "comfyui_record_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI RecordAudio node — Record Audio [audio]
+  ComfyUI RecordAudio node — Record Audio [audio] Source: comfy_extras/nodes_audio.py:337 (v3_extras).
 ---
 
 # comfyui_record_audio (Resource)
 
-ComfyUI RecordAudio node — Record Audio [audio]
+ComfyUI RecordAudio node — Record Audio [audio] Source: comfy_extras/nodes_audio.py:337 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI RecordAudio node — Record Audio [audio]
 
 ### Required
 
-- `audio` (String) Input: AUDIO_RECORD (link)
+- `audio` (String) Input: AUDIO_RECORD. Link input.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

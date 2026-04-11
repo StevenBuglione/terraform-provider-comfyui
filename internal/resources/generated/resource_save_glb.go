@@ -35,29 +35,29 @@ func (r *SaveGlbResource) Metadata(_ context.Context, req resource.MetadataReque
 
 func (r *SaveGlbResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SaveGLB node — Save 3D Model [3d]",
+		MarkdownDescription: "ComfyUI SaveGLB node — Save 3D Model [3d] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_hunyuan3d.py:616 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"io_mesh_input_mesh": schema.StringAttribute{
-				Description: "Input: COMFY_MULTITYPED_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_MULTITYPED_V3. Tooltip: Mesh or 3D file to save.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: mesh/ComfyUI",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"mesh/ComfyUI\".",
+				Required:            true,
 			},
 		},
 	}

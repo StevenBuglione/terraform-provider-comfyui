@@ -47,25 +47,25 @@ func (r *ByteDanceImageNodeResource) Metadata(_ context.Context, req resource.Me
 
 func (r *ByteDanceImageNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(DEPRECATED) Generate images using ByteDance models via api based on prompt [api node/image/ByteDance]",
+		MarkdownDescription: "(DEPRECATED) Generate images using ByteDance models via api based on prompt [api node/image/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:64 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"seedream-3-0-t2i-250415",
@@ -73,48 +73,48 @@ func (r *ByteDanceImageNodeResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the image.",
+				Required:            true,
 			},
 			"size_preset": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Pick a recommended size. Select Custom to use the width and height below.",
+				Required:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Allowed range: 512 to 2048. Step: 64. Tooltip: Custom width for image. Value is working only if `size_preset` is set to `Custom`.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(512, 2048),
 				},
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Allowed range: 512 to 2048. Step: 64. Tooltip: Custom height for image. Value is working only if `size_preset` is set to `Custom`.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(512, 2048),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"guidance_scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 2.5",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 2.5. Allowed range: 1 to 10. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 10),
 				},
 			},
 			"watermark": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to add an \"AI generated\" watermark to the image.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

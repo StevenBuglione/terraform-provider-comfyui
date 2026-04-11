@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_camera_controls Resource - comfyui"
 subcategory: ""
 description: |-
-  Allows specifying configuration options for Kling Camera Controls and motion control effects. [api node/video/Kling]
+  Allows specifying configuration options for Kling Camera Controls and motion control effects. [api node/video/Kling] Source: comfy_api_nodes/nodes_kling.py:637 (v3_api).
 ---
 
 # comfyui_kling_camera_controls (Resource)
 
-Allows specifying configuration options for Kling Camera Controls and motion control effects. [api node/video/Kling]
+Allows specifying configuration options for Kling Camera Controls and motion control effects. [api node/video/Kling] Source: comfy_api_nodes/nodes_kling.py:637 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Allows specifying configuration options for Kling Camera Controls and motion con
 
 ### Required
 
-- `camera_control_type` (String) Input: COMBO
-- `horizontal_movement` (Number) Input: FLOAT default: 0
-- `pan` (Number) Input: FLOAT default: 0.5
-- `roll` (Number) Input: FLOAT default: 0
-- `tilt` (Number) Input: FLOAT default: 0
-- `vertical_movement` (Number) Input: FLOAT default: 0
-- `zoom` (Number) Input: FLOAT default: 0
+- `camera_control_type` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingCameraControlType.
+- `horizontal_movement` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's movement along horizontal axis (x-axis). Negative indicates left, positive indicates right.
+- `pan` (Number) Input: FLOAT. Default: 0.5. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rotation in vertical plane (x-axis). Negative indicates downward rotation, positive indicates upward rotation.
+- `roll` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rolling amount (z-axis). Negative indicates counterclockwise, positive indicates clockwise.
+- `tilt` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rotation in horizontal plane (y-axis). Negative indicates left rotation, positive indicates right rotation.
+- `vertical_movement` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's movement along vertical axis (y-axis). Negative indicates downward, positive indicates upward.
+- `zoom` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls change in camera's focal length. Negative indicates narrower field of view, positive indicates wider field of view.
 
 ### Read-Only
 
-- `camera_control_output` (String) Output: CAMERA_CONTROL (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `camera_control_output` (String) Output: CAMERA_CONTROL (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

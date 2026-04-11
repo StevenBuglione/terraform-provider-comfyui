@@ -46,78 +46,78 @@ func (r *AudioEqualizer3BandResource) Metadata(_ context.Context, req resource.M
 
 func (r *AudioEqualizer3BandResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI AudioEqualizer3Band node — Audio Equalizer (3-Band) [audio]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI AudioEqualizer3Band node — Audio Equalizer (3-Band) [audio] Source: comfy_extras/nodes_audio.py:707 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO. Link input.",
+				Required:            true,
 			},
 			"low_gain_db": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for Low frequencies (Bass).",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-24, 24),
 				},
 			},
 			"low_freq": schema.Int64Attribute{
-				Description: "Input: INT default: 100",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 100. Allowed range: 20 to 500. Tooltip: Cutoff frequency for Low shelf.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(20, 500),
 				},
 			},
 			"mid_gain_db": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for Mid frequencies.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-24, 24),
 				},
 			},
 			"mid_freq": schema.Int64Attribute{
-				Description: "Input: INT default: 1000",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1000. Allowed range: 200 to 4000. Tooltip: Center frequency for Mids.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(200, 4000),
 				},
 			},
 			"mid_q": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.707",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.707. Allowed range: 0.1 to 10. Step: 0.1. Tooltip: Q factor (bandwidth) for Mids.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 10),
 				},
 			},
 			"high_gain_db": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for High frequencies (Treble).",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-24, 24),
 				},
 			},
 			"high_freq": schema.Int64Attribute{
-				Description: "Input: INT default: 5000",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 5000. Allowed range: 1000 to 15000. Tooltip: Cutoff frequency for High shelf.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1000, 15000),
 				},
 			},
 			"audio_output": schema.StringAttribute{
-				Description: "Output: AUDIO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

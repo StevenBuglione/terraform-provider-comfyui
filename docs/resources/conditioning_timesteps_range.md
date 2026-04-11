@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_timesteps_range Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI ConditioningTimestepsRange node — Timesteps Range [advanced/hooks]
+  (EXPERIMENTAL) ComfyUI ConditioningTimestepsRange node — Timesteps Range [advanced/hooks] Source: comfy_extras/nodes_hooks.py:261 (v1_extras).
 ---
 
 # comfyui_conditioning_timesteps_range (Resource)
 
-(EXPERIMENTAL) ComfyUI ConditioningTimestepsRange node — Timesteps Range [advanced/hooks]
+(EXPERIMENTAL) ComfyUI ConditioningTimestepsRange node — Timesteps Range [advanced/hooks] Source: comfy_extras/nodes_hooks.py:261 (v1_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `end_percent` (Number) Input: FLOAT default: 1
-- `start_percent` (Number) Input: FLOAT default: 0
+- `end_percent` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
 
 ### Read-Only
 
-- `after_range_output` (String) Output: TIMESTEPS_RANGE (slot 2)
-- `before_range_output` (String) Output: TIMESTEPS_RANGE (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `timesteps_range_output` (String) Output: TIMESTEPS_RANGE (slot 0)
+- `after_range_output` (String) Output: TIMESTEPS_RANGE (slot 2).
+- `before_range_output` (String) Output: TIMESTEPS_RANGE (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `timesteps_range_output` (String) Output: TIMESTEPS_RANGE (slot 0).

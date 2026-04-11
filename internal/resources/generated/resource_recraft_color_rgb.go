@@ -41,50 +41,50 @@ func (r *RecraftColorRgbResource) Metadata(_ context.Context, req resource.Metad
 
 func (r *RecraftColorRgbResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Create Recraft Color by choosing specific RGB values. [api node/image/Recraft]",
+		MarkdownDescription: "Create Recraft Color by choosing specific RGB values. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:175 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"r": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 255. Tooltip: Red value of color.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
 				},
 			},
 			"g": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 255. Tooltip: Green value of color.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
 				},
 			},
 			"b": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 255. Tooltip: Blue value of color.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 255),
 				},
 			},
 			"recraft_color": schema.StringAttribute{
-				Description: "Input: RecraftIO.COLOR (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: RecraftIO.COLOR. Link input.",
+				Optional:            true,
 			},
 			"recraft_color_output": schema.StringAttribute{
-				Description: "Output: RecraftIO.COLOR (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: RecraftIO.COLOR (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

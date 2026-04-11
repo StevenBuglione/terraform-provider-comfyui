@@ -3,12 +3,12 @@
 page_title: "comfyui_vidu2_reference_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate a video from multiple reference images and a prompt. [api node/video/Vidu]
+  Generate a video from multiple reference images and a prompt. [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:710 (v3_api).
 ---
 
 # comfyui_vidu2_reference_video_node (Resource)
 
-Generate a video from multiple reference images and a prompt. [api node/video/Vidu]
+Generate a video from multiple reference images and a prompt. [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:710 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Generate a video from multiple reference images and a prompt. [api node/video/Vi
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `audio` (Boolean) Input: BOOLEAN default: false
-- `duration` (Number) Input: INT default: 5
-- `model` (String) Input: COMBO
-- `movement_amplitude` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 1
-- `subjects` (String) Input: COMFY_AUTOGROW_V3
+- `aspect_ratio` (String) Input: COMBO.
+- `audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When enabled video will contain generated speech and background music based on the prompt.
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 1 to 10. Step: 1.
+- `model` (String) Input: COMBO.
+- `movement_amplitude` (String) Input: COMBO. Tooltip: The movement amplitude of objects in the frame.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: When enabled, the video will include generated speech and background music based on the prompt.
+- `resolution` (String) Input: COMBO.
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
+- `subjects` (String) Input: COMFY_AUTOGROW_V3. Tooltip: For each subject, provide up to 3 reference images (7 images total across all subjects). Reference them in prompts via @subject{subject_id}.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

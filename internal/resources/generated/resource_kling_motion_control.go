@@ -44,41 +44,41 @@ func (r *KlingMotionControlResource) Metadata(_ context.Context, req resource.Me
 
 func (r *KlingMotionControlResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI MotionControl node — Kling Motion Control [api node/video/Kling]",
+		MarkdownDescription: "ComfyUI MotionControl node — Kling Motion Control [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2722 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"reference_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"reference_video": schema.StringAttribute{
-				Description: "Input: VIDEO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VIDEO. Link input. Tooltip: Motion reference video used to drive movement/expression.\nDuration limits depend on character_orientation:\n - image: 3–10s (max 10s)\n - video: 3–30s (max 30s).",
+				Required:            true,
 			},
 			"keep_original_sound": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true.",
+				Required:            true,
 			},
 			"character_orientation": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Controls where the character's facing/orientation comes from.\nvideo: movements, expressions, camera moves, and orientation follow the motion reference video (other details via prompt).\nimage: movements and expressions still follow the motion reference video, but the character orientation matches the reference image (camera/other details via prompt).",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"video",
@@ -87,8 +87,8 @@ func (r *KlingMotionControlResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"mode": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"pro",
@@ -97,8 +97,8 @@ func (r *KlingMotionControlResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"kling-v3",
@@ -107,8 +107,8 @@ func (r *KlingMotionControlResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

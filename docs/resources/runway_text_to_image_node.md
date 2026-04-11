@@ -3,12 +3,12 @@
 page_title: "comfyui_runway_text_to_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate an image from a text prompt using Runway's Gen 4 model. You can also include reference image to guide the generation. [api node/image/Runway]
+  Generate an image from a text prompt using Runway's Gen 4 model. You can also include reference image to guide the generation. [api node/image/Runway] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_runway.py:436 (v3_api).
 ---
 
 # comfyui_runway_text_to_image_node (Resource)
 
-Generate an image from a text prompt using Runway's Gen 4 model. You can also include reference image to guide the generation. [api node/image/Runway]
+Generate an image from a text prompt using Runway's Gen 4 model. You can also include reference image to guide the generation. [api node/image/Runway] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_runway.py:436 (v3_api).
 
 
 
@@ -17,15 +17,15 @@ Generate an image from a text prompt using Runway's Gen 4 model. You can also in
 
 ### Required
 
-- `prompt` (String) Input: STRING default:
-- `ratio` (String) Input: COMBO
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt for the generation.
+- `ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
 
 ### Optional
 
-- `reference_image` (String) Input: IMAGE (link)
+- `reference_image` (String) Input: IMAGE. Link input. Tooltip: Optional reference image to guide the generation.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

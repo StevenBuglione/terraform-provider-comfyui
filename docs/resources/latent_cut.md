@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_cut Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentCut node [latent/advanced]
+  ComfyUI LatentCut node [latent/advanced] Source: comfy_extras/nodes_latent.py:176 (v3_extras).
 ---
 
 # comfyui_latent_cut (Resource)
 
-ComfyUI LatentCut node [latent/advanced]
+ComfyUI LatentCut node [latent/advanced] Source: comfy_extras/nodes_latent.py:176 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI LatentCut node [latent/advanced]
 
 ### Required
 
-- `amount` (Number) Input: INT default: 1
-- `dim` (String) Input: COMBO
-- `index` (Number) Input: INT default: 0
-- `samples` (String) Input: LATENT (link)
+- `amount` (Number) Input: INT. Default: 1. Minimum value: 1. Step: 1.
+- `dim` (String) Input: COMBO.
+- `index` (Number) Input: INT. Default: 0. Step: 1.
+- `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

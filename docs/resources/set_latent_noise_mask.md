@@ -3,12 +3,12 @@
 page_title: "comfyui_set_latent_noise_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SetLatentNoiseMask node — Set Latent Noise Mask [latent/inpaint]
+  ComfyUI SetLatentNoiseMask node — Set Latent Noise Mask [latent/inpaint] Source: nodes.py:1524 (v1_core).
 ---
 
 # comfyui_set_latent_noise_mask (Resource)
 
-ComfyUI SetLatentNoiseMask node — Set Latent Noise Mask [latent/inpaint]
+ComfyUI SetLatentNoiseMask node — Set Latent Noise Mask [latent/inpaint] Source: nodes.py:1524 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI SetLatentNoiseMask node — Set Latent Noise Mask [latent/inpaint]
 
 ### Required
 
-- `mask` (String) Input: MASK (link)
-- `samples` (String) Input: LATENT (link)
+- `mask` (String) Input: MASK. Link input.
+- `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

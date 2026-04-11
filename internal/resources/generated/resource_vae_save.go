@@ -35,29 +35,29 @@ func (r *VAESaveResource) Metadata(_ context.Context, req resource.MetadataReque
 
 func (r *VAESaveResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI VAESave node — VAESave [advanced/model_merging]",
+		MarkdownDescription: "ComfyUI VAESave node — VAESave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_model_merging.py:308 (v1_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: vae/ComfyUI_vae",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"vae/ComfyUI_vae\".",
+				Required:            true,
 			},
 		},
 	}

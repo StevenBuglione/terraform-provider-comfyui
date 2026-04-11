@@ -3,12 +3,12 @@
 page_title: "comfyui_save_webm Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SaveWEBM node [image/video]
+  (EXPERIMENTAL) ComfyUI SaveWEBM node [image/video] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video.py:14 (v3_extras).
 ---
 
 # comfyui_save_webm (Resource)
 
-(EXPERIMENTAL) ComfyUI SaveWEBM node [image/video]
+(EXPERIMENTAL) ComfyUI SaveWEBM node [image/video] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video.py:14 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `codec` (String) Input: COMBO
-- `crf` (Number) Input: FLOAT default: 32
-- `filename_prefix` (String) Input: STRING default: ComfyUI
-- `fps` (Number) Input: FLOAT default: 24
-- `images` (String) Input: IMAGE (link)
+- `codec` (String) Input: COMBO.
+- `crf` (Number) Input: FLOAT. Default: 32. Allowed range: 0 to 63. Step: 1. Tooltip: Higher crf means lower quality with a smaller file size, lower crf means higher quality higher filesize.
+- `filename_prefix` (String) Input: STRING. Default: "ComfyUI".
+- `fps` (Number) Input: FLOAT. Default: 24. Allowed range: 0.01 to 1000. Step: 0.01.
+- `images` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

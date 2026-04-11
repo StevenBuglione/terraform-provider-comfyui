@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_controlnet Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CLIPTextEncodeControlnet node [_for_testing/conditioning]
+  (EXPERIMENTAL) ComfyUI CLIPTextEncodeControlnet node [_for_testing/conditioning] Source: comfy_extras/nodes_cond.py:6 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_controlnet (Resource)
 
-(EXPERIMENTAL) ComfyUI CLIPTextEncodeControlnet node [_for_testing/conditioning]
+(EXPERIMENTAL) ComfyUI CLIPTextEncodeControlnet node [_for_testing/conditioning] Source: comfy_extras/nodes_cond.py:6 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `conditioning` (String) Input: CONDITIONING (link)
-- `text` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input.
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `text` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

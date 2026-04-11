@@ -3,12 +3,12 @@
 page_title: "comfyui_save_svg_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Save SVG files on disk. [image/save]
+  Save SVG files on disk. [image/save] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:481 (v3_extras).
 ---
 
 # comfyui_save_svg_node (Resource)
 
-Save SVG files on disk. [image/save]
+Save SVG files on disk. [image/save] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:481 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ Save SVG files on disk. [image/save]
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: svg/ComfyUI
-- `svg` (String) Input: SVG (link)
+- `filename_prefix` (String) Input: STRING. Default: "svg/ComfyUI". Tooltip: The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes.
+- `svg` (String) Input: SVG. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

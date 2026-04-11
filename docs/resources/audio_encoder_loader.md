@@ -3,12 +3,12 @@
 page_title: "comfyui_audio_encoder_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI AudioEncoderLoader node [loaders]
+  ComfyUI AudioEncoderLoader node [loaders] Source: comfy_extras/nodes_audio_encoder.py:8 (v3_extras).
 ---
 
 # comfyui_audio_encoder_loader (Resource)
 
-ComfyUI AudioEncoderLoader node [loaders]
+ComfyUI AudioEncoderLoader node [loaders] Source: comfy_extras/nodes_audio_encoder.py:8 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI AudioEncoderLoader node [loaders]
 
 ### Required
 
-- `audio_encoder_name` (String) Input: COMBO
+- `audio_encoder_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('audio_encoders').
 
 ### Read-Only
 
-- `audio_encoder_output` (String) Output: AUDIO_ENCODER (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_encoder_output` (String) Output: AUDIO_ENCODER (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

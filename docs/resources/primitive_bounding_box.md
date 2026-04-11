@@ -3,12 +3,12 @@
 page_title: "comfyui_primitive_bounding_box Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI BoundingBox node — Bounding Box [utils/primitive]
+  ComfyUI BoundingBox node — Bounding Box [utils/primitive] Source: comfy_extras/nodes_images.py:84 (v3_extras).
 ---
 
 # comfyui_primitive_bounding_box (Resource)
 
-ComfyUI BoundingBox node — Bounding Box [utils/primitive]
+ComfyUI BoundingBox node — Bounding Box [utils/primitive] Source: comfy_extras/nodes_images.py:84 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI BoundingBox node — Bounding Box [utils/primitive]
 
 ### Required
 
-- `height` (Number) Input: INT default: 512
-- `width` (Number) Input: INT default: 512
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `height` (Number) Input: INT. Default: 512. Minimum value: 1.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 1.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0.
 
 ### Read-Only
 
-- `bounding_box_output` (String) Output: BOUNDING_BOX (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `bounding_box_output` (String) Output: BOUNDING_BOX (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

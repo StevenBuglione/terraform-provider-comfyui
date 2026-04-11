@@ -3,12 +3,12 @@
 page_title: "comfyui_u_net_cross_attention_multiply Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI UNetCrossAttentionMultiply node [_for_testing/attention_experiments]
+  (EXPERIMENTAL) ComfyUI UNetCrossAttentionMultiply node [_for_testing/attention_experiments] Source: comfy_extras/nodes_attention_multiply.py:46 (v3_extras).
 ---
 
 # comfyui_u_net_cross_attention_multiply (Resource)
 
-(EXPERIMENTAL) ComfyUI UNetCrossAttentionMultiply node [_for_testing/attention_experiments]
+(EXPERIMENTAL) ComfyUI UNetCrossAttentionMultiply node [_for_testing/attention_experiments] Source: comfy_extras/nodes_attention_multiply.py:46 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `k` (Number) Input: FLOAT default: 1
-- `model` (String) Input: MODEL (link)
-- `out` (Number) Input: FLOAT default: 1
-- `q` (Number) Input: FLOAT default: 1
-- `v` (Number) Input: FLOAT default: 1
+- `k` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `out` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `q` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `v` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

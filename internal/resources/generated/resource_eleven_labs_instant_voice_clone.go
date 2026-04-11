@@ -37,33 +37,33 @@ func (r *ElevenLabsInstantVoiceCloneResource) Metadata(_ context.Context, req re
 
 func (r *ElevenLabsInstantVoiceCloneResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Create a cloned voice from audio samples. Provide 1-8 audio recordings of the voice to clone. [api node/audio/ElevenLabs]",
+		MarkdownDescription: "Create a cloned voice from audio samples. Provide 1-8 audio recordings of the voice to clone. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:552 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"files": schema.StringAttribute{
-				Description: "Input: COMFY_AUTOGROW_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_AUTOGROW_V3. Tooltip: Audio recordings for voice cloning.",
+				Required:            true,
 			},
 			"remove_background_noise": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Remove background noise from voice samples using audio isolation.",
+				Required:            true,
 			},
 			"voice_output": schema.StringAttribute{
-				Description: "Output: ELEVENLABS_VOICE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: ELEVENLABS_VOICE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

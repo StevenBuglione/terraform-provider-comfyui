@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_omni_pro_edit_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Edit an existing video with the latest model from Kling. [api node/video/Kling]
+  Edit an existing video with the latest model from Kling. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:1454 (v3_api).
 ---
 
 # comfyui_kling_omni_pro_edit_video_node (Resource)
 
-Edit an existing video with the latest model from Kling. [api node/video/Kling]
+Edit an existing video with the latest model from Kling. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:1454 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Edit an existing video with the latest model from Kling. [api node/video/Kling]
 
 ### Required
 
-- `keep_original_sound` (Boolean) Input: BOOLEAN default: true
-- `model_name` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `video` (String) Input: VIDEO (link)
+- `keep_original_sound` (Boolean) Input: BOOLEAN. Default: true.
+- `model_name` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A text prompt describing the video content. This can include both positive and negative descriptions.
+- `video` (String) Input: VIDEO. Link input. Tooltip: Video for editing. The output video length will be the same.
 
 ### Optional
 
-- `reference_images` (String) Input: IMAGE (link)
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `reference_images` (String) Input: IMAGE. Link input. Tooltip: Up to 4 additional reference images.
+- `resolution` (String) Input: COMBO.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_photo_maker_encode Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI PhotoMakerEncode node [_for_testing/photomaker]
+  (EXPERIMENTAL) ComfyUI PhotoMakerEncode node [_for_testing/photomaker] Source: comfy_extras/nodes_photomaker.py:147 (v3_extras).
 ---
 
 # comfyui_photo_maker_encode (Resource)
 
-(EXPERIMENTAL) ComfyUI PhotoMakerEncode node [_for_testing/photomaker]
+(EXPERIMENTAL) ComfyUI PhotoMakerEncode node [_for_testing/photomaker] Source: comfy_extras/nodes_photomaker.py:147 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `image` (String) Input: IMAGE (link)
-- `photomaker` (String) Input: PHOTOMAKER (link)
-- `text` (String) Input: STRING default: photograph of photomaker
+- `clip` (String) Input: CLIP. Link input.
+- `image` (String) Input: IMAGE. Link input.
+- `photomaker` (String) Input: PHOTOMAKER. Link input.
+- `text` (String) Input: STRING. Default: "photograph of photomaker". Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

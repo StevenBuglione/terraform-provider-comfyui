@@ -3,12 +3,12 @@
 page_title: "comfyui_tome_patch_model Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TomePatchModel node [model_patches/unet]
+  ComfyUI TomePatchModel node [model_patches/unet] Source: comfy_extras/nodes_tomesd.py:149 (v3_extras).
 ---
 
 # comfyui_tome_patch_model (Resource)
 
-ComfyUI TomePatchModel node [model_patches/unet]
+ComfyUI TomePatchModel node [model_patches/unet] Source: comfy_extras/nodes_tomesd.py:149 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI TomePatchModel node [model_patches/unet]
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `ratio` (Number) Input: FLOAT default: 0.3
+- `model` (String) Input: MODEL. Link input.
+- `ratio` (Number) Input: FLOAT. Default: 0.3. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

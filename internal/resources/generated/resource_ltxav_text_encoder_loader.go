@@ -40,33 +40,33 @@ func (r *LtxavTextEncoderLoaderResource) Metadata(_ context.Context, req resourc
 
 func (r *LtxavTextEncoderLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "[Recipes]\n\nltxav: gemma 3 12B [advanced/loaders]",
+		MarkdownDescription: "[Recipes]\n\nltxav: gemma 3 12B [advanced/loaders] Source: comfy_extras/nodes_lt_audio.py:172 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"text_encoder": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').",
+				Required:            true,
 			},
 			"ckpt_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints').",
+				Required:            true,
 			},
 			"device": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"default",
@@ -75,8 +75,8 @@ func (r *LtxavTextEncoderLoaderResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"clip_output": schema.StringAttribute{
-				Description: "Output: CLIP (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CLIP (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

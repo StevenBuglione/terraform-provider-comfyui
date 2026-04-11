@@ -41,33 +41,33 @@ func (r *DualCLIPLoaderResource) Metadata(_ context.Context, req resource.Metada
 
 func (r *DualCLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "[Recipes]\n\nsdxl: clip-l, clip-g\nsd3: clip-l, clip-g / clip-l, t5 / clip-g, t5\nflux: clip-l, t5\nhidream: at least one of t5 or llama, recommended t5 and llama\nhunyuan_image: qwen2.5vl 7b and byt5 small\nnewbie: gemma-3-4b-it, jina clip v2 [advanced/loaders]",
+		MarkdownDescription: "[Recipes]\n\nsdxl: clip-l, clip-g\nsd3: clip-l, clip-g / clip-l, t5 / clip-g, t5\nflux: clip-l, t5\nhidream: at least one of t5 or llama, recommended t5 and llama\nhunyuan_image: qwen2.5vl 7b and byt5 small\nnewbie: gemma-3-4b-it, jina clip v2 [advanced/loaders] Source: nodes.py:1003 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip_name1": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').",
+				Required:            true,
 			},
 			"clip_name2": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').",
+				Required:            true,
 			},
 			"type": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"sdxl",
@@ -86,8 +86,8 @@ func (r *DualCLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"device": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"default",
@@ -96,8 +96,8 @@ func (r *DualCLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"clip_output": schema.StringAttribute{
-				Description: "Output: CLIP (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CLIP (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

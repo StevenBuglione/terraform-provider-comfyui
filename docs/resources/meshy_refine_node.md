@@ -3,12 +3,12 @@
 page_title: "comfyui_meshy_refine_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Refine a previously created draft model. [api node/3d/Meshy]
+  Refine a previously created draft model. [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:141 (v3_api).
 ---
 
 # comfyui_meshy_refine_node (Resource)
 
-Refine a previously created draft model. [api node/3d/Meshy]
+Refine a previously created draft model. [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:141 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ Refine a previously created draft model. [api node/3d/Meshy]
 
 ### Required
 
-- `enable_pbr` (Boolean) Input: BOOLEAN default: false
-- `meshy_task_id` (String) Input: MESHY_TASK_ID (link)
-- `model` (String) Input: COMBO
-- `texture_prompt` (String) Input: STRING default:
+- `enable_pbr` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Generate PBR Maps (metallic, roughness, normal) in addition to the base color. Note: this should be set to false when using Sculpture style, as Sculpture style generates its own set of PBR maps.
+- `meshy_task_id` (String) Input: MESHY_TASK_ID. Link input.
+- `model` (String) Input: COMBO.
+- `texture_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Provide a text prompt to guide the texturing process. Maximum 600 characters. Cannot be used at the same time as 'texture_image'.
 
 ### Optional
 
-- `texture_image` (String) Input: IMAGE (link)
+- `texture_image` (String) Input: IMAGE. Link input. Tooltip: Only one of 'texture_image' or 'texture_prompt' may be used at the same time.
 
 ### Read-Only
 
-- `fbx_output` (String) Output: FILE_3D_FBX (slot 3)
-- `glb_output` (String) Output: FILE_3D_GLB (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `meshy_task_id_output` (String) Output: MESHY_TASK_ID (slot 1)
-- `model_file_output` (String) Output: STRING (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `fbx_output` (String) Output: FILE_3D_FBX (slot 3).
+- `glb_output` (String) Output: FILE_3D_GLB (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `meshy_task_id_output` (String) Output: MESHY_TASK_ID (slot 1).
+- `model_file_output` (String) Output: STRING (slot 0).
+- `node_id` (String) ComfyUI node class type.

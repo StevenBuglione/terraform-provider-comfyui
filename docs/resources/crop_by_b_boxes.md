@@ -3,12 +3,12 @@
 page_title: "comfyui_crop_by_b_boxes Resource - comfyui"
 subcategory: ""
 description: |-
-  Crop and resize regions from the input image batch based on provided bounding boxes. [image/preprocessors]
+  Crop and resize regions from the input image batch based on provided bounding boxes. [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:650 (v3_extras).
 ---
 
 # comfyui_crop_by_b_boxes (Resource)
 
-Crop and resize regions from the input image batch based on provided bounding boxes. [image/preprocessors]
+Crop and resize regions from the input image batch based on provided bounding boxes. [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:650 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ Crop and resize regions from the input image batch based on provided bounding bo
 
 ### Required
 
-- `bboxes` (String) Input: BOUNDING_BOX (link)
-- `image` (String) Input: IMAGE (link)
-- `output_height` (Number) Input: INT default: 512
-- `output_width` (Number) Input: INT default: 512
-- `padding` (Number) Input: INT default: 0
+- `bboxes` (String) Input: BOUNDING_BOX. Link input.
+- `image` (String) Input: IMAGE. Link input.
+- `output_height` (Number) Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 8. Tooltip: Height each crop is resized to.
+- `output_width` (Number) Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 8. Tooltip: Width each crop is resized to.
+- `padding` (Number) Input: INT. Default: 0. Allowed range: 0 to 1024. Step: 1. Tooltip: Extra padding in pixels added on each side of the bbox before cropping.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

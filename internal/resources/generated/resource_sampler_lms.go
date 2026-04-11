@@ -38,32 +38,32 @@ func (r *SamplerLmsResource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *SamplerLmsResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SamplerLMS node [sampling/custom_sampling/samplers]",
+		MarkdownDescription: "ComfyUI SamplerLMS node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:535 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"order": schema.Int64Attribute{
-				Description: "Input: INT default: 4",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 4. Allowed range: 1 to 100.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100),
 				},
 			},
 			"sampler_output": schema.StringAttribute{
-				Description: "Output: SAMPLER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SAMPLER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

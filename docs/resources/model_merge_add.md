@@ -3,12 +3,12 @@
 page_title: "comfyui_model_merge_add Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelAdd node — ModelMergeAdd [advanced/model_merging]
+  ComfyUI ModelAdd node — ModelMergeAdd [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:52 (v1_extras).
 ---
 
 # comfyui_model_merge_add (Resource)
 
-ComfyUI ModelAdd node — ModelMergeAdd [advanced/model_merging]
+ComfyUI ModelAdd node — ModelMergeAdd [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:52 (v1_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ModelAdd node — ModelMergeAdd [advanced/model_merging]
 
 ### Required
 
-- `model1` (String) Input: MODEL (link)
-- `model2` (String) Input: MODEL (link)
+- `model1` (String) Input: MODEL. Link input.
+- `model2` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

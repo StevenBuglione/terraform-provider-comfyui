@@ -48,25 +48,25 @@ func (r *MeshyImageToModelNodeResource) Metadata(_ context.Context, req resource
 
 func (r *MeshyImageToModelNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI MeshyImageToModelNode node — Meshy: Image to Model [api node/3d/Meshy]",
+		MarkdownDescription: "ComfyUI MeshyImageToModelNode node — Meshy: Image to Model [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:236 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"latest",
@@ -74,16 +74,16 @@ func (r *MeshyImageToModelNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"should_remesh": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: When set to false, returns an unprocessed triangular mesh.",
+				Required:            true,
 			},
 			"symmetry_mode": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -93,12 +93,12 @@ func (r *MeshyImageToModelNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"should_texture": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Determines whether textures are generated. Setting it to false skips the texture phase and returns a mesh without textures.",
+				Required:            true,
 			},
 			"pose_mode": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Specify the pose mode for the generated model.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"",
@@ -108,36 +108,36 @@ func (r *MeshyImageToModelNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"model_file_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"meshy_task_id_output": schema.StringAttribute{
-				Description: "Output: MESHY_TASK_ID (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: MESHY_TASK_ID (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"glb_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_GLB (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_GLB (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"fbx_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_FBX (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_FBX (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

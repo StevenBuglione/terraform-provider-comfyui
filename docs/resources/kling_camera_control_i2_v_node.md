@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_camera_control_i2_v_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Transform still images into cinematic videos with professional camera movements that simulate real-world cinematography. Control virtual camera actions including zoom, rotation, pan, tilt, and first-person view, while maintaining focus on your original image. [api node/video/Kling]
+  Transform still images into cinematic videos with professional camera movements that simulate real-world cinematography. Control virtual camera actions including zoom, rotation, pan, tilt, and first-person view, while maintaining focus on your original image. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:1847 (v3_api).
 ---
 
 # comfyui_kling_camera_control_i2_v_node (Resource)
 
-Transform still images into cinematic videos with professional camera movements that simulate real-world cinematography. Control virtual camera actions including zoom, rotation, pan, tilt, and first-person view, while maintaining focus on your original image. [api node/video/Kling]
+Transform still images into cinematic videos with professional camera movements that simulate real-world cinematography. Control virtual camera actions including zoom, rotation, pan, tilt, and first-person view, while maintaining focus on your original image. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:1847 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ Transform still images into cinematic videos with professional camera movements 
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `camera_control` (String) Input: CAMERA_CONTROL (link)
-- `cfg_scale` (Number) Input: FLOAT default: 0.75
-- `negative_prompt` (String) Input: STRING
-- `prompt` (String) Input: STRING
-- `start_frame` (String) Input: IMAGE (link)
+- `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenAspectRatio.
+- `camera_control` (String) Input: CAMERA_CONTROL. Link input. Tooltip: Can be created using the Kling Camera Controls node. Controls the camera movement and motion during the video generation.
+- `cfg_scale` (Number) Input: FLOAT. Default: 0.75. Allowed range: 0 to 1.
+- `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Negative text prompt.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.
+- `start_frame` (String) Input: IMAGE. Link input. Tooltip: Reference Image - URL or Base64 encoded string, cannot exceed 10MB, resolution not less than 300*300px, aspect ratio between 1:2.5 ~ 2.5:1. Base64 should not include data:image prefix.
 
 ### Read-Only
 
-- `duration_output` (String) Output: STRING (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_id_output` (String) Output: STRING (slot 1)
-- `video_output` (String) Output: VIDEO (slot 0)
+- `duration_output` (String) Output: STRING (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_id_output` (String) Output: STRING (slot 1).
+- `video_output` (String) Output: VIDEO (slot 0).

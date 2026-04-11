@@ -41,29 +41,29 @@ func (r *MorphologyResource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *MorphologyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Morphology node — ImageMorphology [image/postprocessing]",
+		MarkdownDescription: "ComfyUI Morphology node — ImageMorphology [image/postprocessing] Source: comfy_extras/nodes_morphology.py:10 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"operation": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"erode",
@@ -77,15 +77,15 @@ func (r *MorphologyResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"kernel_size": schema.Int64Attribute{
-				Description: "Input: INT default: 3",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 3. Allowed range: 3 to 999. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(3, 999),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

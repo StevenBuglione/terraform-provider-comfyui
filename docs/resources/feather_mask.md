@@ -3,12 +3,12 @@
 page_title: "comfyui_feather_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI FeatherMask node [mask]
+  ComfyUI FeatherMask node [mask] Source: comfy_extras/nodes_mask.py:293 (v3_extras).
 ---
 
 # comfyui_feather_mask (Resource)
 
-ComfyUI FeatherMask node [mask]
+ComfyUI FeatherMask node [mask] Source: comfy_extras/nodes_mask.py:293 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI FeatherMask node [mask]
 
 ### Required
 
-- `bottom` (Number) Input: INT default: 0
-- `left` (Number) Input: INT default: 0
-- `mask` (String) Input: MASK (link)
-- `right` (Number) Input: INT default: 0
-- `top` (Number) Input: INT default: 0
+- `bottom` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
+- `left` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
+- `mask` (String) Input: MASK. Link input.
+- `right` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
+- `top` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

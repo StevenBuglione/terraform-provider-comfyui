@@ -3,12 +3,12 @@
 page_title: "comfyui_grok_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate images using Grok based on a text prompt [api node/image/Grok]
+  Generate images using Grok based on a text prompt [api node/image/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:45 (v3_api).
 ---
 
 # comfyui_grok_image_node (Resource)
 
-Generate images using Grok based on a text prompt [api node/image/Grok]
+Generate images using Grok based on a text prompt [api node/image/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:45 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Generate images using Grok based on a text prompt [api node/image/Grok]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `model` (String) Input: COMBO
-- `number_of_images` (Number) Input: INT default: 1
-- `prompt` (String) Input: STRING
-- `seed` (Number) Input: INT default: 0
+- `aspect_ratio` (String) Input: COMBO.
+- `model` (String) Input: COMBO.
+- `number_of_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 10. Step: 1. Tooltip: Number of images to generate.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the image.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 
-- `resolution` (String) Input: COMBO
+- `resolution` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

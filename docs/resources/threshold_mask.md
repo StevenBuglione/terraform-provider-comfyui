@@ -3,12 +3,12 @@
 page_title: "comfyui_threshold_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ThresholdMask node [mask]
+  ComfyUI ThresholdMask node [mask] Source: comfy_extras/nodes_mask.py:378 (v3_extras).
 ---
 
 # comfyui_threshold_mask (Resource)
 
-ComfyUI ThresholdMask node [mask]
+ComfyUI ThresholdMask node [mask] Source: comfy_extras/nodes_mask.py:378 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ThresholdMask node [mask]
 
 ### Required
 
-- `mask` (String) Input: MASK (link)
-- `value` (Number) Input: FLOAT default: 0.5
+- `mask` (String) Input: MASK. Link input.
+- `value` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

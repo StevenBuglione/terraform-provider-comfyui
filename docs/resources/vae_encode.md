@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_encode Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VAEEncode node — VAE Encode [latent]
+  ComfyUI VAEEncode node — VAE Encode [latent] Source: nodes.py:354 (v1_core).
 ---
 
 # comfyui_vae_encode (Resource)
 
-ComfyUI VAEEncode node — VAE Encode [latent]
+ComfyUI VAEEncode node — VAE Encode [latent] Source: nodes.py:354 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI VAEEncode node — VAE Encode [latent]
 
 ### Required
 
-- `pixels` (String) Input: IMAGE (link)
-- `vae` (String) Input: VAE (link)
+- `pixels` (String) Input: IMAGE. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

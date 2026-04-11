@@ -3,12 +3,12 @@
 page_title: "comfyui_tripo_conversion_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo]
+  ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:675 (v3_api).
 ---
 
 # comfyui_tripo_conversion_node (Resource)
 
-ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo]
+ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:675 (v3_api).
 
 
 
@@ -17,30 +17,30 @@ ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo]
 
 ### Required
 
-- `format` (String) Input: COMBO
-- `original_model_task_id` (String) Input: MODEL_TASK_ID,RIG_TASK_ID,RETARGET_TASK_ID (link)
+- `format` (String) Input: COMBO.
+- `original_model_task_id` (String) Input: MODEL_TASK_ID,RIG_TASK_ID,RETARGET_TASK_ID. Link input.
 
 ### Optional
 
-- `animate_in_place` (Boolean) Input: BOOLEAN default: false
-- `bake` (Boolean) Input: BOOLEAN default: false
-- `export_orientation` (String) Input: COMBO default: default
-- `export_vertex_colors` (Boolean) Input: BOOLEAN default: false
-- `face_limit` (Number) Input: INT default: -1
-- `fbx_preset` (String) Input: COMBO default: blender
-- `flatten_bottom` (Boolean) Input: BOOLEAN default: false
-- `flatten_bottom_threshold` (Number) Input: FLOAT default: 0
-- `force_symmetry` (Boolean) Input: BOOLEAN default: false
-- `pack_uv` (Boolean) Input: BOOLEAN default: false
-- `part_names` (String) Input: STRING default:
-- `pivot_to_center_bottom` (Boolean) Input: BOOLEAN default: false
-- `quad` (Boolean) Input: BOOLEAN default: false
-- `scale_factor` (Number) Input: FLOAT default: 1
-- `texture_format` (String) Input: COMBO default: JPEG
-- `texture_size` (Number) Input: INT default: 4096
-- `with_animation` (Boolean) Input: BOOLEAN default: false
+- `animate_in_place` (Boolean) Input: BOOLEAN. Default: false.
+- `bake` (Boolean) Input: BOOLEAN. Default: false.
+- `export_orientation` (String) Input: COMBO. Default: "default".
+- `export_vertex_colors` (Boolean) Input: BOOLEAN. Default: false.
+- `face_limit` (Number) Input: INT. Default: -1. Allowed range: -1 to 2000000.
+- `fbx_preset` (String) Input: COMBO. Default: "blender".
+- `flatten_bottom` (Boolean) Input: BOOLEAN. Default: false.
+- `flatten_bottom_threshold` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1.
+- `force_symmetry` (Boolean) Input: BOOLEAN. Default: false.
+- `pack_uv` (Boolean) Input: BOOLEAN. Default: false.
+- `part_names` (String) Input: STRING. Default: "".
+- `pivot_to_center_bottom` (Boolean) Input: BOOLEAN. Default: false.
+- `quad` (Boolean) Input: BOOLEAN. Default: false.
+- `scale_factor` (Number) Input: FLOAT. Default: 1. Minimum value: 0.
+- `texture_format` (String) Input: COMBO. Default: "JPEG".
+- `texture_size` (Number) Input: INT. Default: 4096. Allowed range: 128 to 4096.
+- `with_animation` (Boolean) Input: BOOLEAN. Default: false.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

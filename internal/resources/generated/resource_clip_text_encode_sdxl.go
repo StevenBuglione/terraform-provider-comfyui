@@ -44,61 +44,61 @@ func (r *CLIPTextEncodeSdxlResource) Metadata(_ context.Context, req resource.Me
 
 func (r *CLIPTextEncodeSdxlResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI CLIPTextEncodeSDXL node [advanced/conditioning]",
+		MarkdownDescription: "ComfyUI CLIPTextEncodeSDXL node [advanced/conditioning] Source: comfy_extras/nodes_clip_sdxl.py:28 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input.",
+				Required:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 0.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 0.",
+				Required:            true,
 			},
 			"crop_w": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0.",
+				Required:            true,
 			},
 			"crop_h": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0.",
+				Required:            true,
 			},
 			"target_width": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 0.",
+				Required:            true,
 			},
 			"target_height": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 0.",
+				Required:            true,
 			},
 			"text_g": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"text_l": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"conditioning_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

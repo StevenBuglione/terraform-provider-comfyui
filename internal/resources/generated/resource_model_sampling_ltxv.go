@@ -41,47 +41,47 @@ func (r *ModelSamplingLtxvResource) Metadata(_ context.Context, req resource.Met
 
 func (r *ModelSamplingLtxvResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ModelSamplingLTXV node [advanced/model]",
+		MarkdownDescription: "ComfyUI ModelSamplingLTXV node [advanced/model] Source: comfy_extras/nodes_lt.py:439 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"max_shift": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 2.05",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 2.05. Allowed range: 0 to 100. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"base_shift": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.95",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0 to 100. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"latent": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Optional:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

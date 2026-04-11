@@ -3,12 +3,12 @@
 page_title: "comfyui_image_merge_tile_list Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageMergeTileList node — Merge List of Tiles to Image [image/batch]
+  ComfyUI ImageMergeTileList node — Merge List of Tiles to Image [image/batch] Source: comfy_extras/nodes_images.py:748 (v3_extras).
 ---
 
 # comfyui_image_merge_tile_list (Resource)
 
-ComfyUI ImageMergeTileList node — Merge List of Tiles to Image [image/batch]
+ComfyUI ImageMergeTileList node — Merge List of Tiles to Image [image/batch] Source: comfy_extras/nodes_images.py:748 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI ImageMergeTileList node — Merge List of Tiles to Image [image/batch]
 
 ### Required
 
-- `final_height` (Number) Input: INT default: 1024
-- `final_width` (Number) Input: INT default: 1024
-- `image_list` (String) Input: IMAGE (link)
-- `overlap` (Number) Input: INT default: 128
+- `final_height` (Number) Input: INT. Default: 1024. Allowed range: 64 to 32768.
+- `final_width` (Number) Input: INT. Default: 1024. Allowed range: 64 to 32768.
+- `image_list` (String) Input: IMAGE. Link input.
+- `overlap` (Number) Input: INT. Default: 128. Allowed range: 0 to 4096.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

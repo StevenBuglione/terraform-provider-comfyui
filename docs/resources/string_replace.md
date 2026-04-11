@@ -3,12 +3,12 @@
 page_title: "comfyui_string_replace Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StringReplace node — Replace [utils/string]
+  ComfyUI StringReplace node — Replace [utils/string] Source: comfy_extras/nodes_string.py:138 (v3_extras).
 ---
 
 # comfyui_string_replace (Resource)
 
-ComfyUI StringReplace node — Replace [utils/string]
+ComfyUI StringReplace node — Replace [utils/string] Source: comfy_extras/nodes_string.py:138 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI StringReplace node — Replace [utils/string]
 
 ### Required
 
-- `find` (String) Input: STRING
-- `replace` (String) Input: STRING
-- `string` (String) Input: STRING
+- `find` (String) Input: STRING. Supports multiline text.
+- `replace` (String) Input: STRING. Supports multiline text.
+- `string` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

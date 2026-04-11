@@ -41,48 +41,48 @@ func (r *LoraSaveResource) Metadata(_ context.Context, req resource.MetadataRequ
 
 func (r *LoraSaveResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI LoraSave node — Extract and Save Lora [_for_testing]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI LoraSave node — Extract and Save Lora [_for_testing] Source: comfy_extras/nodes_lora_extract.py:87 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: loras/ComfyUI_extracted_lora",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"loras/ComfyUI_extracted_lora\".",
+				Required:            true,
 			},
 			"rank": schema.Int64Attribute{
-				Description: "Input: INT default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 8. Allowed range: 1 to 4096. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4096),
 				},
 			},
 			"lora_type": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: tuple(LORA_TYPES.keys()).",
+				Required:            true,
 			},
 			"bias_diff": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true.",
+				Required:            true,
 			},
 			"model_diff": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: MODEL. Link input. Tooltip: The ModelSubtract output to be converted to a lora.",
+				Optional:            true,
 			},
 			"text_encoder_diff": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: CLIP. Link input. Tooltip: The CLIPSubtract output to be converted to a lora.",
+				Optional:            true,
 			},
 		},
 	}

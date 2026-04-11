@@ -42,40 +42,40 @@ func (r *ImageBlendResource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *ImageBlendResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Blend node — Image Blend [image/postprocessing]",
+		MarkdownDescription: "ComfyUI Blend node — Image Blend [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:17 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image1": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"image2": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"blend_factor": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"blend_mode": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"normal",
@@ -88,8 +88,8 @@ func (r *ImageBlendResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_preview_image Resource - comfyui"
 subcategory: ""
 description: |-
-  Saves the input images to your ComfyUI output directory. [image]
+  Saves the input images to your ComfyUI output directory. [image] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: nodes.py:1684 (v1_core).
 ---
 
 # comfyui_preview_image (Resource)
 
-Saves the input images to your ComfyUI output directory. [image]
+Saves the input images to your ComfyUI output directory. [image] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: nodes.py:1684 (v1_core).
 
 
 
@@ -17,9 +17,9 @@ Saves the input images to your ComfyUI output directory. [image]
 
 ### Required
 
-- `images` (String) Input: IMAGE (link)
+- `images` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

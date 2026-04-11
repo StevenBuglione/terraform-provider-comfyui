@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_text_to_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates images synchronously based on prompt and resolution. [api node/image/Recraft]
+  Generates images synchronously based on prompt and resolution. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:397 (v3_api).
 ---
 
 # comfyui_recraft_text_to_image_node (Resource)
 
-Generates images synchronously based on prompt and resolution. [api node/image/Recraft]
+Generates images synchronously based on prompt and resolution. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:397 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Generates images synchronously based on prompt and resolution. [api node/image/R
 
 ### Required
 
-- `n` (Number) Input: INT default: 1
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 0
-- `size` (String) Input: COMBO
+- `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 6. Tooltip: The number of images to generate.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
+- `size` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The size of the generated image.
 
 ### Optional
 
-- `negative_prompt` (String) Input: STRING default:
-- `recraft_controls` (String) Input: RecraftIO.CONTROLS (link)
-- `recraft_style` (String) Input: RecraftIO.STYLEV3 (link)
+- `negative_prompt` (String) Input: STRING. Default: "". Tooltip: An optional text description of undesired elements on an image.
+- `recraft_controls` (String) Input: RecraftIO.CONTROLS. Link input. Tooltip: Optional additional controls over the generation via the Recraft Controls node.
+- `recraft_style` (String) Input: RecraftIO.STYLEV3. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

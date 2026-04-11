@@ -3,12 +3,12 @@
 page_title: "comfyui_flux_kontext_image_scale Resource - comfyui"
 subcategory: ""
 description: |-
-  This node resizes the image to one that is more optimal for flux kontext. [advanced/conditioning/flux]
+  This node resizes the image to one that is more optimal for flux kontext. [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:126 (v3_extras).
 ---
 
 # comfyui_flux_kontext_image_scale (Resource)
 
-This node resizes the image to one that is more optimal for flux kontext. [advanced/conditioning/flux]
+This node resizes the image to one that is more optimal for flux kontext. [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:126 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ This node resizes the image to one that is more optimal for flux kontext. [advan
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

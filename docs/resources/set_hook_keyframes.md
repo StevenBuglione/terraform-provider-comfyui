@@ -3,12 +3,12 @@
 page_title: "comfyui_set_hook_keyframes Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SetHookKeyframes node — Set Hook Keyframes [advanced/hooks/scheduling]
+  (EXPERIMENTAL) ComfyUI SetHookKeyframes node — Set Hook Keyframes [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:446 (v1_extras).
 ---
 
 # comfyui_set_hook_keyframes (Resource)
 
-(EXPERIMENTAL) ComfyUI SetHookKeyframes node — Set Hook Keyframes [advanced/hooks/scheduling]
+(EXPERIMENTAL) ComfyUI SetHookKeyframes node — Set Hook Keyframes [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:446 (v1_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `hooks` (String) Input: HOOKS (link)
+- `hooks` (String) Input: HOOKS. Link input.
 
 ### Optional
 
-- `hook_kf` (String) Input: HOOK_KEYFRAMES (link)
+- `hook_kf` (String) Input: HOOK_KEYFRAMES. Link input.
 
 ### Read-Only
 
-- `hooks_output` (String) Output: HOOKS (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `hooks_output` (String) Output: HOOKS (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

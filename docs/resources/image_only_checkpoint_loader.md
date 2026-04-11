@@ -3,12 +3,12 @@
 page_title: "comfyui_image_only_checkpoint_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageOnlyCheckpointLoader node — Image Only Checkpoint Loader (img2vid model) [loaders/video_models]
+  ComfyUI ImageOnlyCheckpointLoader node — Image Only Checkpoint Loader (img2vid model) [loaders/video_models] Source: comfy_extras/nodes_video_model.py:10 (v1_extras).
 ---
 
 # comfyui_image_only_checkpoint_loader (Resource)
 
-ComfyUI ImageOnlyCheckpointLoader node — Image Only Checkpoint Loader (img2vid model) [loaders/video_models]
+ComfyUI ImageOnlyCheckpointLoader node — Image Only Checkpoint Loader (img2vid model) [loaders/video_models] Source: comfy_extras/nodes_video_model.py:10 (v1_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ImageOnlyCheckpointLoader node — Image Only Checkpoint Loader (img2vid
 
 ### Required
 
-- `ckpt_name` (String) Input: COMBO
+- `ckpt_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints').
 
 ### Read-Only
 
-- `clip_vision_output` (String) Output: CLIP_VISION (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `vae_output` (String) Output: VAE (slot 2)
+- `clip_vision_output` (String) Output: CLIP_VISION (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `vae_output` (String) Output: VAE (slot 2).

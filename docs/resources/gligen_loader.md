@@ -3,12 +3,12 @@
 page_title: "comfyui_gligen_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI GLIGENLoader node — GLIGENLoader [loaders]
+  ComfyUI GLIGENLoader node — GLIGENLoader [loaders] Source: nodes.py:1168 (v1_core).
 ---
 
 # comfyui_gligen_loader (Resource)
 
-ComfyUI GLIGENLoader node — GLIGENLoader [loaders]
+ComfyUI GLIGENLoader node — GLIGENLoader [loaders] Source: nodes.py:1168 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI GLIGENLoader node — GLIGENLoader [loaders]
 
 ### Required
 
-- `gligen_name` (String) Input: COMBO
+- `gligen_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('gligen').
 
 ### Read-Only
 
-- `gligen_output` (String) Output: GLIGEN (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `gligen_output` (String) Output: GLIGEN (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

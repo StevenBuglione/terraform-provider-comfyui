@@ -40,40 +40,40 @@ func (r *TrimAudioDurationResource) Metadata(_ context.Context, req resource.Met
 
 func (r *TrimAudioDurationResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Trim audio tensor into chosen time range. [audio]",
+		MarkdownDescription: "Trim audio tensor into chosen time range. [audio] Source: comfy_extras/nodes_audio.py:362 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO. Link input.",
+				Required:            true,
 			},
 			"start_index": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -18446744073709552000 to 18446744073709552000. Step: 0.01. Tooltip: Start time in seconds, can be negative to count from the end (supports sub-seconds).",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-1.8446744073709552e+19, 1.8446744073709552e+19),
 				},
 			},
 			"duration": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 60",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 60. Minimum value: 0. Step: 0.01. Tooltip: Duration in seconds.",
+				Required:            true,
 			},
 			"audio_output": schema.StringAttribute{
-				Description: "Output: AUDIO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

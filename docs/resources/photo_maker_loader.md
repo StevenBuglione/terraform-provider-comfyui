@@ -3,12 +3,12 @@
 page_title: "comfyui_photo_maker_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI PhotoMakerLoader node [_for_testing/photomaker]
+  (EXPERIMENTAL) ComfyUI PhotoMakerLoader node [_for_testing/photomaker] Source: comfy_extras/nodes_photomaker.py:121 (v3_extras).
 ---
 
 # comfyui_photo_maker_loader (Resource)
 
-(EXPERIMENTAL) ComfyUI PhotoMakerLoader node [_for_testing/photomaker]
+(EXPERIMENTAL) ComfyUI PhotoMakerLoader node [_for_testing/photomaker] Source: comfy_extras/nodes_photomaker.py:121 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `photomaker_model_name` (String) Input: COMBO
+- `photomaker_model_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('photomaker').
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `photomaker_output` (String) Output: PHOTOMAKER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `photomaker_output` (String) Output: PHOTOMAKER (slot 0).

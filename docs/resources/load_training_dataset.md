@@ -3,12 +3,12 @@
 page_title: "comfyui_load_training_dataset Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LoadTrainingDataset node — Load Training Dataset [dataset]
+  (EXPERIMENTAL) ComfyUI LoadTrainingDataset node — Load Training Dataset [dataset] Source: comfy_extras/nodes_dataset.py:1419 (v3_extras).
 ---
 
 # comfyui_load_training_dataset (Resource)
 
-(EXPERIMENTAL) ComfyUI LoadTrainingDataset node — Load Training Dataset [dataset]
+(EXPERIMENTAL) ComfyUI LoadTrainingDataset node — Load Training Dataset [dataset] Source: comfy_extras/nodes_dataset.py:1419 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `folder_name` (String) Input: STRING default: training_dataset
+- `folder_name` (String) Input: STRING. Default: "training_dataset". Tooltip: Name of folder containing the saved dataset (inside output directory).
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `latents_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `latents_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

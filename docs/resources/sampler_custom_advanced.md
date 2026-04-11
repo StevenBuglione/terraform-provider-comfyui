@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_custom_advanced Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerCustomAdvanced node [sampling/custom_sampling]
+  ComfyUI SamplerCustomAdvanced node [sampling/custom_sampling] Source: comfy_extras/nodes_custom_sampler.py:928 (v3_extras).
 ---
 
 # comfyui_sampler_custom_advanced (Resource)
 
-ComfyUI SamplerCustomAdvanced node [sampling/custom_sampling]
+ComfyUI SamplerCustomAdvanced node [sampling/custom_sampling] Source: comfy_extras/nodes_custom_sampler.py:928 (v3_extras).
 
 
 
@@ -17,15 +17,15 @@ ComfyUI SamplerCustomAdvanced node [sampling/custom_sampling]
 
 ### Required
 
-- `guider` (String) Input: GUIDER (link)
-- `latent_image` (String) Input: LATENT (link)
-- `noise` (String) Input: NOISE (link)
-- `sampler` (String) Input: SAMPLER (link)
-- `sigmas` (String) Input: SIGMAS (link)
+- `guider` (String) Input: GUIDER. Link input.
+- `latent_image` (String) Input: LATENT. Link input.
+- `noise` (String) Input: NOISE. Link input.
+- `sampler` (String) Input: SAMPLER. Link input.
+- `sigmas` (String) Input: SIGMAS. Link input.
 
 ### Read-Only
 
-- `denoised_output_output` (String) Output: LATENT (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `output_output` (String) Output: LATENT (slot 0)
+- `denoised_output_output` (String) Output: LATENT (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `output_output` (String) Output: LATENT (slot 0).

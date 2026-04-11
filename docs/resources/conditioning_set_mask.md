@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_set_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningSetMask node — Conditioning (Set Mask) [conditioning]
+  ComfyUI ConditioningSetMask node — Conditioning (Set Mask) [conditioning] Source: nodes.py:225 (v1_core).
 ---
 
 # comfyui_conditioning_set_mask (Resource)
 
-ComfyUI ConditioningSetMask node — Conditioning (Set Mask) [conditioning]
+ComfyUI ConditioningSetMask node — Conditioning (Set Mask) [conditioning] Source: nodes.py:225 (v1_core).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI ConditioningSetMask node — Conditioning (Set Mask) [conditioning]
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `mask` (String) Input: MASK (link)
-- `set_cond_area` (String) Input: COMBO
-- `strength` (Number) Input: FLOAT default: 1
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `mask` (String) Input: MASK. Link input.
+- `set_cond_area` (String) Input: COMBO.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

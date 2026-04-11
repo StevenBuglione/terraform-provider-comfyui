@@ -39,36 +39,36 @@ func (r *CLIPSetLastLayerResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *CLIPSetLastLayerResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI CLIPSetLastLayer node — CLIP Set Last Layer [conditioning]",
+		MarkdownDescription: "ComfyUI CLIPSetLastLayer node — CLIP Set Last Layer [conditioning] Source: nodes.py:655 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input.",
+				Required:            true,
 			},
 			"stop_at_clip_layer": schema.Int64Attribute{
-				Description: "Input: INT default: -1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: -1. Allowed range: -24 to -1. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(-24, -1),
 				},
 			},
 			"clip_output": schema.StringAttribute{
-				Description: "Output: CLIP (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CLIP (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

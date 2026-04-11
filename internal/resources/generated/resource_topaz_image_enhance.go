@@ -52,25 +52,25 @@ func (r *TopazImageEnhanceResource) Metadata(_ context.Context, req resource.Met
 
 func (r *TopazImageEnhanceResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Industry-standard upscaling and image enhancement. [api node/image/Topaz]",
+		MarkdownDescription: "Industry-standard upscaling and image enhancement. [api node/image/Topaz] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_topaz.py:45 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"Reimagine",
@@ -78,16 +78,16 @@ func (r *TopazImageEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Optional text prompt for creative upscaling guidance.",
+				Optional:            true,
 			},
 			"subject_detection": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"All",
@@ -97,59 +97,59 @@ func (r *TopazImageEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"face_enhancement": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Enhance faces (if present) during processing.",
+				Optional:            true,
 			},
 			"face_enhancement_creativity": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Set the creativity level for face enhancement.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"face_enhancement_strength": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Controls how sharp enhanced faces are relative to the background.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"crop_to_fill": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: By default, the image is letterboxed when the output aspect ratio differs. Enable to crop the image to fill the output dimensions.",
+				Optional:            true,
 			},
 			"output_width": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 32000. Step: 1. Tooltip: Zero value means to calculate automatically (usually it will be original size or output_height if specified).",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 32000),
 				},
 			},
 			"output_height": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 32000. Step: 1. Tooltip: Zero value means to output in the same height as original or output width.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 32000),
 				},
 			},
 			"creativity": schema.Int64Attribute{
-				Description: "Input: INT default: 3",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 3. Allowed range: 1 to 9. Step: 1.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 9),
 				},
 			},
 			"face_preservation": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Preserve subjects' facial identity.",
+				Optional:            true,
 			},
 			"color_preservation": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Preserve the original colors.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

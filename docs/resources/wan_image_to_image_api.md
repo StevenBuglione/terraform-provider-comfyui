@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_image_to_image_api Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates an image from one or two input images and a text prompt. The output image is currently fixed at 1.6 MP, and its aspect ratio matches the input image(s). [api node/image/Wan]
+  Generates an image from one or two input images and a text prompt. The output image is currently fixed at 1.6 MP, and its aspect ratio matches the input image(s). [api node/image/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:181 (v3_api).
 ---
 
 # comfyui_wan_image_to_image_api (Resource)
 
-Generates an image from one or two input images and a text prompt. The output image is currently fixed at 1.6 MP, and its aspect ratio matches the input image(s). [api node/image/Wan]
+Generates an image from one or two input images and a text prompt. The output image is currently fixed at 1.6 MP, and its aspect ratio matches the input image(s). [api node/image/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:181 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Generates an image from one or two input images and a text prompt. The output im
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO default: wan2.5-i2i-preview
-- `prompt` (String) Input: STRING default:
+- `image` (String) Input: IMAGE. Link input. Tooltip: Single-image editing or multi-image fusion. Maximum 2 images.
+- `model` (String) Input: COMBO. Default: "wan2.5-i2i-preview". Tooltip: Model to use.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.
 
 ### Optional
 
-- `negative_prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 0
-- `watermark` (Boolean) Input: BOOLEAN default: false
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative prompt describing what to avoid.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

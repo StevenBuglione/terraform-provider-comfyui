@@ -41,47 +41,47 @@ func (r *LtxvConditioningResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *LtxvConditioningResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI LTXVConditioning node [conditioning/video_models]",
+		MarkdownDescription: "ComfyUI LTXVConditioning node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:415 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"positive": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"negative": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"frame_rate": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 25",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 25. Allowed range: 0 to 1000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1000),
 				},
 			},
 			"positive_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"negative_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

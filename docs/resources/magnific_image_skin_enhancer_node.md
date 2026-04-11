@@ -3,12 +3,12 @@
 page_title: "comfyui_magnific_image_skin_enhancer_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Skin enhancement for portraits with multiple processing modes. [api node/image/Magnific]
+  Skin enhancement for portraits with multiple processing modes. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:790 (v3_api).
 ---
 
 # comfyui_magnific_image_skin_enhancer_node (Resource)
 
-Skin enhancement for portraits with multiple processing modes. [api node/image/Magnific]
+Skin enhancement for portraits with multiple processing modes. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:790 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ Skin enhancement for portraits with multiple processing modes. [api node/image/M
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `mode` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `sharpen` (Number) Input: INT default: 0
-- `smart_grain` (Number) Input: INT default: 2
+- `image` (String) Input: IMAGE. Link input. Tooltip: The portrait image to enhance.
+- `mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Processing mode: creative for artistic enhancement, faithful for preserving original appearance, flexible for targeted optimization.
+- `sharpen` (Number) Input: INT. Default: 0. Allowed range: 0 to 100. Tooltip: Sharpening intensity level.
+- `smart_grain` (Number) Input: INT. Default: 2. Allowed range: 0 to 100. Tooltip: Smart grain intensity level.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

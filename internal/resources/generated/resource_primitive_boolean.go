@@ -36,29 +36,29 @@ func (r *PrimitiveBooleanResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *PrimitiveBooleanResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Boolean node — Boolean [utils/primitive]",
+		MarkdownDescription: "ComfyUI Boolean node — Boolean [utils/primitive] Source: comfy_extras/nodes_primitive.py:80 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"value": schema.BoolAttribute{
-				Description: "Input: BOOLEAN",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN.",
+				Required:            true,
 			},
 			"boolean_output": schema.StringAttribute{
-				Description: "Output: BOOLEAN (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: BOOLEAN (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

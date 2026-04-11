@@ -41,49 +41,49 @@ func (r *ImageCompositeMaskedResource) Metadata(_ context.Context, req resource.
 
 func (r *ImageCompositeMaskedResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ImageCompositeMasked node [image]",
+		MarkdownDescription: "ComfyUI ImageCompositeMasked node [image] Source: comfy_extras/nodes_mask.py:77 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"destination": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"source": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"x": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0. Step: 1.",
+				Required:            true,
 			},
 			"y": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0. Step: 1.",
+				Required:            true,
 			},
 			"resize_source": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Required:            true,
 			},
 			"mask": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: MASK. Link input.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

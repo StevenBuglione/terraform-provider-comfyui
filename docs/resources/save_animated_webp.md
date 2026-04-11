@@ -3,12 +3,12 @@
 page_title: "comfyui_save_animated_webp Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SaveAnimatedWEBP node [image/animation]
+  ComfyUI SaveAnimatedWEBP node [image/animation] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:184 (v3_extras).
 ---
 
 # comfyui_save_animated_webp (Resource)
 
-ComfyUI SaveAnimatedWEBP node [image/animation]
+ComfyUI SaveAnimatedWEBP node [image/animation] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:184 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI SaveAnimatedWEBP node [image/animation]
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: ComfyUI
-- `fps` (Number) Input: FLOAT default: 6
-- `images` (String) Input: IMAGE (link)
-- `lossless` (Boolean) Input: BOOLEAN default: true
-- `method` (String) Input: COMBO
-- `quality` (Number) Input: INT default: 80
+- `filename_prefix` (String) Input: STRING. Default: "ComfyUI".
+- `fps` (Number) Input: FLOAT. Default: 6. Allowed range: 0.01 to 1000. Step: 0.01.
+- `images` (String) Input: IMAGE. Link input.
+- `lossless` (Boolean) Input: BOOLEAN. Default: true.
+- `method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(cls.COMPRESS_METHODS.keys()).
+- `quality` (Number) Input: INT. Default: 80. Allowed range: 0 to 100.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -39,29 +39,29 @@ func (r *FluxKontextMultiReferenceLatentMethodResource) Metadata(_ context.Conte
 
 func (r *FluxKontextMultiReferenceLatentMethodResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI FluxKontextMultiReferenceLatentMethod node — Edit Model Reference Method [advanced/conditioning/flux]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI FluxKontextMultiReferenceLatentMethod node — Edit Model Reference Method [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:153 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"conditioning": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"reference_latents_method": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"offset",
@@ -72,8 +72,8 @@ func (r *FluxKontextMultiReferenceLatentMethodResource) Schema(_ context.Context
 				},
 			},
 			"conditioning_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

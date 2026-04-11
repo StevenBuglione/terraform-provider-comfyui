@@ -3,12 +3,12 @@
 page_title: "comfyui_load_image_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LoadImageMask node — Load Image (as Mask) [mask]
+  ComfyUI LoadImageMask node — Load Image (as Mask) [mask] Source: nodes.py:1781 (v1_core).
 ---
 
 # comfyui_load_image_mask (Resource)
 
-ComfyUI LoadImageMask node — Load Image (as Mask) [mask]
+ComfyUI LoadImageMask node — Load Image (as Mask) [mask] Source: nodes.py:1781 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI LoadImageMask node — Load Image (as Mask) [mask]
 
 ### Required
 
-- `channel` (String) Input: COMBO
-- `image` (String) Input: COMBO
+- `channel` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s._color_channels.
+- `image` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: sorted(files).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

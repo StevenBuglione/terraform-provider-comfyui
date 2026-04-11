@@ -3,12 +3,12 @@
 page_title: "comfyui_optimal_steps_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI OptimalStepsScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI OptimalStepsScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_optimalsteps.py:29 (v3_extras).
 ---
 
 # comfyui_optimal_steps_scheduler (Resource)
 
-ComfyUI OptimalStepsScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI OptimalStepsScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_optimalsteps.py:29 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI OptimalStepsScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `denoise` (Number) Input: FLOAT default: 1
-- `model_type` (String) Input: COMBO
-- `steps` (Number) Input: INT default: 20
+- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `model_type` (String) Input: COMBO.
+- `steps` (Number) Input: INT. Default: 20. Allowed range: 3 to 1000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

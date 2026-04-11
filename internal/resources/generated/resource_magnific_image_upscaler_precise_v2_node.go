@@ -45,29 +45,29 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Metadata(_ context.Context,
 
 func (r *MagnificImageUpscalerPreciseV2NodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "High-fidelity upscaling with fine control over sharpness, grain, and detail. Maximum output: 10060×10060 pixels. [api node/image/Magnific]",
+		MarkdownDescription: "High-fidelity upscaling with fine control over sharpness, grain, and detail. Maximum output: 10060×10060 pixels. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:238 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"scale_factor": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"2x",
@@ -78,8 +78,8 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Schema(_ context.Context, _
 				},
 			},
 			"flavor": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Processing style: sublime for general use, photo for photographs, photo_denoiser for noisy photos.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"sublime",
@@ -89,33 +89,33 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Schema(_ context.Context, _
 				},
 			},
 			"sharpen": schema.Int64Attribute{
-				Description: "Input: INT default: 7",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 7. Allowed range: 0 to 100. Tooltip: Image sharpness intensity. Higher values increase edge definition and clarity.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"smart_grain": schema.Int64Attribute{
-				Description: "Input: INT default: 7",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 7. Allowed range: 0 to 100. Tooltip: Intelligent grain/texture enhancement to prevent the image from looking too smooth or artificial.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"ultra_detail": schema.Int64Attribute{
-				Description: "Input: INT default: 30",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 30. Allowed range: 0 to 100. Tooltip: Controls fine detail, textures, and micro-details added during upscaling.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"auto_downscale": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Automatically downscale input image if output would exceed maximum resolution.",
+				Required:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -44,50 +44,50 @@ func (r *ExtendIntermediateSigmasResource) Metadata(_ context.Context, req resou
 
 func (r *ExtendIntermediateSigmasResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ExtendIntermediateSigmas node [sampling/custom_sampling/sigmas]",
+		MarkdownDescription: "ComfyUI ExtendIntermediateSigmas node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:295 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"sigmas": schema.StringAttribute{
-				Description: "Input: SIGMAS (link)",
-				Required:    true,
+				MarkdownDescription: "Input: SIGMAS. Link input.",
+				Required:            true,
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 2",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 2. Allowed range: 1 to 100.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100),
 				},
 			},
 			"start_at_sigma": schema.Float64Attribute{
-				Description: "Input: FLOAT default: -1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: -1. Allowed range: -1 to 20000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-1, 20000),
 				},
 			},
 			"end_at_sigma": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 12",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 12. Allowed range: 0 to 20000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 20000),
 				},
 			},
 			"spacing": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"linear",
@@ -97,8 +97,8 @@ func (r *ExtendIntermediateSigmasResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"sigmas_output": schema.StringAttribute{
-				Description: "Output: SIGMAS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SIGMAS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

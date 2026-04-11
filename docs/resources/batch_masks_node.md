@@ -3,12 +3,12 @@
 page_title: "comfyui_batch_masks_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI BatchMasksNode node — Batch Masks [mask]
+  ComfyUI BatchMasksNode node — Batch Masks [mask] Source: comfy_extras/nodes_post_processing.py:585 (v3_extras).
 ---
 
 # comfyui_batch_masks_node (Resource)
 
-ComfyUI BatchMasksNode node — Batch Masks [mask]
+ComfyUI BatchMasksNode node — Batch Masks [mask] Source: comfy_extras/nodes_post_processing.py:585 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI BatchMasksNode node — Batch Masks [mask]
 
 ### Required
 
-- `masks` (String) Input: COMFY_AUTOGROW_V3
+- `masks` (String) Input: COMFY_AUTOGROW_V3.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -40,46 +40,46 @@ func (r *LtxvEmptyLatentAudioResource) Metadata(_ context.Context, req resource.
 
 func (r *LtxvEmptyLatentAudioResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI LTXVEmptyLatentAudio node — LTXV Empty Latent Audio [latent/audio]",
+		MarkdownDescription: "ComfyUI LTXVEmptyLatentAudio node — LTXV Empty Latent Audio [latent/audio] Source: comfy_extras/nodes_lt_audio.py:97 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"frames_number": schema.Int64Attribute{
-				Description: "Input: INT default: 97",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 97. Allowed range: 1 to 1000. Step: 1. Tooltip: Number of frames.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 1000),
 				},
 			},
 			"frame_rate": schema.Int64Attribute{
-				Description: "Input: INT default: 25",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 25. Allowed range: 1 to 1000. Step: 1. Tooltip: Number of frames per second.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 1000),
 				},
 			},
 			"batch_size": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 4096. Tooltip: The number of latent audio samples in the batch.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4096),
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

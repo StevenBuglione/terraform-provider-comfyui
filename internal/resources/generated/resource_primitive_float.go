@@ -36,29 +36,29 @@ func (r *PrimitiveFloatResource) Metadata(_ context.Context, req resource.Metada
 
 func (r *PrimitiveFloatResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Float node — Float [utils/primitive]",
+		MarkdownDescription: "ComfyUI Float node — Float [utils/primitive] Source: comfy_extras/nodes_primitive.py:62 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"value": schema.Float64Attribute{
-				Description: "Input: FLOAT",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Step: 0.1.",
+				Required:            true,
 			},
 			"float_output": schema.StringAttribute{
-				Description: "Output: FLOAT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: FLOAT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

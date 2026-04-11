@@ -50,29 +50,29 @@ func (r *GeminiNanoBanana2Resource) Metadata(_ context.Context, req resource.Met
 
 func (r *GeminiNanoBanana2Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate or edit images synchronously via Google Vertex API. [api node/image/Gemini]",
+		MarkdownDescription: "Generate or edit images synchronously via Google Vertex API. [api node/image/Gemini] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_gemini.py:837 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text prompt describing the image to generate or the edits to apply. Include any constraints, styles, or details the model should follow.",
+				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"Nano Banana 2 (Gemini 3.1 Flash Image)",
@@ -80,15 +80,15 @@ func (r *GeminiNanoBanana2Resource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 42",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 42. Allowed range: 0 to 18446744073709552000. Tooltip: When the seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO default: auto",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: If set to 'auto', matches your input image's aspect ratio; if no image is provided, a 16:9 square is usually generated.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -106,8 +106,8 @@ func (r *GeminiNanoBanana2Resource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Target output resolution. For 2K/4K the native Gemini upscaler is used.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"1K",
@@ -117,8 +117,8 @@ func (r *GeminiNanoBanana2Resource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"response_modalities": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"IMAGE",
@@ -127,8 +127,8 @@ func (r *GeminiNanoBanana2Resource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"thinking_level": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"MINIMAL",
@@ -137,34 +137,34 @@ func (r *GeminiNanoBanana2Resource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Optional reference image(s). To include multiple images, use the Batch Images node (up to 14).",
+				Optional:            true,
 			},
 			"files": schema.StringAttribute{
-				Description: "Input: GEMINI_INPUT_FILES (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: GEMINI_INPUT_FILES. Link input. Tooltip: Optional file(s) to use as context for the model. Accepts inputs from the Gemini Generate Content Input Files node.",
+				Optional:            true,
 			},
 			"system_prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: Foundational instructions that dictate an AI's behavior.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"string_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"thought_image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

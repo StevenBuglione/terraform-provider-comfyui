@@ -3,12 +3,12 @@
 page_title: "comfyui_image_crop_v2 Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageCropV2 node — Image Crop [image/transform]
+  ComfyUI ImageCropV2 node — Image Crop [image/transform] Source: comfy_extras/nodes_images.py:53 (v3_extras).
 ---
 
 # comfyui_image_crop_v2 (Resource)
 
-ComfyUI ImageCropV2 node — Image Crop [image/transform]
+ComfyUI ImageCropV2 node — Image Crop [image/transform] Source: comfy_extras/nodes_images.py:53 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ImageCropV2 node — Image Crop [image/transform]
 
 ### Required
 
-- `crop_region` (String) Input: BOUNDING_BOX (link)
-- `image` (String) Input: IMAGE (link)
+- `crop_region` (String) Input: BOUNDING_BOX. Link input.
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

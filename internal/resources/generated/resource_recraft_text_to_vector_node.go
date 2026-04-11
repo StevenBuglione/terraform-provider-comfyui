@@ -44,59 +44,59 @@ func (r *RecraftTextToVectorNodeResource) Metadata(_ context.Context, req resour
 
 func (r *RecraftTextToVectorNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generates SVG synchronously based on prompt and resolution. [api node/image/Recraft]",
+		MarkdownDescription: "Generates SVG synchronously based on prompt and resolution. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:729 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Prompt for the image generation.",
+				Required:            true,
 			},
 			"substyle": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_v3_substyles(RecraftStyleV3.vector_illustration).",
+				Required:            true,
 			},
 			"size": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The size of the generated image.",
+				Required:            true,
 			},
 			"n": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 6. Tooltip: The number of images to generate.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 6),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Tooltip: An optional text description of undesired elements on an image.",
+				Optional:            true,
 			},
 			"recraft_controls": schema.StringAttribute{
-				Description: "Input: RecraftIO.CONTROLS (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: RecraftIO.CONTROLS. Link input. Tooltip: Optional additional controls over the generation via the Recraft Controls node.",
+				Optional:            true,
 			},
 			"svg_output": schema.StringAttribute{
-				Description: "Output: SVG (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SVG (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

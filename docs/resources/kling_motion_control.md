@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_motion_control Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI MotionControl node — Kling Motion Control [api node/video/Kling]
+  ComfyUI MotionControl node — Kling Motion Control [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2722 (v3_api).
 ---
 
 # comfyui_kling_motion_control (Resource)
 
-ComfyUI MotionControl node — Kling Motion Control [api node/video/Kling]
+ComfyUI MotionControl node — Kling Motion Control [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2722 (v3_api).
 
 
 
@@ -17,19 +17,24 @@ ComfyUI MotionControl node — Kling Motion Control [api node/video/Kling]
 
 ### Required
 
-- `character_orientation` (String) Input: COMBO
-- `keep_original_sound` (Boolean) Input: BOOLEAN default: true
-- `mode` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `reference_image` (String) Input: IMAGE (link)
-- `reference_video` (String) Input: VIDEO (link)
+- `character_orientation` (String) Input: COMBO. Tooltip: Controls where the character's facing/orientation comes from.
+video: movements, expressions, camera moves, and orientation follow the motion reference video (other details via prompt).
+image: movements and expressions still follow the motion reference video, but the character orientation matches the reference image (camera/other details via prompt).
+- `keep_original_sound` (Boolean) Input: BOOLEAN. Default: true.
+- `mode` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Supports multiline text.
+- `reference_image` (String) Input: IMAGE. Link input.
+- `reference_video` (String) Input: VIDEO. Link input. Tooltip: Motion reference video used to drive movement/expression.
+Duration limits depend on character_orientation:
+ - image: 3–10s (max 10s)
+ - video: 3–30s (max 30s).
 
 ### Optional
 
-- `model` (String) Input: COMBO
+- `model` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_moonvalley_video2_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI MoonvalleyVideo2VideoNode node — Moonvalley Marey Video to Video [api node/video/Moonvalley Marey]
+  ComfyUI MoonvalleyVideo2VideoNode node — Moonvalley Marey Video to Video [api node/video/Moonvalley Marey] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_moonvalley.py:285 (v3_api).
 ---
 
 # comfyui_moonvalley_video2_video_node (Resource)
 
-ComfyUI MoonvalleyVideo2VideoNode node — Moonvalley Marey Video to Video [api node/video/Moonvalley Marey]
+ComfyUI MoonvalleyVideo2VideoNode node — Moonvalley Marey Video to Video [api node/video/Moonvalley Marey] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_moonvalley.py:285 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ ComfyUI MoonvalleyVideo2VideoNode node — Moonvalley Marey Video to Video [api 
 
 ### Required
 
-- `negative_prompt` (String) Input: STRING default: <synthetic> <scene cut> gopro, bright, contrast, static, overexposed, vignette, artifacts, still, noise, texture, scanlines, videogame, 360 camera, VR, transition, flare, saturation, distorted, warped, wide angle, saturated, vibrant, glowing, cross dissolve, cheesy, ugly hands, mutated hands, mutant, disfigured, extra fingers, blown out, horrible, blurry, worst quality, bad, dissolve, melt, fade in, fade out, wobbly, weird, low quality, plastic, stock footage, video camera, boring
-- `prompt` (String) Input: STRING
-- `seed` (Number) Input: INT default: 9
-- `steps` (Number) Input: INT default: 60
-- `video` (String) Input: VIDEO (link)
+- `negative_prompt` (String) Input: STRING. Default: "<synthetic> <scene cut> gopro, bright, contrast, static, overexposed, vignette, artifacts, still, noise, texture, scanlines, videogame, 360 camera, VR, transition, flare, saturation, distorted, warped, wide angle, saturated, vibrant, glowing, cross dissolve, cheesy, ugly hands, mutated hands, mutant, disfigured, extra fingers, blown out, horrible, blurry, worst quality, bad, dissolve, melt, fade in, fade out, wobbly, weird, low quality, plastic, stock footage, video camera, boring". Supports multiline text. Tooltip: Negative prompt text.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Describes the video to generate.
+- `seed` (Number) Input: INT. Default: 9. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Random seed value.
+- `steps` (Number) Input: INT. Default: 60. Allowed range: 60 to 100. Step: 1. Tooltip: Number of inference steps.
+- `video` (String) Input: VIDEO. Link input. Tooltip: The reference video used to generate the output video. Must be at least 5 seconds long. Videos longer than 5s will be automatically trimmed. Only MP4 format supported.
 
 ### Optional
 
-- `control_type` (String) Input: COMBO default: Motion Transfer
-- `motion_intensity` (Number) Input: INT default: 100
+- `control_type` (String) Input: COMBO. Default: "Motion Transfer".
+- `motion_intensity` (Number) Input: INT. Default: 100. Allowed range: 0 to 100. Step: 1. Tooltip: Only used if control_type is 'Motion Transfer'.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

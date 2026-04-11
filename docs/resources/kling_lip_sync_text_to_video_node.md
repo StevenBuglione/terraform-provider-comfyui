@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_lip_sync_text_to_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Kling Lip Sync Text to Video Node. Syncs mouth movements in a video file to a text prompt. The video file should not be larger than 100MB, should have height/width between 720px and 1920px, and should be between 2s and 10s in length. [api node/video/Kling]
+  Kling Lip Sync Text to Video Node. Syncs mouth movements in a video file to a text prompt. The video file should not be larger than 100MB, should have height/width between 720px and 1920px, and should be between 2s and 10s in length. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2311 (v3_api).
 ---
 
 # comfyui_kling_lip_sync_text_to_video_node (Resource)
 
-Kling Lip Sync Text to Video Node. Syncs mouth movements in a video file to a text prompt. The video file should not be larger than 100MB, should have height/width between 720px and 1920px, and should be between 2s and 10s in length. [api node/video/Kling]
+Kling Lip Sync Text to Video Node. Syncs mouth movements in a video file to a text prompt. The video file should not be larger than 100MB, should have height/width between 720px and 1920px, and should be between 2s and 10s in length. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2311 (v3_api).
 
 
 
@@ -17,15 +17,15 @@ Kling Lip Sync Text to Video Node. Syncs mouth movements in a video file to a te
 
 ### Required
 
-- `text` (String) Input: STRING
-- `video` (String) Input: VIDEO (link)
-- `voice` (String) Input: COMBO default: Melody
-- `voice_speed` (Number) Input: FLOAT default: 1
+- `text` (String) Input: STRING. Supports multiline text. Tooltip: Text Content for Lip-Sync Video Generation. Required when mode is text2video. Maximum length is 120 characters.
+- `video` (String) Input: VIDEO. Link input.
+- `voice` (String) Input: COMBO. Default: "Melody". Dynamic options are resolved by ComfyUI at runtime from: list(VOICES_CONFIG.keys()).
+- `voice_speed` (Number) Input: FLOAT. Default: 1. Allowed range: 0.8 to 2. Tooltip: Speech Rate. Valid range: 0.8~2.0, accurate to one decimal place.
 
 ### Read-Only
 
-- `duration_output` (String) Output: STRING (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_id_output` (String) Output: STRING (slot 1)
-- `video_output` (String) Output: VIDEO (slot 0)
+- `duration_output` (String) Output: STRING (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_id_output` (String) Output: STRING (slot 1).
+- `video_output` (String) Output: VIDEO (slot 0).

@@ -36,29 +36,29 @@ func (r *KSamplerSelectResource) Metadata(_ context.Context, req resource.Metada
 
 func (r *KSamplerSelectResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI KSamplerSelect node [sampling/custom_sampling/samplers]",
+		MarkdownDescription: "ComfyUI KSamplerSelect node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:377 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"sampler_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.SAMPLER_NAMES.",
+				Required:            true,
 			},
 			"sampler_output": schema.StringAttribute{
-				Description: "Output: SAMPLER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SAMPLER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -36,33 +36,33 @@ func (r *Preview3DResource) Metadata(_ context.Context, req resource.MetadataReq
 
 func (r *Preview3DResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI Preview3D node — Preview 3D & Animation [3d]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI Preview3D node — Preview 3D & Animation [3d] Source: comfy_extras/nodes_load_3d.py:77 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"io_string_input_model_file_default_multiline_false": schema.StringAttribute{
-				Description: "Input: COMFY_MULTITYPED_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_MULTITYPED_V3. Tooltip: 3D model file or path string.",
+				Required:            true,
 			},
 			"camera_info": schema.StringAttribute{
-				Description: "Input: LOAD3D_CAMERA (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: LOAD3D_CAMERA. Link input.",
+				Optional:            true,
 			},
 			"bg_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 		},
 	}

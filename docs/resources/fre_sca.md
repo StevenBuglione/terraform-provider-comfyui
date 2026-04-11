@@ -3,12 +3,12 @@
 page_title: "comfyui_fre_sca Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Applies frequency-dependent scaling to the guidance [_for_testing]
+  (EXPERIMENTAL) Applies frequency-dependent scaling to the guidance [_for_testing] Source: comfy_extras/nodes_fresca.py:56 (v3_extras).
 ---
 
 # comfyui_fre_sca (Resource)
 
-(EXPERIMENTAL) Applies frequency-dependent scaling to the guidance [_for_testing]
+(EXPERIMENTAL) Applies frequency-dependent scaling to the guidance [_for_testing] Source: comfy_extras/nodes_fresca.py:56 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `freq_cutoff` (Number) Input: INT default: 20
-- `model` (String) Input: MODEL (link)
-- `scale_high` (Number) Input: FLOAT default: 1.25
-- `scale_low` (Number) Input: FLOAT default: 1
+- `freq_cutoff` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000. Step: 1. Tooltip: Number of frequency indices around center to consider as low-frequency.
+- `model` (String) Input: MODEL. Link input.
+- `scale_high` (Number) Input: FLOAT. Default: 1.25. Allowed range: 0 to 10. Step: 0.01. Tooltip: Scaling factor for high-frequency components.
+- `scale_low` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01. Tooltip: Scaling factor for low-frequency components.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_image_color_to_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageColorToMask node [mask]
+  ComfyUI ImageColorToMask node [mask] Source: comfy_extras/nodes_mask.py:151 (v3_extras).
 ---
 
 # comfyui_image_color_to_mask (Resource)
 
-ComfyUI ImageColorToMask node [mask]
+ComfyUI ImageColorToMask node [mask] Source: comfy_extras/nodes_mask.py:151 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ImageColorToMask node [mask]
 
 ### Required
 
-- `color` (Number) Input: INT default: 0
-- `image` (String) Input: IMAGE (link)
+- `color` (Number) Input: INT. Default: 0. Allowed range: 0 to 16777215. Step: 1.
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

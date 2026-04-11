@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_latent_image Resource - comfyui"
 subcategory: ""
 description: |-
-  Create a new batch of empty latent images to be denoised via sampling. [latent]
+  Create a new batch of empty latent images to be denoised via sampling. [latent] Source: nodes.py:1214 (v1_core).
 ---
 
 # comfyui_empty_latent_image (Resource)
 
-Create a new batch of empty latent images to be denoised via sampling. [latent]
+Create a new batch of empty latent images to be denoised via sampling. [latent] Source: nodes.py:1214 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ Create a new batch of empty latent images to be denoised via sampling. [latent]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `height` (Number) Input: INT default: 512
-- `width` (Number) Input: INT default: 512
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096. Tooltip: The number of latent images in the batch.
+- `height` (Number) Input: INT. Default: 512. Minimum value: 16. Step: 8. Tooltip: The height of the latent images in pixels.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 16. Step: 8. Tooltip: The width of the latent images in pixels.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

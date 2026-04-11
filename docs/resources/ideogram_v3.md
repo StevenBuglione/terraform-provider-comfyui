@@ -3,12 +3,12 @@
 page_title: "comfyui_ideogram_v3 Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates images using the Ideogram V3 model. Supports both regular image generation from text prompts and image editing with mask. [api node/image/Ideogram]
+  Generates images using the Ideogram V3 model. Supports both regular image generation from text prompts and image editing with mask. [api node/image/Ideogram] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_ideogram.py:522 (v3_api).
 ---
 
 # comfyui_ideogram_v3 (Resource)
 
-Generates images using the Ideogram V3 model. Supports both regular image generation from text prompts and image editing with mask. [api node/image/Ideogram]
+Generates images using the Ideogram V3 model. Supports both regular image generation from text prompts and image editing with mask. [api node/image/Ideogram] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_ideogram.py:522 (v3_api).
 
 
 
@@ -17,23 +17,23 @@ Generates images using the Ideogram V3 model. Supports both regular image genera
 
 ### Required
 
-- `prompt` (String) Input: STRING default:
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation or editing.
 
 ### Optional
 
-- `aspect_ratio` (String) Input: COMBO default: 1:1
-- `character_image` (String) Input: IMAGE (link)
-- `character_mask` (String) Input: MASK (link)
-- `image` (String) Input: IMAGE (link)
-- `magic_prompt_option` (String) Input: COMBO default: AUTO
-- `mask` (String) Input: MASK (link)
-- `num_images` (Number) Input: INT default: 1
-- `rendering_speed` (String) Input: COMBO default: DEFAULT
-- `resolution` (String) Input: COMBO default: Auto
-- `seed` (Number) Input: INT default: 0
+- `aspect_ratio` (String) Input: COMBO. Default: "1:1". Dynamic options are resolved by ComfyUI at runtime from: list(V3_RATIO_MAP.keys()). Tooltip: The aspect ratio for image generation. Ignored if resolution is not set to Auto.
+- `character_image` (String) Input: IMAGE. Link input. Tooltip: Image to use as character reference.
+- `character_mask` (String) Input: MASK. Link input. Tooltip: Optional mask for character reference image.
+- `image` (String) Input: IMAGE. Link input. Tooltip: Optional reference image for image editing.
+- `magic_prompt_option` (String) Input: COMBO. Default: "AUTO". Tooltip: Determine if MagicPrompt should be used in generation.
+- `mask` (String) Input: MASK. Link input. Tooltip: Optional mask for inpainting (white areas will be replaced).
+- `num_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1.
+- `rendering_speed` (String) Input: COMBO. Default: "DEFAULT". Tooltip: Controls the trade-off between generation speed and quality.
+- `resolution` (String) Input: COMBO. Default: "Auto". Dynamic options are resolved by ComfyUI at runtime from: V3_RESOLUTIONS. Tooltip: The resolution for image generation. If not set to Auto, this overrides the aspect_ratio setting.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

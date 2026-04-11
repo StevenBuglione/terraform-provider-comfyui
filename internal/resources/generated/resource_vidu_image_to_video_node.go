@@ -45,25 +45,25 @@ func (r *ViduImageToVideoNodeResource) Metadata(_ context.Context, req resource.
 
 func (r *ViduImageToVideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate video from image and optional prompt [api node/video/Vidu]",
+		MarkdownDescription: "Generate video from image and optional prompt [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:165 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Model name.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"viduq1",
@@ -71,30 +71,30 @@ func (r *ViduImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: An image to be used as the start frame of the generated video.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: A textual description for video generation.",
+				Optional:            true,
 			},
 			"duration": schema.Int64Attribute{
-				Description: "Input: INT default: 5",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 5. Allowed range: 5 to 5. Step: 1. Tooltip: Duration of the output video in seconds.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(5, 5),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed for video generation (0 for random).",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Supported values may vary by model & duration.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"1080p",
@@ -102,8 +102,8 @@ func (r *ViduImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"movement_amplitude": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: The movement amplitude of objects in the frame.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -114,8 +114,8 @@ func (r *ViduImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -40,29 +40,29 @@ func (r *LatentCutToBatchResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *LatentCutToBatchResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI LatentCutToBatch node [latent/advanced]",
+		MarkdownDescription: "ComfyUI LatentCutToBatch node [latent/advanced] Source: comfy_extras/nodes_latent.py:217 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"samples": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"dim": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"t",
@@ -72,12 +72,12 @@ func (r *LatentCutToBatchResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"slice_size": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Minimum value: 1. Step: 1.",
+				Required:            true,
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

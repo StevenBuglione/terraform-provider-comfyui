@@ -44,56 +44,56 @@ func (r *CosmosPredict2ImageToVideoLatentResource) Metadata(_ context.Context, r
 
 func (r *CosmosPredict2ImageToVideoLatentResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI CosmosPredict2ImageToVideoLatent node [conditioning/inpaint]",
+		MarkdownDescription: "ComfyUI CosmosPredict2ImageToVideoLatent node [conditioning/inpaint] Source: comfy_extras/nodes_cosmos.py:86 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 848",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 848. Minimum value: 16. Step: 16.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 480",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 480. Minimum value: 16. Step: 16.",
+				Required:            true,
 			},
 			"length": schema.Int64Attribute{
-				Description: "Input: INT default: 93",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 93. Minimum value: 1. Step: 4.",
+				Required:            true,
 			},
 			"batch_size": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 4096.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4096),
 				},
 			},
 			"start_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"end_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

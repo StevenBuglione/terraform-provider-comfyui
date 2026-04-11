@@ -3,12 +3,12 @@
 page_title: "comfyui_hunyuan3_dv2_conditioning_multi_view Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Hunyuan3Dv2ConditioningMultiView node [conditioning/video_models]
+  ComfyUI Hunyuan3Dv2ConditioningMultiView node [conditioning/video_models] Source: comfy_extras/nodes_hunyuan3d.py:63 (v3_extras).
 ---
 
 # comfyui_hunyuan3_dv2_conditioning_multi_view (Resource)
 
-ComfyUI Hunyuan3Dv2ConditioningMultiView node [conditioning/video_models]
+ComfyUI Hunyuan3Dv2ConditioningMultiView node [conditioning/video_models] Source: comfy_extras/nodes_hunyuan3d.py:63 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI Hunyuan3Dv2ConditioningMultiView node [conditioning/video_models]
 
 ### Optional
 
-- `back` (String) Input: CLIP_VISION_OUTPUT (link)
-- `front` (String) Input: CLIP_VISION_OUTPUT (link)
-- `left` (String) Input: CLIP_VISION_OUTPUT (link)
-- `right` (String) Input: CLIP_VISION_OUTPUT (link)
+- `back` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `front` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `left` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `right` (String) Input: CLIP_VISION_OUTPUT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

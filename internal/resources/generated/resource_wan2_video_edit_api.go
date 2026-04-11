@@ -43,40 +43,40 @@ func (r *Wan2VideoEditAPIResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *Wan2VideoEditAPIResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Edit a video using text instructions, reference images, or style transfer. [api node/video/Wan]",
+		MarkdownDescription: "Edit a video using text instructions, reference images, or style transfer. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:1317 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"video": schema.StringAttribute{
-				Description: "Input: VIDEO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VIDEO. Link input. Tooltip: The video to edit.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"audio_setting": schema.StringAttribute{
-				Description: "Input: COMBO default: auto",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: 'auto': model decides whether to regenerate audio based on the prompt. 'origin': preserve the original audio from the input video.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -85,12 +85,12 @@ func (r *Wan2VideoEditAPIResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"watermark": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.",
+				Required:            true,
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

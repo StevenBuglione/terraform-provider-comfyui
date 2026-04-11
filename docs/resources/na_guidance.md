@@ -3,12 +3,12 @@
 page_title: "comfyui_na_guidance Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Applies Normalized Attention Guidance to models, enabling negative prompts on distilled/schnell models. [advanced/guidance]
+  (EXPERIMENTAL) Applies Normalized Attention Guidance to models, enabling negative prompts on distilled/schnell models. [advanced/guidance] Source: comfy_extras/nodes_nag.py:6 (v3_extras).
 ---
 
 # comfyui_na_guidance (Resource)
 
-(EXPERIMENTAL) Applies Normalized Attention Guidance to models, enabling negative prompts on distilled/schnell models. [advanced/guidance]
+(EXPERIMENTAL) Applies Normalized Attention Guidance to models, enabling negative prompts on distilled/schnell models. [advanced/guidance] Source: comfy_extras/nodes_nag.py:6 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `nag_alpha` (Number) Input: FLOAT default: 0.5
-- `nag_scale` (Number) Input: FLOAT default: 5
-- `nag_tau` (Number) Input: FLOAT default: 1.5
+- `model` (String) Input: MODEL. Link input. Tooltip: The model to apply NAG to.
+- `nag_alpha` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Blending factor for the normalized attention. 1.0 is full replacement, 0.0 is no effect.
+- `nag_scale` (Number) Input: FLOAT. Default: 5. Allowed range: 0 to 50. Step: 0.1. Tooltip: The guidance scale factor. Higher values push further from the negative prompt.
+- `nag_tau` (Number) Input: FLOAT. Default: 1.5. Allowed range: 1 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

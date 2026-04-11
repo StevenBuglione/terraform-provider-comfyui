@@ -3,12 +3,12 @@
 page_title: "comfyui_eleven_labs_audio_isolation Resource - comfyui"
 subcategory: ""
 description: |-
-  Remove background noise from audio, isolating vocals or speech. [api node/audio/ElevenLabs]
+  Remove background noise from audio, isolating vocals or speech. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:411 (v3_api).
 ---
 
 # comfyui_eleven_labs_audio_isolation (Resource)
 
-Remove background noise from audio, isolating vocals or speech. [api node/audio/ElevenLabs]
+Remove background noise from audio, isolating vocals or speech. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:411 (v3_api).
 
 
 
@@ -17,10 +17,10 @@ Remove background noise from audio, isolating vocals or speech. [api node/audio/
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
+- `audio` (String) Input: AUDIO. Link input. Tooltip: Audio to process for background noise removal.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

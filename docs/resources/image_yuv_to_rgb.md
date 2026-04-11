@@ -3,12 +3,12 @@
 page_title: "comfyui_image_yuv_to_rgb Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageYUVToRGB node [image/batch]
+  ComfyUI ImageYUVToRGB node [image/batch] Source: comfy_extras/nodes_morphology.py:78 (v3_extras).
 ---
 
 # comfyui_image_yuv_to_rgb (Resource)
 
-ComfyUI ImageYUVToRGB node [image/batch]
+ComfyUI ImageYUVToRGB node [image/batch] Source: comfy_extras/nodes_morphology.py:78 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ImageYUVToRGB node [image/batch]
 
 ### Required
 
-- `u` (String) Input: IMAGE (link)
-- `v` (String) Input: IMAGE (link)
-- `y` (String) Input: IMAGE (link)
+- `u` (String) Input: IMAGE. Link input.
+- `v` (String) Input: IMAGE. Link input.
+- `y` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

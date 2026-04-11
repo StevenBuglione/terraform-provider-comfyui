@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_latent_upsampler Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LTXVLatentUpsampler node — LTXVLatentUpsampler [latent/video]
+  (EXPERIMENTAL) ComfyUI LTXVLatentUpsampler node — LTXVLatentUpsampler [latent/video] Source: comfy_extras/nodes_lt_upsampler.py:4 (v1_extras).
 ---
 
 # comfyui_ltxv_latent_upsampler (Resource)
 
-(EXPERIMENTAL) ComfyUI LTXVLatentUpsampler node — LTXVLatentUpsampler [latent/video]
+(EXPERIMENTAL) ComfyUI LTXVLatentUpsampler node — LTXVLatentUpsampler [latent/video] Source: comfy_extras/nodes_lt_upsampler.py:4 (v1_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `samples` (String) Input: LATENT (link)
-- `upscale_model` (String) Input: LATENT_UPSCALE_MODEL (link)
-- `vae` (String) Input: VAE (link)
+- `samples` (String) Input: LATENT. Link input.
+- `upscale_model` (String) Input: LATENT_UPSCALE_MODEL. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

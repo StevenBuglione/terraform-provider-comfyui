@@ -3,12 +3,12 @@
 page_title: "comfyui_invert_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI InvertMask node [mask]
+  ComfyUI InvertMask node [mask] Source: comfy_extras/nodes_mask.py:197 (v3_extras).
 ---
 
 # comfyui_invert_mask (Resource)
 
-ComfyUI InvertMask node [mask]
+ComfyUI InvertMask node [mask] Source: comfy_extras/nodes_mask.py:197 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI InvertMask node [mask]
 
 ### Required
 
-- `mask` (String) Input: MASK (link)
+- `mask` (String) Input: MASK. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -41,47 +41,47 @@ func (r *VAEDecodeHunyuan3DResource) Metadata(_ context.Context, req resource.Me
 
 func (r *VAEDecodeHunyuan3DResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI VAEDecodeHunyuan3D node [latent/3d]",
+		MarkdownDescription: "ComfyUI VAEDecodeHunyuan3D node [latent/3d] Source: comfy_extras/nodes_hunyuan3d.py:100 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"samples": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"num_chunks": schema.Int64Attribute{
-				Description: "Input: INT default: 8000",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 8000. Allowed range: 1000 to 500000.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1000, 500000),
 				},
 			},
 			"octree_resolution": schema.Int64Attribute{
-				Description: "Input: INT default: 256",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 256. Allowed range: 16 to 512.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(16, 512),
 				},
 			},
 			"voxel_output": schema.StringAttribute{
-				Description: "Output: VOXEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VOXEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

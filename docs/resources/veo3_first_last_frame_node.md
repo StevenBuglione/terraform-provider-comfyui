@@ -3,12 +3,12 @@
 page_title: "comfyui_veo3_first_last_frame_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate video using prompt and first and last frames. [api node/video/Veo]
+  Generate video using prompt and first and last frames. [api node/video/Veo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_veo2.py:375 (v3_api).
 ---
 
 # comfyui_veo3_first_last_frame_node (Resource)
 
-Generate video using prompt and first and last frames. [api node/video/Veo]
+Generate video using prompt and first and last frames. [api node/video/Veo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_veo2.py:375 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Generate video using prompt and first and last frames. [api node/video/Veo]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO default: 16:9
-- `duration` (Number) Input: INT default: 8
-- `first_frame` (String) Input: IMAGE (link)
-- `generate_audio` (Boolean) Input: BOOLEAN default: true
-- `last_frame` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO default: veo-3.1-fast-generate
-- `negative_prompt` (String) Input: STRING default:
-- `prompt` (String) Input: STRING default:
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `aspect_ratio` (String) Input: COMBO. Default: "16:9". Tooltip: Aspect ratio of the output video.
+- `duration` (Number) Input: INT. Default: 8. Allowed range: 4 to 8. Step: 2. Tooltip: Duration of the output video in seconds.
+- `first_frame` (String) Input: IMAGE. Link input. Tooltip: Start frame.
+- `generate_audio` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Generate audio for the video.
+- `last_frame` (String) Input: IMAGE. Link input. Tooltip: End frame.
+- `model` (String) Input: COMBO. Default: "veo-3.1-fast-generate".
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative text prompt to guide what to avoid in the video.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of the video.
+- `resolution` (String) Input: COMBO.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Seed for video generation.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

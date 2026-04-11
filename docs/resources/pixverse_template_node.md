@@ -3,12 +3,12 @@
 page_title: "comfyui_pixverse_template_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI PixverseTemplateNode node — PixVerse Template [api node/video/PixVerse]
+  ComfyUI PixverseTemplateNode node — PixVerse Template [api node/video/PixVerse] Source: comfy_api_nodes/nodes_pixverse.py:46 (v3_api).
 ---
 
 # comfyui_pixverse_template_node (Resource)
 
-ComfyUI PixverseTemplateNode node — PixVerse Template [api node/video/PixVerse]
+ComfyUI PixverseTemplateNode node — PixVerse Template [api node/video/PixVerse] Source: comfy_api_nodes/nodes_pixverse.py:46 (v3_api).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI PixverseTemplateNode node — PixVerse Template [api node/video/PixVerse
 
 ### Required
 
-- `template` (String) Input: COMBO
+- `template` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(pixverse_templates.keys()).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `pixverse_template_output` (String) Output: PixverseIO.TEMPLATE (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `pixverse_template_output` (String) Output: PixverseIO.TEMPLATE (slot 0).

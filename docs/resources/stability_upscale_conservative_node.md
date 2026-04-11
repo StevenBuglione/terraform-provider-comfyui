@@ -3,12 +3,12 @@
 page_title: "comfyui_stability_upscale_conservative_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StabilityUpscaleConservativeNode node — Stability AI Upscale Conservative [api node/image/Stability AI]
+  ComfyUI StabilityUpscaleConservativeNode node — Stability AI Upscale Conservative [api node/image/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:347 (v3_api).
 ---
 
 # comfyui_stability_upscale_conservative_node (Resource)
 
-ComfyUI StabilityUpscaleConservativeNode node — Stability AI Upscale Conservative [api node/image/Stability AI]
+ComfyUI StabilityUpscaleConservativeNode node — Stability AI Upscale Conservative [api node/image/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:347 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ ComfyUI StabilityUpscaleConservativeNode node — Stability AI Upscale Conservat
 
 ### Required
 
-- `creativity` (Number) Input: FLOAT default: 0.35
-- `image` (String) Input: IMAGE (link)
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 0
+- `creativity` (Number) Input: FLOAT. Default: 0.35. Allowed range: 0.2 to 0.5. Step: 0.01. Tooltip: Controls the likelihood of creating additional details not heavily conditioned by the init image.
+- `image` (String) Input: IMAGE. Link input.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: What you wish to see in the output image. A strong, descriptive prompt that clearly defines elements, colors, and subjects will lead to better results.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967294. Step: 1. Tooltip: The random seed used for creating the noise.
 
 ### Optional
 
-- `negative_prompt` (String) Input: STRING default:
+- `negative_prompt` (String) Input: STRING. Default: "". Tooltip: Keywords of what you do not wish to see in the output image. This is an advanced feature.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

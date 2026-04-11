@@ -38,43 +38,43 @@ func (r *GetImageSizeResource) Metadata(_ context.Context, req resource.Metadata
 
 func (r *GetImageSizeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Returns width and height of the image, and passes it through unchanged. [image]",
+		MarkdownDescription: "Returns width and height of the image, and passes it through unchanged. [image] Hidden runtime inputs: unique_id (UNIQUE_ID). Source: comfy_extras/nodes_images.py:553 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"width_output": schema.StringAttribute{
-				Description: "Output: INT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"height_output": schema.StringAttribute{
-				Description: "Output: INT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"batch_size_output": schema.StringAttribute{
-				Description: "Output: INT (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_er_sde Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerER_SDE node [sampling/custom_sampling/samplers]
+  ComfyUI SamplerER_SDE node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:583 (v3_extras).
 ---
 
 # comfyui_sampler_er_sde (Resource)
 
-ComfyUI SamplerER_SDE node [sampling/custom_sampling/samplers]
+ComfyUI SamplerER_SDE node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:583 (v3_extras).
 
 
 
@@ -17,13 +17,14 @@ ComfyUI SamplerER_SDE node [sampling/custom_sampling/samplers]
 
 ### Required
 
-- `eta` (Number) Input: FLOAT default: 1
-- `max_stage` (Number) Input: INT default: 3
-- `s_noise` (Number) Input: FLOAT default: 1
-- `solver_type` (String) Input: COMBO
+- `eta` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: Stochastic strength of reverse-time SDE.
+When eta=0, it reduces to deterministic ODE. This setting doesn't apply to ER-SDE solver type.
+- `max_stage` (Number) Input: INT. Default: 3. Allowed range: 1 to 3.
+- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `solver_type` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

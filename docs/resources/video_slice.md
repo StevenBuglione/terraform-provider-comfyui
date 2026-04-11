@@ -3,12 +3,12 @@
 page_title: "comfyui_video_slice Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VideoSlice node — Video Slice [image/video]
+  ComfyUI VideoSlice node — Video Slice [image/video] Source: comfy_extras/nodes_video.py:207 (v3_extras).
 ---
 
 # comfyui_video_slice (Resource)
 
-ComfyUI VideoSlice node — Video Slice [image/video]
+ComfyUI VideoSlice node — Video Slice [image/video] Source: comfy_extras/nodes_video.py:207 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI VideoSlice node — Video Slice [image/video]
 
 ### Required
 
-- `duration` (Number) Input: FLOAT default: 0
-- `start_time` (Number) Input: FLOAT default: 0
-- `strict_duration` (Boolean) Input: BOOLEAN default: false
-- `video` (String) Input: VIDEO (link)
+- `duration` (Number) Input: FLOAT. Default: 0. Minimum value: 0. Step: 0.001. Tooltip: Duration in seconds, or 0 for unlimited duration.
+- `start_time` (Number) Input: FLOAT. Default: 0. Allowed range: -100000 to 100000. Step: 0.001. Tooltip: Start time in seconds.
+- `strict_duration` (Boolean) Input: BOOLEAN. Default: false. Tooltip: If True, when the specified duration is not possible, an error will be raised.
+- `video` (String) Input: VIDEO. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

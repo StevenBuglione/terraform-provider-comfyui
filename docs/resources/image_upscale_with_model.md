@@ -3,12 +3,12 @@
 page_title: "comfyui_image_upscale_with_model Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageUpscaleWithModel node — Upscale Image (using Model) [image/upscaling]
+  ComfyUI ImageUpscaleWithModel node — Upscale Image (using Model) [image/upscaling] Source: comfy_extras/nodes_upscale_model.py:49 (v3_extras).
 ---
 
 # comfyui_image_upscale_with_model (Resource)
 
-ComfyUI ImageUpscaleWithModel node — Upscale Image (using Model) [image/upscaling]
+ComfyUI ImageUpscaleWithModel node — Upscale Image (using Model) [image/upscaling] Source: comfy_extras/nodes_upscale_model.py:49 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ImageUpscaleWithModel node — Upscale Image (using Model) [image/upscal
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `upscale_model` (String) Input: UPSCALE_MODEL (link)
+- `image` (String) Input: IMAGE. Link input.
+- `upscale_model` (String) Input: UPSCALE_MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

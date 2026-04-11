@@ -4,14 +4,14 @@ page_title: "comfyui_tcfg Resource - comfyui"
 subcategory: ""
 description: |-
   TCFG – Tangential Damping CFG (2503.18137)
-  Refine the uncond (negative) to align with the cond (positive) for improving quality. [advanced/guidance]
+  Refine the uncond (negative) to align with the cond (positive) for improving quality. [advanced/guidance] Source: comfy_extras/nodes_tcfg.py:30 (v3_extras).
 ---
 
 # comfyui_tcfg (Resource)
 
 TCFG – Tangential Damping CFG (2503.18137)
 
-Refine the uncond (negative) to align with the cond (positive) for improving quality. [advanced/guidance]
+Refine the uncond (negative) to align with the cond (positive) for improving quality. [advanced/guidance] Source: comfy_extras/nodes_tcfg.py:30 (v3_extras).
 
 
 
@@ -20,10 +20,10 @@ Refine the uncond (negative) to align with the cond (positive) for improving qua
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `patched_model_output` (String) Output: MODEL (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `patched_model_output` (String) Output: MODEL (slot 0).

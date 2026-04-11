@@ -38,37 +38,37 @@ func (r *CLIPTextEncodeControlnetResource) Metadata(_ context.Context, req resou
 
 func (r *CLIPTextEncodeControlnetResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI CLIPTextEncodeControlnet node [_for_testing/conditioning]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI CLIPTextEncodeControlnet node [_for_testing/conditioning] Source: comfy_extras/nodes_cond.py:6 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input.",
+				Required:            true,
 			},
 			"conditioning": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"text": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"conditioning_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

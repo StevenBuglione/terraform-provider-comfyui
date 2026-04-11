@@ -37,33 +37,33 @@ func (r *RecraftControlsResource) Metadata(_ context.Context, req resource.Metad
 
 func (r *RecraftControlsResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Create Recraft Controls for customizing Recraft generation. [api node/image/Recraft]",
+		MarkdownDescription: "Create Recraft Controls for customizing Recraft generation. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:201 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"colors": schema.StringAttribute{
-				Description: "Input: RecraftIO.COLOR (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: RecraftIO.COLOR. Link input.",
+				Optional:            true,
 			},
 			"background_color": schema.StringAttribute{
-				Description: "Input: RecraftIO.COLOR (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: RecraftIO.COLOR. Link input.",
+				Optional:            true,
 			},
 			"recraft_controls_output": schema.StringAttribute{
-				Description: "Output: RecraftIO.CONTROLS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: RecraftIO.CONTROLS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

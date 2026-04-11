@@ -3,12 +3,12 @@
 page_title: "comfyui_model_merge_simple Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelMergeSimple node — ModelMergeSimple [advanced/model_merging]
+  ComfyUI ModelMergeSimple node — ModelMergeSimple [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:14 (v1_extras).
 ---
 
 # comfyui_model_merge_simple (Resource)
 
-ComfyUI ModelMergeSimple node — ModelMergeSimple [advanced/model_merging]
+ComfyUI ModelMergeSimple node — ModelMergeSimple [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:14 (v1_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ModelMergeSimple node — ModelMergeSimple [advanced/model_merging]
 
 ### Required
 
-- `model1` (String) Input: MODEL (link)
-- `model2` (String) Input: MODEL (link)
-- `ratio` (Number) Input: FLOAT default: 1
+- `model1` (String) Input: MODEL. Link input.
+- `model2` (String) Input: MODEL. Link input.
+- `ratio` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

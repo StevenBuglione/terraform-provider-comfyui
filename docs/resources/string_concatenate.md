@@ -3,12 +3,12 @@
 page_title: "comfyui_string_concatenate Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StringConcatenate node — Concatenate [utils/string]
+  ComfyUI StringConcatenate node — Concatenate [utils/string] Source: comfy_extras/nodes_string.py:7 (v3_extras).
 ---
 
 # comfyui_string_concatenate (Resource)
 
-ComfyUI StringConcatenate node — Concatenate [utils/string]
+ComfyUI StringConcatenate node — Concatenate [utils/string] Source: comfy_extras/nodes_string.py:7 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI StringConcatenate node — Concatenate [utils/string]
 
 ### Required
 
-- `delimiter` (String) Input: STRING default:
-- `string_a` (String) Input: STRING
-- `string_b` (String) Input: STRING
+- `delimiter` (String) Input: STRING. Default: "".
+- `string_a` (String) Input: STRING. Supports multiline text.
+- `string_b` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

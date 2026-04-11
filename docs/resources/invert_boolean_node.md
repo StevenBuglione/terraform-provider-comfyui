@@ -3,12 +3,12 @@
 page_title: "comfyui_invert_boolean_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI InvertBooleanNode node — Invert Boolean [logic]
+  ComfyUI InvertBooleanNode node — Invert Boolean [logic] Source: comfy_extras/nodes_logic.py:242 (v3_extras).
 ---
 
 # comfyui_invert_boolean_node (Resource)
 
-ComfyUI InvertBooleanNode node — Invert Boolean [logic]
+ComfyUI InvertBooleanNode node — Invert Boolean [logic] Source: comfy_extras/nodes_logic.py:242 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI InvertBooleanNode node — Invert Boolean [logic]
 
 ### Required
 
-- `boolean` (Boolean) Input: BOOLEAN
+- `boolean` (Boolean) Input: BOOLEAN.
 
 ### Read-Only
 
-- `boolean_output` (String) Output: BOOLEAN (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `boolean_output` (String) Output: BOOLEAN (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

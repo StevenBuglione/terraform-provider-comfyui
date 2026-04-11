@@ -46,37 +46,37 @@ func (r *MoonvalleyImg2VideoNodeResource) Metadata(_ context.Context, req resour
 
 func (r *MoonvalleyImg2VideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Moonvalley Marey Image to Video Node [api node/video/Moonvalley Marey]",
+		MarkdownDescription: "Moonvalley Marey Image to Video Node [api node/video/Moonvalley Marey] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_moonvalley.py:160 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: The reference image used to generate the video.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: <synthetic> <scene cut> gopro, bright, contrast, static, overexposed, vignette, artifacts, still, noise, texture, scanlines, videogame, 360 camera, VR, transition, flare, saturation, distorted, warped, wide angle, saturated, vibrant, glowing, cross dissolve, cheesy, ugly hands, mutated hands, mutant, disfigured, extra fingers, blown out, horrible, blurry, worst quality, bad, dissolve, melt, fade in, fade out, wobbly, weird, low quality, plastic, stock footage, video camera, boring",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"<synthetic> <scene cut> gopro, bright, contrast, static, overexposed, vignette, artifacts, still, noise, texture, scanlines, videogame, 360 camera, VR, transition, flare, saturation, distorted, warped, wide angle, saturated, vibrant, glowing, cross dissolve, cheesy, ugly hands, mutated hands, mutant, disfigured, extra fingers, blown out, horrible, blurry, worst quality, bad, dissolve, melt, fade in, fade out, wobbly, weird, low quality, plastic, stock footage, video camera, boring\". Supports multiline text. Tooltip: Negative prompt text.",
+				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO default: 16:9 (1920 x 1080)",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"16:9 (1920 x 1080)\". Tooltip: Resolution of the output video.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"16:9 (1920 x 1080)",
@@ -88,29 +88,29 @@ func (r *MoonvalleyImg2VideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"prompt_adherence": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 4.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 4.5. Allowed range: 1 to 20. Step: 1. Tooltip: Guidance scale for generation control.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 20),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 9",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 9. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Random seed value.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 80",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 80. Allowed range: 75 to 100. Step: 1. Tooltip: Number of denoising steps.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(75, 100),
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

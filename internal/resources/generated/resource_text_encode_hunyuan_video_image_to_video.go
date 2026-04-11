@@ -41,44 +41,44 @@ func (r *TextEncodeHunyuanVideoImageToVideoResource) Metadata(_ context.Context,
 
 func (r *TextEncodeHunyuanVideoImageToVideoResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI TextEncodeHunyuanVideo_ImageToVideo node [advanced/conditioning]",
+		MarkdownDescription: "ComfyUI TextEncodeHunyuanVideo_ImageToVideo node [advanced/conditioning] Source: comfy_extras/nodes_hunyuan.py:272 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input.",
+				Required:            true,
 			},
 			"clip_vision_output": schema.StringAttribute{
-				Description: "Input: CLIP_VISION_OUTPUT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP_VISION_OUTPUT. Link input.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"image_interleave": schema.Int64Attribute{
-				Description: "Input: INT default: 2",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 2. Allowed range: 1 to 512. Tooltip: How much the image influences things vs the text prompt. Higher number means more influence from the text prompt.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 512),
 				},
 			},
 			"conditioning_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

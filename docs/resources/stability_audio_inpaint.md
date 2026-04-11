@@ -3,12 +3,12 @@
 page_title: "comfyui_stability_audio_inpaint Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StabilityAudioInpaint node — Stability AI Audio Inpaint [api node/audio/Stability AI]
+  ComfyUI StabilityAudioInpaint node — Stability AI Audio Inpaint [api node/audio/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:797 (v3_api).
 ---
 
 # comfyui_stability_audio_inpaint (Resource)
 
-ComfyUI StabilityAudioInpaint node — Stability AI Audio Inpaint [api node/audio/Stability AI]
+ComfyUI StabilityAudioInpaint node — Stability AI Audio Inpaint [api node/audio/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:797 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ ComfyUI StabilityAudioInpaint node — Stability AI Audio Inpaint [api node/audi
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
+- `audio` (String) Input: AUDIO. Link input. Tooltip: Audio must be between 6 and 190 seconds long.
+- `model` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
 
 ### Optional
 
-- `duration` (Number) Input: INT default: 190
-- `mask_end` (Number) Input: INT default: 190
-- `mask_start` (Number) Input: INT default: 30
-- `seed` (Number) Input: INT default: 0
-- `steps` (Number) Input: INT default: 8
+- `duration` (Number) Input: INT. Default: 190. Allowed range: 1 to 190. Step: 1. Tooltip: Controls the duration in seconds of the generated audio.
+- `mask_end` (Number) Input: INT. Default: 190. Allowed range: 0 to 190. Step: 1.
+- `mask_start` (Number) Input: INT. Default: 30. Allowed range: 0 to 190. Step: 1.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967294. Step: 1. Tooltip: The random seed used for generation.
+- `steps` (Number) Input: INT. Default: 8. Allowed range: 4 to 8. Step: 1. Tooltip: Controls the number of sampling steps.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

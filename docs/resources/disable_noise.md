@@ -3,12 +3,12 @@
 page_title: "comfyui_disable_noise Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI DisableNoise node [sampling/custom_sampling/noise]
+  ComfyUI DisableNoise node [sampling/custom_sampling/noise] Source: comfy_extras/nodes_custom_sampler.py:893 (v3_extras).
 ---
 
 # comfyui_disable_noise (Resource)
 
-ComfyUI DisableNoise node [sampling/custom_sampling/noise]
+ComfyUI DisableNoise node [sampling/custom_sampling/noise] Source: comfy_extras/nodes_custom_sampler.py:893 (v3_extras).
 
 
 
@@ -17,6 +17,6 @@ ComfyUI DisableNoise node [sampling/custom_sampling/noise]
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `noise_output` (String) Output: NOISE (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `noise_output` (String) Output: NOISE (slot 0).

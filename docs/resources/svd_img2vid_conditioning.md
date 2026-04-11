@@ -3,12 +3,12 @@
 page_title: "comfyui_svd_img2vid_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SVD_img2vid_Conditioning node — SVD_img2vid_Conditioning [conditioning/video_models]
+  ComfyUI SVD_img2vid_Conditioning node — SVD_img2vid_Conditioning [conditioning/video_models] Source: comfy_extras/nodes_video_model.py:26 (v1_extras).
 ---
 
 # comfyui_svd_img2vid_conditioning (Resource)
 
-ComfyUI SVD_img2vid_Conditioning node — SVD_img2vid_Conditioning [conditioning/video_models]
+ComfyUI SVD_img2vid_Conditioning node — SVD_img2vid_Conditioning [conditioning/video_models] Source: comfy_extras/nodes_video_model.py:26 (v1_extras).
 
 
 
@@ -17,20 +17,20 @@ ComfyUI SVD_img2vid_Conditioning node — SVD_img2vid_Conditioning [conditioning
 
 ### Required
 
-- `augmentation_level` (Number) Input: FLOAT default: 0
-- `clip_vision` (String) Input: CLIP_VISION (link)
-- `fps` (Number) Input: INT default: 6
-- `height` (Number) Input: INT default: 576
-- `init_image` (String) Input: IMAGE (link)
-- `motion_bucket_id` (Number) Input: INT default: 127
-- `vae` (String) Input: VAE (link)
-- `video_frames` (Number) Input: INT default: 14
-- `width` (Number) Input: INT default: 1024
+- `augmentation_level` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 10. Step: 0.01.
+- `clip_vision` (String) Input: CLIP_VISION. Link input.
+- `fps` (Number) Input: INT. Default: 6. Allowed range: 1 to 1024.
+- `height` (Number) Input: INT. Default: 576. Minimum value: 16. Step: 8.
+- `init_image` (String) Input: IMAGE. Link input.
+- `motion_bucket_id` (Number) Input: INT. Default: 127. Allowed range: 1 to 1023.
+- `vae` (String) Input: VAE. Link input.
+- `video_frames` (Number) Input: INT. Default: 14. Allowed range: 1 to 4096.
+- `width` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

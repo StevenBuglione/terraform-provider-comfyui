@@ -13,7 +13,7 @@ description: |-
   lumina2: gemma 2 2B
   wan: umt5 xxl
   hidream: llama-3.1 (Recommend) or t5
-  omnigen2: qwen vl 2.5 3B [advanced/loaders]
+  omnigen2: qwen vl 2.5 3B [advanced/loaders] Source: nodes.py:976 (v1_core).
 ---
 
 # comfyui_clip_loader (Resource)
@@ -29,7 +29,7 @@ cosmos: old t5 xxl
 lumina2: gemma 2 2B
 wan: umt5 xxl
  hidream: llama-3.1 (Recommend) or t5
-omnigen2: qwen vl 2.5 3B [advanced/loaders]
+omnigen2: qwen vl 2.5 3B [advanced/loaders] Source: nodes.py:976 (v1_core).
 
 
 
@@ -38,15 +38,15 @@ omnigen2: qwen vl 2.5 3B [advanced/loaders]
 
 ### Required
 
-- `clip_name` (String) Input: COMBO
-- `type` (String) Input: COMBO
+- `clip_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
+- `type` (String) Input: COMBO.
 
 ### Optional
 
-- `device` (String) Input: COMBO
+- `device` (String) Input: COMBO.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

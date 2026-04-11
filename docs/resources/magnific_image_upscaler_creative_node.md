@@ -3,12 +3,12 @@
 page_title: "comfyui_magnific_image_upscaler_creative_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Prompt‑guided enhancement, stylization, and 2x/4x/8x/16x upscaling. Maximum output: 25.3 megapixels. [api node/image/Magnific]
+  Prompt‑guided enhancement, stylization, and 2x/4x/8x/16x upscaling. Maximum output: 25.3 megapixels. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:58 (v3_api).
 ---
 
 # comfyui_magnific_image_upscaler_creative_node (Resource)
 
-Prompt‑guided enhancement, stylization, and 2x/4x/8x/16x upscaling. Maximum output: 25.3 megapixels. [api node/image/Magnific]
+Prompt‑guided enhancement, stylization, and 2x/4x/8x/16x upscaling. Maximum output: 25.3 megapixels. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:58 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Prompt‑guided enhancement, stylization, and 2x/4x/8x/16x upscaling. Maximum ou
 
 ### Required
 
-- `auto_downscale` (Boolean) Input: BOOLEAN default: false
-- `creativity` (Number) Input: INT default: 0
-- `engine` (String) Input: COMBO
-- `fractality` (Number) Input: INT default: 0
-- `hdr` (Number) Input: INT default: 0
-- `image` (String) Input: IMAGE (link)
-- `optimized_for` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `resemblance` (Number) Input: INT default: 0
-- `scale_factor` (String) Input: COMBO
+- `auto_downscale` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Automatically downscale input image if output would exceed maximum pixel limit.
+- `creativity` (Number) Input: INT. Default: 0. Allowed range: -10 to 10.
+- `engine` (String) Input: COMBO.
+- `fractality` (Number) Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The strength of the prompt and intricacy per square pixel.
+- `hdr` (Number) Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The level of definition and detail.
+- `image` (String) Input: IMAGE. Link input.
+- `optimized_for` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `resemblance` (Number) Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The level of resemblance to the original image.
+- `scale_factor` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

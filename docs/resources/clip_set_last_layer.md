@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_set_last_layer Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPSetLastLayer node — CLIP Set Last Layer [conditioning]
+  ComfyUI CLIPSetLastLayer node — CLIP Set Last Layer [conditioning] Source: nodes.py:655 (v1_core).
 ---
 
 # comfyui_clip_set_last_layer (Resource)
 
-ComfyUI CLIPSetLastLayer node — CLIP Set Last Layer [conditioning]
+ComfyUI CLIPSetLastLayer node — CLIP Set Last Layer [conditioning] Source: nodes.py:655 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI CLIPSetLastLayer node — CLIP Set Last Layer [conditioning]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `stop_at_clip_layer` (Number) Input: INT default: -1
+- `clip` (String) Input: CLIP. Link input.
+- `stop_at_clip_layer` (Number) Input: INT. Default: -1. Allowed range: -24 to -1. Step: 1.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_batch_seed_behavior Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentBatchSeedBehavior node [latent/advanced]
+  ComfyUI LatentBatchSeedBehavior node [latent/advanced] Source: comfy_extras/nodes_latent.py:288 (v3_extras).
 ---
 
 # comfyui_latent_batch_seed_behavior (Resource)
 
-ComfyUI LatentBatchSeedBehavior node [latent/advanced]
+ComfyUI LatentBatchSeedBehavior node [latent/advanced] Source: comfy_extras/nodes_latent.py:288 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI LatentBatchSeedBehavior node [latent/advanced]
 
 ### Required
 
-- `samples` (String) Input: LATENT (link)
-- `seed_behavior` (String) Input: COMBO default: fixed
+- `samples` (String) Input: LATENT. Link input.
+- `seed_behavior` (String) Input: COMBO. Default: "fixed".
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -39,50 +39,50 @@ func (r *UnCLIPCheckpointLoaderResource) Metadata(_ context.Context, req resourc
 
 func (r *UnCLIPCheckpointLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI unCLIPCheckpointLoader node — unCLIPCheckpointLoader [loaders]",
+		MarkdownDescription: "ComfyUI unCLIPCheckpointLoader node — unCLIPCheckpointLoader [loaders] Source: nodes.py:640 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"ckpt_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints').",
+				Required:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip_output": schema.StringAttribute{
-				Description: "Output: CLIP (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: CLIP (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"vae_output": schema.StringAttribute{
-				Description: "Output: VAE (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: VAE (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip_vision_output": schema.StringAttribute{
-				Description: "Output: CLIP_VISION (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: CLIP_VISION (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

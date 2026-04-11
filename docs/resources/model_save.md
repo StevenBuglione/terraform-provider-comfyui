@@ -3,12 +3,12 @@
 page_title: "comfyui_model_save Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelSave node — ModelSave [advanced/model_merging]
+  ComfyUI ModelSave node — ModelSave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_model_merging.py:342 (v1_extras).
 ---
 
 # comfyui_model_save (Resource)
 
-ComfyUI ModelSave node — ModelSave [advanced/model_merging]
+ComfyUI ModelSave node — ModelSave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_model_merging.py:342 (v1_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI ModelSave node — ModelSave [advanced/model_merging]
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: diffusion_models/ComfyUI
-- `model` (String) Input: MODEL (link)
+- `filename_prefix` (String) Input: STRING. Default: "diffusion_models/ComfyUI".
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

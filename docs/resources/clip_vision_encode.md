@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_vision_encode Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPVisionEncode node — CLIP Vision Encode [conditioning]
+  ComfyUI CLIPVisionEncode node — CLIP Vision Encode [conditioning] Source: nodes.py:1050 (v1_core).
 ---
 
 # comfyui_clip_vision_encode (Resource)
 
-ComfyUI CLIPVisionEncode node — CLIP Vision Encode [conditioning]
+ComfyUI CLIPVisionEncode node — CLIP Vision Encode [conditioning] Source: nodes.py:1050 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI CLIPVisionEncode node — CLIP Vision Encode [conditioning]
 
 ### Required
 
-- `clip_vision` (String) Input: CLIP_VISION (link)
-- `crop` (String) Input: COMBO
-- `image` (String) Input: IMAGE (link)
+- `clip_vision` (String) Input: CLIP_VISION. Link input.
+- `crop` (String) Input: COMBO.
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `clip_vision_output_output` (String) Output: CLIP_VISION_OUTPUT (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_vision_output_output` (String) Output: CLIP_VISION_OUTPUT (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

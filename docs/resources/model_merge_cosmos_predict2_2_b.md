@@ -3,12 +3,12 @@
 page_title: "comfyui_model_merge_cosmos_predict2_2_b Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelMergeCosmosPredict2_2B node — ModelMergeCosmosPredict2_2B [advanced/model_merging/model_specific]
+  ComfyUI ModelMergeCosmosPredict2_2B node — ModelMergeCosmosPredict2_2B [advanced/model_merging/model_specific] Source: comfy_extras/nodes_model_merging_model_specific.py:271 (v1_extras).
 ---
 
 # comfyui_model_merge_cosmos_predict2_2_b (Resource)
 
-ComfyUI ModelMergeCosmosPredict2_2B node — ModelMergeCosmosPredict2_2B [advanced/model_merging/model_specific]
+ComfyUI ModelMergeCosmosPredict2_2B node — ModelMergeCosmosPredict2_2B [advanced/model_merging/model_specific] Source: comfy_extras/nodes_model_merging_model_specific.py:271 (v1_extras).
 
 
 
@@ -17,44 +17,44 @@ ComfyUI ModelMergeCosmosPredict2_2B node — ModelMergeCosmosPredict2_2B [advanc
 
 ### Required
 
-- `blocks_0` (String) Input: COMBO
-- `blocks_1` (String) Input: COMBO
-- `blocks_10` (String) Input: COMBO
-- `blocks_11` (String) Input: COMBO
-- `blocks_12` (String) Input: COMBO
-- `blocks_13` (String) Input: COMBO
-- `blocks_14` (String) Input: COMBO
-- `blocks_15` (String) Input: COMBO
-- `blocks_16` (String) Input: COMBO
-- `blocks_17` (String) Input: COMBO
-- `blocks_18` (String) Input: COMBO
-- `blocks_19` (String) Input: COMBO
-- `blocks_2` (String) Input: COMBO
-- `blocks_20` (String) Input: COMBO
-- `blocks_21` (String) Input: COMBO
-- `blocks_22` (String) Input: COMBO
-- `blocks_23` (String) Input: COMBO
-- `blocks_24` (String) Input: COMBO
-- `blocks_25` (String) Input: COMBO
-- `blocks_26` (String) Input: COMBO
-- `blocks_27` (String) Input: COMBO
-- `blocks_3` (String) Input: COMBO
-- `blocks_4` (String) Input: COMBO
-- `blocks_5` (String) Input: COMBO
-- `blocks_6` (String) Input: COMBO
-- `blocks_7` (String) Input: COMBO
-- `blocks_8` (String) Input: COMBO
-- `blocks_9` (String) Input: COMBO
-- `final_layer` (String) Input: COMBO
-- `model1` (String) Input: MODEL (link)
-- `model2` (String) Input: MODEL (link)
-- `pos_embedder` (String) Input: COMBO
-- `t_embedder` (String) Input: COMBO
-- `t_embedding_norm` (String) Input: COMBO
-- `x_embedder` (String) Input: COMBO
+- `blocks_0` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_1` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_10` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_11` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_12` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_13` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_14` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_15` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_16` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_17` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_18` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_19` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_2` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_20` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_21` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_22` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_23` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_24` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_25` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_26` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_27` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_3` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_4` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_5` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_6` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_7` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_8` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `blocks_9` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `final_layer` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `model1` (String) Input: MODEL. Link input.
+- `model2` (String) Input: MODEL. Link input.
+- `pos_embedder` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `t_embedder` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `t_embedding_norm` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
+- `x_embedder` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: argument.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

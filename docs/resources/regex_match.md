@@ -3,12 +3,12 @@
 page_title: "comfyui_regex_match Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI RegexMatch node — Regex Match [utils/string]
+  ComfyUI RegexMatch node — Regex Match [utils/string] Source: comfy_extras/nodes_string.py:225 (v3_extras).
 ---
 
 # comfyui_regex_match (Resource)
 
-ComfyUI RegexMatch node — Regex Match [utils/string]
+ComfyUI RegexMatch node — Regex Match [utils/string] Source: comfy_extras/nodes_string.py:225 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI RegexMatch node — Regex Match [utils/string]
 
 ### Required
 
-- `case_insensitive` (Boolean) Input: BOOLEAN default: true
-- `dotall` (Boolean) Input: BOOLEAN default: false
-- `multiline` (Boolean) Input: BOOLEAN default: false
-- `regex_pattern` (String) Input: STRING
-- `string` (String) Input: STRING
+- `case_insensitive` (Boolean) Input: BOOLEAN. Default: true.
+- `dotall` (Boolean) Input: BOOLEAN. Default: false.
+- `multiline` (Boolean) Input: BOOLEAN. Default: false.
+- `regex_pattern` (String) Input: STRING. Supports multiline text.
+- `string` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `matches_output` (String) Output: BOOLEAN (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `matches_output` (String) Output: BOOLEAN (slot 0).
+- `node_id` (String) ComfyUI node class type.

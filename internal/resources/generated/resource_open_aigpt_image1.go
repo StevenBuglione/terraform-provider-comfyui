@@ -47,33 +47,33 @@ func (r *OpenAigptImage1Resource) Metadata(_ context.Context, req resource.Metad
 
 func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generates images synchronously via OpenAI's GPT Image endpoint. [api node/image/OpenAI]",
+		MarkdownDescription: "Generates images synchronously via OpenAI's GPT Image endpoint. [api node/image/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:360 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text prompt for GPT Image.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: not implemented yet in backend.",
+				Optional:            true,
 			},
 			"quality": schema.StringAttribute{
-				Description: "Input: COMBO default: low",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"low\". Tooltip: Image quality, affects cost and generation time.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"low",
@@ -83,8 +83,8 @@ func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"background": schema.StringAttribute{
-				Description: "Input: COMBO default: auto",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: Return image with or without background.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -94,8 +94,8 @@ func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"size": schema.StringAttribute{
-				Description: "Input: COMBO default: auto",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: Image size.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -106,23 +106,23 @@ func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"n": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1. Tooltip: How many images to generate.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 8),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Optional reference image for image editing.",
+				Optional:            true,
 			},
 			"mask": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: MASK. Link input. Tooltip: Optional mask for inpainting (white areas will be replaced).",
+				Optional:            true,
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO default: gpt-image-1.5",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"gpt-image-1.5\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"gpt-image-1",
@@ -131,8 +131,8 @@ func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

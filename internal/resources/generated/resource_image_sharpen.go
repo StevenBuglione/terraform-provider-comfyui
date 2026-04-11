@@ -42,50 +42,50 @@ func (r *ImageSharpenResource) Metadata(_ context.Context, req resource.Metadata
 
 func (r *ImageSharpenResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Sharpen node [image/postprocessing]",
+		MarkdownDescription: "ComfyUI Sharpen node [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:177 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"sharpen_radius": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 31. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 31),
 				},
 			},
 			"sigma": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.1 to 10. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 10),
 				},
 			},
 			"alpha": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 5. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 5),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

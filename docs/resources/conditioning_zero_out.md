@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_zero_out Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningZeroOut node — ConditioningZeroOut [advanced/conditioning]
+  ComfyUI ConditioningZeroOut node — ConditioningZeroOut [advanced/conditioning] Source: nodes.py:252 (v1_core).
 ---
 
 # comfyui_conditioning_zero_out (Resource)
 
-ComfyUI ConditioningZeroOut node — ConditioningZeroOut [advanced/conditioning]
+ComfyUI ConditioningZeroOut node — ConditioningZeroOut [advanced/conditioning] Source: nodes.py:252 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI ConditioningZeroOut node — ConditioningZeroOut [advanced/conditioning]
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
+- `conditioning` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

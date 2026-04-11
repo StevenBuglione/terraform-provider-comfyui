@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_set_properties_and_combine Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI ConditioningSetPropertiesAndCombine node — Cond Set Props Combine [advanced/hooks/cond single]
+  (EXPERIMENTAL) ComfyUI ConditioningSetPropertiesAndCombine node — Cond Set Props Combine [advanced/hooks/cond single] Source: comfy_extras/nodes_hooks.py:117 (v1_extras).
 ---
 
 # comfyui_conditioning_set_properties_and_combine (Resource)
 
-(EXPERIMENTAL) ComfyUI ConditioningSetPropertiesAndCombine node — Cond Set Props Combine [advanced/hooks/cond single]
+(EXPERIMENTAL) ComfyUI ConditioningSetPropertiesAndCombine node — Cond Set Props Combine [advanced/hooks/cond single] Source: comfy_extras/nodes_hooks.py:117 (v1_extras).
 
 
 
@@ -17,19 +17,19 @@ description: |-
 
 ### Required
 
-- `cond` (String) Input: CONDITIONING (link)
-- `cond_new` (String) Input: CONDITIONING (link)
-- `set_cond_area` (String) Input: COMBO
-- `strength` (Number) Input: FLOAT default: 1
+- `cond` (String) Input: CONDITIONING. Link input.
+- `cond_new` (String) Input: CONDITIONING. Link input.
+- `set_cond_area` (String) Input: COMBO.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Optional
 
-- `hooks` (String) Input: HOOKS (link)
-- `mask` (String) Input: MASK (link)
-- `timesteps` (String) Input: TIMESTEPS_RANGE (link)
+- `hooks` (String) Input: HOOKS. Link input.
+- `mask` (String) Input: MASK. Link input.
+- `timesteps` (String) Input: TIMESTEPS_RANGE. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

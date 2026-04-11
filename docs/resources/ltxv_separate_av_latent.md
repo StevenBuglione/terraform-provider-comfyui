@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_separate_av_latent Resource - comfyui"
 subcategory: ""
 description: |-
-  LTXV Separate AV Latent [latent/video/ltxv]
+  LTXV Separate AV Latent [latent/video/ltxv] Source: comfy_extras/nodes_lt.py:653 (v3_extras).
 ---
 
 # comfyui_ltxv_separate_av_latent (Resource)
 
-LTXV Separate AV Latent [latent/video/ltxv]
+LTXV Separate AV Latent [latent/video/ltxv] Source: comfy_extras/nodes_lt.py:653 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ LTXV Separate AV Latent [latent/video/ltxv]
 
 ### Required
 
-- `av_latent` (String) Input: LATENT (link)
+- `av_latent` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `audio_latent_output` (String) Output: LATENT (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_latent_output` (String) Output: LATENT (slot 0)
+- `audio_latent_output` (String) Output: LATENT (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_latent_output` (String) Output: LATENT (slot 0).

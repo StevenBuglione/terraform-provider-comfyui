@@ -3,12 +3,12 @@
 page_title: "comfyui_set_clip_hooks Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SetClipHooks node — Set CLIP Hooks [advanced/hooks/clip]
+  (EXPERIMENTAL) ComfyUI SetClipHooks node — Set CLIP Hooks [advanced/hooks/clip] Source: comfy_extras/nodes_hooks.py:228 (v1_extras).
 ---
 
 # comfyui_set_clip_hooks (Resource)
 
-(EXPERIMENTAL) ComfyUI SetClipHooks node — Set CLIP Hooks [advanced/hooks/clip]
+(EXPERIMENTAL) ComfyUI SetClipHooks node — Set CLIP Hooks [advanced/hooks/clip] Source: comfy_extras/nodes_hooks.py:228 (v1_extras).
 
 
 
@@ -17,16 +17,16 @@ description: |-
 
 ### Required
 
-- `apply_to_conds` (Boolean) Input: BOOLEAN default: true
-- `clip` (String) Input: CLIP (link)
-- `schedule_clip` (Boolean) Input: BOOLEAN default: false
+- `apply_to_conds` (Boolean) Input: BOOLEAN. Default: true.
+- `clip` (String) Input: CLIP. Link input.
+- `schedule_clip` (Boolean) Input: BOOLEAN. Default: false.
 
 ### Optional
 
-- `hooks` (String) Input: HOOKS (link)
+- `hooks` (String) Input: HOOKS. Link input.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

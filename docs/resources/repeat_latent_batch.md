@@ -3,12 +3,12 @@
 page_title: "comfyui_repeat_latent_batch Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI RepeatLatentBatch node — Repeat Latent Batch [latent/batch]
+  ComfyUI RepeatLatentBatch node — Repeat Latent Batch [latent/batch] Source: nodes.py:1271 (v1_core).
 ---
 
 # comfyui_repeat_latent_batch (Resource)
 
-ComfyUI RepeatLatentBatch node — Repeat Latent Batch [latent/batch]
+ComfyUI RepeatLatentBatch node — Repeat Latent Batch [latent/batch] Source: nodes.py:1271 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI RepeatLatentBatch node — Repeat Latent Batch [latent/batch]
 
 ### Required
 
-- `amount` (Number) Input: INT default: 1
-- `samples` (String) Input: LATENT (link)
+- `amount` (Number) Input: INT. Default: 1. Allowed range: 1 to 64.
+- `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

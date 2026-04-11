@@ -43,25 +43,25 @@ func (r *StabilityTextToAudioResource) Metadata(_ context.Context, req resource.
 
 func (r *StabilityTextToAudioResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI StabilityTextToAudio node — Stability AI Text To Audio [api node/audio/Stability AI]",
+		MarkdownDescription: "ComfyUI StabilityTextToAudio node — Stability AI Text To Audio [api node/audio/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:625 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"stable-audio-2.5",
@@ -69,33 +69,33 @@ func (r *StabilityTextToAudioResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text.",
+				Required:            true,
 			},
 			"duration": schema.Int64Attribute{
-				Description: "Input: INT default: 190",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 190. Allowed range: 1 to 190. Step: 1. Tooltip: Controls the duration in seconds of the generated audio.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 190),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 4294967294. Step: 1. Tooltip: The random seed used for generation.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967294),
 				},
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 8",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 8. Allowed range: 4 to 8. Step: 1. Tooltip: Controls the number of sampling steps.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(4, 8),
 				},
 			},
 			"audio_output": schema.StringAttribute{
-				Description: "Output: AUDIO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

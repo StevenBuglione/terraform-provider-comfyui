@@ -3,12 +3,12 @@
 page_title: "comfyui_combine_hooks2 Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CombineHooks node — Combine Hooks [2] [advanced/hooks/combine]
+  (EXPERIMENTAL) ComfyUI CombineHooks node — Combine Hooks [2] [advanced/hooks/combine] Source: comfy_extras/nodes_hooks.py:624 (v1_extras).
 ---
 
 # comfyui_combine_hooks2 (Resource)
 
-(EXPERIMENTAL) ComfyUI CombineHooks node — Combine Hooks [2] [advanced/hooks/combine]
+(EXPERIMENTAL) ComfyUI CombineHooks node — Combine Hooks [2] [advanced/hooks/combine] Source: comfy_extras/nodes_hooks.py:624 (v1_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Optional
 
-- `hooks_a` (String) Input: HOOKS (link)
-- `hooks_b` (String) Input: HOOKS (link)
+- `hooks_a` (String) Input: HOOKS. Link input.
+- `hooks_b` (String) Input: HOOKS. Link input.
 
 ### Read-Only
 
-- `hooks_output` (String) Output: HOOKS (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `hooks_output` (String) Output: HOOKS (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

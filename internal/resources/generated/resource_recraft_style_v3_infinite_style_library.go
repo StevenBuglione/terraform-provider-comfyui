@@ -36,29 +36,29 @@ func (r *RecraftStyleV3InfiniteStyleLibraryResource) Metadata(_ context.Context,
 
 func (r *RecraftStyleV3InfiniteStyleLibraryResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Choose style based on preexisting UUID from Recraft's Infinite Style Library. [api node/image/Recraft]",
+		MarkdownDescription: "Choose style based on preexisting UUID from Recraft's Infinite Style Library. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:305 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"style_id": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Tooltip: UUID of style from Infinite Style Library.",
+				Required:            true,
 			},
 			"recraft_style_output": schema.StringAttribute{
-				Description: "Output: RecraftIO.STYLEV3 (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: RecraftIO.STYLEV3 (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

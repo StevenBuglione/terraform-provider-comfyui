@@ -35,29 +35,29 @@ func (r *SaveAudioResource) Metadata(_ context.Context, req resource.MetadataReq
 
 func (r *SaveAudioResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SaveAudio node — Save Audio (FLAC) [audio]",
+		MarkdownDescription: "ComfyUI SaveAudio node — Save Audio (FLAC) [audio] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_audio.py:155 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO. Link input.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: audio/ComfyUI",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"audio/ComfyUI\".",
+				Required:            true,
 			},
 		},
 	}

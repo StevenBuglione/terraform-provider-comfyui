@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode Resource - comfyui"
 subcategory: ""
 description: |-
-  Encodes a text prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning]
+  Encodes a text prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning] Source: nodes.py:59 (v1_core).
 ---
 
 # comfyui_clip_text_encode (Resource)
 
-Encodes a text prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning]
+Encodes a text prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning] Source: nodes.py:59 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ Encodes a text prompt using a CLIP model into an embedding that can be used to g
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `text` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input. Tooltip: The CLIP model used for encoding the text.
+- `text` (String) Input: STRING. Supports multiline text. Tooltip: The text to be encoded.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_grok_image_edit_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Modify an existing image based on a text prompt [api node/image/Grok]
+  Modify an existing image based on a text prompt [api node/image/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:158 (v3_api).
 ---
 
 # comfyui_grok_image_edit_node (Resource)
 
-Modify an existing image based on a text prompt [api node/image/Grok]
+Modify an existing image based on a text prompt [api node/image/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:158 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Modify an existing image based on a text prompt [api node/image/Grok]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO
-- `number_of_images` (Number) Input: INT default: 1
-- `prompt` (String) Input: STRING
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `image` (String) Input: IMAGE. Display name: images. Link input.
+- `model` (String) Input: COMBO.
+- `number_of_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 10. Step: 1. Tooltip: Number of edited images to generate.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the image.
+- `resolution` (String) Input: COMBO.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 
-- `aspect_ratio` (String) Input: COMBO
+- `aspect_ratio` (String) Input: COMBO. Tooltip: Only allowed when multiple images are connected to the image input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

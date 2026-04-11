@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_upscale_model_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentUpscaleModelLoader node — Load Latent Upscale Model [loaders]
+  ComfyUI LatentUpscaleModelLoader node — Load Latent Upscale Model [loaders] Source: comfy_extras/nodes_hunyuan.py:173 (v3_extras).
 ---
 
 # comfyui_latent_upscale_model_loader (Resource)
 
-ComfyUI LatentUpscaleModelLoader node — Load Latent Upscale Model [loaders]
+ComfyUI LatentUpscaleModelLoader node — Load Latent Upscale Model [loaders] Source: comfy_extras/nodes_hunyuan.py:173 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI LatentUpscaleModelLoader node — Load Latent Upscale Model [loaders]
 
 ### Required
 
-- `model_name` (String) Input: COMBO
+- `model_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('latent_upscale_models').
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_upscale_model_output` (String) Output: LATENT_UPSCALE_MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_upscale_model_output` (String) Output: LATENT_UPSCALE_MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

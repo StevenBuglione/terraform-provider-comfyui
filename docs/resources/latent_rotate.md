@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_rotate Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentRotate node — Rotate Latent [latent/transform]
+  ComfyUI LatentRotate node — Rotate Latent [latent/transform] Source: nodes.py:1356 (v1_core).
 ---
 
 # comfyui_latent_rotate (Resource)
 
-ComfyUI LatentRotate node — Rotate Latent [latent/transform]
+ComfyUI LatentRotate node — Rotate Latent [latent/transform] Source: nodes.py:1356 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI LatentRotate node — Rotate Latent [latent/transform]
 
 ### Required
 
-- `rotation` (String) Input: COMBO
-- `samples` (String) Input: LATENT (link)
+- `rotation` (String) Input: COMBO.
+- `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

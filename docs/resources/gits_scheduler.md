@@ -3,12 +3,12 @@
 page_title: "comfyui_gits_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI GITSScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI GITSScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_gits.py:338 (v3_extras).
 ---
 
 # comfyui_gits_scheduler (Resource)
 
-ComfyUI GITSScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI GITSScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_gits.py:338 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI GITSScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `coeff` (Number) Input: FLOAT default: 1.2
-- `denoise` (Number) Input: FLOAT default: 1
-- `steps` (Number) Input: INT default: 10
+- `coeff` (Number) Input: FLOAT. Default: 1.2. Allowed range: 0.8 to 1.5. Step: 0.05.
+- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `steps` (Number) Input: INT. Default: 10. Allowed range: 2 to 1000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

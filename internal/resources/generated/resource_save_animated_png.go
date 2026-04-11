@@ -40,40 +40,40 @@ func (r *SaveAnimatedPngResource) Metadata(_ context.Context, req resource.Metad
 
 func (r *SaveAnimatedPngResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SaveAnimatedPNG node [image/animation]",
+		MarkdownDescription: "ComfyUI SaveAnimatedPNG node [image/animation] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:222 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: ComfyUI",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"ComfyUI\".",
+				Required:            true,
 			},
 			"fps": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 6",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 6. Allowed range: 0.01 to 1000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 1000),
 				},
 			},
 			"compress_level": schema.Int64Attribute{
-				Description: "Input: INT default: 4",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 4. Allowed range: 0 to 9.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9),
 				},

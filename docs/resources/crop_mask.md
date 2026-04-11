@@ -3,12 +3,12 @@
 page_title: "comfyui_crop_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CropMask node [mask]
+  ComfyUI CropMask node [mask] Source: comfy_extras/nodes_mask.py:218 (v3_extras).
 ---
 
 # comfyui_crop_mask (Resource)
 
-ComfyUI CropMask node [mask]
+ComfyUI CropMask node [mask] Source: comfy_extras/nodes_mask.py:218 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI CropMask node [mask]
 
 ### Required
 
-- `height` (Number) Input: INT default: 512
-- `mask` (String) Input: MASK (link)
-- `width` (Number) Input: INT default: 512
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `height` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
+- `mask` (String) Input: MASK. Link input.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

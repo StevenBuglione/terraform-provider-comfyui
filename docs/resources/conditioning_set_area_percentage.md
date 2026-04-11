@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_set_area_percentage Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningSetAreaPercentage node — Conditioning (Set Area with Percentage) [conditioning]
+  ComfyUI ConditioningSetAreaPercentage node — Conditioning (Set Area with Percentage) [conditioning] Source: nodes.py:188 (v1_core).
 ---
 
 # comfyui_conditioning_set_area_percentage (Resource)
 
-ComfyUI ConditioningSetAreaPercentage node — Conditioning (Set Area with Percentage) [conditioning]
+ComfyUI ConditioningSetAreaPercentage node — Conditioning (Set Area with Percentage) [conditioning] Source: nodes.py:188 (v1_core).
 
 
 
@@ -17,15 +17,15 @@ ComfyUI ConditioningSetAreaPercentage node — Conditioning (Set Area with Perce
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `height` (Number) Input: FLOAT default: 1
-- `strength` (Number) Input: FLOAT default: 1
-- `width` (Number) Input: FLOAT default: 1
-- `x` (Number) Input: FLOAT default: 0
-- `y` (Number) Input: FLOAT default: 0
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `height` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `width` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `x` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
+- `y` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

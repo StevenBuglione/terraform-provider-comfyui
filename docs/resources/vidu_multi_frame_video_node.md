@@ -3,12 +3,12 @@
 page_title: "comfyui_vidu_multi_frame_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate a video with multiple keyframe transitions. [api node/video/Vidu]
+  Generate a video with multiple keyframe transitions. [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:1135 (v3_api).
 ---
 
 # comfyui_vidu_multi_frame_video_node (Resource)
 
-Generate a video with multiple keyframe transitions. [api node/video/Vidu]
+Generate a video with multiple keyframe transitions. [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:1135 (v3_api).
 
 
 
@@ -17,14 +17,14 @@ Generate a video with multiple keyframe transitions. [api node/video/Vidu]
 
 ### Required
 
-- `frames` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `model` (String) Input: COMBO
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 1
-- `start_image` (String) Input: IMAGE (link)
+- `frames` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of keyframe transitions (2-9).
+- `model` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO.
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
+- `start_image` (String) Input: IMAGE. Link input. Tooltip: The starting frame image. Aspect ratio must be between 1:4 and 4:1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

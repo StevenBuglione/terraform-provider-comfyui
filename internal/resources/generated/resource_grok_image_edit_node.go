@@ -45,25 +45,25 @@ func (r *GrokImageEditNodeResource) Metadata(_ context.Context, req resource.Met
 
 func (r *GrokImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Modify an existing image based on a text prompt [api node/image/Grok]",
+		MarkdownDescription: "Modify an existing image based on a text prompt [api node/image/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:158 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"grok-imagine-image-pro",
@@ -73,16 +73,16 @@ func (r *GrokImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Display name: images. Link input.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the image.",
+				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"1K",
@@ -91,22 +91,22 @@ func (r *GrokImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"number_of_images": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 10. Step: 1. Tooltip: Number of edited images to generate.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 10),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Only allowed when multiple images are connected to the image input.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -127,8 +127,8 @@ func (r *GrokImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

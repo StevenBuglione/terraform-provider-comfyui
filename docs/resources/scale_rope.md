@@ -3,12 +3,12 @@
 page_title: "comfyui_scale_rope Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Scale and shift the ROPE of the model. [advanced/model_patches]
+  (EXPERIMENTAL) Scale and shift the ROPE of the model. [advanced/model_patches] Source: comfy_extras/nodes_rope.py:5 (v3_extras).
 ---
 
 # comfyui_scale_rope (Resource)
 
-(EXPERIMENTAL) Scale and shift the ROPE of the model. [advanced/model_patches]
+(EXPERIMENTAL) Scale and shift the ROPE of the model. [advanced/model_patches] Source: comfy_extras/nodes_rope.py:5 (v3_extras).
 
 
 
@@ -17,16 +17,16 @@ description: |-
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `scale_t` (Number) Input: FLOAT default: 1
-- `scale_x` (Number) Input: FLOAT default: 1
-- `scale_y` (Number) Input: FLOAT default: 1
-- `shift_t` (Number) Input: FLOAT default: 0
-- `shift_x` (Number) Input: FLOAT default: 0
-- `shift_y` (Number) Input: FLOAT default: 0
+- `model` (String) Input: MODEL. Link input.
+- `scale_t` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.
+- `scale_x` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.
+- `scale_y` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.
+- `shift_t` (Number) Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.
+- `shift_x` (Number) Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.
+- `shift_y` (Number) Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

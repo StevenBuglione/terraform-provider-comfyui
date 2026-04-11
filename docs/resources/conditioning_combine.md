@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_combine Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningCombine node — Conditioning (Combine) [conditioning]
+  ComfyUI ConditioningCombine node — Conditioning (Combine) [conditioning] Source: nodes.py:83 (v1_core).
 ---
 
 # comfyui_conditioning_combine (Resource)
 
-ComfyUI ConditioningCombine node — Conditioning (Combine) [conditioning]
+ComfyUI ConditioningCombine node — Conditioning (Combine) [conditioning] Source: nodes.py:83 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ConditioningCombine node — Conditioning (Combine) [conditioning]
 
 ### Required
 
-- `conditioning_1` (String) Input: CONDITIONING (link)
-- `conditioning_2` (String) Input: CONDITIONING (link)
+- `conditioning_1` (String) Input: CONDITIONING. Link input.
+- `conditioning_2` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

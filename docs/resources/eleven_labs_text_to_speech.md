@@ -3,12 +3,12 @@
 page_title: "comfyui_eleven_labs_text_to_speech Resource - comfyui"
 subcategory: ""
 description: |-
-  Convert text to speech. [api node/audio/ElevenLabs]
+  Convert text to speech. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:236 (v3_api).
 ---
 
 # comfyui_eleven_labs_text_to_speech (Resource)
 
-Convert text to speech. [api node/audio/ElevenLabs]
+Convert text to speech. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:236 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ Convert text to speech. [api node/audio/ElevenLabs]
 
 ### Required
 
-- `apply_text_normalization` (String) Input: COMBO
-- `language_code` (String) Input: STRING default:
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `output_format` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 1
-- `stability` (Number) Input: FLOAT default: 0.5
-- `text` (String) Input: STRING default:
-- `voice` (String) Input: ELEVENLABS_VOICE (link)
+- `apply_text_normalization` (String) Input: COMBO. Tooltip: Text normalization mode. 'auto' lets the system decide, 'on' always applies normalization, 'off' skips it.
+- `language_code` (String) Input: STRING. Default: "". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for text-to-speech.
+- `output_format` (String) Input: COMBO. Tooltip: Audio output format.
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Tooltip: Seed for reproducibility (determinism not guaranteed).
+- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
+- `text` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: The text to convert to speech.
+- `voice` (String) Input: ELEVENLABS_VOICE. Link input. Tooltip: Voice to use for speech synthesis. Connect from Voice Selector or Instant Voice Clone.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

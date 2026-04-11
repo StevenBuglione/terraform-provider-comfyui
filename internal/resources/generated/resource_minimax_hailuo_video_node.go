@@ -44,44 +44,44 @@ func (r *MinimaxHailuoVideoNodeResource) Metadata(_ context.Context, req resourc
 
 func (r *MinimaxHailuoVideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generates videos from prompt, with optional start frame using the new MiniMax Hailuo-02 model. [api node/video/MiniMax]",
+		MarkdownDescription: "Generates videos from prompt, with optional start frame using the new MiniMax Hailuo-02 model. [api node/video/MiniMax] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_minimax.py:291 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt_text": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text prompt to guide the video generation.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Step: 1. Tooltip: The random seed used for creating the noise.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"first_frame_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Optional image to use as the first frame to generate a video.",
+				Optional:            true,
 			},
 			"prompt_optimizer": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Optimize prompt to improve generation quality when needed.",
+				Optional:            true,
 			},
 			"duration": schema.StringAttribute{
-				Description: "Input: COMBO default: 6",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: 6. Tooltip: The length of the output video in seconds.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"6",
@@ -90,8 +90,8 @@ func (r *MinimaxHailuoVideoNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO default: 768P",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"768P\". Tooltip: The dimensions of the video display. 1080p is 1920x1080, 768p is 1366x768.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"768P",
@@ -100,8 +100,8 @@ func (r *MinimaxHailuoVideoNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

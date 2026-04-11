@@ -3,12 +3,12 @@
 page_title: "comfyui_magnific_image_relight_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Relight an image with lighting adjustments and optional reference-based light transfer. [api node/image/Magnific]
+  Relight an image with lighting adjustments and optional reference-based light transfer. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:549 (v3_api).
 ---
 
 # comfyui_magnific_image_relight_node (Resource)
 
-Relight an image with lighting adjustments and optional reference-based light transfer. [api node/image/Magnific]
+Relight an image with lighting adjustments and optional reference-based light transfer. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:549 (v3_api).
 
 
 
@@ -17,21 +17,21 @@ Relight an image with lighting adjustments and optional reference-based light tr
 
 ### Required
 
-- `advanced_settings` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `change_background` (Boolean) Input: BOOLEAN default: true
-- `image` (String) Input: IMAGE (link)
-- `interpolate_from_original` (Boolean) Input: BOOLEAN default: false
-- `light_transfer_strength` (Number) Input: INT default: 100
-- `preserve_details` (Boolean) Input: BOOLEAN default: true
-- `prompt` (String) Input: STRING default:
-- `style` (String) Input: COMBO
+- `advanced_settings` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Fine-tuning options for advanced lighting control.
+- `change_background` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Modifies background based on prompt/reference.
+- `image` (String) Input: IMAGE. Link input. Tooltip: The image to relight.
+- `interpolate_from_original` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Restricts generation freedom to match original more closely.
+- `light_transfer_strength` (Number) Input: INT. Default: 100. Allowed range: 0 to 100. Tooltip: Intensity of light transfer application.
+- `preserve_details` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Maintains texture and fine details from original.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Descriptive guidance for lighting. Supports emphasis notation (1-1.4).
+- `style` (String) Input: COMBO. Tooltip: Stylistic output preference.
 
 ### Optional
 
-- `reference_image` (String) Input: IMAGE (link)
+- `reference_image` (String) Input: IMAGE. Link input. Tooltip: Optional reference image to transfer lighting from.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

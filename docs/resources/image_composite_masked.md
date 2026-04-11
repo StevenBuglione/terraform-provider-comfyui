@@ -3,12 +3,12 @@
 page_title: "comfyui_image_composite_masked Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageCompositeMasked node [image]
+  ComfyUI ImageCompositeMasked node [image] Source: comfy_extras/nodes_mask.py:77 (v3_extras).
 ---
 
 # comfyui_image_composite_masked (Resource)
 
-ComfyUI ImageCompositeMasked node [image]
+ComfyUI ImageCompositeMasked node [image] Source: comfy_extras/nodes_mask.py:77 (v3_extras).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI ImageCompositeMasked node [image]
 
 ### Required
 
-- `destination` (String) Input: IMAGE (link)
-- `resize_source` (Boolean) Input: BOOLEAN default: false
-- `source` (String) Input: IMAGE (link)
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `destination` (String) Input: IMAGE. Link input.
+- `resize_source` (Boolean) Input: BOOLEAN. Default: false.
+- `source` (String) Input: IMAGE. Link input.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
 
 ### Optional
 
-- `mask` (String) Input: MASK (link)
+- `mask` (String) Input: MASK. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

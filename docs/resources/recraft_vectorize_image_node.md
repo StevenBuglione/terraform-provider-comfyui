@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_vectorize_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates SVG synchronously from an input image. [api node/image/Recraft]
+  Generates SVG synchronously from an input image. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:829 (v3_api).
 ---
 
 # comfyui_recraft_vectorize_image_node (Resource)
 
-Generates SVG synchronously from an input image. [api node/image/Recraft]
+Generates SVG synchronously from an input image. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:829 (v3_api).
 
 
 
@@ -17,10 +17,10 @@ Generates SVG synchronously from an input image. [api node/image/Recraft]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `svg_output` (String) Output: SVG (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `svg_output` (String) Output: SVG (slot 0).

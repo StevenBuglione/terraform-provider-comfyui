@@ -44,65 +44,65 @@ func (r *ElevenLabsSpeechToTextResource) Metadata(_ context.Context, req resourc
 
 func (r *ElevenLabsSpeechToTextResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Transcribe audio to text. Supports automatic language detection, speaker diarization, and audio event tagging. [api node/audio/ElevenLabs]",
+		MarkdownDescription: "Transcribe audio to text. Supports automatic language detection, speaker diarization, and audio event tagging. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:66 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO. Link input. Tooltip: Audio to transcribe.",
+				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for transcription.",
+				Required:            true,
 			},
 			"language_code": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.",
+				Required:            true,
 			},
 			"num_speakers": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 32. Tooltip: Maximum number of speakers to predict. Set to 0 for automatic detection.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 32),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 0 to 2147483647. Tooltip: Seed for reproducibility (determinism not guaranteed).",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"text_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"language_code_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"words_json_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

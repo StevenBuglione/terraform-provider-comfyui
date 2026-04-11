@@ -58,127 +58,127 @@ func (r *WanAnimateToVideoResource) Metadata(_ context.Context, req resource.Met
 
 func (r *WanAnimateToVideoResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI WanAnimateToVideo node [conditioning/video_models]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI WanAnimateToVideo node [conditioning/video_models] Source: comfy_extras/nodes_wan.py:1110 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"positive": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"negative": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 832",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 832. Minimum value: 16. Step: 16.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 480",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 480. Minimum value: 16. Step: 16.",
+				Required:            true,
 			},
 			"length": schema.Int64Attribute{
-				Description: "Input: INT default: 77",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 77. Minimum value: 1. Step: 4.",
+				Required:            true,
 			},
 			"batch_size": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 4096.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4096),
 				},
 			},
 			"clip_vision_output": schema.StringAttribute{
-				Description: "Input: CLIP_VISION_OUTPUT (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: CLIP_VISION_OUTPUT. Link input.",
+				Optional:            true,
 			},
 			"reference_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"face_video": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"pose_video": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"continue_motion_max_frames": schema.Int64Attribute{
-				Description: "Input: INT default: 5",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 5. Minimum value: 1. Step: 4.",
+				Required:            true,
 			},
 			"background_video": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"character_mask": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: MASK. Link input.",
+				Optional:            true,
 			},
 			"continue_motion": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"video_frame_offset": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: The amount of frames to seek in all the input videos. Used for generating longer videos by chunk. Connect to the video_frame_offset output of the previous node for extending a video.",
+				Required:            true,
 			},
 			"positive_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"negative_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"trim_latent_output": schema.StringAttribute{
-				Description: "Output: INT (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"trim_image_output": schema.StringAttribute{
-				Description: "Output: INT (slot 4)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 4).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"video_frame_offset_output": schema.StringAttribute{
-				Description: "Output: INT (slot 5)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 5).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

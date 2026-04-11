@@ -47,25 +47,25 @@ func (r *Vidu2ReferenceVideoNodeResource) Metadata(_ context.Context, req resour
 
 func (r *Vidu2ReferenceVideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate a video from multiple reference images and a prompt. [api node/video/Vidu]",
+		MarkdownDescription: "Generate a video from multiple reference images and a prompt. [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:710 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"viduq2",
@@ -73,34 +73,34 @@ func (r *Vidu2ReferenceVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"subjects": schema.StringAttribute{
-				Description: "Input: COMFY_AUTOGROW_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_AUTOGROW_V3. Tooltip: For each subject, provide up to 3 reference images (7 images total across all subjects). Reference them in prompts via @subject{subject_id}.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: When enabled, the video will include generated speech and background music based on the prompt.",
+				Required:            true,
 			},
 			"audio": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: When enabled video will contain generated speech and background music based on the prompt.",
+				Required:            true,
 			},
 			"duration": schema.Int64Attribute{
-				Description: "Input: INT default: 5",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 5. Allowed range: 1 to 10. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 10),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"16:9",
@@ -112,8 +112,8 @@ func (r *Vidu2ReferenceVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"720p",
@@ -122,8 +122,8 @@ func (r *Vidu2ReferenceVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"movement_amplitude": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: The movement amplitude of objects in the frame.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -134,8 +134,8 @@ func (r *Vidu2ReferenceVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

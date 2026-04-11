@@ -52,25 +52,25 @@ func (r *TencentImageToModelNodeResource) Metadata(_ context.Context, req resour
 
 func (r *TencentImageToModelNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/3d/Tencent]",
+		MarkdownDescription: "ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:235 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: The LowPoly option is unavailable for the `3.1` model.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"3.0",
@@ -79,84 +79,84 @@ func (r *TencentImageToModelNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"image_left": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"image_right": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"image_back": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"face_count": schema.Int64Attribute{
-				Description: "Input: INT default: 500000",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 500000. Allowed range: 40000 to 1500000.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(40000, 1500000),
 				},
 			},
 			"generate_type": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"model_file_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"glb_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_GLB (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_GLB (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"obj_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_OBJ (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_OBJ (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"texture_image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"optional_metallic_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 4)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 4).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"optional_normal_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 5)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 5).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"optional_roughness_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 6)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 6).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

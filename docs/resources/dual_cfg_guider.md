@@ -3,12 +3,12 @@
 page_title: "comfyui_dual_cfg_guider Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI DualCFGGuider node [sampling/custom_sampling/guiders]
+  ComfyUI DualCFGGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/nodes_custom_sampler.py:865 (v3_extras).
 ---
 
 # comfyui_dual_cfg_guider (Resource)
 
-ComfyUI DualCFGGuider node [sampling/custom_sampling/guiders]
+ComfyUI DualCFGGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/nodes_custom_sampler.py:865 (v3_extras).
 
 
 
@@ -17,16 +17,16 @@ ComfyUI DualCFGGuider node [sampling/custom_sampling/guiders]
 
 ### Required
 
-- `cfg_cond2_negative` (Number) Input: FLOAT default: 8
-- `cfg_conds` (Number) Input: FLOAT default: 8
-- `cond1` (String) Input: CONDITIONING (link)
-- `cond2` (String) Input: CONDITIONING (link)
-- `model` (String) Input: MODEL (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `style` (String) Input: COMBO
+- `cfg_cond2_negative` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `cfg_conds` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `cond1` (String) Input: CONDITIONING. Link input.
+- `cond2` (String) Input: CONDITIONING. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `style` (String) Input: COMBO.
 
 ### Read-Only
 
-- `guider_output` (String) Output: GUIDER (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `guider_output` (String) Output: GUIDER (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

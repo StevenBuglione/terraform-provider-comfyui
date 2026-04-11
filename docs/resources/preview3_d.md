@@ -3,12 +3,12 @@
 page_title: "comfyui_preview3_d Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI Preview3D node — Preview 3D & Animation [3d]
+  (EXPERIMENTAL) ComfyUI Preview3D node — Preview 3D & Animation [3d] Source: comfy_extras/nodes_load_3d.py:77 (v3_extras).
 ---
 
 # comfyui_preview3_d (Resource)
 
-(EXPERIMENTAL) ComfyUI Preview3D node — Preview 3D & Animation [3d]
+(EXPERIMENTAL) ComfyUI Preview3D node — Preview 3D & Animation [3d] Source: comfy_extras/nodes_load_3d.py:77 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `io_string_input_model_file_default_multiline_false` (String) Input: COMFY_MULTITYPED_V3
+- `io_string_input_model_file_default_multiline_false` (String) Input: COMFY_MULTITYPED_V3. Tooltip: 3D model file or path string.
 
 ### Optional
 
-- `bg_image` (String) Input: IMAGE (link)
-- `camera_info` (String) Input: LOAD3D_CAMERA (link)
+- `bg_image` (String) Input: IMAGE. Link input.
+- `camera_info` (String) Input: LOAD3D_CAMERA. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_ace_step_latent_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EmptyAceStepLatentAudio node — Empty Ace Step 1.0 Latent Audio [latent/audio]
+  ComfyUI EmptyAceStepLatentAudio node — Empty Ace Step 1.0 Latent Audio [latent/audio] Source: comfy_extras/nodes_ace.py:64 (v3_extras).
 ---
 
 # comfyui_empty_ace_step_latent_audio (Resource)
 
-ComfyUI EmptyAceStepLatentAudio node — Empty Ace Step 1.0 Latent Audio [latent/audio]
+ComfyUI EmptyAceStepLatentAudio node — Empty Ace Step 1.0 Latent Audio [latent/audio] Source: comfy_extras/nodes_ace.py:64 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI EmptyAceStepLatentAudio node — Empty Ace Step 1.0 Latent Audio [latent
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `seconds` (Number) Input: FLOAT default: 120
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096. Tooltip: The number of latent images in the batch.
+- `seconds` (Number) Input: FLOAT. Default: 120. Allowed range: 1 to 1000. Step: 0.1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

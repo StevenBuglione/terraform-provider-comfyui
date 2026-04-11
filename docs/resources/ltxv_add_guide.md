@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_add_guide Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LTXVAddGuide node [conditioning/video_models]
+  ComfyUI LTXVAddGuide node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:196 (v3_extras).
 ---
 
 # comfyui_ltxv_add_guide (Resource)
 
-ComfyUI LTXVAddGuide node [conditioning/video_models]
+ComfyUI LTXVAddGuide node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:196 (v3_extras).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI LTXVAddGuide node [conditioning/video_models]
 
 ### Required
 
-- `frame_idx` (Number) Input: INT default: 0
-- `image` (String) Input: IMAGE (link)
-- `latent` (String) Input: LATENT (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
-- `strength` (Number) Input: FLOAT default: 1
-- `vae` (String) Input: VAE (link)
+- `frame_idx` (Number) Input: INT. Default: 0. Allowed range: -9999 to 9999. Tooltip: Frame index to start the conditioning at. For single-frame images or videos with 1-8 frames, any frame_idx value is acceptable. For videos with 9+ frames, frame_idx must be divisible by 8, otherwise it will be rounded down to the nearest multiple of 8. Negative values are counted from the end of the video.
+- `image` (String) Input: IMAGE. Link input. Tooltip: Image or video to condition the latent video on. Must be 8*n + 1 frames. If the video is not 8*n + 1 frames, it will be cropped to the nearest 8*n + 1 frames.
+- `latent` (String) Input: LATENT. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

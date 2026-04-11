@@ -3,12 +3,12 @@
 page_title: "comfyui_meshy_text_to_model_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI MeshyTextToModelNode node — Meshy: Text to Model [api node/3d/Meshy]
+  ComfyUI MeshyTextToModelNode node — Meshy: Text to Model [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:29 (v3_api).
 ---
 
 # comfyui_meshy_text_to_model_node (Resource)
 
-ComfyUI MeshyTextToModelNode node — Meshy: Text to Model [api node/3d/Meshy]
+ComfyUI MeshyTextToModelNode node — Meshy: Text to Model [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:29 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ ComfyUI MeshyTextToModelNode node — Meshy: Text to Model [api node/3d/Meshy]
 
 ### Required
 
-- `model` (String) Input: COMBO
-- `pose_mode` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 0
-- `should_remesh` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `style` (String) Input: COMBO
-- `symmetry_mode` (String) Input: COMBO
+- `model` (String) Input: COMBO.
+- `pose_mode` (String) Input: COMBO. Tooltip: Specify the pose mode for the generated model.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
+- `should_remesh` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: When set to false, returns an unprocessed triangular mesh.
+- `style` (String) Input: COMBO.
+- `symmetry_mode` (String) Input: COMBO.
 
 ### Read-Only
 
-- `fbx_output` (String) Output: FILE_3D_FBX (slot 3)
-- `glb_output` (String) Output: FILE_3D_GLB (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `meshy_task_id_output` (String) Output: MESHY_TASK_ID (slot 1)
-- `model_file_output` (String) Output: STRING (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `fbx_output` (String) Output: FILE_3D_FBX (slot 3).
+- `glb_output` (String) Output: FILE_3D_GLB (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `meshy_task_id_output` (String) Output: MESHY_TASK_ID (slot 1).
+- `model_file_output` (String) Output: STRING (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_sd_pose_face_b_boxes Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SDPoseFaceBBoxes node [image/preprocessors]
+  ComfyUI SDPoseFaceBBoxes node [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:592 (v3_extras).
 ---
 
 # comfyui_sd_pose_face_b_boxes (Resource)
 
-ComfyUI SDPoseFaceBBoxes node [image/preprocessors]
+ComfyUI SDPoseFaceBBoxes node [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:592 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI SDPoseFaceBBoxes node [image/preprocessors]
 
 ### Required
 
-- `force_square` (Boolean) Input: BOOLEAN default: true
-- `keypoints` (String) Input: POSE_KEYPOINT (link)
-- `scale` (Number) Input: FLOAT default: 1.5
+- `force_square` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Expand the shorter bbox axis so the crop region is always square.
+- `keypoints` (String) Input: POSE_KEYPOINT. Link input.
+- `scale` (Number) Input: FLOAT. Default: 1.5. Allowed range: 1 to 10. Step: 0.1. Tooltip: Multiplier for the bounding box area around each detected face.
 
 ### Read-Only
 
-- `bboxes_output` (String) Output: BOUNDING_BOX (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `bboxes_output` (String) Output: BOUNDING_BOX (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

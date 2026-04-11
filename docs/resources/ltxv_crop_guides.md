@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_crop_guides Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LTXVCropGuides node [conditioning/video_models]
+  ComfyUI LTXVCropGuides node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:371 (v3_extras).
 ---
 
 # comfyui_ltxv_crop_guides (Resource)
 
-ComfyUI LTXVCropGuides node [conditioning/video_models]
+ComfyUI LTXVCropGuides node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:371 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI LTXVCropGuides node [conditioning/video_models]
 
 ### Required
 
-- `latent` (String) Input: LATENT (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
+- `latent` (String) Input: LATENT. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

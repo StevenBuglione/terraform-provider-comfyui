@@ -36,33 +36,33 @@ func (r *SaveLoRaResource) Metadata(_ context.Context, req resource.MetadataRequ
 
 func (r *SaveLoRaResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI SaveLoRA node — Save LoRA Weights [loaders]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI SaveLoRA node — Save LoRA Weights [loaders] Source: comfy_extras/nodes_train.py:1345 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"lora": schema.StringAttribute{
-				Description: "Input: LORA_MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LORA_MODEL. Link input. Tooltip: The LoRA model to save. Do not use the model with LoRA layers.",
+				Required:            true,
 			},
 			"prefix": schema.StringAttribute{
-				Description: "Input: STRING default: loras/ComfyUI_trained_lora",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"loras/ComfyUI_trained_lora\". Tooltip: The prefix to use for the saved LoRA file.",
+				Required:            true,
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Tooltip: Optional: The number of steps the LoRA has been trained for, used to name the saved file.",
+				Optional:            true,
 			},
 		},
 	}

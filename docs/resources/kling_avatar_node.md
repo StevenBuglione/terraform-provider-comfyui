@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_avatar_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate broadcast-style digital human videos from a single photo and an audio file. [api node/video/Kling]
+  Generate broadcast-style digital human videos from a single photo and an audio file. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:3148 (v3_api).
 ---
 
 # comfyui_kling_avatar_node (Resource)
 
-Generate broadcast-style digital human videos from a single photo and an audio file. [api node/video/Kling]
+Generate broadcast-style digital human videos from a single photo and an audio file. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:3148 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ Generate broadcast-style digital human videos from a single photo and an audio f
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `mode` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
-- `sound_file` (String) Input: AUDIO (link)
+- `image` (String) Input: IMAGE. Link input. Tooltip: Avatar reference image. Width and height must be at least 300px. Aspect ratio must be between 1:2.5 and 2.5:1.
+- `mode` (String) Input: COMBO.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
+- `sound_file` (String) Input: AUDIO. Link input. Tooltip: Audio input. Must be between 2 and 300 seconds in duration.
 
 ### Optional
 
-- `prompt` (String) Input: STRING default:
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Optional prompt to define avatar actions, emotions, and camera movements.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

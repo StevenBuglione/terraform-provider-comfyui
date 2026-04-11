@@ -36,29 +36,29 @@ func (r *PrimitiveStringResource) Metadata(_ context.Context, req resource.Metad
 
 func (r *PrimitiveStringResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI String node — String [utils/primitive]",
+		MarkdownDescription: "ComfyUI String node — String [utils/primitive] Source: comfy_extras/nodes_primitive.py:7 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"value": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING.",
+				Required:            true,
 			},
 			"string_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

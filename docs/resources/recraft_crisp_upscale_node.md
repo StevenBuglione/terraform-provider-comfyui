@@ -4,13 +4,13 @@ page_title: "comfyui_recraft_crisp_upscale_node Resource - comfyui"
 subcategory: ""
 description: |-
   Upscale image synchronously.
-  Enhances a given raster image using ‘crisp upscale’ tool, increasing image resolution, making the image sharper and cleaner. [api node/image/Recraft]
+  Enhances a given raster image using ‘crisp upscale’ tool, increasing image resolution, making the image sharper and cleaner. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:1007 (v3_api).
 ---
 
 # comfyui_recraft_crisp_upscale_node (Resource)
 
 Upscale image synchronously.
-Enhances a given raster image using ‘crisp upscale’ tool, increasing image resolution, making the image sharper and cleaner. [api node/image/Recraft]
+Enhances a given raster image using ‘crisp upscale’ tool, increasing image resolution, making the image sharper and cleaner. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:1007 (v3_api).
 
 
 
@@ -19,10 +19,10 @@ Enhances a given raster image using ‘crisp upscale’ tool, increasing image r
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

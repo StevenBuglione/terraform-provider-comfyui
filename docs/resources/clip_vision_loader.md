@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_vision_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPVisionLoader node — Load CLIP Vision [loaders]
+  ComfyUI CLIPVisionLoader node — Load CLIP Vision [loaders] Source: nodes.py:1033 (v1_core).
 ---
 
 # comfyui_clip_vision_loader (Resource)
 
-ComfyUI CLIPVisionLoader node — Load CLIP Vision [loaders]
+ComfyUI CLIPVisionLoader node — Load CLIP Vision [loaders] Source: nodes.py:1033 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI CLIPVisionLoader node — Load CLIP Vision [loaders]
 
 ### Required
 
-- `clip_name` (String) Input: COMBO
+- `clip_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('clip_vision').
 
 ### Read-Only
 
-- `clip_vision_output` (String) Output: CLIP_VISION (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_vision_output` (String) Output: CLIP_VISION (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

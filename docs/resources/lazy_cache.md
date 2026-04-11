@@ -3,12 +3,12 @@
 page_title: "comfyui_lazy_cache Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) A homebrew version of EasyCache - even 'easier' version of EasyCache to implement. Overall works worse than EasyCache, but better in some rare cases AND universal compatibility with everything in ComfyUI. [advanced/debug/model]
+  (EXPERIMENTAL) A homebrew version of EasyCache - even 'easier' version of EasyCache to implement. Overall works worse than EasyCache, but better in some rare cases AND universal compatibility with everything in ComfyUI. [advanced/debug/model] Source: comfy_extras/nodes_easycache.py:492 (v3_extras).
 ---
 
 # comfyui_lazy_cache (Resource)
 
-(EXPERIMENTAL) A homebrew version of EasyCache - even 'easier' version of EasyCache to implement. Overall works worse than EasyCache, but better in some rare cases AND universal compatibility with everything in ComfyUI. [advanced/debug/model]
+(EXPERIMENTAL) A homebrew version of EasyCache - even 'easier' version of EasyCache to implement. Overall works worse than EasyCache, but better in some rare cases AND universal compatibility with everything in ComfyUI. [advanced/debug/model] Source: comfy_extras/nodes_easycache.py:492 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `end_percent` (Number) Input: FLOAT default: 0.95
-- `model` (String) Input: MODEL (link)
-- `reuse_threshold` (Number) Input: FLOAT default: 0.2
-- `start_percent` (Number) Input: FLOAT default: 0.15
-- `verbose` (Boolean) Input: BOOLEAN default: false
+- `end_percent` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0 to 1. Step: 0.01. Tooltip: The relative sampling step to end use of LazyCache.
+- `model` (String) Input: MODEL. Link input. Tooltip: The model to add LazyCache to.
+- `reuse_threshold` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0 to 3. Step: 0.01. Tooltip: The threshold for reusing cached steps.
+- `start_percent` (Number) Input: FLOAT. Default: 0.15. Allowed range: 0 to 1. Step: 0.01. Tooltip: The relative sampling step to begin use of LazyCache.
+- `verbose` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to log verbose information.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

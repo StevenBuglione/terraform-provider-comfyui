@@ -3,12 +3,12 @@
 page_title: "comfyui_save_glb Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SaveGLB node — Save 3D Model [3d]
+  ComfyUI SaveGLB node — Save 3D Model [3d] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_hunyuan3d.py:616 (v3_extras).
 ---
 
 # comfyui_save_glb (Resource)
 
-ComfyUI SaveGLB node — Save 3D Model [3d]
+ComfyUI SaveGLB node — Save 3D Model [3d] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_hunyuan3d.py:616 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI SaveGLB node — Save 3D Model [3d]
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: mesh/ComfyUI
-- `io_mesh_input_mesh` (String) Input: COMFY_MULTITYPED_V3
+- `filename_prefix` (String) Input: STRING. Default: "mesh/ComfyUI".
+- `io_mesh_input_mesh` (String) Input: COMFY_MULTITYPED_V3. Tooltip: Mesh or 3D file to save.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

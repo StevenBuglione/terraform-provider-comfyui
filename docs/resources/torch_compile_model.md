@@ -3,12 +3,12 @@
 page_title: "comfyui_torch_compile_model Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI TorchCompileModel node [_for_testing]
+  (EXPERIMENTAL) ComfyUI TorchCompileModel node [_for_testing] Source: comfy_extras/nodes_torch_compile.py:8 (v3_extras).
 ---
 
 # comfyui_torch_compile_model (Resource)
 
-(EXPERIMENTAL) ComfyUI TorchCompileModel node [_for_testing]
+(EXPERIMENTAL) ComfyUI TorchCompileModel node [_for_testing] Source: comfy_extras/nodes_torch_compile.py:8 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `backend` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
+- `backend` (String) Input: COMBO.
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

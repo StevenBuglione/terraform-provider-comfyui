@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_merge_subtract Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPSubtract node — CLIPMergeSubtract [advanced/model_merging]
+  ComfyUI CLIPSubtract node — CLIPMergeSubtract [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:93 (v1_extras).
 ---
 
 # comfyui_clip_merge_subtract (Resource)
 
-ComfyUI CLIPSubtract node — CLIPMergeSubtract [advanced/model_merging]
+ComfyUI CLIPSubtract node — CLIPMergeSubtract [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:93 (v1_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI CLIPSubtract node — CLIPMergeSubtract [advanced/model_merging]
 
 ### Required
 
-- `clip1` (String) Input: CLIP (link)
-- `clip2` (String) Input: CLIP (link)
-- `multiplier` (Number) Input: FLOAT default: 1
+- `clip1` (String) Input: CLIP. Link input.
+- `clip2` (String) Input: CLIP. Link input.
+- `multiplier` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

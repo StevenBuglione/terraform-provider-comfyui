@@ -3,12 +3,12 @@
 page_title: "comfyui_voxel_to_mesh_basic Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VoxelToMeshBasic node [3d]
+  ComfyUI VoxelToMeshBasic node [3d] Source: comfy_extras/nodes_hunyuan3d.py:422 (v3_extras).
 ---
 
 # comfyui_voxel_to_mesh_basic (Resource)
 
-ComfyUI VoxelToMeshBasic node [3d]
+ComfyUI VoxelToMeshBasic node [3d] Source: comfy_extras/nodes_hunyuan3d.py:422 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI VoxelToMeshBasic node [3d]
 
 ### Required
 
-- `threshold` (Number) Input: FLOAT default: 0.6
-- `voxel` (String) Input: VOXEL (link)
+- `threshold` (Number) Input: FLOAT. Default: 0.6. Allowed range: -1 to 1. Step: 0.01.
+- `voxel` (String) Input: VOXEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mesh_output` (String) Output: MESH (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mesh_output` (String) Output: MESH (slot 0).
+- `node_id` (String) ComfyUI node class type.

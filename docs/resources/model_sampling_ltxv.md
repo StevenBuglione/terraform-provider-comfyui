@@ -3,12 +3,12 @@
 page_title: "comfyui_model_sampling_ltxv Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelSamplingLTXV node [advanced/model]
+  ComfyUI ModelSamplingLTXV node [advanced/model] Source: comfy_extras/nodes_lt.py:439 (v3_extras).
 ---
 
 # comfyui_model_sampling_ltxv (Resource)
 
-ComfyUI ModelSamplingLTXV node [advanced/model]
+ComfyUI ModelSamplingLTXV node [advanced/model] Source: comfy_extras/nodes_lt.py:439 (v3_extras).
 
 
 
@@ -17,16 +17,16 @@ ComfyUI ModelSamplingLTXV node [advanced/model]
 
 ### Required
 
-- `base_shift` (Number) Input: FLOAT default: 0.95
-- `max_shift` (Number) Input: FLOAT default: 2.05
-- `model` (String) Input: MODEL (link)
+- `base_shift` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0 to 100. Step: 0.01.
+- `max_shift` (Number) Input: FLOAT. Default: 2.05. Allowed range: 0 to 100. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
 
 ### Optional
 
-- `latent` (String) Input: LATENT (link)
+- `latent` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_topaz_image_enhance Resource - comfyui"
 subcategory: ""
 description: |-
-  Industry-standard upscaling and image enhancement. [api node/image/Topaz]
+  Industry-standard upscaling and image enhancement. [api node/image/Topaz] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_topaz.py:45 (v3_api).
 ---
 
 # comfyui_topaz_image_enhance (Resource)
 
-Industry-standard upscaling and image enhancement. [api node/image/Topaz]
+Industry-standard upscaling and image enhancement. [api node/image/Topaz] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_topaz.py:45 (v3_api).
 
 
 
@@ -17,25 +17,25 @@ Industry-standard upscaling and image enhancement. [api node/image/Topaz]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO
+- `image` (String) Input: IMAGE. Link input.
+- `model` (String) Input: COMBO.
 
 ### Optional
 
-- `color_preservation` (Boolean) Input: BOOLEAN default: true
-- `creativity` (Number) Input: INT default: 3
-- `crop_to_fill` (Boolean) Input: BOOLEAN default: false
-- `face_enhancement` (Boolean) Input: BOOLEAN default: true
-- `face_enhancement_creativity` (Number) Input: FLOAT default: 0
-- `face_enhancement_strength` (Number) Input: FLOAT default: 1
-- `face_preservation` (Boolean) Input: BOOLEAN default: true
-- `output_height` (Number) Input: INT default: 0
-- `output_width` (Number) Input: INT default: 0
-- `prompt` (String) Input: STRING default:
-- `subject_detection` (String) Input: COMBO
+- `color_preservation` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Preserve the original colors.
+- `creativity` (Number) Input: INT. Default: 3. Allowed range: 1 to 9. Step: 1.
+- `crop_to_fill` (Boolean) Input: BOOLEAN. Default: false. Tooltip: By default, the image is letterboxed when the output aspect ratio differs. Enable to crop the image to fill the output dimensions.
+- `face_enhancement` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Enhance faces (if present) during processing.
+- `face_enhancement_creativity` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Set the creativity level for face enhancement.
+- `face_enhancement_strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Controls how sharp enhanced faces are relative to the background.
+- `face_preservation` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Preserve subjects' facial identity.
+- `output_height` (Number) Input: INT. Default: 0. Allowed range: 0 to 32000. Step: 1. Tooltip: Zero value means to output in the same height as original or output width.
+- `output_width` (Number) Input: INT. Default: 0. Allowed range: 0 to 32000. Step: 1. Tooltip: Zero value means to calculate automatically (usually it will be original size or output_height if specified).
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Optional text prompt for creative upscaling guidance.
+- `subject_detection` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

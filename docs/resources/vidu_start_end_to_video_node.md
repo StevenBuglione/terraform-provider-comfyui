@@ -3,12 +3,12 @@
 page_title: "comfyui_vidu_start_end_to_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate a video from start and end frames and a prompt [api node/video/Vidu]
+  Generate a video from start and end frames and a prompt [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:384 (v3_api).
 ---
 
 # comfyui_vidu_start_end_to_video_node (Resource)
 
-Generate a video from start and end frames and a prompt [api node/video/Vidu]
+Generate a video from start and end frames and a prompt [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:384 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ Generate a video from start and end frames and a prompt [api node/video/Vidu]
 
 ### Required
 
-- `end_frame` (String) Input: IMAGE (link)
-- `first_frame` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO
+- `end_frame` (String) Input: IMAGE. Link input. Tooltip: End frame.
+- `first_frame` (String) Input: IMAGE. Link input. Tooltip: Start frame.
+- `model` (String) Input: COMBO. Tooltip: Model name.
 
 ### Optional
 
-- `duration` (Number) Input: INT default: 5
-- `movement_amplitude` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 5 to 5. Step: 1. Tooltip: Duration of the output video in seconds.
+- `movement_amplitude` (String) Input: COMBO. Tooltip: The movement amplitude of objects in the frame.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A textual description for video generation.
+- `resolution` (String) Input: COMBO. Tooltip: Supported values may vary by model & duration.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed for video generation (0 for random).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

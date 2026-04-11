@@ -44,71 +44,71 @@ func (r *KlingCameraControlsResource) Metadata(_ context.Context, req resource.M
 
 func (r *KlingCameraControlsResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Allows specifying configuration options for Kling Camera Controls and motion control effects. [api node/video/Kling]",
+		MarkdownDescription: "Allows specifying configuration options for Kling Camera Controls and motion control effects. [api node/video/Kling] Source: comfy_api_nodes/nodes_kling.py:637 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"camera_control_type": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingCameraControlType.",
+				Required:            true,
 			},
 			"horizontal_movement": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's movement along horizontal axis (x-axis). Negative indicates left, positive indicates right.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"vertical_movement": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's movement along vertical axis (y-axis). Negative indicates downward, positive indicates upward.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"pan": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rotation in vertical plane (x-axis). Negative indicates downward rotation, positive indicates upward rotation.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"tilt": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rotation in horizontal plane (y-axis). Negative indicates left rotation, positive indicates right rotation.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"roll": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rolling amount (z-axis). Negative indicates counterclockwise, positive indicates clockwise.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"zoom": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls change in camera's focal length. Negative indicates narrower field of view, positive indicates wider field of view.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"camera_control_output": schema.StringAttribute{
-				Description: "Output: CAMERA_CONTROL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CAMERA_CONTROL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

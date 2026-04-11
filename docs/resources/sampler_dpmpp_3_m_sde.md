@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_dpmpp_3_m_sde Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerDPMPP_3M_SDE node [sampling/custom_sampling/samplers]
+  ComfyUI SamplerDPMPP_3M_SDE node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:394 (v3_extras).
 ---
 
 # comfyui_sampler_dpmpp_3_m_sde (Resource)
 
-ComfyUI SamplerDPMPP_3M_SDE node [sampling/custom_sampling/samplers]
+ComfyUI SamplerDPMPP_3M_SDE node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:394 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI SamplerDPMPP_3M_SDE node [sampling/custom_sampling/samplers]
 
 ### Required
 
-- `eta` (Number) Input: FLOAT default: 1
-- `noise_device` (String) Input: COMBO
-- `s_noise` (Number) Input: FLOAT default: 1
+- `eta` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `noise_device` (String) Input: COMBO.
+- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

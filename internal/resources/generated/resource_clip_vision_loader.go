@@ -36,29 +36,29 @@ func (r *CLIPVisionLoaderResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *CLIPVisionLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI CLIPVisionLoader node — Load CLIP Vision [loaders]",
+		MarkdownDescription: "ComfyUI CLIPVisionLoader node — Load CLIP Vision [loaders] Source: nodes.py:1033 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('clip_vision').",
+				Required:            true,
 			},
 			"clip_vision_output": schema.StringAttribute{
-				Description: "Output: CLIP_VISION (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CLIP_VISION (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -37,36 +37,36 @@ func (r *SplitAudioChannelsResource) Metadata(_ context.Context, req resource.Me
 
 func (r *SplitAudioChannelsResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Separates the audio into left and right channels. [audio]",
+		MarkdownDescription: "Separates the audio into left and right channels. [audio] Source: comfy_extras/nodes_audio.py:415 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO. Link input.",
+				Required:            true,
 			},
 			"left_output": schema.StringAttribute{
-				Description: "Output: AUDIO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"right_output": schema.StringAttribute{
-				Description: "Output: AUDIO (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

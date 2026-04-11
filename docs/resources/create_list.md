@@ -3,12 +3,12 @@
 page_title: "comfyui_create_list Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CreateList node — Create List [logic]
+  ComfyUI CreateList node — Create List [logic] Source: comfy_extras/nodes_toolkit.py:6 (v3_extras).
 ---
 
 # comfyui_create_list (Resource)
 
-ComfyUI CreateList node — Create List [logic]
+ComfyUI CreateList node — Create List [logic] Source: comfy_extras/nodes_toolkit.py:6 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI CreateList node — Create List [logic]
 
 ### Required
 
-- `inputs` (String) Input: COMFY_AUTOGROW_V3
+- `inputs` (String) Input: COMFY_AUTOGROW_V3.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `list_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `list_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0).
+- `node_id` (String) ComfyUI node class type.

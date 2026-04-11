@@ -41,33 +41,33 @@ func (r *SaveWebmResource) Metadata(_ context.Context, req resource.MetadataRequ
 
 func (r *SaveWebmResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI SaveWEBM node [image/video]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI SaveWEBM node [image/video] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video.py:14 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: ComfyUI",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"ComfyUI\".",
+				Required:            true,
 			},
 			"codec": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"vp9",
@@ -76,15 +76,15 @@ func (r *SaveWebmResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				},
 			},
 			"fps": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 24",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 24. Allowed range: 0.01 to 1000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 1000),
 				},
 			},
 			"crf": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 32",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 32. Allowed range: 0 to 63. Step: 1. Tooltip: Higher crf means lower quality with a smaller file size, lower crf means higher quality higher filesize.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 63),
 				},

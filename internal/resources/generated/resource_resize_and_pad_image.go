@@ -42,37 +42,37 @@ func (r *ResizeAndPadImageResource) Metadata(_ context.Context, req resource.Met
 
 func (r *ResizeAndPadImageResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ResizeAndPadImage node [image/transform]",
+		MarkdownDescription: "ComfyUI ResizeAndPadImage node [image/transform] Source: comfy_extras/nodes_images.py:430 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"target_width": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Minimum value: 1. Step: 1.",
+				Required:            true,
 			},
 			"target_height": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Minimum value: 1. Step: 1.",
+				Required:            true,
 			},
 			"padding_color": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"white",
@@ -81,8 +81,8 @@ func (r *ResizeAndPadImageResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"interpolation": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"area",
@@ -94,8 +94,8 @@ func (r *ResizeAndPadImageResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

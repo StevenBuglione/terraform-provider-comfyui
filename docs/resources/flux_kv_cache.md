@@ -3,12 +3,12 @@
 page_title: "comfyui_flux_kv_cache Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Enables KV Cache optimization for reference images on Flux family models.
+  (EXPERIMENTAL) Enables KV Cache optimization for reference images on Flux family models. Source: comfy_extras/nodes_flux.py:259 (v3_extras).
 ---
 
 # comfyui_flux_kv_cache (Resource)
 
-(EXPERIMENTAL) Enables KV Cache optimization for reference images on Flux family models.
+(EXPERIMENTAL) Enables KV Cache optimization for reference images on Flux family models. Source: comfy_extras/nodes_flux.py:259 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
+- `model` (String) Input: MODEL. Link input. Tooltip: The model to use KV Cache on.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

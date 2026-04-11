@@ -3,12 +3,12 @@
 page_title: "comfyui_comfy_math_expression Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI MathExpressionNode node — Math Expression [math]
+  ComfyUI MathExpressionNode node — Math Expression [math] Source: comfy_extras/nodes_math.py:60 (v3_extras).
 ---
 
 # comfyui_comfy_math_expression (Resource)
 
-ComfyUI MathExpressionNode node — Math Expression [math]
+ComfyUI MathExpressionNode node — Math Expression [math] Source: comfy_extras/nodes_math.py:60 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI MathExpressionNode node — Math Expression [math]
 
 ### Required
 
-- `expression` (String) Input: STRING default: a + b
-- `values` (String) Input: COMFY_AUTOGROW_V3
+- `expression` (String) Input: STRING. Default: "a + b". Supports multiline text.
+- `values` (String) Input: COMFY_AUTOGROW_V3.
 
 ### Read-Only
 
-- `float_output` (String) Output: FLOAT (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `int_output` (String) Output: INT (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `float_output` (String) Output: FLOAT (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `int_output` (String) Output: INT (slot 1).
+- `node_id` (String) ComfyUI node class type.

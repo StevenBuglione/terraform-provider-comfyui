@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_lumina2 Resource - comfyui"
 subcategory: ""
 description: |-
-  Encodes a system prompt and a user prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning]
+  Encodes a system prompt and a user prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning] Source: comfy_extras/nodes_lumina2.py:66 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_lumina2 (Resource)
 
-Encodes a system prompt and a user prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning]
+Encodes a system prompt and a user prompt using a CLIP model into an embedding that can be used to guide the diffusion model towards generating specific images. [conditioning] Source: comfy_extras/nodes_lumina2.py:66 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Encodes a system prompt and a user prompt using a CLIP model into an embedding t
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `system_prompt` (String) Input: COMBO
-- `user_prompt` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input. Tooltip: The CLIP model used for encoding the text.
+- `system_prompt` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(cls.SYSTEM_PROMPT.keys()).
+- `user_prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text to be encoded.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

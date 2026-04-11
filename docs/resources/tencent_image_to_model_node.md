@@ -3,12 +3,12 @@
 page_title: "comfyui_tencent_image_to_model_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/3d/Tencent]
+  ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:235 (v3_api).
 ---
 
 # comfyui_tencent_image_to_model_node (Resource)
 
-ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/3d/Tencent]
+ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:235 (v3_api).
 
 
 
@@ -17,26 +17,26 @@ ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/
 
 ### Required
 
-- `face_count` (Number) Input: INT default: 500000
-- `generate_type` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `face_count` (Number) Input: INT. Default: 500000. Allowed range: 40000 to 1500000.
+- `generate_type` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `image` (String) Input: IMAGE. Link input.
+- `model` (String) Input: COMBO. Tooltip: The LowPoly option is unavailable for the `3.1` model.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Optional
 
-- `image_back` (String) Input: IMAGE (link)
-- `image_left` (String) Input: IMAGE (link)
-- `image_right` (String) Input: IMAGE (link)
+- `image_back` (String) Input: IMAGE. Link input.
+- `image_left` (String) Input: IMAGE. Link input.
+- `image_right` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `glb_output` (String) Output: FILE_3D_GLB (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `model_file_output` (String) Output: STRING (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `obj_output` (String) Output: FILE_3D_OBJ (slot 2)
-- `optional_metallic_output` (String) Output: IMAGE (slot 4)
-- `optional_normal_output` (String) Output: IMAGE (slot 5)
-- `optional_roughness_output` (String) Output: IMAGE (slot 6)
-- `texture_image_output` (String) Output: IMAGE (slot 3)
+- `glb_output` (String) Output: FILE_3D_GLB (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `model_file_output` (String) Output: STRING (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `obj_output` (String) Output: FILE_3D_OBJ (slot 2).
+- `optional_metallic_output` (String) Output: IMAGE (slot 4).
+- `optional_normal_output` (String) Output: IMAGE (slot 5).
+- `optional_roughness_output` (String) Output: IMAGE (slot 6).
+- `texture_image_output` (String) Output: IMAGE (slot 3).

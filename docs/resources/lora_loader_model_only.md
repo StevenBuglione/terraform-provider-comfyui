@@ -3,12 +3,12 @@
 page_title: "comfyui_lora_loader_model_only Resource - comfyui"
 subcategory: ""
 description: |-
-  LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together. [loaders]
+  LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together. [loaders] Source: nodes.py:716 (v1_core).
 ---
 
 # comfyui_lora_loader_model_only (Resource)
 
-LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together. [loaders]
+LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together. [loaders] Source: nodes.py:716 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ LoRAs are used to modify diffusion and CLIP models, altering the way in which la
 
 ### Required
 
-- `lora_name` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
-- `strength_model` (Number) Input: FLOAT default: 1
+- `lora_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('loras').
+- `model` (String) Input: MODEL. Link input.
+- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

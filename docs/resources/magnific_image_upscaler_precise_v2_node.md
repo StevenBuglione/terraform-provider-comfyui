@@ -3,12 +3,12 @@
 page_title: "comfyui_magnific_image_upscaler_precise_v2_node Resource - comfyui"
 subcategory: ""
 description: |-
-  High-fidelity upscaling with fine control over sharpness, grain, and detail. Maximum output: 10060×10060 pixels. [api node/image/Magnific]
+  High-fidelity upscaling with fine control over sharpness, grain, and detail. Maximum output: 10060×10060 pixels. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:238 (v3_api).
 ---
 
 # comfyui_magnific_image_upscaler_precise_v2_node (Resource)
 
-High-fidelity upscaling with fine control over sharpness, grain, and detail. Maximum output: 10060×10060 pixels. [api node/image/Magnific]
+High-fidelity upscaling with fine control over sharpness, grain, and detail. Maximum output: 10060×10060 pixels. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:238 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ High-fidelity upscaling with fine control over sharpness, grain, and detail. Max
 
 ### Required
 
-- `auto_downscale` (Boolean) Input: BOOLEAN default: false
-- `flavor` (String) Input: COMBO
-- `image` (String) Input: IMAGE (link)
-- `scale_factor` (String) Input: COMBO
-- `sharpen` (Number) Input: INT default: 7
-- `smart_grain` (Number) Input: INT default: 7
-- `ultra_detail` (Number) Input: INT default: 30
+- `auto_downscale` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Automatically downscale input image if output would exceed maximum resolution.
+- `flavor` (String) Input: COMBO. Tooltip: Processing style: sublime for general use, photo for photographs, photo_denoiser for noisy photos.
+- `image` (String) Input: IMAGE. Link input.
+- `scale_factor` (String) Input: COMBO.
+- `sharpen` (Number) Input: INT. Default: 7. Allowed range: 0 to 100. Tooltip: Image sharpness intensity. Higher values increase edge definition and clarity.
+- `smart_grain` (Number) Input: INT. Default: 7. Allowed range: 0 to 100. Tooltip: Intelligent grain/texture enhancement to prevent the image from looking too smooth or artificial.
+- `ultra_detail` (Number) Input: INT. Default: 30. Allowed range: 0 to 100. Tooltip: Controls fine detail, textures, and micro-details added during upscaling.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

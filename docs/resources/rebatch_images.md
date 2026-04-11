@@ -3,12 +3,12 @@
 page_title: "comfyui_rebatch_images Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageRebatch node — Rebatch Images [image/batch]
+  ComfyUI ImageRebatch node — Rebatch Images [image/batch] Source: comfy_extras/nodes_rebatch.py:110 (v3_extras).
 ---
 
 # comfyui_rebatch_images (Resource)
 
-ComfyUI ImageRebatch node — Rebatch Images [image/batch]
+ComfyUI ImageRebatch node — Rebatch Images [image/batch] Source: comfy_extras/nodes_rebatch.py:110 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ImageRebatch node — Rebatch Images [image/batch]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `images` (String) Input: IMAGE (link)
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `images` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

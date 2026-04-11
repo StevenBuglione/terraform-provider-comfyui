@@ -35,29 +35,29 @@ func (r *LossGraphNodeResource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *LossGraphNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI LossGraphNode node — Plot Loss Graph [training]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI LossGraphNode node — Plot Loss Graph [training] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_train.py:1389 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"loss": schema.StringAttribute{
-				Description: "Input: LOSS_MAP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LOSS_MAP. Link input. Tooltip: Loss map from training node.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: loss_graph",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"loss_graph\". Tooltip: Prefix for the saved loss graph image.",
+				Required:            true,
 			},
 		},
 	}

@@ -3,12 +3,12 @@
 page_title: "comfyui_custom_combo Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CustomComboNode node — Custom Combo [utils]
+  (EXPERIMENTAL) ComfyUI CustomComboNode node — Custom Combo [utils] Source: comfy_extras/nodes_logic.py:94 (v3_extras).
 ---
 
 # comfyui_custom_combo (Resource)
 
-(EXPERIMENTAL) ComfyUI CustomComboNode node — Custom Combo [utils]
+(EXPERIMENTAL) ComfyUI CustomComboNode node — Custom Combo [utils] Source: comfy_extras/nodes_logic.py:94 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `choice` (String) Input: COMBO
+- `choice` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `index_output` (String) Output: INT (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `index_output` (String) Output: INT (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

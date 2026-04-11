@@ -55,65 +55,65 @@ func (r *TripoMultiviewToModelNodeResource) Metadata(_ context.Context, req reso
 
 func (r *TripoMultiviewToModelNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI TripoMultiviewToModelNode node — Tripo: Multiview to Model [api node/3d/Tripo]",
+		MarkdownDescription: "ComfyUI TripoMultiviewToModelNode node — Tripo: Multiview to Model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:323 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"image_left": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"image_back": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"image_right": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"model_version": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: TripoModelVersion. Tooltip: The model version to use for generation.",
+				Optional:            true,
 			},
 			"orientation": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: TripoOrientation.",
+				Optional:            true,
 			},
 			"texture": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true.",
+				Optional:            true,
 			},
 			"pbr": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true.",
+				Optional:            true,
 			},
 			"model_seed": schema.Int64Attribute{
-				Description: "Input: INT default: 42",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 42.",
+				Optional:            true,
 			},
 			"texture_seed": schema.Int64Attribute{
-				Description: "Input: INT default: 42",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 42.",
+				Optional:            true,
 			},
 			"texture_quality": schema.StringAttribute{
-				Description: "Input: COMBO default: standard",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"standard\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"standard",
@@ -122,8 +122,8 @@ func (r *TripoMultiviewToModelNodeResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"texture_alignment": schema.StringAttribute{
-				Description: "Input: COMBO default: original_image",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"original_image\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"original_image",
@@ -132,19 +132,19 @@ func (r *TripoMultiviewToModelNodeResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"face_limit": schema.Int64Attribute{
-				Description: "Input: INT default: -1",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: -1. Allowed range: -1 to 500000.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(-1, 500000),
 				},
 			},
 			"quad": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"geometry_quality": schema.StringAttribute{
-				Description: "Input: COMBO default: standard",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"standard\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"standard",
@@ -153,22 +153,22 @@ func (r *TripoMultiviewToModelNodeResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"model_file_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model_task_id_output": schema.StringAttribute{
-				Description: "Output: MODEL_TASK_ID (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL_TASK_ID (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"glb_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_GLB (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_GLB (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_lora_save Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LoraSave node — Extract and Save Lora [_for_testing]
+  (EXPERIMENTAL) ComfyUI LoraSave node — Extract and Save Lora [_for_testing] Source: comfy_extras/nodes_lora_extract.py:87 (v3_extras).
 ---
 
 # comfyui_lora_save (Resource)
 
-(EXPERIMENTAL) ComfyUI LoraSave node — Extract and Save Lora [_for_testing]
+(EXPERIMENTAL) ComfyUI LoraSave node — Extract and Save Lora [_for_testing] Source: comfy_extras/nodes_lora_extract.py:87 (v3_extras).
 
 
 
@@ -17,17 +17,17 @@ description: |-
 
 ### Required
 
-- `bias_diff` (Boolean) Input: BOOLEAN default: true
-- `filename_prefix` (String) Input: STRING default: loras/ComfyUI_extracted_lora
-- `lora_type` (String) Input: COMBO
-- `rank` (Number) Input: INT default: 8
+- `bias_diff` (Boolean) Input: BOOLEAN. Default: true.
+- `filename_prefix` (String) Input: STRING. Default: "loras/ComfyUI_extracted_lora".
+- `lora_type` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: tuple(LORA_TYPES.keys()).
+- `rank` (Number) Input: INT. Default: 8. Allowed range: 1 to 4096. Step: 1.
 
 ### Optional
 
-- `model_diff` (String) Input: MODEL (link)
-- `text_encoder_diff` (String) Input: CLIP (link)
+- `model_diff` (String) Input: MODEL. Link input. Tooltip: The ModelSubtract output to be converted to a lora.
+- `text_encoder_diff` (String) Input: CLIP. Link input. Tooltip: The CLIPSubtract output to be converted to a lora.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

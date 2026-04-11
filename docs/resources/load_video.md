@@ -3,12 +3,12 @@
 page_title: "comfyui_load_video Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LoadVideo node — Load Video [image/video]
+  ComfyUI LoadVideo node — Load Video [image/video] Source: comfy_extras/nodes_video.py:167 (v3_extras).
 ---
 
 # comfyui_load_video (Resource)
 
-ComfyUI LoadVideo node — Load Video [image/video]
+ComfyUI LoadVideo node — Load Video [image/video] Source: comfy_extras/nodes_video.py:167 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI LoadVideo node — Load Video [image/video]
 
 ### Required
 
-- `file` (String) Input: COMBO
+- `file` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: sorted(files).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

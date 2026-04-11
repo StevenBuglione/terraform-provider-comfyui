@@ -45,59 +45,59 @@ func (r *FluxProUltraImageNodeResource) Metadata(_ context.Context, req resource
 
 func (r *FluxProUltraImageNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generates images using Flux Pro 1.1 Ultra via api based on prompt and resolution. [api node/image/BFL]",
+		MarkdownDescription: "Generates images using Flux Pro 1.1 Ultra via api based on prompt and resolution. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:38 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Prompt for the image generation.",
+				Required:            true,
 			},
 			"prompt_upsampling": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation, but results are nondeterministic (same seed will not produce exactly the same result).",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: STRING default: 16:9",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"16:9\". Tooltip: Aspect ratio of image; must be between 1:4 and 4:1.",
+				Required:            true,
 			},
 			"raw": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: When True, generate less processed, more natural-looking images.",
+				Required:            true,
 			},
 			"image_prompt": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"image_prompt_strength": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.1",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Blend between the prompt and the image prompt.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

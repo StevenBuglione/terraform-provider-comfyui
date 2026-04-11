@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_text_to_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Kling Text to Video Node [api node/video/Kling]
+  Kling Text to Video Node [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:756 (v3_api).
 ---
 
 # comfyui_kling_text_to_video_node (Resource)
 
-Kling Text to Video Node [api node/video/Kling]
+Kling Text to Video Node [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:756 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Kling Text to Video Node [api node/video/Kling]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO default: 16:9
-- `cfg_scale` (Number) Input: FLOAT default: 1
-- `mode` (String) Input: COMBO
-- `negative_prompt` (String) Input: STRING
-- `prompt` (String) Input: STRING
+- `aspect_ratio` (String) Input: COMBO. Default: "16:9". Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenAspectRatio.
+- `cfg_scale` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1.
+- `mode` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: modes. Tooltip: The configuration to use for the video generation following the format: mode / duration / model_name.
+- `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Negative text prompt.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.
 
 ### Read-Only
 
-- `duration_output` (String) Output: STRING (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_id_output` (String) Output: STRING (slot 1)
-- `video_output` (String) Output: VIDEO (slot 0)
+- `duration_output` (String) Output: STRING (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_id_output` (String) Output: STRING (slot 1).
+- `video_output` (String) Output: VIDEO (slot 0).

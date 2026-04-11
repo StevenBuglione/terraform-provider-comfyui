@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_lcm_upscale Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers]
+  ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_advanced_samplers.py:41 (v3_extras).
 ---
 
 # comfyui_sampler_lcm_upscale (Resource)
 
-ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers]
+ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_advanced_samplers.py:41 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers]
 
 ### Required
 
-- `scale_ratio` (Number) Input: FLOAT default: 1
-- `scale_steps` (Number) Input: INT default: -1
-- `upscale_method` (String) Input: COMBO
+- `scale_ratio` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 20. Step: 0.01.
+- `scale_steps` (Number) Input: INT. Default: -1. Allowed range: -1 to 1000. Step: 1.
+- `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

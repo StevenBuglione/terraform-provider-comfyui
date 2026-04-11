@@ -37,33 +37,33 @@ func (r *GeminiInputFilesResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *GeminiInputFilesResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Loads and prepares input files to include as inputs for Gemini LLM nodes. The files will be read by the Gemini model when generating a response. The contents of the text file count toward the token limit. 🛈 TIP: Can be chained together with other Gemini Input File nodes. [api node/text/Gemini]",
+		MarkdownDescription: "Loads and prepares input files to include as inputs for Gemini LLM nodes. The files will be read by the Gemini model when generating a response. The contents of the text file count toward the token limit. 🛈 TIP: Can be chained together with other Gemini Input File nodes. [api node/text/Gemini] Source: comfy_api_nodes/nodes_gemini.py:487 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"file": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: input_files. Tooltip: Input files to include as context for the model. Only accepts text (.txt) and PDF (.pdf) files for now.",
+				Required:            true,
 			},
 			"gemini_input_files": schema.StringAttribute{
-				Description: "Input: GEMINI_INPUT_FILES (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: GEMINI_INPUT_FILES. Link input. Tooltip: An optional additional file(s) to batch together with the file loaded from this node. Allows chaining of input files so that a single message can include multiple input files.",
+				Optional:            true,
 			},
 			"gemini_input_files_output": schema.StringAttribute{
-				Description: "Output: GEMINI_INPUT_FILES (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: GEMINI_INPUT_FILES (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

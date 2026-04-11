@@ -3,12 +3,12 @@
 page_title: "comfyui_meshy_animate_model_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Apply a specific animation action to a previously rigged character. [api node/3d/Meshy]
+  Apply a specific animation action to a previously rigged character. [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:652 (v3_api).
 ---
 
 # comfyui_meshy_animate_model_node (Resource)
 
-Apply a specific animation action to a previously rigged character. [api node/3d/Meshy]
+Apply a specific animation action to a previously rigged character. [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:652 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ Apply a specific animation action to a previously rigged character. [api node/3d
 
 ### Required
 
-- `action_id` (Number) Input: INT default: 0
-- `rig_task_id` (String) Input: MESHY_RIGGED_TASK_ID (link)
+- `action_id` (Number) Input: INT. Default: 0. Allowed range: 0 to 696. Tooltip: Visit https://docs.meshy.ai/en/api/animation-library for a list of available values.
+- `rig_task_id` (String) Input: MESHY_RIGGED_TASK_ID. Link input.
 
 ### Read-Only
 
-- `fbx_output` (String) Output: FILE_3D_FBX (slot 2)
-- `glb_output` (String) Output: FILE_3D_GLB (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `model_file_output` (String) Output: STRING (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `fbx_output` (String) Output: FILE_3D_FBX (slot 2).
+- `glb_output` (String) Output: FILE_3D_GLB (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `model_file_output` (String) Output: STRING (slot 0).
+- `node_id` (String) ComfyUI node class type.

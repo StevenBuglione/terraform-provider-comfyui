@@ -48,33 +48,33 @@ func (r *Veo3FirstLastFrameNodeResource) Metadata(_ context.Context, req resourc
 
 func (r *Veo3FirstLastFrameNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate video using prompt and first and last frames. [api node/video/Veo]",
+		MarkdownDescription: "Generate video using prompt and first and last frames. [api node/video/Veo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_veo2.py:375 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text description of the video.",
+				Required:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Negative text prompt to guide what to avoid in the video.",
+				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"720p",
@@ -83,8 +83,8 @@ func (r *Veo3FirstLastFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO default: 16:9",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"16:9\". Tooltip: Aspect ratio of the output video.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"16:9",
@@ -93,30 +93,30 @@ func (r *Veo3FirstLastFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"duration": schema.Int64Attribute{
-				Description: "Input: INT default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 8. Allowed range: 4 to 8. Step: 2. Tooltip: Duration of the output video in seconds.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(4, 8),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Seed for video generation.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967295),
 				},
 			},
 			"first_frame": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Start frame.",
+				Required:            true,
 			},
 			"last_frame": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: End frame.",
+				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO default: veo-3.1-fast-generate",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"veo-3.1-fast-generate\".",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"veo-3.1-generate",
@@ -125,12 +125,12 @@ func (r *Veo3FirstLastFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"generate_audio": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Generate audio for the video.",
+				Required:            true,
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

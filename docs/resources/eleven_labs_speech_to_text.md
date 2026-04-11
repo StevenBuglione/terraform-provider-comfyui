@@ -3,12 +3,12 @@
 page_title: "comfyui_eleven_labs_speech_to_text Resource - comfyui"
 subcategory: ""
 description: |-
-  Transcribe audio to text. Supports automatic language detection, speaker diarization, and audio event tagging. [api node/audio/ElevenLabs]
+  Transcribe audio to text. Supports automatic language detection, speaker diarization, and audio event tagging. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:66 (v3_api).
 ---
 
 # comfyui_eleven_labs_speech_to_text (Resource)
 
-Transcribe audio to text. Supports automatic language detection, speaker diarization, and audio event tagging. [api node/audio/ElevenLabs]
+Transcribe audio to text. Supports automatic language detection, speaker diarization, and audio event tagging. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:66 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Transcribe audio to text. Supports automatic language detection, speaker diariza
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `language_code` (String) Input: STRING default:
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `num_speakers` (Number) Input: INT default: 0
-- `seed` (Number) Input: INT default: 1
+- `audio` (String) Input: AUDIO. Link input. Tooltip: Audio to transcribe.
+- `language_code` (String) Input: STRING. Default: "". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for transcription.
+- `num_speakers` (Number) Input: INT. Default: 0. Allowed range: 0 to 32. Tooltip: Maximum number of speakers to predict. Set to 0 for automatic detection.
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Tooltip: Seed for reproducibility (determinism not guaranteed).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `language_code_output` (String) Output: STRING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `text_output` (String) Output: STRING (slot 0)
-- `words_json_output` (String) Output: STRING (slot 2)
+- `id` (String) Unique identifier for this node instance.
+- `language_code_output` (String) Output: STRING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `text_output` (String) Output: STRING (slot 0).
+- `words_json_output` (String) Output: STRING (slot 2).

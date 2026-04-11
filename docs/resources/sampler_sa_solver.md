@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_sa_solver Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerSASolver node [sampling/custom_sampling/samplers]
+  ComfyUI SamplerSASolver node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:620 (v3_extras).
 ---
 
 # comfyui_sampler_sa_solver (Resource)
 
-ComfyUI SamplerSASolver node [sampling/custom_sampling/samplers]
+ComfyUI SamplerSASolver node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:620 (v3_extras).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI SamplerSASolver node [sampling/custom_sampling/samplers]
 
 ### Required
 
-- `corrector_order` (Number) Input: INT default: 4
-- `eta` (Number) Input: FLOAT default: 1
-- `model` (String) Input: MODEL (link)
-- `predictor_order` (Number) Input: INT default: 3
-- `s_noise` (Number) Input: FLOAT default: 1
-- `sde_end_percent` (Number) Input: FLOAT default: 0.8
-- `sde_start_percent` (Number) Input: FLOAT default: 0.2
-- `simple_order_2` (Boolean) Input: BOOLEAN
-- `use_pece` (Boolean) Input: BOOLEAN
+- `corrector_order` (Number) Input: INT. Default: 4. Allowed range: 0 to 6.
+- `eta` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `predictor_order` (Number) Input: INT. Default: 3. Allowed range: 1 to 6.
+- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `sde_end_percent` (Number) Input: FLOAT. Default: 0.8. Allowed range: 0 to 1. Step: 0.001.
+- `sde_start_percent` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0 to 1. Step: 0.001.
+- `simple_order_2` (Boolean) Input: BOOLEAN.
+- `use_pece` (Boolean) Input: BOOLEAN.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

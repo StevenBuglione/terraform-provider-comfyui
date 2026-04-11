@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_set_area Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningSetArea node — Conditioning (Set Area) [conditioning]
+  ComfyUI ConditioningSetArea node — Conditioning (Set Area) [conditioning] Source: nodes.py:165 (v1_core).
 ---
 
 # comfyui_conditioning_set_area (Resource)
 
-ComfyUI ConditioningSetArea node — Conditioning (Set Area) [conditioning]
+ComfyUI ConditioningSetArea node — Conditioning (Set Area) [conditioning] Source: nodes.py:165 (v1_core).
 
 
 
@@ -17,15 +17,15 @@ ComfyUI ConditioningSetArea node — Conditioning (Set Area) [conditioning]
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `height` (Number) Input: INT default: 64
-- `strength` (Number) Input: FLOAT default: 1
-- `width` (Number) Input: INT default: 64
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `height` (Number) Input: INT. Default: 64. Minimum value: 64. Step: 8.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `width` (Number) Input: INT. Default: 64. Minimum value: 64. Step: 8.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

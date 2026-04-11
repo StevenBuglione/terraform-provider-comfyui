@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_apply_operation_cfg Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LatentApplyOperationCFG node [latent/advanced/operations]
+  (EXPERIMENTAL) ComfyUI LatentApplyOperationCFG node [latent/advanced/operations] Source: comfy_extras/nodes_latent.py:341 (v3_extras).
 ---
 
 # comfyui_latent_apply_operation_cfg (Resource)
 
-(EXPERIMENTAL) ComfyUI LatentApplyOperationCFG node [latent/advanced/operations]
+(EXPERIMENTAL) ComfyUI LatentApplyOperationCFG node [latent/advanced/operations] Source: comfy_extras/nodes_latent.py:341 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `operation` (String) Input: LATENT_OPERATION (link)
+- `model` (String) Input: MODEL. Link input.
+- `operation` (String) Input: LATENT_OPERATION. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

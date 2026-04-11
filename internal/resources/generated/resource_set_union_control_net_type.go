@@ -37,33 +37,33 @@ func (r *SetUnionControlNetTypeResource) Metadata(_ context.Context, req resourc
 
 func (r *SetUnionControlNetTypeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SetUnionControlNetType node [conditioning/controlnet]",
+		MarkdownDescription: "ComfyUI SetUnionControlNetType node [conditioning/controlnet] Source: comfy_extras/nodes_controlnet.py:7 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"control_net": schema.StringAttribute{
-				Description: "Input: CONTROL_NET (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONTROL_NET. Link input.",
+				Required:            true,
 			},
 			"type": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"control_net_output": schema.StringAttribute{
-				Description: "Output: CONTROL_NET (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONTROL_NET (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

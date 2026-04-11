@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_euler_ancestral Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerEulerAncestral node [sampling/custom_sampling/samplers]
+  ComfyUI SamplerEulerAncestral node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:492 (v3_extras).
 ---
 
 # comfyui_sampler_euler_ancestral (Resource)
 
-ComfyUI SamplerEulerAncestral node [sampling/custom_sampling/samplers]
+ComfyUI SamplerEulerAncestral node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:492 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI SamplerEulerAncestral node [sampling/custom_sampling/samplers]
 
 ### Required
 
-- `eta` (Number) Input: FLOAT default: 1
-- `s_noise` (Number) Input: FLOAT default: 1
+- `eta` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_sd3 Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPTextEncodeSD3 node [advanced/conditioning]
+  ComfyUI CLIPTextEncodeSD3 node [advanced/conditioning] Source: comfy_extras/nodes_sd3.py:63 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_sd3 (Resource)
 
-ComfyUI CLIPTextEncodeSD3 node [advanced/conditioning]
+ComfyUI CLIPTextEncodeSD3 node [advanced/conditioning] Source: comfy_extras/nodes_sd3.py:63 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI CLIPTextEncodeSD3 node [advanced/conditioning]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `clip_g` (String) Input: STRING
-- `clip_l` (String) Input: STRING
-- `empty_padding` (String) Input: COMBO
-- `t5xxl` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input.
+- `clip_g` (String) Input: STRING. Supports multiline text.
+- `clip_l` (String) Input: STRING. Supports multiline text.
+- `empty_padding` (String) Input: COMBO.
+- `t5xxl` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

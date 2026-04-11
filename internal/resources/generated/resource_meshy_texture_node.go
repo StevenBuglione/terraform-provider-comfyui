@@ -46,25 +46,25 @@ func (r *MeshyTextureNodeResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *MeshyTextureNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI MeshyTextureNode node — Meshy: Texture Model [api node/3d/Meshy]",
+		MarkdownDescription: "ComfyUI MeshyTextureNode node — Meshy: Texture Model [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:718 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"latest",
@@ -72,49 +72,49 @@ func (r *MeshyTextureNodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"meshy_task_id": schema.StringAttribute{
-				Description: "Input: MESHY_TASK_ID (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MESHY_TASK_ID. Link input.",
+				Required:            true,
 			},
 			"enable_original_uv": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Use the original UV of the model instead of generating new UVs. When enabled, Meshy preserves existing textures from the uploaded model. If the model has no original UV, the quality of the output might not be as good.",
+				Required:            true,
 			},
 			"pbr": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Required:            true,
 			},
 			"text_style_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Describe your desired texture style of the object using text. Maximum 600 characters.Maximum 600 characters. Cannot be used at the same time as 'image_style'.",
+				Required:            true,
 			},
 			"image_style": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: A 2d image to guide the texturing process. Can not be used at the same time with 'text_style_prompt'.",
+				Optional:            true,
 			},
 			"model_file_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"meshy_task_id_output": schema.StringAttribute{
-				Description: "Output: MODEL_TASK_ID (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL_TASK_ID (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"glb_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_GLB (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_GLB (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"fbx_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_FBX (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_FBX (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

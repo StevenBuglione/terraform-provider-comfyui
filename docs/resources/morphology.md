@@ -3,12 +3,12 @@
 page_title: "comfyui_morphology Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Morphology node — ImageMorphology [image/postprocessing]
+  ComfyUI Morphology node — ImageMorphology [image/postprocessing] Source: comfy_extras/nodes_morphology.py:10 (v3_extras).
 ---
 
 # comfyui_morphology (Resource)
 
-ComfyUI Morphology node — ImageMorphology [image/postprocessing]
+ComfyUI Morphology node — ImageMorphology [image/postprocessing] Source: comfy_extras/nodes_morphology.py:10 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI Morphology node — ImageMorphology [image/postprocessing]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `kernel_size` (Number) Input: INT default: 3
-- `operation` (String) Input: COMBO
+- `image` (String) Input: IMAGE. Link input.
+- `kernel_size` (Number) Input: INT. Default: 3. Allowed range: 3 to 999. Step: 1.
+- `operation` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

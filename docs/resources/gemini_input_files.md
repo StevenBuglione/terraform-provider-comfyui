@@ -3,12 +3,12 @@
 page_title: "comfyui_gemini_input_files Resource - comfyui"
 subcategory: ""
 description: |-
-  Loads and prepares input files to include as inputs for Gemini LLM nodes. The files will be read by the Gemini model when generating a response. The contents of the text file count toward the token limit. 🛈 TIP: Can be chained together with other Gemini Input File nodes. [api node/text/Gemini]
+  Loads and prepares input files to include as inputs for Gemini LLM nodes. The files will be read by the Gemini model when generating a response. The contents of the text file count toward the token limit. 🛈 TIP: Can be chained together with other Gemini Input File nodes. [api node/text/Gemini] Source: comfy_api_nodes/nodes_gemini.py:487 (v3_api).
 ---
 
 # comfyui_gemini_input_files (Resource)
 
-Loads and prepares input files to include as inputs for Gemini LLM nodes. The files will be read by the Gemini model when generating a response. The contents of the text file count toward the token limit. 🛈 TIP: Can be chained together with other Gemini Input File nodes. [api node/text/Gemini]
+Loads and prepares input files to include as inputs for Gemini LLM nodes. The files will be read by the Gemini model when generating a response. The contents of the text file count toward the token limit. 🛈 TIP: Can be chained together with other Gemini Input File nodes. [api node/text/Gemini] Source: comfy_api_nodes/nodes_gemini.py:487 (v3_api).
 
 
 
@@ -17,14 +17,14 @@ Loads and prepares input files to include as inputs for Gemini LLM nodes. The fi
 
 ### Required
 
-- `file` (String) Input: COMBO
+- `file` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: input_files. Tooltip: Input files to include as context for the model. Only accepts text (.txt) and PDF (.pdf) files for now.
 
 ### Optional
 
-- `gemini_input_files` (String) Input: GEMINI_INPUT_FILES (link)
+- `gemini_input_files` (String) Input: GEMINI_INPUT_FILES. Link input. Tooltip: An optional additional file(s) to batch together with the file loaded from this node. Allows chaining of input files so that a single message can include multiple input files.
 
 ### Read-Only
 
-- `gemini_input_files_output` (String) Output: GEMINI_INPUT_FILES (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `gemini_input_files_output` (String) Output: GEMINI_INPUT_FILES (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

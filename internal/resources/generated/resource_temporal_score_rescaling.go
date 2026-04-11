@@ -40,43 +40,43 @@ func (r *TemporalScoreRescalingResource) Metadata(_ context.Context, req resourc
 
 func (r *TemporalScoreRescalingResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "[Post-CFG Function]\nTSR - Temporal Score Rescaling (2510.01184)\n\nRescaling the model's score or noise to steer the sampling diversity.\n [model_patches/unet]",
+		MarkdownDescription: "[Post-CFG Function]\nTSR - Temporal Score Rescaling (2510.01184)\n\nRescaling the model's score or noise to steer the sampling diversity. [model_patches/unet] Source: comfy_extras/nodes_eps.py:81 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"tsr_k": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.95",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0.01 to 100. Step: 0.001. Tooltip: Controls the rescaling strength.\nLower k produces more detailed results; higher k produces smoother results in image generation. Setting k = 1 disables rescaling.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 100),
 				},
 			},
 			"tsr_sigma": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.01 to 100. Step: 0.001. Tooltip: Controls how early rescaling takes effect.\nLarger values take effect earlier.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 100),
 				},
 			},
 			"patched_model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

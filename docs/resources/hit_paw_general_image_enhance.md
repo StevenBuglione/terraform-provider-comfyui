@@ -3,12 +3,12 @@
 page_title: "comfyui_hit_paw_general_image_enhance Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI HitPawGeneralImageEnhance node — HitPaw General Image Enhance [api node/image/HitPaw]
+  ComfyUI HitPawGeneralImageEnhance node — HitPaw General Image Enhance [api node/image/HitPaw] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hitpaw.py:68 (v3_api).
 ---
 
 # comfyui_hit_paw_general_image_enhance (Resource)
 
-ComfyUI HitPawGeneralImageEnhance node — HitPaw General Image Enhance [api node/image/HitPaw]
+ComfyUI HitPawGeneralImageEnhance node — HitPaw General Image Enhance [api node/image/HitPaw] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hitpaw.py:68 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI HitPawGeneralImageEnhance node — HitPaw General Image Enhance [api nod
 
 ### Required
 
-- `auto_downscale` (Boolean) Input: BOOLEAN default: false
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO
-- `upscale_factor` (String) Input: COMBO
+- `auto_downscale` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Automatically downscale input image if output would exceed the limit.
+- `image` (String) Input: IMAGE. Link input.
+- `model` (String) Input: COMBO.
+- `upscale_factor` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

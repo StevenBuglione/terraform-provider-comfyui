@@ -3,12 +3,12 @@
 page_title: "comfyui_t5_tokenizer_options Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI T5TokenizerOptions node [_for_testing/conditioning]
+  (EXPERIMENTAL) ComfyUI T5TokenizerOptions node [_for_testing/conditioning] Source: comfy_extras/nodes_cond.py:33 (v3_extras).
 ---
 
 # comfyui_t5_tokenizer_options (Resource)
 
-(EXPERIMENTAL) ComfyUI T5TokenizerOptions node [_for_testing/conditioning]
+(EXPERIMENTAL) ComfyUI T5TokenizerOptions node [_for_testing/conditioning] Source: comfy_extras/nodes_cond.py:33 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `min_length` (Number) Input: INT default: 0
-- `min_padding` (Number) Input: INT default: 0
+- `clip` (String) Input: CLIP. Link input.
+- `min_length` (Number) Input: INT. Default: 0. Allowed range: 0 to 10000. Step: 1.
+- `min_padding` (Number) Input: INT. Default: 0. Allowed range: 0 to 10000. Step: 1.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

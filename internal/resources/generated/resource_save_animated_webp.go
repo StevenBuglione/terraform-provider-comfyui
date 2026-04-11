@@ -42,51 +42,51 @@ func (r *SaveAnimatedWebpResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *SaveAnimatedWebpResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SaveAnimatedWEBP node [image/animation]",
+		MarkdownDescription: "ComfyUI SaveAnimatedWEBP node [image/animation] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:184 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: ComfyUI",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"ComfyUI\".",
+				Required:            true,
 			},
 			"fps": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 6",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 6. Allowed range: 0.01 to 1000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 1000),
 				},
 			},
 			"lossless": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true.",
+				Required:            true,
 			},
 			"quality": schema.Int64Attribute{
-				Description: "Input: INT default: 80",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 80. Allowed range: 0 to 100.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"method": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(cls.COMPRESS_METHODS.keys()).",
+				Required:            true,
 			},
 		},
 	}

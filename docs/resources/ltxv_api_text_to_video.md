@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_api_text_to_video Resource - comfyui"
 subcategory: ""
 description: |-
-  Professional-quality videos with customizable duration and resolution. [api node/video/LTXV]
+  Professional-quality videos with customizable duration and resolution. [api node/video/LTXV] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_ltxv.py:47 (v3_api).
 ---
 
 # comfyui_ltxv_api_text_to_video (Resource)
 
-Professional-quality videos with customizable duration and resolution. [api node/video/LTXV]
+Professional-quality videos with customizable duration and resolution. [api node/video/LTXV] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_ltxv.py:47 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Professional-quality videos with customizable duration and resolution. [api node
 
 ### Required
 
-- `duration` (String) Input: COMBO default: 8
-- `fps` (String) Input: COMBO default: 25
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `resolution` (String) Input: COMBO
+- `duration` (String) Input: COMBO. Default: 8.
+- `fps` (String) Input: COMBO. Default: 25.
+- `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(MODELS_MAP.keys()).
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `resolution` (String) Input: COMBO.
 
 ### Optional
 
-- `generate_audio` (Boolean) Input: BOOLEAN default: false
+- `generate_audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When true, the generated video will include AI-generated audio matching the scene.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

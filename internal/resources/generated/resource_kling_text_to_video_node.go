@@ -44,62 +44,62 @@ func (r *KlingTextToVideoNodeResource) Metadata(_ context.Context, req resource.
 
 func (r *KlingTextToVideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Kling Text to Video Node [api node/video/Kling]",
+		MarkdownDescription: "Kling Text to Video Node [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:756 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: Positive text prompt.",
+				Required:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: Negative text prompt.",
+				Required:            true,
 			},
 			"cfg_scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO default: 16:9",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"16:9\". Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenAspectRatio.",
+				Required:            true,
 			},
 			"mode": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: modes. Tooltip: The configuration to use for the video generation following the format: mode / duration / model_name.",
+				Required:            true,
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"video_id_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"duration_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_set_area_strength Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningSetAreaStrength node — ConditioningSetAreaStrength [conditioning]
+  ComfyUI ConditioningSetAreaStrength node — ConditioningSetAreaStrength [conditioning] Source: nodes.py:209 (v1_core).
 ---
 
 # comfyui_conditioning_set_area_strength (Resource)
 
-ComfyUI ConditioningSetAreaStrength node — ConditioningSetAreaStrength [conditioning]
+ComfyUI ConditioningSetAreaStrength node — ConditioningSetAreaStrength [conditioning] Source: nodes.py:209 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ConditioningSetAreaStrength node — ConditioningSetAreaStrength [condit
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `strength` (Number) Input: FLOAT default: 1
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

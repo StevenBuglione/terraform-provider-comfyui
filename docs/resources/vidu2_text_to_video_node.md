@@ -3,12 +3,12 @@
 page_title: "comfyui_vidu2_text_to_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate video from a text prompt [api node/video/Vidu]
+  Generate video from a text prompt [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:488 (v3_api).
 ---
 
 # comfyui_vidu2_text_to_video_node (Resource)
 
-Generate video from a text prompt [api node/video/Vidu]
+Generate video from a text prompt [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:488 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Generate video from a text prompt [api node/video/Vidu]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `background_music` (Boolean) Input: BOOLEAN default: false
-- `duration` (Number) Input: INT default: 5
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 1
+- `aspect_ratio` (String) Input: COMBO.
+- `background_music` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add background music to the generated video.
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 1 to 10. Step: 1.
+- `model` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A textual description for video generation, with a maximum length of 2000 characters.
+- `resolution` (String) Input: COMBO.
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_load_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LoadAudio node — Load Audio [audio]
+  ComfyUI LoadAudio node — Load Audio [audio] Source: comfy_extras/nodes_audio.py:296 (v3_extras).
 ---
 
 # comfyui_load_audio (Resource)
 
-ComfyUI LoadAudio node — Load Audio [audio]
+ComfyUI LoadAudio node — Load Audio [audio] Source: comfy_extras/nodes_audio.py:296 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI LoadAudio node — Load Audio [audio]
 
 ### Required
 
-- `audio` (String) Input: COMBO
+- `audio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: sorted(files).
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

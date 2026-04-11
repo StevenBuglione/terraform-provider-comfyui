@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_decode_hunyuan3_d Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VAEDecodeHunyuan3D node [latent/3d]
+  ComfyUI VAEDecodeHunyuan3D node [latent/3d] Source: comfy_extras/nodes_hunyuan3d.py:100 (v3_extras).
 ---
 
 # comfyui_vae_decode_hunyuan3_d (Resource)
 
-ComfyUI VAEDecodeHunyuan3D node [latent/3d]
+ComfyUI VAEDecodeHunyuan3D node [latent/3d] Source: comfy_extras/nodes_hunyuan3d.py:100 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI VAEDecodeHunyuan3D node [latent/3d]
 
 ### Required
 
-- `num_chunks` (Number) Input: INT default: 8000
-- `octree_resolution` (Number) Input: INT default: 256
-- `samples` (String) Input: LATENT (link)
-- `vae` (String) Input: VAE (link)
+- `num_chunks` (Number) Input: INT. Default: 8000. Allowed range: 1000 to 500000.
+- `octree_resolution` (Number) Input: INT. Default: 256. Allowed range: 16 to 512.
+- `samples` (String) Input: LATENT. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `voxel_output` (String) Output: VOXEL (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `voxel_output` (String) Output: VOXEL (slot 0).

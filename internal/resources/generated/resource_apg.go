@@ -41,50 +41,50 @@ func (r *ApgResource) Metadata(_ context.Context, req resource.MetadataRequest, 
 
 func (r *ApgResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI APG node — Adaptive Projected Guidance [sampling/custom_sampling]",
+		MarkdownDescription: "ComfyUI APG node — Adaptive Projected Guidance [sampling/custom_sampling] Source: comfy_extras/nodes_apg.py:13 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"eta": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01. Tooltip: Controls the scale of the parallel guidance vector. Default CFG behavior at a setting of 1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"norm_threshold": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 5. Allowed range: 0 to 50. Step: 0.1. Tooltip: Normalize guidance vector to this value, normalization disable at a setting of 0.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 50),
 				},
 			},
 			"momentum": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -5 to 1. Step: 0.01. Tooltip: Controls a running average of guidance during diffusion, disabled at a setting of 0.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-5, 1),
 				},
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

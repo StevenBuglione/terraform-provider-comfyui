@@ -3,12 +3,12 @@
 page_title: "comfyui_open_ai_video_sora2 Resource - comfyui"
 subcategory: ""
 description: |-
-  OpenAI video and audio generation. [api node/video/Sora]
+  OpenAI video and audio generation. [api node/video/Sora] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_sora.py:31 (v3_api).
 ---
 
 # comfyui_open_ai_video_sora2 (Resource)
 
-OpenAI video and audio generation. [api node/video/Sora]
+OpenAI video and audio generation. [api node/video/Sora] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_sora.py:31 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ OpenAI video and audio generation. [api node/video/Sora]
 
 ### Required
 
-- `duration` (String) Input: COMBO default: 8
-- `model` (String) Input: COMBO default: sora-2
-- `prompt` (String) Input: STRING default:
-- `size` (String) Input: COMBO default: 1280x720
+- `duration` (String) Input: COMBO. Default: 8.
+- `model` (String) Input: COMBO. Default: "sora-2".
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Guiding text; may be empty if an input image is present.
+- `size` (String) Input: COMBO. Default: "1280x720".
 
 ### Optional
 
-- `image` (String) Input: IMAGE (link)
-- `seed` (Number) Input: INT default: 0
+- `image` (String) Input: IMAGE. Link input.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_regex_extract Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI RegexExtract node — Regex Extract [utils/string]
+  ComfyUI RegexExtract node — Regex Extract [utils/string] Source: comfy_extras/nodes_string.py:266 (v3_extras).
 ---
 
 # comfyui_regex_extract (Resource)
 
-ComfyUI RegexExtract node — Regex Extract [utils/string]
+ComfyUI RegexExtract node — Regex Extract [utils/string] Source: comfy_extras/nodes_string.py:266 (v3_extras).
 
 
 
@@ -17,16 +17,16 @@ ComfyUI RegexExtract node — Regex Extract [utils/string]
 
 ### Required
 
-- `case_insensitive` (Boolean) Input: BOOLEAN default: true
-- `dotall` (Boolean) Input: BOOLEAN default: false
-- `group_index` (Number) Input: INT default: 1
-- `mode` (String) Input: COMBO
-- `multiline` (Boolean) Input: BOOLEAN default: false
-- `regex_pattern` (String) Input: STRING
-- `string` (String) Input: STRING
+- `case_insensitive` (Boolean) Input: BOOLEAN. Default: true.
+- `dotall` (Boolean) Input: BOOLEAN. Default: false.
+- `group_index` (Number) Input: INT. Default: 1. Allowed range: 0 to 100.
+- `mode` (String) Input: COMBO.
+- `multiline` (Boolean) Input: BOOLEAN. Default: false.
+- `regex_pattern` (String) Input: STRING. Supports multiline text.
+- `string` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

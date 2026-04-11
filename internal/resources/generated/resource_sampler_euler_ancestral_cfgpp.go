@@ -39,39 +39,39 @@ func (r *SamplerEulerAncestralCfgppResource) Metadata(_ context.Context, req res
 
 func (r *SamplerEulerAncestralCfgppResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SamplerEulerAncestralCFGPP node — SamplerEulerAncestralCFG++ [sampling/custom_sampling/samplers]",
+		MarkdownDescription: "ComfyUI SamplerEulerAncestralCFGPP node — SamplerEulerAncestralCFG++ [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:512 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"eta": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"s_noise": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"sampler_output": schema.StringAttribute{
-				Description: "Output: SAMPLER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SAMPLER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

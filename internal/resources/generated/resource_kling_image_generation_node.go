@@ -49,51 +49,51 @@ func (r *KlingImageGenerationNodeResource) Metadata(_ context.Context, req resou
 
 func (r *KlingImageGenerationNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Kling Image Generation Node. Generate an image from a text prompt with an optional reference image. [api node/image/Kling]",
+		MarkdownDescription: "Kling Image Generation Node. Generate an image from a text prompt with an optional reference image. [api node/image/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2446 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: Positive text prompt.",
+				Required:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: Negative text prompt.",
+				Required:            true,
 			},
 			"image_type": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"image_fidelity": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Reference intensity for user-uploaded images.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"human_fidelity": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.45",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.45. Allowed range: 0 to 1. Step: 0.01. Tooltip: Subject reference similarity.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"model_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"kling-v3",
@@ -103,30 +103,30 @@ func (r *KlingImageGenerationNodeResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO default: 16:9",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"16:9\". Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"n": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 9. Tooltip: Number of generated images.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 9),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

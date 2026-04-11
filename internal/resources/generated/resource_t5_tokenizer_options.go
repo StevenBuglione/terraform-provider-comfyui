@@ -40,43 +40,43 @@ func (r *T5TokenizerOptionsResource) Metadata(_ context.Context, req resource.Me
 
 func (r *T5TokenizerOptionsResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI T5TokenizerOptions node [_for_testing/conditioning]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI T5TokenizerOptions node [_for_testing/conditioning] Source: comfy_extras/nodes_cond.py:33 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input.",
+				Required:            true,
 			},
 			"min_padding": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 10000. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 10000),
 				},
 			},
 			"min_length": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 10000. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 10000),
 				},
 			},
 			"clip_output": schema.StringAttribute{
-				Description: "Output: CLIP (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CLIP (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

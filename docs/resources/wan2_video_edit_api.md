@@ -3,12 +3,12 @@
 page_title: "comfyui_wan2_video_edit_api Resource - comfyui"
 subcategory: ""
 description: |-
-  Edit a video using text instructions, reference images, or style transfer. [api node/video/Wan]
+  Edit a video using text instructions, reference images, or style transfer. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:1317 (v3_api).
 ---
 
 # comfyui_wan2_video_edit_api (Resource)
 
-Edit a video using text instructions, reference images, or style transfer. [api node/video/Wan]
+Edit a video using text instructions, reference images, or style transfer. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:1317 (v3_api).
 
 
 
@@ -17,14 +17,14 @@ Edit a video using text instructions, reference images, or style transfer. [api 
 
 ### Required
 
-- `audio_setting` (String) Input: COMBO default: auto
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `seed` (Number) Input: INT default: 0
-- `video` (String) Input: VIDEO (link)
-- `watermark` (Boolean) Input: BOOLEAN default: false
+- `audio_setting` (String) Input: COMBO. Default: "auto". Tooltip: 'auto': model decides whether to regenerate audio based on the prompt. 'origin': preserve the original audio from the input video.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `video` (String) Input: VIDEO. Link input. Tooltip: The video to edit.
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

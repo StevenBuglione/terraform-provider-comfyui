@@ -3,12 +3,12 @@
 page_title: "comfyui_repeat_image_batch Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI RepeatImageBatch node [image/batch]
+  ComfyUI RepeatImageBatch node [image/batch] Source: comfy_extras/nodes_images.py:105 (v3_extras).
 ---
 
 # comfyui_repeat_image_batch (Resource)
 
-ComfyUI RepeatImageBatch node [image/batch]
+ComfyUI RepeatImageBatch node [image/batch] Source: comfy_extras/nodes_images.py:105 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI RepeatImageBatch node [image/batch]
 
 ### Required
 
-- `amount` (Number) Input: INT default: 1
-- `image` (String) Input: IMAGE (link)
+- `amount` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

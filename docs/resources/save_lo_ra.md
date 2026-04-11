@@ -3,12 +3,12 @@
 page_title: "comfyui_save_lo_ra Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SaveLoRA node — Save LoRA Weights [loaders]
+  (EXPERIMENTAL) ComfyUI SaveLoRA node — Save LoRA Weights [loaders] Source: comfy_extras/nodes_train.py:1345 (v3_extras).
 ---
 
 # comfyui_save_lo_ra (Resource)
 
-(EXPERIMENTAL) ComfyUI SaveLoRA node — Save LoRA Weights [loaders]
+(EXPERIMENTAL) ComfyUI SaveLoRA node — Save LoRA Weights [loaders] Source: comfy_extras/nodes_train.py:1345 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `lora` (String) Input: LORA_MODEL (link)
-- `prefix` (String) Input: STRING default: loras/ComfyUI_trained_lora
+- `lora` (String) Input: LORA_MODEL. Link input. Tooltip: The LoRA model to save. Do not use the model with LoRA layers.
+- `prefix` (String) Input: STRING. Default: "loras/ComfyUI_trained_lora". Tooltip: The prefix to use for the saved LoRA file.
 
 ### Optional
 
-- `steps` (Number) Input: INT
+- `steps` (Number) Input: INT. Tooltip: Optional: The number of steps the LoRA has been trained for, used to name the saved file.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

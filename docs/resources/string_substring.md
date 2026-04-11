@@ -3,12 +3,12 @@
 page_title: "comfyui_string_substring Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StringSubstring node — Substring [utils/string]
+  ComfyUI StringSubstring node — Substring [utils/string] Source: comfy_extras/nodes_string.py:30 (v3_extras).
 ---
 
 # comfyui_string_substring (Resource)
 
-ComfyUI StringSubstring node — Substring [utils/string]
+ComfyUI StringSubstring node — Substring [utils/string] Source: comfy_extras/nodes_string.py:30 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI StringSubstring node — Substring [utils/string]
 
 ### Required
 
-- `end` (Number) Input: INT
-- `start` (Number) Input: INT
-- `string` (String) Input: STRING
+- `end` (Number) Input: INT.
+- `start` (Number) Input: INT.
+- `string` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

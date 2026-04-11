@@ -3,12 +3,12 @@
 page_title: "comfyui_autogrow_names_test_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI AutogrowNamesTestNode node — AutogrowNamesTest [logic]
+  ComfyUI AutogrowNamesTestNode node — AutogrowNamesTest [logic] Source: comfy_extras/nodes_logic.py:170 (v3_extras).
 ---
 
 # comfyui_autogrow_names_test_node (Resource)
 
-ComfyUI AutogrowNamesTestNode node — AutogrowNamesTest [logic]
+ComfyUI AutogrowNamesTestNode node — AutogrowNamesTest [logic] Source: comfy_extras/nodes_logic.py:170 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI AutogrowNamesTestNode node — AutogrowNamesTest [logic]
 
 ### Required
 
-- `autogrow` (String) Input: COMFY_AUTOGROW_V3
+- `autogrow` (String) Input: COMFY_AUTOGROW_V3.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

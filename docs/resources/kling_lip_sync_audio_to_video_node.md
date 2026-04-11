@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_lip_sync_audio_to_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Kling Lip Sync Audio to Video Node. Syncs mouth movements in a video file to the audio content of an audio file. When using, ensure that the audio contains clearly distinguishable vocals and that the video contains a distinct face. The audio file should not be larger than 5MB. The video file should not be larger than 100MB, should have height/width between 720px and 1920px, and should be between 2s and 10s in length. [api node/video/Kling]
+  Kling Lip Sync Audio to Video Node. Syncs mouth movements in a video file to the audio content of an audio file. When using, ensure that the audio contains clearly distinguishable vocals and that the video contains a distinct face. The audio file should not be larger than 5MB. The video file should not be larger than 100MB, should have height/width between 720px and 1920px, and should be between 2s and 10s in length. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2259 (v3_api).
 ---
 
 # comfyui_kling_lip_sync_audio_to_video_node (Resource)
 
-Kling Lip Sync Audio to Video Node. Syncs mouth movements in a video file to the audio content of an audio file. When using, ensure that the audio contains clearly distinguishable vocals and that the video contains a distinct face. The audio file should not be larger than 5MB. The video file should not be larger than 100MB, should have height/width between 720px and 1920px, and should be between 2s and 10s in length. [api node/video/Kling]
+Kling Lip Sync Audio to Video Node. Syncs mouth movements in a video file to the audio content of an audio file. When using, ensure that the audio contains clearly distinguishable vocals and that the video contains a distinct face. The audio file should not be larger than 5MB. The video file should not be larger than 100MB, should have height/width between 720px and 1920px, and should be between 2s and 10s in length. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2259 (v3_api).
 
 
 
@@ -17,14 +17,14 @@ Kling Lip Sync Audio to Video Node. Syncs mouth movements in a video file to the
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `video` (String) Input: VIDEO (link)
-- `voice_language` (String) Input: COMBO default: en
+- `audio` (String) Input: AUDIO. Link input.
+- `video` (String) Input: VIDEO. Link input.
+- `voice_language` (String) Input: COMBO. Default: "en". Dynamic options are resolved by ComfyUI at runtime.
 
 ### Read-Only
 
-- `duration_output` (String) Output: STRING (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_id_output` (String) Output: STRING (slot 1)
-- `video_output` (String) Output: VIDEO (slot 0)
+- `duration_output` (String) Output: STRING (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_id_output` (String) Output: STRING (slot 1).
+- `video_output` (String) Output: VIDEO (slot 0).

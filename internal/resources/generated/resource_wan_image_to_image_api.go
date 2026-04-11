@@ -44,25 +44,25 @@ func (r *WanImageToImageAPIResource) Metadata(_ context.Context, req resource.Me
 
 func (r *WanImageToImageAPIResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generates an image from one or two input images and a text prompt. The output image is currently fixed at 1.6 MP, and its aspect ratio matches the input image(s). [api node/image/Wan]",
+		MarkdownDescription: "Generates an image from one or two input images and a text prompt. The output image is currently fixed at 1.6 MP, and its aspect ratio matches the input image(s). [api node/image/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:181 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO default: wan2.5-i2i-preview",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"wan2.5-i2i-preview\". Tooltip: Model to use.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"wan2.5-i2i-preview",
@@ -70,31 +70,31 @@ func (r *WanImageToImageAPIResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Single-image editing or multi-image fusion. Maximum 2 images.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.",
+				Required:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Negative prompt describing what to avoid.",
+				Optional:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"watermark": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

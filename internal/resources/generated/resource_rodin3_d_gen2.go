@@ -44,36 +44,36 @@ func (r *Rodin3DGen2Resource) Metadata(_ context.Context, req resource.MetadataR
 
 func (r *Rodin3DGen2Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Rodin3D_Gen2 node — Rodin 3D Generate - Gen-2 Generate [api node/3d/Rodin]",
+		MarkdownDescription: "ComfyUI Rodin3D_Gen2 node — Rodin 3D Generate - Gen-2 Generate [api node/3d/Rodin] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_rodin.py:469 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 65535.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 65535),
 				},
 			},
 			"material_type": schema.StringAttribute{
-				Description: "Input: COMBO default: PBR",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"PBR\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"PBR",
@@ -82,8 +82,8 @@ func (r *Rodin3DGen2Resource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"polygon_count": schema.StringAttribute{
-				Description: "Input: COMBO default: 500K-Triangle",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"500K-Triangle\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"4K-Quad",
@@ -98,19 +98,19 @@ func (r *Rodin3DGen2Resource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"tapose": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Required:            true,
 			},
 			"_3d_model_path_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"glb_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_GLB (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_GLB (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

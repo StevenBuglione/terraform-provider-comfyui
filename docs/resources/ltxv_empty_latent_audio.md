@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_empty_latent_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LTXVEmptyLatentAudio node — LTXV Empty Latent Audio [latent/audio]
+  ComfyUI LTXVEmptyLatentAudio node — LTXV Empty Latent Audio [latent/audio] Source: comfy_extras/nodes_lt_audio.py:97 (v3_extras).
 ---
 
 # comfyui_ltxv_empty_latent_audio (Resource)
 
-ComfyUI LTXVEmptyLatentAudio node — LTXV Empty Latent Audio [latent/audio]
+ComfyUI LTXVEmptyLatentAudio node — LTXV Empty Latent Audio [latent/audio] Source: comfy_extras/nodes_lt_audio.py:97 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI LTXVEmptyLatentAudio node — LTXV Empty Latent Audio [latent/audio]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `frame_rate` (Number) Input: INT default: 25
-- `frames_number` (Number) Input: INT default: 97
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096. Tooltip: The number of latent audio samples in the batch.
+- `frame_rate` (Number) Input: INT. Default: 25. Allowed range: 1 to 1000. Step: 1. Tooltip: Number of frames per second.
+- `frames_number` (Number) Input: INT. Default: 97. Allowed range: 1 to 1000. Step: 1. Tooltip: Number of frames.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

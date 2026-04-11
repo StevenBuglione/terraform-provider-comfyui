@@ -3,12 +3,12 @@
 page_title: "comfyui_chroma_radiance_options Resource - comfyui"
 subcategory: ""
 description: |-
-  Allows setting advanced options for the Chroma Radiance model. [model_patches/chroma_radiance]
+  Allows setting advanced options for the Chroma Radiance model. [model_patches/chroma_radiance] Source: comfy_extras/nodes_chroma_radiance.py:31 (v3_extras).
 ---
 
 # comfyui_chroma_radiance_options (Resource)
 
-Allows setting advanced options for the Chroma Radiance model. [model_patches/chroma_radiance]
+Allows setting advanced options for the Chroma Radiance model. [model_patches/chroma_radiance] Source: comfy_extras/nodes_chroma_radiance.py:31 (v3_extras).
 
 
 
@@ -17,6 +17,6 @@ Allows setting advanced options for the Chroma Radiance model. [model_patches/ch
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

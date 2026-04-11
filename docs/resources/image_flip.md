@@ -3,12 +3,12 @@
 page_title: "comfyui_image_flip Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageFlip node [image/transform]
+  ComfyUI ImageFlip node [image/transform] Source: comfy_extras/nodes_images.py:620 (v3_extras).
 ---
 
 # comfyui_image_flip (Resource)
 
-ComfyUI ImageFlip node [image/transform]
+ComfyUI ImageFlip node [image/transform] Source: comfy_extras/nodes_images.py:620 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ImageFlip node [image/transform]
 
 ### Required
 
-- `flip_method` (String) Input: COMBO
-- `image` (String) Input: IMAGE (link)
+- `flip_method` (String) Input: COMBO.
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

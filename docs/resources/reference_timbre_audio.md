@@ -3,12 +3,12 @@
 page_title: "comfyui_reference_timbre_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) This node sets the reference audio for ace step 1.5 [advanced/conditioning/audio]
+  (EXPERIMENTAL) This node sets the reference audio for ace step 1.5 [advanced/conditioning/audio] Source: comfy_extras/nodes_ace.py:109 (v3_extras).
 ---
 
 # comfyui_reference_timbre_audio (Resource)
 
-(EXPERIMENTAL) This node sets the reference audio for ace step 1.5 [advanced/conditioning/audio]
+(EXPERIMENTAL) This node sets the reference audio for ace step 1.5 [advanced/conditioning/audio] Source: comfy_extras/nodes_ace.py:109 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
+- `conditioning` (String) Input: CONDITIONING. Link input.
 
 ### Optional
 
-- `latent` (String) Input: LATENT (link)
+- `latent` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

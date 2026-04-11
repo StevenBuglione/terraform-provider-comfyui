@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_save Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPSave node — CLIPSave [advanced/model_merging]
+  ComfyUI CLIPSave node — CLIPSave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_model_merging.py:251 (v1_extras).
 ---
 
 # comfyui_clip_save (Resource)
 
-ComfyUI CLIPSave node — CLIPSave [advanced/model_merging]
+ComfyUI CLIPSave node — CLIPSave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_model_merging.py:251 (v1_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI CLIPSave node — CLIPSave [advanced/model_merging]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `filename_prefix` (String) Input: STRING default: clip/ComfyUI
+- `clip` (String) Input: CLIP. Link input.
+- `filename_prefix` (String) Input: STRING. Default: "clip/ComfyUI".
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

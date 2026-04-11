@@ -39,25 +39,25 @@ func (r *RecraftCreateStyleNodeResource) Metadata(_ context.Context, req resourc
 
 func (r *RecraftCreateStyleNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Create a custom style from reference images. Upload 1-5 images to use as style references. Total size of all images is limited to 5 MB. [api node/image/Recraft]",
+		MarkdownDescription: "Create a custom style from reference images. Upload 1-5 images to use as style references. Total size of all images is limited to 5 MB. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:328 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"style": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: The base style of the generated images.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"realistic_image",
@@ -66,12 +66,12 @@ func (r *RecraftCreateStyleNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: COMFY_AUTOGROW_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+				Required:            true,
 			},
 			"style_id_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

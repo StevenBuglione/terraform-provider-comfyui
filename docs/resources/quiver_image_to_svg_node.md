@@ -3,12 +3,12 @@
 page_title: "comfyui_quiver_image_to_svg_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Vectorize a raster image into SVG using Quiver AI. [api node/image/Quiver]
+  Vectorize a raster image into SVG using Quiver AI. [api node/image/Quiver] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_quiver.py:162 (v3_api).
 ---
 
 # comfyui_quiver_image_to_svg_node (Resource)
 
-Vectorize a raster image into SVG using Quiver AI. [api node/image/Quiver]
+Vectorize a raster image into SVG using Quiver AI. [api node/image/Quiver] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_quiver.py:162 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ Vectorize a raster image into SVG using Quiver AI. [api node/image/Quiver]
 
 ### Required
 
-- `auto_crop` (Boolean) Input: BOOLEAN default: false
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `seed` (Number) Input: INT default: 0
+- `auto_crop` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Automatically crop to the dominant subject.
+- `image` (String) Input: IMAGE. Link input. Tooltip: Input image to vectorize.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for SVG vectorization.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `svg_output` (String) Output: SVG (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `svg_output` (String) Output: SVG (slot 0).

@@ -4,14 +4,14 @@ page_title: "comfyui_triple_clip_loader Resource - comfyui"
 subcategory: ""
 description: |-
   [Recipes]
-  sd3: clip-l, clip-g, t5 [advanced/loaders]
+  sd3: clip-l, clip-g, t5 [advanced/loaders] Source: comfy_extras/nodes_sd3.py:11 (v3_extras).
 ---
 
 # comfyui_triple_clip_loader (Resource)
 
 [Recipes]
 
-sd3: clip-l, clip-g, t5 [advanced/loaders]
+sd3: clip-l, clip-g, t5 [advanced/loaders] Source: comfy_extras/nodes_sd3.py:11 (v3_extras).
 
 
 
@@ -20,12 +20,12 @@ sd3: clip-l, clip-g, t5 [advanced/loaders]
 
 ### Required
 
-- `clip_name1` (String) Input: COMBO
-- `clip_name2` (String) Input: COMBO
-- `clip_name3` (String) Input: COMBO
+- `clip_name1` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
+- `clip_name2` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
+- `clip_name3` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

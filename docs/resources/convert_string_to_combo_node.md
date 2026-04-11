@@ -3,12 +3,12 @@
 page_title: "comfyui_convert_string_to_combo_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConvertStringToComboNode node — Convert String to Combo [logic]
+  ComfyUI ConvertStringToComboNode node — Convert String to Combo [logic] Source: comfy_extras/nodes_logic.py:226 (v3_extras).
 ---
 
 # comfyui_convert_string_to_combo_node (Resource)
 
-ComfyUI ConvertStringToComboNode node — Convert String to Combo [logic]
+ComfyUI ConvertStringToComboNode node — Convert String to Combo [logic] Source: comfy_extras/nodes_logic.py:226 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI ConvertStringToComboNode node — Convert String to Combo [logic]
 
 ### Required
 
-- `string` (String) Input: STRING
+- `string` (String) Input: STRING.
 
 ### Read-Only
 
-- `combo_output` (String) Output: COMBO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `combo_output` (String) Output: COMBO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_audio_concat Resource - comfyui"
 subcategory: ""
 description: |-
-  Concatenates the audio1 to audio2 in the specified direction. [audio]
+  Concatenates the audio1 to audio2 in the specified direction. [audio] Source: comfy_extras/nodes_audio.py:516 (v3_extras).
 ---
 
 # comfyui_audio_concat (Resource)
 
-Concatenates the audio1 to audio2 in the specified direction. [audio]
+Concatenates the audio1 to audio2 in the specified direction. [audio] Source: comfy_extras/nodes_audio.py:516 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Concatenates the audio1 to audio2 in the specified direction. [audio]
 
 ### Required
 
-- `audio1` (String) Input: AUDIO (link)
-- `audio2` (String) Input: AUDIO (link)
-- `direction` (String) Input: COMBO default: after
+- `audio1` (String) Input: AUDIO. Link input.
+- `audio2` (String) Input: AUDIO. Link input.
+- `direction` (String) Input: COMBO. Default: "after". Tooltip: Whether to append audio2 after or before audio1.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

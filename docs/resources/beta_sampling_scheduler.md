@@ -3,12 +3,12 @@
 page_title: "comfyui_beta_sampling_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI BetaSamplingScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI BetaSamplingScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:158 (v3_extras).
 ---
 
 # comfyui_beta_sampling_scheduler (Resource)
 
-ComfyUI BetaSamplingScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI BetaSamplingScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:158 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI BetaSamplingScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `alpha` (Number) Input: FLOAT default: 0.6
-- `beta` (Number) Input: FLOAT default: 0.6
-- `model` (String) Input: MODEL (link)
-- `steps` (Number) Input: INT default: 20
+- `alpha` (Number) Input: FLOAT. Default: 0.6. Allowed range: 0 to 50. Step: 0.01.
+- `beta` (Number) Input: FLOAT. Default: 0.6. Allowed range: 0 to 50. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

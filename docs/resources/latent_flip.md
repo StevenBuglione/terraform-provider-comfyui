@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_flip Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentFlip node — Flip Latent [latent/transform]
+  ComfyUI LatentFlip node — Flip Latent [latent/transform] Source: nodes.py:1380 (v1_core).
 ---
 
 # comfyui_latent_flip (Resource)
 
-ComfyUI LatentFlip node — Flip Latent [latent/transform]
+ComfyUI LatentFlip node — Flip Latent [latent/transform] Source: nodes.py:1380 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI LatentFlip node — Flip Latent [latent/transform]
 
 ### Required
 
-- `flip_method` (String) Input: COMBO
-- `samples` (String) Input: LATENT (link)
+- `flip_method` (String) Input: COMBO.
+- `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

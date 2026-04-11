@@ -3,12 +3,12 @@
 page_title: "comfyui_rescale_cfg Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI RescaleCFG node — RescaleCFG [advanced/model]
+  ComfyUI RescaleCFG node — RescaleCFG [advanced/model] Source: comfy_extras/nodes_model_advanced.py:264 (v1_extras).
 ---
 
 # comfyui_rescale_cfg (Resource)
 
-ComfyUI RescaleCFG node — RescaleCFG [advanced/model]
+ComfyUI RescaleCFG node — RescaleCFG [advanced/model] Source: comfy_extras/nodes_model_advanced.py:264 (v1_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI RescaleCFG node — RescaleCFG [advanced/model]
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `multiplier` (Number) Input: FLOAT default: 0.7
+- `model` (String) Input: MODEL. Link input.
+- `multiplier` (Number) Input: FLOAT. Default: 0.7. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

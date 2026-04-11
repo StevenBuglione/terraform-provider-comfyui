@@ -3,12 +3,12 @@
 page_title: "comfyui_vidu_reference_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate video from multiple images and a prompt [api node/video/Vidu]
+  Generate video from multiple images and a prompt [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:269 (v3_api).
 ---
 
 # comfyui_vidu_reference_video_node (Resource)
 
-Generate video from multiple images and a prompt [api node/video/Vidu]
+Generate video from multiple images and a prompt [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:269 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ Generate video from multiple images and a prompt [api node/video/Vidu]
 
 ### Required
 
-- `images` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING
+- `images` (String) Input: IMAGE. Link input. Tooltip: Images to use as references to generate a video with consistent subjects (max 7 images).
+- `model` (String) Input: COMBO. Tooltip: Model name.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A textual description for video generation.
 
 ### Optional
 
-- `aspect_ratio` (String) Input: COMBO
-- `duration` (Number) Input: INT default: 5
-- `movement_amplitude` (String) Input: COMBO
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `aspect_ratio` (String) Input: COMBO. Tooltip: The aspect ratio of the output video.
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 5 to 5. Step: 1. Tooltip: Duration of the output video in seconds.
+- `movement_amplitude` (String) Input: COMBO. Tooltip: The movement amplitude of objects in the frame.
+- `resolution` (String) Input: COMBO. Tooltip: Supported values may vary by model & duration.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed for video generation (0 for random).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

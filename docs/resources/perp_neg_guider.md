@@ -3,12 +3,12 @@
 page_title: "comfyui_perp_neg_guider Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI PerpNegGuider node [_for_testing]
+  (EXPERIMENTAL) ComfyUI PerpNegGuider node [_for_testing] Source: comfy_extras/nodes_perpneg.py:125 (v3_extras).
 ---
 
 # comfyui_perp_neg_guider (Resource)
 
-(EXPERIMENTAL) ComfyUI PerpNegGuider node [_for_testing]
+(EXPERIMENTAL) ComfyUI PerpNegGuider node [_for_testing] Source: comfy_extras/nodes_perpneg.py:125 (v3_extras).
 
 
 
@@ -17,15 +17,15 @@ description: |-
 
 ### Required
 
-- `cfg` (Number) Input: FLOAT default: 8
-- `empty_conditioning` (String) Input: CONDITIONING (link)
-- `model` (String) Input: MODEL (link)
-- `neg_scale` (Number) Input: FLOAT default: 1
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
+- `cfg` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `empty_conditioning` (String) Input: CONDITIONING. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `neg_scale` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only
 
-- `guider_output` (String) Output: GUIDER (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `guider_output` (String) Output: GUIDER (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

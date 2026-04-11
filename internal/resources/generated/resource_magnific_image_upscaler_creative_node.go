@@ -48,33 +48,33 @@ func (r *MagnificImageUpscalerCreativeNodeResource) Metadata(_ context.Context, 
 
 func (r *MagnificImageUpscalerCreativeNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Prompt‑guided enhancement, stylization, and 2x/4x/8x/16x upscaling. Maximum output: 25.3 megapixels. [api node/image/Magnific]",
+		MarkdownDescription: "Prompt‑guided enhancement, stylization, and 2x/4x/8x/16x upscaling. Maximum output: 25.3 megapixels. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:58 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text.",
+				Required:            true,
 			},
 			"scale_factor": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"2x",
@@ -85,8 +85,8 @@ func (r *MagnificImageUpscalerCreativeNodeResource) Schema(_ context.Context, _ 
 				},
 			},
 			"optimized_for": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"standard",
@@ -102,36 +102,36 @@ func (r *MagnificImageUpscalerCreativeNodeResource) Schema(_ context.Context, _ 
 				},
 			},
 			"creativity": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: -10 to 10.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(-10, 10),
 				},
 			},
 			"hdr": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The level of definition and detail.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(-10, 10),
 				},
 			},
 			"resemblance": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The level of resemblance to the original image.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(-10, 10),
 				},
 			},
 			"fractality": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The strength of the prompt and intricacy per square pixel.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(-10, 10),
 				},
 			},
 			"engine": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"automatic",
@@ -142,12 +142,12 @@ func (r *MagnificImageUpscalerCreativeNodeResource) Schema(_ context.Context, _ 
 				},
 			},
 			"auto_downscale": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Automatically downscale input image if output would exceed maximum pixel limit.",
+				Required:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

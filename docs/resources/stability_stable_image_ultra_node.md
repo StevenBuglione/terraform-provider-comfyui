@@ -3,12 +3,12 @@
 page_title: "comfyui_stability_stable_image_ultra_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StabilityStableImageUltraNode node — Stability AI Stable Image Ultra [api node/image/Stability AI]
+  ComfyUI StabilityStableImageUltraNode node — Stability AI Stable Image Ultra [api node/image/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:55 (v3_api).
 ---
 
 # comfyui_stability_stable_image_ultra_node (Resource)
 
-ComfyUI StabilityStableImageUltraNode node — Stability AI Stable Image Ultra [api node/image/Stability AI]
+ComfyUI StabilityStableImageUltraNode node — Stability AI Stable Image Ultra [api node/image/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:55 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ ComfyUI StabilityStableImageUltraNode node — Stability AI Stable Image Ultra [
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 0
-- `style_preset` (String) Input: COMBO
+- `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: StabilityAspectRatio. Tooltip: Aspect ratio of generated image.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967294. Step: 1. Tooltip: The random seed used for creating the noise.
+- `style_preset` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_stability_style_presets(). Tooltip: Optional desired style of generated image.
 
 ### Optional
 
-- `image` (String) Input: IMAGE (link)
-- `image_denoise` (Number) Input: FLOAT default: 0.5
-- `negative_prompt` (String) Input: STRING default:
+- `image` (String) Input: IMAGE. Link input.
+- `image_denoise` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.
+- `negative_prompt` (String) Input: STRING. Default: "". Tooltip: A blurb of text describing what you do not wish to see in the output image. This is an advanced feature.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

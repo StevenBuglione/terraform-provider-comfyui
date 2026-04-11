@@ -40,43 +40,43 @@ func (r *CannyResource) Metadata(_ context.Context, req resource.MetadataRequest
 
 func (r *CannyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Canny node — Canny [image/preprocessors]",
+		MarkdownDescription: "ComfyUI Canny node — Canny [image/preprocessors] Source: comfy_extras/nodes_canny.py:9 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"low_threshold": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.4",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.4. Allowed range: 0.01 to 0.99. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 0.99),
 				},
 			},
 			"high_threshold": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.8",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.8. Allowed range: 0.01 to 0.99. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 0.99),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

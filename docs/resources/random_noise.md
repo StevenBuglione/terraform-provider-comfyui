@@ -3,12 +3,12 @@
 page_title: "comfyui_random_noise Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI RandomNoise node [sampling/custom_sampling/noise]
+  ComfyUI RandomNoise node [sampling/custom_sampling/noise] Source: comfy_extras/nodes_custom_sampler.py:911 (v3_extras).
 ---
 
 # comfyui_random_noise (Resource)
 
-ComfyUI RandomNoise node [sampling/custom_sampling/noise]
+ComfyUI RandomNoise node [sampling/custom_sampling/noise] Source: comfy_extras/nodes_custom_sampler.py:911 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI RandomNoise node [sampling/custom_sampling/noise]
 
 ### Required
 
-- `noise_seed` (Number) Input: INT default: 0
+- `noise_seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `noise_output` (String) Output: NOISE (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `noise_output` (String) Output: NOISE (slot 0).

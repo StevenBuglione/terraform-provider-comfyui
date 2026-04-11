@@ -3,12 +3,12 @@
 page_title: "comfyui_model_patch_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI ModelPatchLoader node — ModelPatchLoader [advanced/loaders]
+  (EXPERIMENTAL) ComfyUI ModelPatchLoader node — ModelPatchLoader [advanced/loaders] Source: comfy_extras/nodes_model_patch.py:223 (v1_extras).
 ---
 
 # comfyui_model_patch_loader (Resource)
 
-(EXPERIMENTAL) ComfyUI ModelPatchLoader node — ModelPatchLoader [advanced/loaders]
+(EXPERIMENTAL) ComfyUI ModelPatchLoader node — ModelPatchLoader [advanced/loaders] Source: comfy_extras/nodes_model_patch.py:223 (v1_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `name` (String) Input: COMBO
+- `name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('model_patches').
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_patch_output` (String) Output: MODEL_PATCH (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_patch_output` (String) Output: MODEL_PATCH (slot 0).
+- `node_id` (String) ComfyUI node class type.

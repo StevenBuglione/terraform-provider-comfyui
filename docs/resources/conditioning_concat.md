@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_concat Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningConcat node — Conditioning (Concat) [conditioning]
+  ComfyUI ConditioningConcat node — Conditioning (Concat) [conditioning] Source: nodes.py:137 (v1_core).
 ---
 
 # comfyui_conditioning_concat (Resource)
 
-ComfyUI ConditioningConcat node — Conditioning (Concat) [conditioning]
+ComfyUI ConditioningConcat node — Conditioning (Concat) [conditioning] Source: nodes.py:137 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ConditioningConcat node — Conditioning (Concat) [conditioning]
 
 ### Required
 
-- `conditioning_from` (String) Input: CONDITIONING (link)
-- `conditioning_to` (String) Input: CONDITIONING (link)
+- `conditioning_from` (String) Input: CONDITIONING. Link input.
+- `conditioning_to` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

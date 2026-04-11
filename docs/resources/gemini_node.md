@@ -3,12 +3,12 @@
 page_title: "comfyui_gemini_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate text responses with Google's Gemini AI model. You can provide multiple types of inputs (text, images, audio, video) as context for generating more relevant and meaningful responses. [api node/text/Gemini]
+  Generate text responses with Google's Gemini AI model. You can provide multiple types of inputs (text, images, audio, video) as context for generating more relevant and meaningful responses. [api node/text/Gemini] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_gemini.py:260 (v3_api).
 ---
 
 # comfyui_gemini_node (Resource)
 
-Generate text responses with Google's Gemini AI model. You can provide multiple types of inputs (text, images, audio, video) as context for generating more relevant and meaningful responses. [api node/text/Gemini]
+Generate text responses with Google's Gemini AI model. You can provide multiple types of inputs (text, images, audio, video) as context for generating more relevant and meaningful responses. [api node/text/Gemini] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_gemini.py:260 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ Generate text responses with Google's Gemini AI model. You can provide multiple 
 
 ### Required
 
-- `model` (String) Input: COMBO default: gemini-3-1-pro
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 42
+- `model` (String) Input: COMBO. Default: "gemini-3-1-pro". Tooltip: The Gemini model to use for generating responses.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text inputs to the model, used to generate a response. You can include detailed instructions, questions, or context for the model.
+- `seed` (Number) Input: INT. Default: 42. Allowed range: 0 to 18446744073709552000. Tooltip: When seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.
 
 ### Optional
 
-- `audio` (String) Input: AUDIO (link)
-- `files` (String) Input: GEMINI_INPUT_FILES (link)
-- `images` (String) Input: IMAGE (link)
-- `system_prompt` (String) Input: STRING default:
-- `video` (String) Input: VIDEO (link)
+- `audio` (String) Input: AUDIO. Link input. Tooltip: Optional audio to use as context for the model.
+- `files` (String) Input: GEMINI_INPUT_FILES. Link input. Tooltip: Optional file(s) to use as context for the model. Accepts inputs from the Gemini Generate Content Input Files node.
+- `images` (String) Input: IMAGE. Link input. Tooltip: Optional image(s) to use as context for the model. To include multiple images, you can use the Batch Images node.
+- `system_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Foundational instructions that dictate an AI's behavior.
+- `video` (String) Input: VIDEO. Link input. Tooltip: Optional video to use as context for the model.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_flux2_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Flux2Scheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI Flux2Scheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_flux.py:213 (v3_extras).
 ---
 
 # comfyui_flux2_scheduler (Resource)
 
-ComfyUI Flux2Scheduler node [sampling/custom_sampling/schedulers]
+ComfyUI Flux2Scheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_flux.py:213 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI Flux2Scheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `height` (Number) Input: INT default: 1024
-- `steps` (Number) Input: INT default: 20
-- `width` (Number) Input: INT default: 1024
+- `height` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 1.
+- `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 4096.
+- `width` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

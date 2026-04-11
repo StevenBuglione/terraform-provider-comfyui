@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_latent_hunyuan3_dv2 Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EmptyLatentHunyuan3Dv2 node [latent/3d]
+  ComfyUI EmptyLatentHunyuan3Dv2 node [latent/3d] Source: comfy_extras/nodes_hunyuan3d.py:15 (v3_extras).
 ---
 
 # comfyui_empty_latent_hunyuan3_dv2 (Resource)
 
-ComfyUI EmptyLatentHunyuan3Dv2 node [latent/3d]
+ComfyUI EmptyLatentHunyuan3Dv2 node [latent/3d] Source: comfy_extras/nodes_hunyuan3d.py:15 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI EmptyLatentHunyuan3Dv2 node [latent/3d]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `resolution` (Number) Input: INT default: 3072
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096. Tooltip: The number of latent images in the batch.
+- `resolution` (Number) Input: INT. Default: 3072. Allowed range: 1 to 8192.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

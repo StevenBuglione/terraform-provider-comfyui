@@ -42,33 +42,33 @@ func (r *OpenAiDalle3Resource) Metadata(_ context.Context, req resource.Metadata
 
 func (r *OpenAiDalle3Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generates images synchronously via OpenAI's DALL·E 3 endpoint. [api node/image/OpenAI]",
+		MarkdownDescription: "Generates images synchronously via OpenAI's DALL·E 3 endpoint. [api node/image/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:242 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text prompt for DALL·E.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: not implemented yet in backend.",
+				Optional:            true,
 			},
 			"quality": schema.StringAttribute{
-				Description: "Input: COMBO default: standard",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"standard\". Tooltip: Image quality.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"standard",
@@ -77,8 +77,8 @@ func (r *OpenAiDalle3Resource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"style": schema.StringAttribute{
-				Description: "Input: COMBO default: natural",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"natural\". Tooltip: Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"natural",
@@ -87,8 +87,8 @@ func (r *OpenAiDalle3Resource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"size": schema.StringAttribute{
-				Description: "Input: COMBO default: 1024x1024",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"1024x1024\". Tooltip: Image size.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"1024x1024",
@@ -98,8 +98,8 @@ func (r *OpenAiDalle3Resource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

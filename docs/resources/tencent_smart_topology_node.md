@@ -3,12 +3,12 @@
 page_title: "comfyui_tencent_smart_topology_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Perform smart retopology on a 3D model. Supports GLB/OBJ formats; max 200MB; recommended for high-poly models. [api node/3d/Tencent]
+  Perform smart retopology on a 3D model. Supports GLB/OBJ formats; max 200MB; recommended for high-poly models. [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:638 (v3_api).
 ---
 
 # comfyui_tencent_smart_topology_node (Resource)
 
-Perform smart retopology on a 3D model. Supports GLB/OBJ formats; max 200MB; recommended for high-poly models. [api node/3d/Tencent]
+Perform smart retopology on a 3D model. Supports GLB/OBJ formats; max 200MB; recommended for high-poly models. [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:638 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ Perform smart retopology on a 3D model. Supports GLB/OBJ formats; max 200MB; rec
 
 ### Required
 
-- `face_level` (String) Input: COMBO
-- `model_3d` (String) Input: COMFY_MULTITYPED_V3
-- `polygon_type` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `face_level` (String) Input: COMBO. Tooltip: Polygon reduction level.
+- `model_3d` (String) Input: COMFY_MULTITYPED_V3. Tooltip: Input 3D model (GLB or OBJ).
+- `polygon_type` (String) Input: COMBO. Tooltip: Surface composition type.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `obj_output` (String) Output: FILE_3D_OBJ (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `obj_output` (String) Output: FILE_3D_OBJ (slot 0).

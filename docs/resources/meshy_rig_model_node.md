@@ -3,12 +3,12 @@
 page_title: "comfyui_meshy_rig_model_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Provides a rigged character in standard formats. Auto-rigging is currently not suitable for untextured meshes, non-humanoid assets, or humanoid assets with unclear limb and body structure. [api node/3d/Meshy]
+  Provides a rigged character in standard formats. Auto-rigging is currently not suitable for untextured meshes, non-humanoid assets, or humanoid assets with unclear limb and body structure. [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:571 (v3_api).
 ---
 
 # comfyui_meshy_rig_model_node (Resource)
 
-Provides a rigged character in standard formats. Auto-rigging is currently not suitable for untextured meshes, non-humanoid assets, or humanoid assets with unclear limb and body structure. [api node/3d/Meshy]
+Provides a rigged character in standard formats. Auto-rigging is currently not suitable for untextured meshes, non-humanoid assets, or humanoid assets with unclear limb and body structure. [api node/3d/Meshy] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_meshy.py:571 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Provides a rigged character in standard formats. Auto-rigging is currently not s
 
 ### Required
 
-- `height_meters` (Number) Input: FLOAT default: 1.7
-- `meshy_task_id` (String) Input: MESHY_TASK_ID (link)
+- `height_meters` (Number) Input: FLOAT. Default: 1.7. Allowed range: 0.1 to 15. Tooltip: The approximate height of the character model in meters. This aids in scaling and rigging accuracy.
+- `meshy_task_id` (String) Input: MESHY_TASK_ID. Link input.
 
 ### Optional
 
-- `texture_image` (String) Input: IMAGE (link)
+- `texture_image` (String) Input: IMAGE. Link input. Tooltip: The model's UV-unwrapped base color texture image.
 
 ### Read-Only
 
-- `fbx_output` (String) Output: FILE_3D_FBX (slot 3)
-- `glb_output` (String) Output: FILE_3D_GLB (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `model_file_output` (String) Output: STRING (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `rig_task_id_output` (String) Output: MESHY_RIGGED_TASK_ID (slot 1)
+- `fbx_output` (String) Output: FILE_3D_FBX (slot 3).
+- `glb_output` (String) Output: FILE_3D_GLB (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `model_file_output` (String) Output: STRING (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `rig_task_id_output` (String) Output: MESHY_RIGGED_TASK_ID (slot 1).

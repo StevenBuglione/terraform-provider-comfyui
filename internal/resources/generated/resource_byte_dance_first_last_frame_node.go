@@ -49,25 +49,25 @@ func (r *ByteDanceFirstLastFrameNodeResource) Metadata(_ context.Context, req re
 
 func (r *ByteDanceFirstLastFrameNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate video using prompt and first and last frames. [api node/video/ByteDance]",
+		MarkdownDescription: "Generate video using prompt and first and last frames. [api node/video/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:661 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO default: seedance-1-0-lite-i2v-250428",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"seedance-1-0-lite-i2v-250428\".",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"seedance-1-5-pro-251215",
@@ -77,20 +77,20 @@ func (r *ByteDanceFirstLastFrameNodeResource) Schema(_ context.Context, _ resour
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the video.",
+				Required:            true,
 			},
 			"first_frame": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: First frame to be used for the video.",
+				Required:            true,
 			},
 			"last_frame": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Last frame to be used for the video.",
+				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: The resolution of the output video.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"480p",
@@ -100,8 +100,8 @@ func (r *ByteDanceFirstLastFrameNodeResource) Schema(_ context.Context, _ resour
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: The aspect ratio of the output video.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"adaptive",
@@ -115,34 +115,34 @@ func (r *ByteDanceFirstLastFrameNodeResource) Schema(_ context.Context, _ resour
 				},
 			},
 			"duration": schema.Int64Attribute{
-				Description: "Input: INT default: 5",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 5. Allowed range: 3 to 12. Step: 1. Tooltip: The duration of the output video in seconds.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(3, 12),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"camera_fixed": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Specifies whether to fix the camera. The platform appends an instruction to fix the camera to your prompt, but does not guarantee the actual effect.",
+				Optional:            true,
 			},
 			"watermark": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to add an \"AI generated\" watermark to the video.",
+				Optional:            true,
 			},
 			"generate_audio": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: This parameter is ignored for any model except seedance-1-5-pro.",
+				Optional:            true,
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

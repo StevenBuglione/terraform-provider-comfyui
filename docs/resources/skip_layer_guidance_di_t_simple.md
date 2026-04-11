@@ -3,12 +3,12 @@
 page_title: "comfyui_skip_layer_guidance_di_t_simple Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Simple version of the SkipLayerGuidanceDiT node that only modifies the uncond pass. [advanced/guidance]
+  (EXPERIMENTAL) Simple version of the SkipLayerGuidanceDiT node that only modifies the uncond pass. [advanced/guidance] Source: comfy_extras/nodes_slg.py:91 (v3_extras).
 ---
 
 # comfyui_skip_layer_guidance_di_t_simple (Resource)
 
-(EXPERIMENTAL) Simple version of the SkipLayerGuidanceDiT node that only modifies the uncond pass. [advanced/guidance]
+(EXPERIMENTAL) Simple version of the SkipLayerGuidanceDiT node that only modifies the uncond pass. [advanced/guidance] Source: comfy_extras/nodes_slg.py:91 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `double_layers` (String) Input: STRING default: 7, 8, 9
-- `end_percent` (Number) Input: FLOAT default: 1
-- `model` (String) Input: MODEL (link)
-- `single_layers` (String) Input: STRING default: 7, 8, 9
-- `start_percent` (Number) Input: FLOAT default: 0
+- `double_layers` (String) Input: STRING. Default: "7, 8, 9".
+- `end_percent` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `model` (String) Input: MODEL. Link input.
+- `single_layers` (String) Input: STRING. Default: "7, 8, 9".
+- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

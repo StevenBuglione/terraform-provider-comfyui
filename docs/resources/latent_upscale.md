@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_upscale Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentUpscale node — Upscale Latent [latent]
+  ComfyUI LatentUpscale node — Upscale Latent [latent] Source: nodes.py:1299 (v1_core).
 ---
 
 # comfyui_latent_upscale (Resource)
 
-ComfyUI LatentUpscale node — Upscale Latent [latent]
+ComfyUI LatentUpscale node — Upscale Latent [latent] Source: nodes.py:1299 (v1_core).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI LatentUpscale node — Upscale Latent [latent]
 
 ### Required
 
-- `crop` (String) Input: COMBO
-- `height` (Number) Input: INT default: 512
-- `samples` (String) Input: LATENT (link)
-- `upscale_method` (String) Input: COMBO
-- `width` (Number) Input: INT default: 512
+- `crop` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.crop_methods.
+- `height` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 8.
+- `samples` (String) Input: LATENT. Link input.
+- `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.upscale_methods.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_self_attention_guidance Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SelfAttentionGuidance node — Self-Attention Guidance [_for_testing]
+  (EXPERIMENTAL) ComfyUI SelfAttentionGuidance node — Self-Attention Guidance [_for_testing] Source: comfy_extras/nodes_sag.py:110 (v3_extras).
 ---
 
 # comfyui_self_attention_guidance (Resource)
 
-(EXPERIMENTAL) ComfyUI SelfAttentionGuidance node — Self-Attention Guidance [_for_testing]
+(EXPERIMENTAL) ComfyUI SelfAttentionGuidance node — Self-Attention Guidance [_for_testing] Source: comfy_extras/nodes_sag.py:110 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `blur_sigma` (Number) Input: FLOAT default: 2
-- `model` (String) Input: MODEL (link)
-- `scale` (Number) Input: FLOAT default: 0.5
+- `blur_sigma` (Number) Input: FLOAT. Default: 2. Allowed range: 0 to 10. Step: 0.1.
+- `model` (String) Input: MODEL. Link input.
+- `scale` (Number) Input: FLOAT. Default: 0.5. Allowed range: -2 to 5. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

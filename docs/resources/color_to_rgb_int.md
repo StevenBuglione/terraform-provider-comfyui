@@ -3,12 +3,12 @@
 page_title: "comfyui_color_to_rgb_int Resource - comfyui"
 subcategory: ""
 description: |-
-  Convert a color to a RGB integer value. [utils]
+  Convert a color to a RGB integer value. [utils] Source: comfy_extras/nodes_color.py:5 (v3_extras).
 ---
 
 # comfyui_color_to_rgb_int (Resource)
 
-Convert a color to a RGB integer value. [utils]
+Convert a color to a RGB integer value. [utils] Source: comfy_extras/nodes_color.py:5 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ Convert a color to a RGB integer value. [utils]
 
 ### Required
 
-- `color` (String) Input: COLOR
+- `color` (String) Input: COLOR.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `rgb_int_output` (String) Output: INT (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `rgb_int_output` (String) Output: INT (slot 0).

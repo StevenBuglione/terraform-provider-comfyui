@@ -3,12 +3,12 @@
 page_title: "comfyui_eleven_labs_text_to_dialogue Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate multi-speaker dialogue from text. Each dialogue entry has its own text and voice. [api node/audio/ElevenLabs]
+  Generate multi-speaker dialogue from text. Each dialogue entry has its own text and voice. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:790 (v3_api).
 ---
 
 # comfyui_eleven_labs_text_to_dialogue (Resource)
 
-Generate multi-speaker dialogue from text. Each dialogue entry has its own text and voice. [api node/audio/ElevenLabs]
+Generate multi-speaker dialogue from text. Each dialogue entry has its own text and voice. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:790 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Generate multi-speaker dialogue from text. Each dialogue entry has its own text 
 
 ### Required
 
-- `apply_text_normalization` (String) Input: COMBO
-- `inputs` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `language_code` (String) Input: STRING default:
-- `model` (String) Input: COMBO
-- `output_format` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 1
-- `stability` (Number) Input: FLOAT default: 0.5
+- `apply_text_normalization` (String) Input: COMBO. Tooltip: Text normalization mode. 'auto' lets the system decide, 'on' always applies normalization, 'off' skips it.
+- `inputs` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of dialogue entries.
+- `language_code` (String) Input: STRING. Default: "". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.
+- `model` (String) Input: COMBO. Tooltip: Model to use for dialogue generation.
+- `output_format` (String) Input: COMBO. Tooltip: Audio output format.
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 4294967295. Tooltip: Seed for reproducibility.
+- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.5. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_diffusers_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI DiffusersLoader node — DiffusersLoader [advanced/loaders/deprecated]
+  ComfyUI DiffusersLoader node — DiffusersLoader [advanced/loaders/deprecated] Source: nodes.py:611 (v1_core).
 ---
 
 # comfyui_diffusers_loader (Resource)
 
-ComfyUI DiffusersLoader node — DiffusersLoader [advanced/loaders/deprecated]
+ComfyUI DiffusersLoader node — DiffusersLoader [advanced/loaders/deprecated] Source: nodes.py:611 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI DiffusersLoader node — DiffusersLoader [advanced/loaders/deprecated]
 
 ### Required
 
-- `model_path` (String) Input: COMBO
+- `model_path` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: paths.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `vae_output` (String) Output: VAE (slot 2)
+- `clip_output` (String) Output: CLIP (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `vae_output` (String) Output: VAE (slot 2).

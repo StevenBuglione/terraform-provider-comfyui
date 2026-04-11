@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_save Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VAESave node — VAESave [advanced/model_merging]
+  ComfyUI VAESave node — VAESave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_model_merging.py:308 (v1_extras).
 ---
 
 # comfyui_vae_save (Resource)
 
-ComfyUI VAESave node — VAESave [advanced/model_merging]
+ComfyUI VAESave node — VAESave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_model_merging.py:308 (v1_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI VAESave node — VAESave [advanced/model_merging]
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: vae/ComfyUI_vae
-- `vae` (String) Input: VAE (link)
+- `filename_prefix` (String) Input: STRING. Default: "vae/ComfyUI_vae".
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

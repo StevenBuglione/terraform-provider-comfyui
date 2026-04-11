@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_animate_to_video Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI WanAnimateToVideo node [conditioning/video_models]
+  (EXPERIMENTAL) ComfyUI WanAnimateToVideo node [conditioning/video_models] Source: comfy_extras/nodes_wan.py:1110 (v3_extras).
 ---
 
 # comfyui_wan_animate_to_video (Resource)
 
-(EXPERIMENTAL) ComfyUI WanAnimateToVideo node [conditioning/video_models]
+(EXPERIMENTAL) ComfyUI WanAnimateToVideo node [conditioning/video_models] Source: comfy_extras/nodes_wan.py:1110 (v3_extras).
 
 
 
@@ -17,33 +17,33 @@ description: |-
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `continue_motion_max_frames` (Number) Input: INT default: 5
-- `height` (Number) Input: INT default: 480
-- `length` (Number) Input: INT default: 77
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
-- `vae` (String) Input: VAE (link)
-- `video_frame_offset` (Number) Input: INT default: 0
-- `width` (Number) Input: INT default: 832
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `continue_motion_max_frames` (Number) Input: INT. Default: 5. Minimum value: 1. Step: 4.
+- `height` (Number) Input: INT. Default: 480. Minimum value: 16. Step: 16.
+- `length` (Number) Input: INT. Default: 77. Minimum value: 1. Step: 4.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `vae` (String) Input: VAE. Link input.
+- `video_frame_offset` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: The amount of frames to seek in all the input videos. Used for generating longer videos by chunk. Connect to the video_frame_offset output of the previous node for extending a video.
+- `width` (Number) Input: INT. Default: 832. Minimum value: 16. Step: 16.
 
 ### Optional
 
-- `background_video` (String) Input: IMAGE (link)
-- `character_mask` (String) Input: MASK (link)
-- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT (link)
-- `continue_motion` (String) Input: IMAGE (link)
-- `face_video` (String) Input: IMAGE (link)
-- `pose_video` (String) Input: IMAGE (link)
-- `reference_image` (String) Input: IMAGE (link)
+- `background_video` (String) Input: IMAGE. Link input.
+- `character_mask` (String) Input: MASK. Link input.
+- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `continue_motion` (String) Input: IMAGE. Link input.
+- `face_video` (String) Input: IMAGE. Link input.
+- `pose_video` (String) Input: IMAGE. Link input.
+- `reference_image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
-- `trim_image_output` (String) Output: INT (slot 4)
-- `trim_latent_output` (String) Output: INT (slot 3)
-- `video_frame_offset_output` (String) Output: INT (slot 5)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).
+- `trim_image_output` (String) Output: INT (slot 4).
+- `trim_latent_output` (String) Output: INT (slot 3).
+- `video_frame_offset_output` (String) Output: INT (slot 5).

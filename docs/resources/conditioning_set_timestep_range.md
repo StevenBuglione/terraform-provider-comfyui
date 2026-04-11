@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_set_timestep_range Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningSetTimestepRange node — ConditioningSetTimestepRange [advanced/conditioning]
+  ComfyUI ConditioningSetTimestepRange node — ConditioningSetTimestepRange [advanced/conditioning] Source: nodes.py:277 (v1_core).
 ---
 
 # comfyui_conditioning_set_timestep_range (Resource)
 
-ComfyUI ConditioningSetTimestepRange node — ConditioningSetTimestepRange [advanced/conditioning]
+ComfyUI ConditioningSetTimestepRange node — ConditioningSetTimestepRange [advanced/conditioning] Source: nodes.py:277 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ConditioningSetTimestepRange node — ConditioningSetTimestepRange [adva
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `end` (Number) Input: FLOAT default: 1
-- `start` (Number) Input: FLOAT default: 0
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `end` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `start` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

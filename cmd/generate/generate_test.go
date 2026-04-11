@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"strings"
 	"testing"
 )
 
@@ -232,4 +233,261 @@ func TestToSnakeCaseRoundtrip(t *testing.T) {
 		// The roundtrip may not be identical (e.g., abbreviation handling) but must produce a non-empty valid name
 		t.Logf("%s -> %s -> %s", input, snake, pascal)
 	}
+}
+
+func TestBuildResourceDataSurfacesSchemaMetadata(t *testing.T) {
+	tooltip := "Controls the scale of the parallel guidance vector."
+	multiline := true
+	dynamicOptions := true
+	nodeDescription := "Edits an image using Bria."
+
+	node := Node{
+		ClassName:             "BriaImageEditNode",
+		Description:           &nodeDescription,
+		Category:              "api node/image",
+		TerraformResourceName: "comfyui_bria_image_edit_node",
+		Inputs: []Input{
+			{
+				Name:     "cfg",
+				Type:     "FLOAT",
+				Required: true,
+				Default:  1.5,
+				Min:      floatPtr(0),
+				Max:      floatPtr(10),
+				Step:     floatPtr(0.5),
+				Tooltip:  &tooltip,
+			},
+			{
+				Name:                 "audio_encoder_name",
+				Type:                 "COMBO",
+				Required:             true,
+				DynamicOptions:       &dynamicOptions,
+				DynamicOptionsSource: stringPtr("folder_paths.get_filename_list('audio_encoders')"),
+			},
+			{
+				Name:      "prompt",
+				Type:      "STRING",
+				Required:  true,
+				Default:   "",
+				Multiline: &multiline,
+				Tooltip:   stringPtr("Instruction to edit image"),
+			},
+		},
+		HiddenInputs: []HiddenInput{
+			{Name: "auth_token_comfy_org", Type: "AUTH_TOKEN_COMFY_ORG"},
+			{Name: "unique_id", Type: "UNIQUE_ID"},
+		},
+		Source: SourceInfo{
+			File:       "comfy_api_nodes/nodes_bria.py",
+			Pattern:    "v3_api",
+			LineNumber: intPtr(27),
+		},
+	}
+
+	rd, warnings := buildResourceData(node)
+	if len(warnings) != 0 {
+		t.Fatalf("buildResourceData returned warnings: %v", warnings)
+	}
+
+	if !strings.Contains(rd.Description, "Edits an image using Bria.") {
+		t.Fatalf("resource description missing node description: %q", rd.Description)
+	}
+	if !strings.Contains(rd.Description, "[api node/image]") {
+		t.Fatalf("resource description missing category: %q", rd.Description)
+	}
+	if !strings.Contains(rd.Description, "Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), unique_id (UNIQUE_ID).") {
+		t.Fatalf("resource description missing hidden inputs: %q", rd.Description)
+	}
+	if !strings.Contains(rd.Description, "Source: comfy_api_nodes/nodes_bria.py:27 (v3_api).") {
+		t.Fatalf("resource description missing source metadata: %q", rd.Description)
+	}
+
+	attrDefs := strings.Join(extractAttrDefinitions(rd.Attributes), "\n")
+	if !strings.Contains(attrDefs, "Default: 1.5.") {
+		t.Fatalf("attribute descriptions missing default hint: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, "Allowed range: 0 to 10.") {
+		t.Fatalf("attribute descriptions missing range hint: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, "Step: 0.5.") {
+		t.Fatalf("attribute descriptions missing step hint: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, "Tooltip: Controls the scale of the parallel guidance vector.") {
+		t.Fatalf("attribute descriptions missing tooltip: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, "Supports multiline text.") {
+		t.Fatalf("attribute descriptions missing multiline hint: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, "Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('audio_encoders').") {
+		t.Fatalf("attribute descriptions missing dynamic options source: %s", attrDefs)
+	}
+}
+
+func TestBuildInputDescriptionCollapsesVerboseDynamicOptionSources(t *testing.T) {
+	inp := Input{
+		Name:                 "moderation",
+		Type:                 "COMFY_DYNAMICCOMBO_V3",
+		Required:             true,
+		DynamicOptions:       boolPtr(true),
+		DynamicOptionsSource: stringPtr("[IO.DynamicCombo.Option('false', []), IO.DynamicCombo.Option('true', [IO.Boolean.Input('prompt_content_moderation', default=False), IO.Boolean.Input('visual_input_moderation', default=False), IO.Boolean.Input('visual_output_moderation', default=True)])]"),
+	}
+
+	description := buildInputDescription(inp)
+	if !strings.Contains(description, "Dynamic options are resolved by ComfyUI at runtime.") {
+		t.Fatalf("expected generic dynamic options hint, got %q", description)
+	}
+	if strings.Contains(description, "prompt_content_moderation") {
+		t.Fatalf("expected verbose dynamic options source to be omitted, got %q", description)
+	}
+}
+
+func TestFormatSourceInfo(t *testing.T) {
+	tests := []struct {
+		name     string
+		source   SourceInfo
+		expected string
+	}{
+		{
+			name: "file line and pattern",
+			source: SourceInfo{
+				File:       "comfy_api_nodes/nodes_bria.py",
+				Pattern:    "v3_api",
+				LineNumber: intPtr(27),
+			},
+			expected: "Source: comfy_api_nodes/nodes_bria.py:27 (v3_api).",
+		},
+		{
+			name: "file only",
+			source: SourceInfo{
+				File: "nodes.py",
+			},
+			expected: "Source: nodes.py.",
+		},
+		{
+			name: "pattern only",
+			source: SourceInfo{
+				Pattern: "v1_core",
+			},
+			expected: "Source pattern: v1_core.",
+		},
+		{
+			name: "line without file falls back to pattern",
+			source: SourceInfo{
+				Pattern:    "v3_api",
+				LineNumber: intPtr(27),
+			},
+			expected: "Source pattern: v3_api.",
+		},
+		{
+			name:     "empty",
+			source:   SourceInfo{},
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := formatSourceInfo(tt.source); got != tt.expected {
+				t.Fatalf("formatSourceInfo() = %q, want %q", got, tt.expected)
+			}
+		})
+	}
+}
+
+func TestFormatRangeHint(t *testing.T) {
+	tests := []struct {
+		name     string
+		min      *float64
+		max      *float64
+		expected string
+	}{
+		{
+			name:     "min and max",
+			min:      floatPtr(1),
+			max:      floatPtr(5),
+			expected: "Allowed range: 1 to 5.",
+		},
+		{
+			name:     "min only",
+			min:      floatPtr(0),
+			expected: "Minimum value: 0.",
+		},
+		{
+			name:     "max only",
+			max:      floatPtr(10),
+			expected: "Maximum value: 10.",
+		},
+		{
+			name:     "empty",
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := formatRangeHint(tt.min, tt.max); got != tt.expected {
+				t.Fatalf("formatRangeHint() = %q, want %q", got, tt.expected)
+			}
+		})
+	}
+}
+
+func TestSentence(t *testing.T) {
+	tests := []struct {
+		name     string
+		label    string
+		value    string
+		expected string
+	}{
+		{
+			name:     "adds trailing period",
+			label:    "Tooltip",
+			value:    "Controls guidance",
+			expected: "Tooltip: Controls guidance.",
+		},
+		{
+			name:     "preserves punctuation",
+			label:    "Tooltip",
+			value:    "Already punctuated!",
+			expected: "Tooltip: Already punctuated!",
+		},
+		{
+			name:     "empty",
+			label:    "Tooltip",
+			value:    "",
+			expected: "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := sentence(tt.label, tt.value); got != tt.expected {
+				t.Fatalf("sentence() = %q, want %q", got, tt.expected)
+			}
+		})
+	}
+}
+
+func extractAttrDefinitions(attrs []AttrData) []string {
+	definitions := make([]string, 0, len(attrs))
+	for _, attr := range attrs {
+		definitions = append(definitions, attr.Definition)
+	}
+	return definitions
+}
+
+func floatPtr(v float64) *float64 {
+	return &v
+}
+
+func intPtr(v int) *int {
+	return &v
+}
+
+func stringPtr(v string) *string {
+	return &v
+}
+
+func boolPtr(v bool) *bool {
+	return &v
 }

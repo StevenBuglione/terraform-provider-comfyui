@@ -41,47 +41,47 @@ func (r *VAEDecodeAudioTiledResource) Metadata(_ context.Context, req resource.M
 
 func (r *VAEDecodeAudioTiledResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI VAEDecodeAudioTiled node — VAE Decode Audio (Tiled) [latent/audio]",
+		MarkdownDescription: "ComfyUI VAEDecodeAudioTiled node — VAE Decode Audio (Tiled) [latent/audio] Source: comfy_extras/nodes_audio.py:133 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"samples": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"tile_size": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Allowed range: 32 to 8192. Step: 8.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(32, 8192),
 				},
 			},
 			"overlap": schema.Int64Attribute{
-				Description: "Input: INT default: 64",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 64. Allowed range: 0 to 1024. Step: 8.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 1024),
 				},
 			},
 			"audio_output": schema.StringAttribute{
-				Description: "Output: AUDIO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

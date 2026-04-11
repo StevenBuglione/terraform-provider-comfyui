@@ -37,33 +37,33 @@ func (r *OpenAiInputFilesResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *OpenAiInputFilesResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Loads and prepares input files (text, pdf, etc.) to include as inputs for the OpenAI Chat Node. The files will be read by the OpenAI model when generating a response. 🛈 TIP: Can be chained together with other OpenAI Input File nodes. [api node/text/OpenAI]",
+		MarkdownDescription: "Loads and prepares input files (text, pdf, etc.) to include as inputs for the OpenAI Chat Node. The files will be read by the OpenAI model when generating a response. 🛈 TIP: Can be chained together with other OpenAI Input File nodes. [api node/text/OpenAI] Source: comfy_api_nodes/nodes_openai.py:782 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"file": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: input_files. Tooltip: Input files to include as context for the model. Only accepts text (.txt) and PDF (.pdf) files for now.",
+				Required:            true,
 			},
 			"openai_input_files": schema.StringAttribute{
-				Description: "Input: OPENAI_INPUT_FILES (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: OPENAI_INPUT_FILES. Link input. Tooltip: An optional additional file(s) to batch together with the file loaded from this node. Allows chaining of input files so that a single message can include multiple input files.",
+				Optional:            true,
 			},
 			"openai_input_files_output": schema.StringAttribute{
-				Description: "Output: OPENAI_INPUT_FILES (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: OPENAI_INPUT_FILES (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

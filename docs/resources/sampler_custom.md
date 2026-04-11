@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_custom Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerCustom node [sampling/custom_sampling]
+  ComfyUI SamplerCustom node [sampling/custom_sampling] Source: comfy_extras/nodes_custom_sampler.py:725 (v3_extras).
 ---
 
 # comfyui_sampler_custom (Resource)
 
-ComfyUI SamplerCustom node [sampling/custom_sampling]
+ComfyUI SamplerCustom node [sampling/custom_sampling] Source: comfy_extras/nodes_custom_sampler.py:725 (v3_extras).
 
 
 
@@ -17,19 +17,19 @@ ComfyUI SamplerCustom node [sampling/custom_sampling]
 
 ### Required
 
-- `add_noise` (Boolean) Input: BOOLEAN default: true
-- `cfg` (Number) Input: FLOAT default: 8
-- `latent_image` (String) Input: LATENT (link)
-- `model` (String) Input: MODEL (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `noise_seed` (Number) Input: INT default: 0
-- `positive` (String) Input: CONDITIONING (link)
-- `sampler` (String) Input: SAMPLER (link)
-- `sigmas` (String) Input: SIGMAS (link)
+- `add_noise` (Boolean) Input: BOOLEAN. Default: true.
+- `cfg` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `latent_image` (String) Input: LATENT. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `noise_seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `sampler` (String) Input: SAMPLER. Link input.
+- `sigmas` (String) Input: SIGMAS. Link input.
 
 ### Read-Only
 
-- `denoised_output_output` (String) Output: LATENT (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `output_output` (String) Output: LATENT (slot 0)
+- `denoised_output_output` (String) Output: LATENT (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `output_output` (String) Output: LATENT (slot 0).

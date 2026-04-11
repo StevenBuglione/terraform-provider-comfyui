@@ -3,12 +3,12 @@
 page_title: "comfyui_stable_cascade_empty_latent_image Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StableCascade_EmptyLatentImage node [latent/stable_cascade]
+  ComfyUI StableCascade_EmptyLatentImage node [latent/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:27 (v3_extras).
 ---
 
 # comfyui_stable_cascade_empty_latent_image (Resource)
 
-ComfyUI StableCascade_EmptyLatentImage node [latent/stable_cascade]
+ComfyUI StableCascade_EmptyLatentImage node [latent/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:27 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI StableCascade_EmptyLatentImage node [latent/stable_cascade]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `compression` (Number) Input: INT default: 42
-- `height` (Number) Input: INT default: 1024
-- `width` (Number) Input: INT default: 1024
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `compression` (Number) Input: INT. Default: 42. Allowed range: 4 to 128. Step: 1.
+- `height` (Number) Input: INT. Default: 1024. Minimum value: 256. Step: 8.
+- `width` (Number) Input: INT. Default: 1024. Minimum value: 256. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `stage_b_output` (String) Output: LATENT (slot 1)
-- `stage_c_output` (String) Output: LATENT (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `stage_b_output` (String) Output: LATENT (slot 1).
+- `stage_c_output` (String) Output: LATENT (slot 0).

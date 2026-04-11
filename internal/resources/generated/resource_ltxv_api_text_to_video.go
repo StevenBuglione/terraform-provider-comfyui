@@ -43,33 +43,33 @@ func (r *LtxvAPITextToVideoResource) Metadata(_ context.Context, req resource.Me
 
 func (r *LtxvAPITextToVideoResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Professional-quality videos with customizable duration and resolution. [api node/video/LTXV]",
+		MarkdownDescription: "Professional-quality videos with customizable duration and resolution. [api node/video/LTXV] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_ltxv.py:47 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(MODELS_MAP.keys()).",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text.",
+				Required:            true,
 			},
 			"duration": schema.StringAttribute{
-				Description: "Input: COMBO default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: 8.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"6",
@@ -84,8 +84,8 @@ func (r *LtxvAPITextToVideoResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"1920x1080",
@@ -95,8 +95,8 @@ func (r *LtxvAPITextToVideoResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"fps": schema.StringAttribute{
-				Description: "Input: COMBO default: 25",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: 25.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"25",
@@ -105,12 +105,12 @@ func (r *LtxvAPITextToVideoResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"generate_audio": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: When true, the generated video will include AI-generated audio matching the scene.",
+				Optional:            true,
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

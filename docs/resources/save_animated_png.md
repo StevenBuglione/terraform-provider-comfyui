@@ -3,12 +3,12 @@
 page_title: "comfyui_save_animated_png Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SaveAnimatedPNG node [image/animation]
+  ComfyUI SaveAnimatedPNG node [image/animation] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:222 (v3_extras).
 ---
 
 # comfyui_save_animated_png (Resource)
 
-ComfyUI SaveAnimatedPNG node [image/animation]
+ComfyUI SaveAnimatedPNG node [image/animation] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:222 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI SaveAnimatedPNG node [image/animation]
 
 ### Required
 
-- `compress_level` (Number) Input: INT default: 4
-- `filename_prefix` (String) Input: STRING default: ComfyUI
-- `fps` (Number) Input: FLOAT default: 6
-- `images` (String) Input: IMAGE (link)
+- `compress_level` (Number) Input: INT. Default: 4. Allowed range: 0 to 9.
+- `filename_prefix` (String) Input: STRING. Default: "ComfyUI".
+- `fps` (Number) Input: FLOAT. Default: 6. Allowed range: 0.01 to 1000. Step: 0.01.
+- `images` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

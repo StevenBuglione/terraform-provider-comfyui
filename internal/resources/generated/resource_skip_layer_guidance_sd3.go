@@ -42,54 +42,54 @@ func (r *SkipLayerGuidanceSd3Resource) Metadata(_ context.Context, req resource.
 
 func (r *SkipLayerGuidanceSd3Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) Generic version of SkipLayerGuidance node that can be used on every DiT model. [advanced/guidance]",
+		MarkdownDescription: "(EXPERIMENTAL) Generic version of SkipLayerGuidance node that can be used on every DiT model. [advanced/guidance] Source: comfy_extras/nodes_sd3.py:167 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"layers": schema.StringAttribute{
-				Description: "Input: STRING default: 7, 8, 9",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"7, 8, 9\".",
+				Required:            true,
 			},
 			"scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 3",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 3. Allowed range: 0 to 10. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"start_percent": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.01",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.01. Allowed range: 0 to 1. Step: 0.001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"end_percent": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.15",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.15. Allowed range: 0 to 1. Step: 0.001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

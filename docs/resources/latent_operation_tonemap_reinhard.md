@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_operation_tonemap_reinhard Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LatentOperationTonemapReinhard node [latent/advanced/operations]
+  (EXPERIMENTAL) ComfyUI LatentOperationTonemapReinhard node [latent/advanced/operations] Source: comfy_extras/nodes_latent.py:372 (v3_extras).
 ---
 
 # comfyui_latent_operation_tonemap_reinhard (Resource)
 
-(EXPERIMENTAL) ComfyUI LatentOperationTonemapReinhard node [latent/advanced/operations]
+(EXPERIMENTAL) ComfyUI LatentOperationTonemapReinhard node [latent/advanced/operations] Source: comfy_extras/nodes_latent.py:372 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `multiplier` (Number) Input: FLOAT default: 1
+- `multiplier` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_operation_output` (String) Output: LATENT_OPERATION (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_operation_output` (String) Output: LATENT_OPERATION (slot 0).
+- `node_id` (String) ComfyUI node class type.

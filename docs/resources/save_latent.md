@@ -3,12 +3,12 @@
 page_title: "comfyui_save_latent Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SaveLatent node — SaveLatent [_for_testing]
+  ComfyUI SaveLatent node — SaveLatent [_for_testing] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: nodes.py:479 (v1_core).
 ---
 
 # comfyui_save_latent (Resource)
 
-ComfyUI SaveLatent node — SaveLatent [_for_testing]
+ComfyUI SaveLatent node — SaveLatent [_for_testing] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: nodes.py:479 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI SaveLatent node — SaveLatent [_for_testing]
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: latents/ComfyUI
-- `samples` (String) Input: LATENT (link)
+- `filename_prefix` (String) Input: STRING. Default: "latents/ComfyUI".
+- `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

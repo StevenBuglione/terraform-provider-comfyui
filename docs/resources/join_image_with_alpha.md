@@ -3,12 +3,12 @@
 page_title: "comfyui_join_image_with_alpha Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI JoinImageWithAlpha node — Join Image with Alpha [mask/compositing]
+  ComfyUI JoinImageWithAlpha node — Join Image with Alpha [mask/compositing] Source: comfy_extras/nodes_compositing.py:188 (v3_extras).
 ---
 
 # comfyui_join_image_with_alpha (Resource)
 
-ComfyUI JoinImageWithAlpha node — Join Image with Alpha [mask/compositing]
+ComfyUI JoinImageWithAlpha node — Join Image with Alpha [mask/compositing] Source: comfy_extras/nodes_compositing.py:188 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI JoinImageWithAlpha node — Join Image with Alpha [mask/compositing]
 
 ### Required
 
-- `alpha` (String) Input: MASK (link)
-- `image` (String) Input: IMAGE (link)
+- `alpha` (String) Input: MASK. Link input.
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

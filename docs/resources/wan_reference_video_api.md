@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_reference_video_api Resource - comfyui"
 subcategory: ""
 description: |-
-  Use the character and voice from input videos, combined with a prompt, to generate a new video that maintains character consistency. [api node/video/Wan]
+  Use the character and voice from input videos, combined with a prompt, to generate a new video that maintains character consistency. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:671 (v3_api).
 ---
 
 # comfyui_wan_reference_video_api (Resource)
 
-Use the character and voice from input videos, combined with a prompt, to generate a new video that maintains character consistency. [api node/video/Wan]
+Use the character and voice from input videos, combined with a prompt, to generate a new video that maintains character consistency. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:671 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Use the character and voice from input videos, combined with a prompt, to genera
 
 ### Required
 
-- `duration` (Number) Input: INT default: 5
-- `model` (String) Input: COMBO
-- `negative_prompt` (String) Input: STRING default:
-- `prompt` (String) Input: STRING default:
-- `reference_videos` (String) Input: COMFY_AUTOGROW_V3
-- `seed` (Number) Input: INT default: 0
-- `shot_type` (String) Input: COMBO
-- `size` (String) Input: COMBO
-- `watermark` (Boolean) Input: BOOLEAN default: false
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 5 to 10. Step: 5.
+- `model` (String) Input: COMBO.
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative prompt describing what to avoid.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese. Use identifiers such as `character1` and `character2` to refer to the reference characters.
+- `reference_videos` (String) Input: COMFY_AUTOGROW_V3.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1.
+- `shot_type` (String) Input: COMBO. Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts.
+- `size` (String) Input: COMBO.
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

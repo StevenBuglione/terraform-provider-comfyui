@@ -3,12 +3,12 @@
 page_title: "comfyui_resolution_bucket Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI ResolutionBucket node — Resolution Bucket [dataset]
+  (EXPERIMENTAL) ComfyUI ResolutionBucket node — Resolution Bucket [dataset] Source: comfy_extras/nodes_dataset.py:1138 (v3_extras).
 ---
 
 # comfyui_resolution_bucket (Resource)
 
-(EXPERIMENTAL) ComfyUI ResolutionBucket node — Resolution Bucket [dataset]
+(EXPERIMENTAL) ComfyUI ResolutionBucket node — Resolution Bucket [dataset] Source: comfy_extras/nodes_dataset.py:1138 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `latents` (String) Input: LATENT (link)
+- `conditioning` (String) Input: CONDITIONING. Link input. Tooltip: List of conditioning lists (must match latents length).
+- `latents` (String) Input: LATENT. Link input. Tooltip: List of latent dicts to bucket by resolution.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `latents_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `latents_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

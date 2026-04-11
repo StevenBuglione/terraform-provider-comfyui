@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_sdxl_refiner Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPTextEncodeSDXLRefiner node [advanced/conditioning]
+  ComfyUI CLIPTextEncodeSDXLRefiner node [advanced/conditioning] Source: comfy_extras/nodes_clip_sdxl.py:7 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_sdxl_refiner (Resource)
 
-ComfyUI CLIPTextEncodeSDXLRefiner node [advanced/conditioning]
+ComfyUI CLIPTextEncodeSDXLRefiner node [advanced/conditioning] Source: comfy_extras/nodes_clip_sdxl.py:7 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI CLIPTextEncodeSDXLRefiner node [advanced/conditioning]
 
 ### Required
 
-- `ascore` (Number) Input: FLOAT default: 6
-- `clip` (String) Input: CLIP (link)
-- `height` (Number) Input: INT default: 1024
-- `text` (String) Input: STRING
-- `width` (Number) Input: INT default: 1024
+- `ascore` (Number) Input: FLOAT. Default: 6. Allowed range: 0 to 1000. Step: 0.01.
+- `clip` (String) Input: CLIP. Link input.
+- `height` (Number) Input: INT. Default: 1024. Minimum value: 0.
+- `text` (String) Input: STRING. Supports multiline text.
+- `width` (Number) Input: INT. Default: 1024. Minimum value: 0.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

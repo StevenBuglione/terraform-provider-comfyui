@@ -9,7 +9,7 @@ description: |-
   exp_heun_2_x0
   solver_type=phi_2, r=1.0, eta=0.0
   exp_heun_2_x0_sde
-  solver_type=phi_2, r=1.0, eta=1.0, s_noise=1.0 [sampling/custom_sampling/samplers]
+  solver_type=phi_2, r=1.0, eta=1.0, s_noise=1.0 [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:665 (v3_extras).
 ---
 
 # comfyui_sampler_seeds2 (Resource)
@@ -23,7 +23,7 @@ exp_heun_2_x0
 - solver_type=phi_2, r=1.0, eta=0.0
 
 exp_heun_2_x0_sde
-- solver_type=phi_2, r=1.0, eta=1.0, s_noise=1.0 [sampling/custom_sampling/samplers]
+- solver_type=phi_2, r=1.0, eta=1.0, s_noise=1.0 [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:665 (v3_extras).
 
 
 
@@ -32,13 +32,13 @@ exp_heun_2_x0_sde
 
 ### Required
 
-- `eta` (Number) Input: FLOAT default: 1
-- `r` (Number) Input: FLOAT default: 0.5
-- `s_noise` (Number) Input: FLOAT default: 1
-- `solver_type` (String) Input: COMBO
+- `eta` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: Stochastic strength.
+- `r` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.01 to 1. Step: 0.01. Tooltip: Relative step size for the intermediate stage (c2 node).
+- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: SDE noise multiplier.
+- `solver_type` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

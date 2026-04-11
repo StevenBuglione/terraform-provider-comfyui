@@ -9,7 +9,7 @@ description: |-
   flux: clip-l, t5
   hidream: at least one of t5 or llama, recommended t5 and llama
   hunyuan_image: qwen2.5vl 7b and byt5 small
-  newbie: gemma-3-4b-it, jina clip v2 [advanced/loaders]
+  newbie: gemma-3-4b-it, jina clip v2 [advanced/loaders] Source: nodes.py:1003 (v1_core).
 ---
 
 # comfyui_dual_clip_loader (Resource)
@@ -21,7 +21,7 @@ sd3: clip-l, clip-g / clip-l, t5 / clip-g, t5
 flux: clip-l, t5
 hidream: at least one of t5 or llama, recommended t5 and llama
 hunyuan_image: qwen2.5vl 7b and byt5 small
-newbie: gemma-3-4b-it, jina clip v2 [advanced/loaders]
+newbie: gemma-3-4b-it, jina clip v2 [advanced/loaders] Source: nodes.py:1003 (v1_core).
 
 
 
@@ -30,16 +30,16 @@ newbie: gemma-3-4b-it, jina clip v2 [advanced/loaders]
 
 ### Required
 
-- `clip_name1` (String) Input: COMBO
-- `clip_name2` (String) Input: COMBO
-- `type` (String) Input: COMBO
+- `clip_name1` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
+- `clip_name2` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
+- `type` (String) Input: COMBO.
 
 ### Optional
 
-- `device` (String) Input: COMBO
+- `device` (String) Input: COMBO.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

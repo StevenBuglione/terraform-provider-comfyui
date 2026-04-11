@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_style_v3_infinite_style_library Resource - comfyui"
 subcategory: ""
 description: |-
-  Choose style based on preexisting UUID from Recraft's Infinite Style Library. [api node/image/Recraft]
+  Choose style based on preexisting UUID from Recraft's Infinite Style Library. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:305 (v3_api).
 ---
 
 # comfyui_recraft_style_v3_infinite_style_library (Resource)
 
-Choose style based on preexisting UUID from Recraft's Infinite Style Library. [api node/image/Recraft]
+Choose style based on preexisting UUID from Recraft's Infinite Style Library. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:305 (v3_api).
 
 
 
@@ -17,10 +17,10 @@ Choose style based on preexisting UUID from Recraft's Infinite Style Library. [a
 
 ### Required
 
-- `style_id` (String) Input: STRING default:
+- `style_id` (String) Input: STRING. Default: "". Tooltip: UUID of style from Infinite Style Library.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `recraft_style_output` (String) Output: RecraftIO.STYLEV3 (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `recraft_style_output` (String) Output: RecraftIO.STYLEV3 (slot 0).

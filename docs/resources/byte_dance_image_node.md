@@ -3,12 +3,12 @@
 page_title: "comfyui_byte_dance_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  (DEPRECATED) Generate images using ByteDance models via api based on prompt [api node/image/ByteDance]
+  (DEPRECATED) Generate images using ByteDance models via api based on prompt [api node/image/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:64 (v3_api).
 ---
 
 # comfyui_byte_dance_image_node (Resource)
 
-(DEPRECATED) Generate images using ByteDance models via api based on prompt [api node/image/ByteDance]
+(DEPRECATED) Generate images using ByteDance models via api based on prompt [api node/image/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:64 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ description: |-
 
 ### Required
 
-- `height` (Number) Input: INT default: 1024
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `size_preset` (String) Input: COMBO
-- `width` (Number) Input: INT default: 1024
+- `height` (Number) Input: INT. Default: 1024. Allowed range: 512 to 2048. Step: 64. Tooltip: Custom height for image. Value is working only if `size_preset` is set to `Custom`.
+- `model` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the image.
+- `size_preset` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Pick a recommended size. Select Custom to use the width and height below.
+- `width` (Number) Input: INT. Default: 1024. Allowed range: 512 to 2048. Step: 64. Tooltip: Custom width for image. Value is working only if `size_preset` is set to `Custom`.
 
 ### Optional
 
-- `guidance_scale` (Number) Input: FLOAT default: 2.5
-- `seed` (Number) Input: INT default: 0
-- `watermark` (Boolean) Input: BOOLEAN default: false
+- `guidance_scale` (Number) Input: FLOAT. Default: 2.5. Allowed range: 1 to 10. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an "AI generated" watermark to the image.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

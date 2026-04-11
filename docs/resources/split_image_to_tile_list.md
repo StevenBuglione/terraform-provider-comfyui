@@ -3,12 +3,12 @@
 page_title: "comfyui_split_image_to_tile_list Resource - comfyui"
 subcategory: ""
 description: |-
-  Splits an image into a batched list of tiles with a specified overlap. [image/batch]
+  Splits an image into a batched list of tiles with a specified overlap. [image/batch] Source: comfy_extras/nodes_images.py:687 (v3_extras).
 ---
 
 # comfyui_split_image_to_tile_list (Resource)
 
-Splits an image into a batched list of tiles with a specified overlap. [image/batch]
+Splits an image into a batched list of tiles with a specified overlap. [image/batch] Source: comfy_extras/nodes_images.py:687 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ Splits an image into a batched list of tiles with a specified overlap. [image/ba
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `overlap` (Number) Input: INT default: 128
-- `tile_height` (Number) Input: INT default: 1024
-- `tile_width` (Number) Input: INT default: 1024
+- `image` (String) Input: IMAGE. Link input.
+- `overlap` (Number) Input: INT. Default: 128. Allowed range: 0 to 4096.
+- `tile_height` (Number) Input: INT. Default: 1024. Minimum value: 64.
+- `tile_width` (Number) Input: INT. Default: 1024. Minimum value: 64.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

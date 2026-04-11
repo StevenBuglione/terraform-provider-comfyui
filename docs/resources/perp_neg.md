@@ -3,12 +3,12 @@
 page_title: "comfyui_perp_neg Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) (DEPRECATED) ComfyUI PerpNeg node — Perp-Neg (DEPRECATED by PerpNegGuider) [_for_testing]
+  (EXPERIMENTAL) (DEPRECATED) ComfyUI PerpNeg node — Perp-Neg (DEPRECATED by PerpNegGuider) [_for_testing] Source: comfy_extras/nodes_perpneg.py:22 (v3_extras).
 ---
 
 # comfyui_perp_neg (Resource)
 
-(EXPERIMENTAL) (DEPRECATED) ComfyUI PerpNeg node — Perp-Neg (DEPRECATED by PerpNegGuider) [_for_testing]
+(EXPERIMENTAL) (DEPRECATED) ComfyUI PerpNeg node — Perp-Neg (DEPRECATED by PerpNegGuider) [_for_testing] Source: comfy_extras/nodes_perpneg.py:22 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `empty_conditioning` (String) Input: CONDITIONING (link)
-- `model` (String) Input: MODEL (link)
-- `neg_scale` (Number) Input: FLOAT default: 1
+- `empty_conditioning` (String) Input: CONDITIONING. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `neg_scale` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

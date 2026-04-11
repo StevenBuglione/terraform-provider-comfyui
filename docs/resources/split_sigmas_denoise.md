@@ -3,12 +3,12 @@
 page_title: "comfyui_split_sigmas_denoise Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SplitSigmasDenoise node [sampling/custom_sampling/sigmas]
+  ComfyUI SplitSigmasDenoise node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:226 (v3_extras).
 ---
 
 # comfyui_split_sigmas_denoise (Resource)
 
-ComfyUI SplitSigmasDenoise node [sampling/custom_sampling/sigmas]
+ComfyUI SplitSigmasDenoise node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:226 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI SplitSigmasDenoise node [sampling/custom_sampling/sigmas]
 
 ### Required
 
-- `denoise` (Number) Input: FLOAT default: 1
-- `sigmas` (String) Input: SIGMAS (link)
+- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `sigmas` (String) Input: SIGMAS. Link input.
 
 ### Read-Only
 
-- `high_sigmas_output` (String) Output: SIGMAS (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `low_sigmas_output` (String) Output: SIGMAS (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `high_sigmas_output` (String) Output: SIGMAS (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `low_sigmas_output` (String) Output: SIGMAS (slot 1).
+- `node_id` (String) ComfyUI node class type.

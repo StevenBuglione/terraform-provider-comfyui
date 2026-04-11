@@ -3,12 +3,12 @@
 page_title: "comfyui_magnific_image_style_transfer_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Transfer the style from a reference image to your input image. [api node/image/Magnific]
+  Transfer the style from a reference image to your input image. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:399 (v3_api).
 ---
 
 # comfyui_magnific_image_style_transfer_node (Resource)
 
-Transfer the style from a reference image to your input image. [api node/image/Magnific]
+Transfer the style from a reference image to your input image. [api node/image/Magnific] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_magnific.py:399 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Transfer the style from a reference image to your input image. [api node/image/M
 
 ### Required
 
-- `engine` (String) Input: COMBO
-- `fixed_generation` (Boolean) Input: BOOLEAN default: true
-- `flavor` (String) Input: COMBO
-- `image` (String) Input: IMAGE (link)
-- `portrait_mode` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `prompt` (String) Input: STRING default:
-- `reference_image` (String) Input: IMAGE (link)
-- `structure_strength` (Number) Input: INT default: 50
-- `style_strength` (Number) Input: INT default: 100
+- `engine` (String) Input: COMBO. Tooltip: Processing engine selection.
+- `fixed_generation` (Boolean) Input: BOOLEAN. Default: true. Tooltip: When disabled, expect each generation to introduce a degree of randomness, leading to more diverse outcomes.
+- `flavor` (String) Input: COMBO. Tooltip: Style transfer flavor.
+- `image` (String) Input: IMAGE. Link input. Tooltip: The image to apply style transfer to.
+- `portrait_mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Enable portrait mode for facial enhancements.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `reference_image` (String) Input: IMAGE. Link input. Tooltip: The reference image to extract style from.
+- `structure_strength` (Number) Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Maintains the structure of the original image.
+- `style_strength` (Number) Input: INT. Default: 100. Allowed range: 0 to 100. Tooltip: Percentage of style strength.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

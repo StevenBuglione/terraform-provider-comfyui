@@ -3,12 +3,12 @@
 page_title: "comfyui_open_ai_dalle3 Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates images synchronously via OpenAI's DALL·E 3 endpoint. [api node/image/OpenAI]
+  Generates images synchronously via OpenAI's DALL·E 3 endpoint. [api node/image/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:242 (v3_api).
 ---
 
 # comfyui_open_ai_dalle3 (Resource)
 
-Generates images synchronously via OpenAI's DALL·E 3 endpoint. [api node/image/OpenAI]
+Generates images synchronously via OpenAI's DALL·E 3 endpoint. [api node/image/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:242 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ Generates images synchronously via OpenAI's DALL·E 3 endpoint. [api node/image/
 
 ### Required
 
-- `prompt` (String) Input: STRING default:
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt for DALL·E.
 
 ### Optional
 
-- `quality` (String) Input: COMBO default: standard
-- `seed` (Number) Input: INT default: 0
-- `size` (String) Input: COMBO default: 1024x1024
-- `style` (String) Input: COMBO default: natural
+- `quality` (String) Input: COMBO. Default: "standard". Tooltip: Image quality.
+- `seed` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: not implemented yet in backend.
+- `size` (String) Input: COMBO. Default: "1024x1024". Tooltip: Image size.
+- `style` (String) Input: COMBO. Default: "natural". Tooltip: Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

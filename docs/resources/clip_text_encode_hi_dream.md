@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_hi_dream Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPTextEncodeHiDream node [advanced/conditioning]
+  ComfyUI CLIPTextEncodeHiDream node [advanced/conditioning] Source: comfy_extras/nodes_hidream.py:36 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_hi_dream (Resource)
 
-ComfyUI CLIPTextEncodeHiDream node [advanced/conditioning]
+ComfyUI CLIPTextEncodeHiDream node [advanced/conditioning] Source: comfy_extras/nodes_hidream.py:36 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI CLIPTextEncodeHiDream node [advanced/conditioning]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `clip_g` (String) Input: STRING
-- `clip_l` (String) Input: STRING
-- `llama` (String) Input: STRING
-- `t5xxl` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input.
+- `clip_g` (String) Input: STRING. Supports multiline text.
+- `clip_l` (String) Input: STRING. Supports multiline text.
+- `llama` (String) Input: STRING. Supports multiline text.
+- `t5xxl` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

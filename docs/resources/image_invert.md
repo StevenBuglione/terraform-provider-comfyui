@@ -3,12 +3,12 @@
 page_title: "comfyui_image_invert Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageInvert node — Invert Image [image]
+  ComfyUI ImageInvert node — Invert Image [image] Source: nodes.py:1911 (v1_core).
 ---
 
 # comfyui_image_invert (Resource)
 
-ComfyUI ImageInvert node — Invert Image [image]
+ComfyUI ImageInvert node — Invert Image [image] Source: nodes.py:1911 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI ImageInvert node — Invert Image [image]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_lora_loader_bypass_model_only Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Apply LoRA in bypass mode. Unlike regular LoRA, this doesn't modify model weights - instead it injects the LoRA computation during forward pass. Useful for training scenarios. [loaders]
+  (EXPERIMENTAL) Apply LoRA in bypass mode. Unlike regular LoRA, this doesn't modify model weights - instead it injects the LoRA computation during forward pass. Useful for training scenarios. [loaders] Source: comfy_extras/nodes_lora_debug.py:57 (v1_extras).
 ---
 
 # comfyui_lora_loader_bypass_model_only (Resource)
 
-(EXPERIMENTAL) Apply LoRA in bypass mode. Unlike regular LoRA, this doesn't modify model weights - instead it injects the LoRA computation during forward pass. Useful for training scenarios. [loaders]
+(EXPERIMENTAL) Apply LoRA in bypass mode. Unlike regular LoRA, this doesn't modify model weights - instead it injects the LoRA computation during forward pass. Useful for training scenarios. [loaders] Source: comfy_extras/nodes_lora_debug.py:57 (v1_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `lora_name` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
-- `strength_model` (Number) Input: FLOAT default: 1
+- `lora_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('loras').
+- `model` (String) Input: MODEL. Link input.
+- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

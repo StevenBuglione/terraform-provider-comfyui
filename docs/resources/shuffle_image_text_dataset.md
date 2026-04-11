@@ -3,12 +3,12 @@
 page_title: "comfyui_shuffle_image_text_dataset Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI ShuffleImageTextDatasetNode node — Shuffle Image-Text Dataset [dataset/image]
+  (EXPERIMENTAL) ComfyUI ShuffleImageTextDatasetNode node — Shuffle Image-Text Dataset [dataset/image] Source: comfy_extras/nodes_dataset.py:819 (v3_extras).
 ---
 
 # comfyui_shuffle_image_text_dataset (Resource)
 
-(EXPERIMENTAL) ComfyUI ShuffleImageTextDatasetNode node — Shuffle Image-Text Dataset [dataset/image]
+(EXPERIMENTAL) ComfyUI ShuffleImageTextDatasetNode node — Shuffle Image-Text Dataset [dataset/image] Source: comfy_extras/nodes_dataset.py:819 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `images` (String) Input: IMAGE (link)
-- `seed` (Number) Input: INT default: 0
-- `texts` (String) Input: STRING
+- `images` (String) Input: IMAGE. Link input. Tooltip: List of images to shuffle.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Random seed.
+- `texts` (String) Input: STRING. Tooltip: List of texts to shuffle.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `images_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `texts_output` (String) Output: STRING (slot 1)
+- `id` (String) Unique identifier for this node instance.
+- `images_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `texts_output` (String) Output: STRING (slot 1).

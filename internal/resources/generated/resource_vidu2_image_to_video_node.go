@@ -45,25 +45,25 @@ func (r *Vidu2ImageToVideoNodeResource) Metadata(_ context.Context, req resource
 
 func (r *Vidu2ImageToVideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate a video from an image and an optional prompt. [api node/video/Vidu]",
+		MarkdownDescription: "Generate a video from an image and an optional prompt. [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:580 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"viduq2-pro-fast",
@@ -73,30 +73,30 @@ func (r *Vidu2ImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: An image to be used as the start frame of the generated video.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: An optional text prompt for video generation (max 2000 characters).",
+				Required:            true,
 			},
 			"duration": schema.Int64Attribute{
-				Description: "Input: INT default: 5",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 5. Allowed range: 1 to 10. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 10),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"720p",
@@ -105,8 +105,8 @@ func (r *Vidu2ImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"movement_amplitude": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: The movement amplitude of objects in the frame.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -117,8 +117,8 @@ func (r *Vidu2ImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

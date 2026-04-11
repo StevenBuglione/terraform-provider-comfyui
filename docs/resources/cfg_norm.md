@@ -3,12 +3,12 @@
 page_title: "comfyui_cfg_norm Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CFGNorm node [advanced/guidance]
+  (EXPERIMENTAL) ComfyUI CFGNorm node [advanced/guidance] Source: comfy_extras/nodes_cfg.py:51 (v3_extras).
 ---
 
 # comfyui_cfg_norm (Resource)
 
-(EXPERIMENTAL) ComfyUI CFGNorm node [advanced/guidance]
+(EXPERIMENTAL) ComfyUI CFGNorm node [advanced/guidance] Source: comfy_extras/nodes_cfg.py:51 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `strength` (Number) Input: FLOAT default: 1
+- `model` (String) Input: MODEL. Link input.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `patched_model_output` (String) Output: MODEL (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `patched_model_output` (String) Output: MODEL (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_wavespeed_flash_vsr_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Fast, high-quality video upscaler that boosts resolution and restores clarity for low-resolution or blurry footage. [api node/video/WaveSpeed]
+  Fast, high-quality video upscaler that boosts resolution and restores clarity for low-resolution or blurry footage. [api node/video/WaveSpeed] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wavespeed.py:24 (v3_api).
 ---
 
 # comfyui_wavespeed_flash_vsr_node (Resource)
 
-Fast, high-quality video upscaler that boosts resolution and restores clarity for low-resolution or blurry footage. [api node/video/WaveSpeed]
+Fast, high-quality video upscaler that boosts resolution and restores clarity for low-resolution or blurry footage. [api node/video/WaveSpeed] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wavespeed.py:24 (v3_api).
 
 
 
@@ -17,11 +17,11 @@ Fast, high-quality video upscaler that boosts resolution and restores clarity fo
 
 ### Required
 
-- `target_resolution` (String) Input: COMBO
-- `video` (String) Input: VIDEO (link)
+- `target_resolution` (String) Input: COMBO.
+- `video` (String) Input: VIDEO. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

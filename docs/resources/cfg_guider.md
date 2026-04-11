@@ -3,12 +3,12 @@
 page_title: "comfyui_cfg_guider Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CFGGuider node [sampling/custom_sampling/guiders]
+  ComfyUI CFGGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/nodes_custom_sampler.py:812 (v3_extras).
 ---
 
 # comfyui_cfg_guider (Resource)
 
-ComfyUI CFGGuider node [sampling/custom_sampling/guiders]
+ComfyUI CFGGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/nodes_custom_sampler.py:812 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI CFGGuider node [sampling/custom_sampling/guiders]
 
 ### Required
 
-- `cfg` (Number) Input: FLOAT default: 8
-- `model` (String) Input: MODEL (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
+- `cfg` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `model` (String) Input: MODEL. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only
 
-- `guider_output` (String) Output: GUIDER (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `guider_output` (String) Output: GUIDER (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

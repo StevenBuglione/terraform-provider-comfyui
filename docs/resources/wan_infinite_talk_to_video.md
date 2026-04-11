@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_infinite_talk_to_video Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models]
+  ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models] Source: comfy_extras/nodes_wan.py:1295 (v3_extras).
 ---
 
 # comfyui_wan_infinite_talk_to_video (Resource)
 
-ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models]
+ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models] Source: comfy_extras/nodes_wan.py:1295 (v3_extras).
 
 
 
@@ -17,31 +17,31 @@ ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models]
 
 ### Required
 
-- `audio_encoder_output_1` (String) Input: AUDIO_ENCODER_OUTPUT (link)
-- `audio_scale` (Number) Input: FLOAT default: 1
-- `height` (Number) Input: INT default: 480
-- `length` (Number) Input: INT default: 81
-- `mode` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `model` (String) Input: MODEL (link)
-- `model_patch` (String) Input: MODEL_PATCH (link)
-- `motion_frame_count` (Number) Input: INT default: 9
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
-- `vae` (String) Input: VAE (link)
-- `width` (Number) Input: INT default: 832
+- `audio_encoder_output_1` (String) Input: AUDIO_ENCODER_OUTPUT. Link input.
+- `audio_scale` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `height` (Number) Input: INT. Default: 480. Minimum value: 16. Step: 16.
+- `length` (Number) Input: INT. Default: 81. Minimum value: 1. Step: 4.
+- `mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `model` (String) Input: MODEL. Link input.
+- `model_patch` (String) Input: MODEL_PATCH. Link input.
+- `motion_frame_count` (Number) Input: INT. Default: 9. Allowed range: 1 to 33. Step: 1. Tooltip: Number of previous frames to use as motion context.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `vae` (String) Input: VAE. Link input.
+- `width` (Number) Input: INT. Default: 832. Minimum value: 16. Step: 16.
 
 ### Optional
 
-- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT (link)
-- `previous_frames` (String) Input: IMAGE (link)
-- `start_image` (String) Input: IMAGE (link)
+- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `previous_frames` (String) Input: IMAGE. Link input.
+- `start_image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 3)
-- `model_output` (String) Output: MODEL (slot 0)
-- `negative_output` (String) Output: CONDITIONING (slot 2)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 1)
-- `trim_image_output` (String) Output: INT (slot 4)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 3).
+- `model_output` (String) Output: MODEL (slot 0).
+- `negative_output` (String) Output: CONDITIONING (slot 2).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 1).
+- `trim_image_output` (String) Output: INT (slot 4).

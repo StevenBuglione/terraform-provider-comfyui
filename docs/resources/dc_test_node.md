@@ -3,12 +3,12 @@
 page_title: "comfyui_dc_test_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI DCTestNode node — DCTest [logic]
+  ComfyUI DCTestNode node — DCTest [logic] Source: comfy_extras/nodes_logic.py:126 (v3_extras).
 ---
 
 # comfyui_dc_test_node (Resource)
 
-ComfyUI DCTestNode node — DCTest [logic]
+ComfyUI DCTestNode node — DCTest [logic] Source: comfy_extras/nodes_logic.py:126 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI DCTestNode node — DCTest [logic]
 
 ### Required
 
-- `combo` (String) Input: COMFY_DYNAMICCOMBO_V3
+- `combo` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `unnamed_output` (String) Output: * (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `unnamed_output` (String) Output: * (slot 0).

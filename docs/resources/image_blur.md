@@ -3,12 +3,12 @@
 page_title: "comfyui_image_blur Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Blur node — Image Blur [image/postprocessing]
+  ComfyUI Blur node — Image Blur [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:76 (v3_extras).
 ---
 
 # comfyui_image_blur (Resource)
 
-ComfyUI Blur node — Image Blur [image/postprocessing]
+ComfyUI Blur node — Image Blur [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:76 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI Blur node — Image Blur [image/postprocessing]
 
 ### Required
 
-- `blur_radius` (Number) Input: INT default: 1
-- `image` (String) Input: IMAGE (link)
-- `sigma` (Number) Input: FLOAT default: 1
+- `blur_radius` (Number) Input: INT. Default: 1. Allowed range: 1 to 31. Step: 1.
+- `image` (String) Input: IMAGE. Link input.
+- `sigma` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 10. Step: 0.1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

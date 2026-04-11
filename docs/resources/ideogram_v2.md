@@ -3,12 +3,12 @@
 page_title: "comfyui_ideogram_v2 Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates images using the Ideogram V2 model. [api node/image/Ideogram]
+  Generates images using the Ideogram V2 model. [api node/image/Ideogram] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_ideogram.py:356 (v3_api).
 ---
 
 # comfyui_ideogram_v2 (Resource)
 
-Generates images using the Ideogram V2 model. [api node/image/Ideogram]
+Generates images using the Ideogram V2 model. [api node/image/Ideogram] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_ideogram.py:356 (v3_api).
 
 
 
@@ -17,21 +17,21 @@ Generates images using the Ideogram V2 model. [api node/image/Ideogram]
 
 ### Required
 
-- `prompt` (String) Input: STRING default:
-- `turbo` (Boolean) Input: BOOLEAN default: false
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
+- `turbo` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to use turbo mode (faster generation, potentially lower quality).
 
 ### Optional
 
-- `aspect_ratio` (String) Input: COMBO default: 1:1
-- `magic_prompt_option` (String) Input: COMBO default: AUTO
-- `negative_prompt` (String) Input: STRING default:
-- `num_images` (Number) Input: INT default: 1
-- `resolution` (String) Input: COMBO default: Auto
-- `seed` (Number) Input: INT default: 0
-- `style_type` (String) Input: COMBO default: NONE
+- `aspect_ratio` (String) Input: COMBO. Default: "1:1". Dynamic options are resolved by ComfyUI at runtime from: list(V1_V2_RATIO_MAP.keys()). Tooltip: The aspect ratio for image generation. Ignored if resolution is not set to AUTO.
+- `magic_prompt_option` (String) Input: COMBO. Default: "AUTO". Tooltip: Determine if MagicPrompt should be used in generation.
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Description of what to exclude from the image.
+- `num_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1.
+- `resolution` (String) Input: COMBO. Default: "Auto". Dynamic options are resolved by ComfyUI at runtime from: list(V1_V1_RES_MAP.keys()). Tooltip: The resolution for image generation. If not set to AUTO, this overrides the aspect_ratio setting.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1.
+- `style_type` (String) Input: COMBO. Default: "NONE". Tooltip: Style type for generation (V2 only).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

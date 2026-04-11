@@ -3,12 +3,12 @@
 page_title: "comfyui_eleven_labs_voice_selector Resource - comfyui"
 subcategory: ""
 description: |-
-  Select a predefined ElevenLabs voice for text-to-speech generation. [api node/audio/ElevenLabs]
+  Select a predefined ElevenLabs voice for text-to-speech generation. [api node/audio/ElevenLabs] Source: comfy_api_nodes/nodes_elevenlabs.py:207 (v3_api).
 ---
 
 # comfyui_eleven_labs_voice_selector (Resource)
 
-Select a predefined ElevenLabs voice for text-to-speech generation. [api node/audio/ElevenLabs]
+Select a predefined ElevenLabs voice for text-to-speech generation. [api node/audio/ElevenLabs] Source: comfy_api_nodes/nodes_elevenlabs.py:207 (v3_api).
 
 
 
@@ -17,10 +17,10 @@ Select a predefined ElevenLabs voice for text-to-speech generation. [api node/au
 
 ### Required
 
-- `voice` (String) Input: COMBO
+- `voice` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: ELEVENLABS_VOICE_OPTIONS. Tooltip: Choose a voice from the predefined ElevenLabs voices.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `voice_output` (String) Output: ELEVENLABS_VOICE (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `voice_output` (String) Output: ELEVENLABS_VOICE (slot 0).

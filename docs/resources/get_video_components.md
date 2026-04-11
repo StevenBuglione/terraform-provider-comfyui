@@ -3,12 +3,12 @@
 page_title: "comfyui_get_video_components Resource - comfyui"
 subcategory: ""
 description: |-
-  Extracts all components from a video: frames, audio, and framerate. [image/video]
+  Extracts all components from a video: frames, audio, and framerate. [image/video] Source: comfy_extras/nodes_video.py:142 (v3_extras).
 ---
 
 # comfyui_get_video_components (Resource)
 
-Extracts all components from a video: frames, audio, and framerate. [image/video]
+Extracts all components from a video: frames, audio, and framerate. [image/video] Source: comfy_extras/nodes_video.py:142 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Extracts all components from a video: frames, audio, and framerate. [image/video
 
 ### Required
 
-- `video` (String) Input: VIDEO (link)
+- `video` (String) Input: VIDEO. Link input. Tooltip: The video to extract components from.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 1)
-- `fps_output` (String) Output: FLOAT (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `images_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 1).
+- `fps_output` (String) Output: FLOAT (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `images_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

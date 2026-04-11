@@ -3,12 +3,12 @@
 page_title: "comfyui_image_batch Resource - comfyui"
 subcategory: ""
 description: |-
-  (DEPRECATED) ComfyUI ImageBatch node — Batch Images [image]
+  (DEPRECATED) ComfyUI ImageBatch node — Batch Images [image] Source: nodes.py:1928 (v1_core).
 ---
 
 # comfyui_image_batch (Resource)
 
-(DEPRECATED) ComfyUI ImageBatch node — Batch Images [image]
+(DEPRECATED) ComfyUI ImageBatch node — Batch Images [image] Source: nodes.py:1928 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `image1` (String) Input: IMAGE (link)
-- `image2` (String) Input: IMAGE (link)
+- `image1` (String) Input: IMAGE. Link input.
+- `image2` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

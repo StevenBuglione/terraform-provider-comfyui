@@ -3,12 +3,12 @@
 page_title: "comfyui_checkpoint_loader_simple Resource - comfyui"
 subcategory: ""
 description: |-
-  Loads a diffusion model checkpoint, diffusion models are used to denoise latents. [loaders]
+  Loads a diffusion model checkpoint, diffusion models are used to denoise latents. [loaders] Source: nodes.py:588 (v1_core).
 ---
 
 # comfyui_checkpoint_loader_simple (Resource)
 
-Loads a diffusion model checkpoint, diffusion models are used to denoise latents. [loaders]
+Loads a diffusion model checkpoint, diffusion models are used to denoise latents. [loaders] Source: nodes.py:588 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ Loads a diffusion model checkpoint, diffusion models are used to denoise latents
 
 ### Required
 
-- `ckpt_name` (String) Input: COMBO
+- `ckpt_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints'). Tooltip: The name of the checkpoint (model) to load.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `vae_output` (String) Output: VAE (slot 2)
+- `clip_output` (String) Output: CLIP (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `vae_output` (String) Output: VAE (slot 2).

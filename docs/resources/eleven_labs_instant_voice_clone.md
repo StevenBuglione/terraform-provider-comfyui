@@ -3,12 +3,12 @@
 page_title: "comfyui_eleven_labs_instant_voice_clone Resource - comfyui"
 subcategory: ""
 description: |-
-  Create a cloned voice from audio samples. Provide 1-8 audio recordings of the voice to clone. [api node/audio/ElevenLabs]
+  Create a cloned voice from audio samples. Provide 1-8 audio recordings of the voice to clone. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:552 (v3_api).
 ---
 
 # comfyui_eleven_labs_instant_voice_clone (Resource)
 
-Create a cloned voice from audio samples. Provide 1-8 audio recordings of the voice to clone. [api node/audio/ElevenLabs]
+Create a cloned voice from audio samples. Provide 1-8 audio recordings of the voice to clone. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:552 (v3_api).
 
 
 
@@ -17,11 +17,11 @@ Create a cloned voice from audio samples. Provide 1-8 audio recordings of the vo
 
 ### Required
 
-- `files` (String) Input: COMFY_AUTOGROW_V3
-- `remove_background_noise` (Boolean) Input: BOOLEAN default: false
+- `files` (String) Input: COMFY_AUTOGROW_V3. Tooltip: Audio recordings for voice cloning.
+- `remove_background_noise` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Remove background noise from voice samples using audio isolation.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `voice_output` (String) Output: ELEVENLABS_VOICE (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `voice_output` (String) Output: ELEVENLABS_VOICE (slot 0).

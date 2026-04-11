@@ -41,52 +41,52 @@ func (r *SamplerCustomAdvancedResource) Metadata(_ context.Context, req resource
 
 func (r *SamplerCustomAdvancedResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SamplerCustomAdvanced node [sampling/custom_sampling]",
+		MarkdownDescription: "ComfyUI SamplerCustomAdvanced node [sampling/custom_sampling] Source: comfy_extras/nodes_custom_sampler.py:928 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"noise": schema.StringAttribute{
-				Description: "Input: NOISE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: NOISE. Link input.",
+				Required:            true,
 			},
 			"guider": schema.StringAttribute{
-				Description: "Input: GUIDER (link)",
-				Required:    true,
+				MarkdownDescription: "Input: GUIDER. Link input.",
+				Required:            true,
 			},
 			"sampler": schema.StringAttribute{
-				Description: "Input: SAMPLER (link)",
-				Required:    true,
+				MarkdownDescription: "Input: SAMPLER. Link input.",
+				Required:            true,
 			},
 			"sigmas": schema.StringAttribute{
-				Description: "Input: SIGMAS (link)",
-				Required:    true,
+				MarkdownDescription: "Input: SIGMAS. Link input.",
+				Required:            true,
 			},
 			"latent_image": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"output_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"denoised_output_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

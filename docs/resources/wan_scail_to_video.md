@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_scail_to_video Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI WanSCAILToVideo node [conditioning/video_models]
+  (EXPERIMENTAL) ComfyUI WanSCAILToVideo node [conditioning/video_models] Source: comfy_extras/nodes_wan.py:1459 (v3_extras).
 ---
 
 # comfyui_wan_scail_to_video (Resource)
 
-(EXPERIMENTAL) ComfyUI WanSCAILToVideo node [conditioning/video_models]
+(EXPERIMENTAL) ComfyUI WanSCAILToVideo node [conditioning/video_models] Source: comfy_extras/nodes_wan.py:1459 (v3_extras).
 
 
 
@@ -17,27 +17,27 @@ description: |-
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `height` (Number) Input: INT default: 896
-- `length` (Number) Input: INT default: 81
-- `negative` (String) Input: CONDITIONING (link)
-- `pose_end` (Number) Input: FLOAT default: 1
-- `pose_start` (Number) Input: FLOAT default: 0
-- `pose_strength` (Number) Input: FLOAT default: 1
-- `positive` (String) Input: CONDITIONING (link)
-- `vae` (String) Input: VAE (link)
-- `width` (Number) Input: INT default: 512
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `height` (Number) Input: INT. Default: 896. Minimum value: 32. Step: 32.
+- `length` (Number) Input: INT. Default: 81. Minimum value: 1. Step: 4.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `pose_end` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: End step to use pose conditioning.
+- `pose_start` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Start step to use pose conditioning.
+- `pose_strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01. Tooltip: Strength of the pose latent.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `vae` (String) Input: VAE. Link input.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 32. Step: 32.
 
 ### Optional
 
-- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT (link)
-- `pose_video` (String) Input: IMAGE (link)
-- `reference_image` (String) Input: IMAGE (link)
+- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `pose_video` (String) Input: IMAGE. Link input. Tooltip: Video used for pose conditioning. Will be downscaled to half the resolution of the main video.
+- `reference_image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

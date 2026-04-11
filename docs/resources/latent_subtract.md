@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_subtract Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentSubtract node [latent/advanced]
+  ComfyUI LatentSubtract node [latent/advanced] Source: comfy_extras/nodes_latent.py:46 (v3_extras).
 ---
 
 # comfyui_latent_subtract (Resource)
 
-ComfyUI LatentSubtract node [latent/advanced]
+ComfyUI LatentSubtract node [latent/advanced] Source: comfy_extras/nodes_latent.py:46 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI LatentSubtract node [latent/advanced]
 
 ### Required
 
-- `samples1` (String) Input: LATENT (link)
-- `samples2` (String) Input: LATENT (link)
+- `samples1` (String) Input: LATENT. Link input.
+- `samples2` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

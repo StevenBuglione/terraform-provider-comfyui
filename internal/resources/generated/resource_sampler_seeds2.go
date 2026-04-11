@@ -42,25 +42,25 @@ func (r *SamplerSeeds2Resource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *SamplerSeeds2Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "This sampler node can represent multiple samplers:\n\nseeds_2\n- default setting\n\nexp_heun_2_x0\n- solver_type=phi_2, r=1.0, eta=0.0\n\nexp_heun_2_x0_sde\n- solver_type=phi_2, r=1.0, eta=1.0, s_noise=1.0 [sampling/custom_sampling/samplers]",
+		MarkdownDescription: "This sampler node can represent multiple samplers:\n\nseeds_2\n- default setting\n\nexp_heun_2_x0\n- solver_type=phi_2, r=1.0, eta=0.0\n\nexp_heun_2_x0_sde\n- solver_type=phi_2, r=1.0, eta=1.0, s_noise=1.0 [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:665 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"solver_type": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"phi_1",
@@ -69,29 +69,29 @@ func (r *SamplerSeeds2Resource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"eta": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: Stochastic strength.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"s_noise": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: SDE noise multiplier.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"r": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.01 to 1. Step: 0.01. Tooltip: Relative step size for the intermediate stage (c2 node).",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 1),
 				},
 			},
 			"sampler_output": schema.StringAttribute{
-				Description: "Output: SAMPLER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SAMPLER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

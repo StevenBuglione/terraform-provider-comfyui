@@ -3,12 +3,12 @@
 page_title: "comfyui_unet_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI UNETLoader node — Load Diffusion Model [advanced/loaders]
+  ComfyUI UNETLoader node — Load Diffusion Model [advanced/loaders] Source: nodes.py:951 (v1_core).
 ---
 
 # comfyui_unet_loader (Resource)
 
-ComfyUI UNETLoader node — Load Diffusion Model [advanced/loaders]
+ComfyUI UNETLoader node — Load Diffusion Model [advanced/loaders] Source: nodes.py:951 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI UNETLoader node — Load Diffusion Model [advanced/loaders]
 
 ### Required
 
-- `unet_name` (String) Input: COMBO
-- `weight_dtype` (String) Input: COMBO
+- `unet_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('diffusion_models').
+- `weight_dtype` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -42,54 +42,54 @@ func (r *StableCascadeEmptyLatentImageResource) Metadata(_ context.Context, req 
 
 func (r *StableCascadeEmptyLatentImageResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI StableCascade_EmptyLatentImage node [latent/stable_cascade]",
+		MarkdownDescription: "ComfyUI StableCascade_EmptyLatentImage node [latent/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:27 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 256. Step: 8.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Minimum value: 256. Step: 8.",
+				Required:            true,
 			},
 			"compression": schema.Int64Attribute{
-				Description: "Input: INT default: 42",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 42. Allowed range: 4 to 128. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(4, 128),
 				},
 			},
 			"batch_size": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 4096.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4096),
 				},
 			},
 			"stage_c_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"stage_b_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

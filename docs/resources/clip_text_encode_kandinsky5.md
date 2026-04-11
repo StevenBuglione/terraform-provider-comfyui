@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_kandinsky5 Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPTextEncodeKandinsky5 node [advanced/conditioning/kandinsky5]
+  ComfyUI CLIPTextEncodeKandinsky5 node [advanced/conditioning/kandinsky5] Source: comfy_extras/nodes_kandinsky5.py:102 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_kandinsky5 (Resource)
 
-ComfyUI CLIPTextEncodeKandinsky5 node [advanced/conditioning/kandinsky5]
+ComfyUI CLIPTextEncodeKandinsky5 node [advanced/conditioning/kandinsky5] Source: comfy_extras/nodes_kandinsky5.py:102 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI CLIPTextEncodeKandinsky5 node [advanced/conditioning/kandinsky5]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `clip_l` (String) Input: STRING
-- `qwen25_7b` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input.
+- `clip_l` (String) Input: STRING. Supports multiline text.
+- `qwen25_7b` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

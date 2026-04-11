@@ -3,12 +3,12 @@
 page_title: "comfyui_glsl_shader Resource - comfyui"
 subcategory: ""
 description: |-
-  Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always available. [image/shader]
+  Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always available. [image/shader] Source: comfy_extras/nodes_glsl.py:732 (v3_extras).
 ---
 
 # comfyui_glsl_shader (Resource)
 
-Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always available. [image/shader]
+Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always available. [image/shader] Source: comfy_extras/nodes_glsl.py:732 (v3_extras).
 
 
 
@@ -17,17 +17,17 @@ Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always availabl
 
 ### Required
 
-- `floats` (String) Input: COMFY_AUTOGROW_V3
-- `fragment_shader` (String) Input: STRING
-- `images` (String) Input: COMFY_AUTOGROW_V3
-- `ints` (String) Input: COMFY_AUTOGROW_V3
-- `size_mode` (String) Input: COMFY_DYNAMICCOMBO_V3
+- `floats` (String) Input: COMFY_AUTOGROW_V3.
+- `fragment_shader` (String) Input: STRING. Supports multiline text. Tooltip: GLSL fragment shader source code (GLSL ES 3.00 / WebGL 2.0 compatible).
+- `images` (String) Input: COMFY_AUTOGROW_V3.
+- `ints` (String) Input: COMFY_AUTOGROW_V3.
+- `size_mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Output size: 'from_input' uses first input image dimensions, 'custom' allows manual size.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image0_output` (String) Output: IMAGE (slot 0)
-- `image1_output` (String) Output: IMAGE (slot 1)
-- `image2_output` (String) Output: IMAGE (slot 2)
-- `image3_output` (String) Output: IMAGE (slot 3)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image0_output` (String) Output: IMAGE (slot 0).
+- `image1_output` (String) Output: IMAGE (slot 1).
+- `image2_output` (String) Output: IMAGE (slot 2).
+- `image3_output` (String) Output: IMAGE (slot 3).
+- `node_id` (String) ComfyUI node class type.

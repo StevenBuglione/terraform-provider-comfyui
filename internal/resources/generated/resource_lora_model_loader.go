@@ -41,44 +41,44 @@ func (r *LoraModelLoaderResource) Metadata(_ context.Context, req resource.Metad
 
 func (r *LoraModelLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI LoraModelLoader node — Load LoRA Model [loaders]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI LoraModelLoader node — Load LoRA Model [loaders] Source: comfy_extras/nodes_train.py:1294 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input. Tooltip: The diffusion model the LoRA will be applied to.",
+				Required:            true,
 			},
 			"lora": schema.StringAttribute{
-				Description: "Input: LORA_MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LORA_MODEL. Link input. Tooltip: The LoRA model to apply to the diffusion model.",
+				Required:            true,
 			},
 			"strength_model": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: -100 to 100. Tooltip: How strongly to modify the diffusion model. This value can be negative.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-100, 100),
 				},
 			},
 			"bypass": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: When enabled, applies LoRA in bypass mode without modifying base model weights. Useful for training and when model weights are offloaded.",
+				Required:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

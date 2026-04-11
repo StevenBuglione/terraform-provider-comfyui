@@ -52,29 +52,29 @@ func (r *KsamplerAdvancedResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *KsamplerAdvancedResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling]",
+		MarkdownDescription: "ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling] Source: nodes.py:1593 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"add_noise": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"enable",
@@ -83,63 +83,63 @@ func (r *KsamplerAdvancedResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"noise_seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 20",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 20. Allowed range: 1 to 10000.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 10000),
 				},
 			},
 			"cfg": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"sampler_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.KSampler.SAMPLERS.",
+				Required:            true,
 			},
 			"scheduler": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.KSampler.SCHEDULERS.",
+				Required:            true,
 			},
 			"positive": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"negative": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"latent_image": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"start_at_step": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 10000.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 10000),
 				},
 			},
 			"end_at_step": schema.Int64Attribute{
-				Description: "Input: INT default: 10000",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 10000. Allowed range: 0 to 10000.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 10000),
 				},
 			},
 			"return_with_leftover_noise": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"disable",
@@ -148,8 +148,8 @@ func (r *KsamplerAdvancedResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

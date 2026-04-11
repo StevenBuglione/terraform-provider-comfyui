@@ -3,12 +3,12 @@
 page_title: "comfyui_string_compare Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StringCompare node — Compare [utils/string]
+  ComfyUI StringCompare node — Compare [utils/string] Source: comfy_extras/nodes_string.py:189 (v3_extras).
 ---
 
 # comfyui_string_compare (Resource)
 
-ComfyUI StringCompare node — Compare [utils/string]
+ComfyUI StringCompare node — Compare [utils/string] Source: comfy_extras/nodes_string.py:189 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI StringCompare node — Compare [utils/string]
 
 ### Required
 
-- `case_sensitive` (Boolean) Input: BOOLEAN default: true
-- `mode` (String) Input: COMBO
-- `string_a` (String) Input: STRING
-- `string_b` (String) Input: STRING
+- `case_sensitive` (Boolean) Input: BOOLEAN. Default: true.
+- `mode` (String) Input: COMBO.
+- `string_a` (String) Input: STRING. Supports multiline text.
+- `string_b` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `boolean_output` (String) Output: BOOLEAN (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `boolean_output` (String) Output: BOOLEAN (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

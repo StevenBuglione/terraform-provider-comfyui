@@ -3,12 +3,12 @@
 page_title: "comfyui_load_latent Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LoadLatent node — LoadLatent [_for_testing]
+  ComfyUI LoadLatent node — LoadLatent [_for_testing] Source: nodes.py:532 (v1_core).
 ---
 
 # comfyui_load_latent (Resource)
 
-ComfyUI LoadLatent node — LoadLatent [_for_testing]
+ComfyUI LoadLatent node — LoadLatent [_for_testing] Source: nodes.py:532 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI LoadLatent node — LoadLatent [_for_testing]
 
 ### Required
 
-- `latent` (String) Input: COMBO
+- `latent` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

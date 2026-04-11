@@ -3,12 +3,12 @@
 page_title: "comfyui_reference_latent Resource - comfyui"
 subcategory: ""
 description: |-
-  This node sets the guiding latent for an edit model. If the model supports it you can chain multiple to set multiple reference images. [advanced/conditioning/edit_models]
+  This node sets the guiding latent for an edit model. If the model supports it you can chain multiple to set multiple reference images. [advanced/conditioning/edit_models] Source: comfy_extras/nodes_edit_model.py:6 (v3_extras).
 ---
 
 # comfyui_reference_latent (Resource)
 
-This node sets the guiding latent for an edit model. If the model supports it you can chain multiple to set multiple reference images. [advanced/conditioning/edit_models]
+This node sets the guiding latent for an edit model. If the model supports it you can chain multiple to set multiple reference images. [advanced/conditioning/edit_models] Source: comfy_extras/nodes_edit_model.py:6 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ This node sets the guiding latent for an edit model. If the model supports it yo
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
+- `conditioning` (String) Input: CONDITIONING. Link input.
 
 ### Optional
 
-- `latent` (String) Input: LATENT (link)
+- `latent` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

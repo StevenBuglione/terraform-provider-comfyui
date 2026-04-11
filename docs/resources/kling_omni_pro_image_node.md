@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_omni_pro_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Create or edit images with the latest model from Kling. [api node/image/Kling]
+  Create or edit images with the latest model from Kling. [api node/image/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:1562 (v3_api).
 ---
 
 # comfyui_kling_omni_pro_image_node (Resource)
 
-Create or edit images with the latest model from Kling. [api node/image/Kling]
+Create or edit images with the latest model from Kling. [api node/image/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:1562 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Create or edit images with the latest model from Kling. [api node/image/Kling]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `model_name` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `resolution` (String) Input: COMBO
-- `series_amount` (String) Input: COMBO
+- `aspect_ratio` (String) Input: COMBO.
+- `model_name` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A text prompt describing the image content. This can include both positive and negative descriptions.
+- `resolution` (String) Input: COMBO.
+- `series_amount` (String) Input: COMBO. Tooltip: Generate a series of images. Not supported for kling-image-o1.
 
 ### Optional
 
-- `reference_images` (String) Input: IMAGE (link)
-- `seed` (Number) Input: INT default: 0
+- `reference_images` (String) Input: IMAGE. Link input. Tooltip: Up to 10 additional reference images.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

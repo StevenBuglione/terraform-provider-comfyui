@@ -43,66 +43,66 @@ func (r *GlslShaderResource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *GlslShaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always available. [image/shader]",
+		MarkdownDescription: "Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always available. [image/shader] Source: comfy_extras/nodes_glsl.py:732 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"fragment_shader": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: GLSL fragment shader source code (GLSL ES 3.00 / WebGL 2.0 compatible).",
+				Required:            true,
 			},
 			"size_mode": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Output size: 'from_input' uses first input image dimensions, 'custom' allows manual size.",
+				Required:            true,
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: COMFY_AUTOGROW_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+				Required:            true,
 			},
 			"floats": schema.StringAttribute{
-				Description: "Input: COMFY_AUTOGROW_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+				Required:            true,
 			},
 			"ints": schema.StringAttribute{
-				Description: "Input: COMFY_AUTOGROW_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+				Required:            true,
 			},
 			"image0_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image1_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image2_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image3_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

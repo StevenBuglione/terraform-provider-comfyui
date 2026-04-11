@@ -39,41 +39,41 @@ func (r *AddNoiseResource) Metadata(_ context.Context, req resource.MetadataRequ
 
 func (r *AddNoiseResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI AddNoise node [_for_testing/custom_sampling/noise]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI AddNoise node [_for_testing/custom_sampling/noise] Source: comfy_extras/nodes_custom_sampler.py:982 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"noise": schema.StringAttribute{
-				Description: "Input: NOISE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: NOISE. Link input.",
+				Required:            true,
 			},
 			"sigmas": schema.StringAttribute{
-				Description: "Input: SIGMAS (link)",
-				Required:    true,
+				MarkdownDescription: "Input: SIGMAS. Link input.",
+				Required:            true,
 			},
 			"latent_image": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

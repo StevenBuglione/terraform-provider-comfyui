@@ -3,12 +3,12 @@
 page_title: "comfyui_patch_model_add_downscale Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI PatchModelAddDownscale node — PatchModelAddDownscale (Kohya Deep Shrink) [model_patches/unet]
+  ComfyUI PatchModelAddDownscale node — PatchModelAddDownscale (Kohya Deep Shrink) [model_patches/unet] Source: comfy_extras/nodes_model_downscale.py:6 (v3_extras).
 ---
 
 # comfyui_patch_model_add_downscale (Resource)
 
-ComfyUI PatchModelAddDownscale node — PatchModelAddDownscale (Kohya Deep Shrink) [model_patches/unet]
+ComfyUI PatchModelAddDownscale node — PatchModelAddDownscale (Kohya Deep Shrink) [model_patches/unet] Source: comfy_extras/nodes_model_downscale.py:6 (v3_extras).
 
 
 
@@ -17,17 +17,17 @@ ComfyUI PatchModelAddDownscale node — PatchModelAddDownscale (Kohya Deep Shrin
 
 ### Required
 
-- `block_number` (Number) Input: INT default: 3
-- `downscale_after_skip` (Boolean) Input: BOOLEAN default: true
-- `downscale_factor` (Number) Input: FLOAT default: 2
-- `downscale_method` (String) Input: COMBO
-- `end_percent` (Number) Input: FLOAT default: 0.35
-- `model` (String) Input: MODEL (link)
-- `start_percent` (Number) Input: FLOAT default: 0
-- `upscale_method` (String) Input: COMBO
+- `block_number` (Number) Input: INT. Default: 3. Allowed range: 1 to 32. Step: 1.
+- `downscale_after_skip` (Boolean) Input: BOOLEAN. Default: true.
+- `downscale_factor` (Number) Input: FLOAT. Default: 2. Allowed range: 0.1 to 9. Step: 0.001.
+- `downscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.
+- `end_percent` (Number) Input: FLOAT. Default: 0.35. Allowed range: 0 to 1. Step: 0.001.
+- `model` (String) Input: MODEL. Link input.
+- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

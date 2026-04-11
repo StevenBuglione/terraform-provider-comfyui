@@ -35,29 +35,29 @@ func (r *SaveSvgNodeResource) Metadata(_ context.Context, req resource.MetadataR
 
 func (r *SaveSvgNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Save SVG files on disk. [image/save]",
+		MarkdownDescription: "Save SVG files on disk. [image/save] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_images.py:481 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"svg": schema.StringAttribute{
-				Description: "Input: SVG (link)",
-				Required:    true,
+				MarkdownDescription: "Input: SVG. Link input.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: svg/ComfyUI",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"svg/ComfyUI\". Tooltip: The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes.",
+				Required:            true,
 			},
 		},
 	}

@@ -38,37 +38,37 @@ func (r *ComfySoftSwitchNodeResource) Metadata(_ context.Context, req resource.M
 
 func (r *ComfySoftSwitchNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI SoftSwitchNode node — Soft Switch [logic]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI SoftSwitchNode node — Soft Switch [logic] Source: comfy_extras/nodes_logic.py:42 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"switch": schema.BoolAttribute{
-				Description: "Input: BOOLEAN",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN.",
+				Required:            true,
 			},
 			"on_false": schema.StringAttribute{
-				Description: "Input: COMFY_MATCHTYPE_V3",
-				Optional:    true,
+				MarkdownDescription: "Input: COMFY_MATCHTYPE_V3.",
+				Optional:            true,
 			},
 			"on_true": schema.StringAttribute{
-				Description: "Input: COMFY_MATCHTYPE_V3",
-				Optional:    true,
+				MarkdownDescription: "Input: COMFY_MATCHTYPE_V3.",
+				Optional:            true,
 			},
 			"output_output": schema.StringAttribute{
-				Description: "Output: COMFY_MATCHTYPE_V3 (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: COMFY_MATCHTYPE_V3 (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

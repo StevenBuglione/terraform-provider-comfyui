@@ -3,12 +3,12 @@
 page_title: "comfyui_sampling_percent_to_sigma Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplingPercentToSigma node [sampling/custom_sampling/sigmas]
+  ComfyUI SamplingPercentToSigma node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:349 (v3_extras).
 ---
 
 # comfyui_sampling_percent_to_sigma (Resource)
 
-ComfyUI SamplingPercentToSigma node [sampling/custom_sampling/sigmas]
+ComfyUI SamplingPercentToSigma node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:349 (v3_extras).
 
 
 
@@ -17,12 +17,13 @@ ComfyUI SamplingPercentToSigma node [sampling/custom_sampling/sigmas]
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `return_actual_sigma` (Boolean) Input: BOOLEAN default: false
-- `sampling_percent` (Number) Input: FLOAT default: 0
+- `model` (String) Input: MODEL. Link input.
+- `return_actual_sigma` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Return the actual sigma value instead of the value used for interval checks.
+This only affects results at 0.0 and 1.0.
+- `sampling_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.0001.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigma_value_output` (String) Output: FLOAT (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigma_value_output` (String) Output: FLOAT (slot 0).

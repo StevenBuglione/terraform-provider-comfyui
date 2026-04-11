@@ -3,12 +3,12 @@
 page_title: "comfyui_style_model_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StyleModelLoader node — Load Style Model [loaders]
+  ComfyUI StyleModelLoader node — Load Style Model [loaders] Source: nodes.py:1069 (v1_core).
 ---
 
 # comfyui_style_model_loader (Resource)
 
-ComfyUI StyleModelLoader node — Load Style Model [loaders]
+ComfyUI StyleModelLoader node — Load Style Model [loaders] Source: nodes.py:1069 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI StyleModelLoader node — Load Style Model [loaders]
 
 ### Required
 
-- `style_model_name` (String) Input: COMBO
+- `style_model_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('style_models').
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `style_model_output` (String) Output: STYLE_MODEL (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `style_model_output` (String) Output: STYLE_MODEL (slot 0).

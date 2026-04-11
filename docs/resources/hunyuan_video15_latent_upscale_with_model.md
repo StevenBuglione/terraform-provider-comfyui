@@ -3,12 +3,12 @@
 page_title: "comfyui_hunyuan_video15_latent_upscale_with_model Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI HunyuanVideo15LatentUpscaleWithModel node — Hunyuan Video 15 Latent Upscale With Model [latent]
+  ComfyUI HunyuanVideo15LatentUpscaleWithModel node — Hunyuan Video 15 Latent Upscale With Model [latent] Source: comfy_extras/nodes_hunyuan.py:222 (v3_extras).
 ---
 
 # comfyui_hunyuan_video15_latent_upscale_with_model (Resource)
 
-ComfyUI HunyuanVideo15LatentUpscaleWithModel node — Hunyuan Video 15 Latent Upscale With Model [latent]
+ComfyUI HunyuanVideo15LatentUpscaleWithModel node — Hunyuan Video 15 Latent Upscale With Model [latent] Source: comfy_extras/nodes_hunyuan.py:222 (v3_extras).
 
 
 
@@ -17,15 +17,15 @@ ComfyUI HunyuanVideo15LatentUpscaleWithModel node — Hunyuan Video 15 Latent Up
 
 ### Required
 
-- `crop` (String) Input: COMBO
-- `height` (Number) Input: INT default: 720
-- `model` (String) Input: LATENT_UPSCALE_MODEL (link)
-- `samples` (String) Input: LATENT (link)
-- `upscale_method` (String) Input: COMBO default: bilinear
-- `width` (Number) Input: INT default: 1280
+- `crop` (String) Input: COMBO.
+- `height` (Number) Input: INT. Default: 720. Allowed range: 0 to 16384. Step: 8.
+- `model` (String) Input: LATENT_UPSCALE_MODEL. Link input.
+- `samples` (String) Input: LATENT. Link input.
+- `upscale_method` (String) Input: COMBO. Default: "bilinear".
+- `width` (Number) Input: INT. Default: 1280. Allowed range: 0 to 16384. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

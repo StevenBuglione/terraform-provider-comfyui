@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_composite_masked Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentCompositeMasked node [latent]
+  ComfyUI LatentCompositeMasked node [latent] Source: comfy_extras/nodes_mask.py:48 (v3_extras).
 ---
 
 # comfyui_latent_composite_masked (Resource)
 
-ComfyUI LatentCompositeMasked node [latent]
+ComfyUI LatentCompositeMasked node [latent] Source: comfy_extras/nodes_mask.py:48 (v3_extras).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI LatentCompositeMasked node [latent]
 
 ### Required
 
-- `destination` (String) Input: LATENT (link)
-- `resize_source` (Boolean) Input: BOOLEAN default: false
-- `source` (String) Input: LATENT (link)
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `destination` (String) Input: LATENT. Link input.
+- `resize_source` (Boolean) Input: BOOLEAN. Default: false.
+- `source` (String) Input: LATENT. Link input.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
 
 ### Optional
 
-- `mask` (String) Input: MASK (link)
+- `mask` (String) Input: MASK. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

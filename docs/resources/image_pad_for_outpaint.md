@@ -3,12 +3,12 @@
 page_title: "comfyui_image_pad_for_outpaint Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImagePadForOutpaint node — Pad Image for Outpainting [image]
+  ComfyUI ImagePadForOutpaint node — Pad Image for Outpainting [image] Source: nodes.py:1976 (v1_core).
 ---
 
 # comfyui_image_pad_for_outpaint (Resource)
 
-ComfyUI ImagePadForOutpaint node — Pad Image for Outpainting [image]
+ComfyUI ImagePadForOutpaint node — Pad Image for Outpainting [image] Source: nodes.py:1976 (v1_core).
 
 
 
@@ -17,16 +17,16 @@ ComfyUI ImagePadForOutpaint node — Pad Image for Outpainting [image]
 
 ### Required
 
-- `bottom` (Number) Input: INT default: 0
-- `feathering` (Number) Input: INT default: 40
-- `image` (String) Input: IMAGE (link)
-- `left` (Number) Input: INT default: 0
-- `right` (Number) Input: INT default: 0
-- `top` (Number) Input: INT default: 0
+- `bottom` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `feathering` (Number) Input: INT. Default: 40. Minimum value: 0. Step: 1.
+- `image` (String) Input: IMAGE. Link input.
+- `left` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `right` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `top` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `mask_output` (String) Output: MASK (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `mask_output` (String) Output: MASK (slot 1).
+- `node_id` (String) ComfyUI node class type.

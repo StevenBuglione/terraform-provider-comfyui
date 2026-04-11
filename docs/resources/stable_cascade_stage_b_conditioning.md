@@ -3,12 +3,12 @@
 page_title: "comfyui_stable_cascade_stage_b_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StableCascade_StageB_Conditioning node [conditioning/stable_cascade]
+  ComfyUI StableCascade_StageB_Conditioning node [conditioning/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:91 (v3_extras).
 ---
 
 # comfyui_stable_cascade_stage_b_conditioning (Resource)
 
-ComfyUI StableCascade_StageB_Conditioning node [conditioning/stable_cascade]
+ComfyUI StableCascade_StageB_Conditioning node [conditioning/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:91 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI StableCascade_StageB_Conditioning node [conditioning/stable_cascade]
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `stage_c` (String) Input: LATENT (link)
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `stage_c` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

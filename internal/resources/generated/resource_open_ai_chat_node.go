@@ -41,49 +41,49 @@ func (r *OpenAiChatNodeResource) Metadata(_ context.Context, req resource.Metada
 
 func (r *OpenAiChatNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate text responses from an OpenAI model. [api node/text/OpenAI]",
+		MarkdownDescription: "Generate text responses from an OpenAI model. [api node/text/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:567 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text inputs to the model, used to generate a response.",
+				Required:            true,
 			},
 			"persist_context": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: This parameter is deprecated and has no effect.",
+				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: SupportedOpenAIModel. Tooltip: The model used to generate the response.",
+				Required:            true,
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Optional image(s) to use as context for the model. To include multiple images, you can use the Batch Images node.",
+				Optional:            true,
 			},
 			"files": schema.StringAttribute{
-				Description: "Input: OPENAI_INPUT_FILES (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: OPENAI_INPUT_FILES. Link input. Tooltip: Optional file(s) to use as context for the model. Accepts inputs from the OpenAI Chat Input Files node.",
+				Optional:            true,
 			},
 			"advanced_options": schema.StringAttribute{
-				Description: "Input: OPENAI_CHAT_CONFIG (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: OPENAI_CHAT_CONFIG. Link input. Tooltip: Optional configuration for the model. Accepts inputs from the OpenAI Chat Advanced Options node.",
+				Optional:            true,
 			},
 			"string_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

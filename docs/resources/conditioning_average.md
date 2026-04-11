@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_average Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningAverage node — ConditioningAverage [conditioning]
+  ComfyUI ConditioningAverage node — ConditioningAverage [conditioning] Source: nodes.py:97 (v1_core).
 ---
 
 # comfyui_conditioning_average (Resource)
 
-ComfyUI ConditioningAverage node — ConditioningAverage [conditioning]
+ComfyUI ConditioningAverage node — ConditioningAverage [conditioning] Source: nodes.py:97 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ConditioningAverage node — ConditioningAverage [conditioning]
 
 ### Required
 
-- `conditioning_from` (String) Input: CONDITIONING (link)
-- `conditioning_to` (String) Input: CONDITIONING (link)
-- `conditioning_to_strength` (Number) Input: FLOAT default: 1
+- `conditioning_from` (String) Input: CONDITIONING. Link input.
+- `conditioning_to` (String) Input: CONDITIONING. Link input.
+- `conditioning_to_strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

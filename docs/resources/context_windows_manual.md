@@ -3,12 +3,12 @@
 page_title: "comfyui_context_windows_manual Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Manually set context windows. [context]
+  (EXPERIMENTAL) Manually set context windows. [context] Source: comfy_extras/nodes_context_windows.py:7 (v3_extras).
 ---
 
 # comfyui_context_windows_manual (Resource)
 
-(EXPERIMENTAL) Manually set context windows. [context]
+(EXPERIMENTAL) Manually set context windows. [context] Source: comfy_extras/nodes_context_windows.py:7 (v3_extras).
 
 
 
@@ -17,20 +17,20 @@ description: |-
 
 ### Required
 
-- `closed_loop` (Boolean) Input: BOOLEAN default: false
-- `cond_retain_index_list` (String) Input: STRING default:
-- `context_length` (Number) Input: INT default: 16
-- `context_overlap` (Number) Input: INT default: 4
-- `context_schedule` (String) Input: COMBO
-- `context_stride` (Number) Input: INT default: 1
-- `dim` (Number) Input: INT default: 0
-- `freenoise` (Boolean) Input: BOOLEAN default: false
-- `fuse_method` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
-- `split_conds_to_windows` (Boolean) Input: BOOLEAN default: false
+- `closed_loop` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to close the context window loop; only applicable to looped schedules.
+- `cond_retain_index_list` (String) Input: STRING. Default: "". Tooltip: List of latent indices to retain in the conditioning tensors for each window, for example setting this to '0' will use the initial start image for each window.
+- `context_length` (Number) Input: INT. Default: 16. Minimum value: 1. Tooltip: The length of the context window.
+- `context_overlap` (Number) Input: INT. Default: 4. Minimum value: 0. Tooltip: The overlap of the context window.
+- `context_schedule` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The stride of the context window.
+- `context_stride` (Number) Input: INT. Default: 1. Minimum value: 1. Tooltip: The stride of the context window; only applicable to uniform schedules.
+- `dim` (Number) Input: INT. Default: 0. Allowed range: 0 to 5. Tooltip: The dimension to apply the context windows to.
+- `freenoise` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to apply FreeNoise noise shuffling, improves window blending.
+- `fuse_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.context_windows.ContextFuseMethods.LIST_STATIC. Tooltip: The method to use to fuse the context windows.
+- `model` (String) Input: MODEL. Link input. Tooltip: The model to apply context windows to during sampling.
+- `split_conds_to_windows` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to split multiple conditionings (created by ConditionCombine) to each window based on region index.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

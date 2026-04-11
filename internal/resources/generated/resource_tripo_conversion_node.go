@@ -56,29 +56,29 @@ func (r *TripoConversionNodeResource) Metadata(_ context.Context, req resource.M
 
 func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo]",
+		MarkdownDescription: "ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:675 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"original_model_task_id": schema.StringAttribute{
-				Description: "Input: MODEL_TASK_ID,RIG_TASK_ID,RETARGET_TASK_ID (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL_TASK_ID,RIG_TASK_ID,RETARGET_TASK_ID. Link input.",
+				Required:            true,
 			},
 			"format": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"GLTF",
@@ -91,26 +91,26 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"quad": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"face_limit": schema.Int64Attribute{
-				Description: "Input: INT default: -1",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: -1. Allowed range: -1 to 2000000.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(-1, 2000000),
 				},
 			},
 			"texture_size": schema.Int64Attribute{
-				Description: "Input: INT default: 4096",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 4096. Allowed range: 128 to 4096.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(128, 4096),
 				},
 			},
 			"texture_format": schema.StringAttribute{
-				Description: "Input: COMBO default: JPEG",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"JPEG\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"BMP",
@@ -126,47 +126,47 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"force_symmetry": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"flatten_bottom": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"flatten_bottom_threshold": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"pivot_to_center_bottom": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"scale_factor": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Minimum value: 0.",
+				Optional:            true,
 			},
 			"with_animation": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"pack_uv": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"bake": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"part_names": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\".",
+				Optional:            true,
 			},
 			"fbx_preset": schema.StringAttribute{
-				Description: "Input: COMBO default: blender",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"blender\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"blender",
@@ -176,12 +176,12 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"export_vertex_colors": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"export_orientation": schema.StringAttribute{
-				Description: "Input: COMBO default: default",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"default\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"align_image",
@@ -190,8 +190,8 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"animate_in_place": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 		},
 	}

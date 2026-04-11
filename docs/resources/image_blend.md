@@ -3,12 +3,12 @@
 page_title: "comfyui_image_blend Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Blend node — Image Blend [image/postprocessing]
+  ComfyUI Blend node — Image Blend [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:17 (v3_extras).
 ---
 
 # comfyui_image_blend (Resource)
 
-ComfyUI Blend node — Image Blend [image/postprocessing]
+ComfyUI Blend node — Image Blend [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:17 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI Blend node — Image Blend [image/postprocessing]
 
 ### Required
 
-- `blend_factor` (Number) Input: FLOAT default: 0.5
-- `blend_mode` (String) Input: COMBO
-- `image1` (String) Input: IMAGE (link)
-- `image2` (String) Input: IMAGE (link)
+- `blend_factor` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
+- `blend_mode` (String) Input: COMBO.
+- `image1` (String) Input: IMAGE. Link input.
+- `image2` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

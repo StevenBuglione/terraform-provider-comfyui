@@ -3,12 +3,12 @@
 page_title: "comfyui_image_rotate Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageRotate node — Image Rotate [image/transform]
+  ComfyUI ImageRotate node — Image Rotate [image/transform] Source: comfy_extras/nodes_images.py:588 (v3_extras).
 ---
 
 # comfyui_image_rotate (Resource)
 
-ComfyUI ImageRotate node — Image Rotate [image/transform]
+ComfyUI ImageRotate node — Image Rotate [image/transform] Source: comfy_extras/nodes_images.py:588 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ImageRotate node — Image Rotate [image/transform]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `rotation` (String) Input: COMBO
+- `image` (String) Input: IMAGE. Link input.
+- `rotation` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

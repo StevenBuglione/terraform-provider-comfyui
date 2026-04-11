@@ -3,12 +3,12 @@
 page_title: "comfyui_byte_dance_image_reference_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate video using prompt and reference images. [api node/video/ByteDance]
+  Generate video using prompt and reference images. [api node/video/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:809 (v3_api).
 ---
 
 # comfyui_byte_dance_image_reference_node (Resource)
 
-Generate video using prompt and reference images. [api node/video/ByteDance]
+Generate video using prompt and reference images. [api node/video/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:809 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ Generate video using prompt and reference images. [api node/video/ByteDance]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `duration` (Number) Input: INT default: 5
-- `images` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO default: seedance-1-0-lite-i2v-250428
-- `prompt` (String) Input: STRING
-- `resolution` (String) Input: COMBO
+- `aspect_ratio` (String) Input: COMBO. Tooltip: The aspect ratio of the output video.
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 12. Step: 1. Tooltip: The duration of the output video in seconds.
+- `images` (String) Input: IMAGE. Link input. Tooltip: One to four images.
+- `model` (String) Input: COMBO. Default: "seedance-1-0-lite-i2v-250428".
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the video.
+- `resolution` (String) Input: COMBO. Tooltip: The resolution of the output video.
 
 ### Optional
 
-- `seed` (Number) Input: INT default: 0
-- `watermark` (Boolean) Input: BOOLEAN default: false
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an "AI generated" watermark to the video.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

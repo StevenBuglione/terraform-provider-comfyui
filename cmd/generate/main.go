@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -25,32 +26,37 @@ type NodeSpecs struct {
 }
 
 type Node struct {
-	NodeID                string   `json:"node_id"`
-	ClassName             string   `json:"class_name"`
-	DisplayName           *string  `json:"display_name"`
-	Description           *string  `json:"description"`
-	Category              string   `json:"category"`
-	FunctionName          string   `json:"function_name"`
-	IsOutputNode          bool     `json:"is_output_node"`
-	IsDeprecated          bool     `json:"is_deprecated"`
-	IsExperimental        bool     `json:"is_experimental"`
-	Inputs                []Input  `json:"inputs"`
-	Outputs               []Output `json:"outputs"`
-	TerraformResourceName string   `json:"terraform_resource_name"`
+	NodeID                string        `json:"node_id"`
+	ClassName             string        `json:"class_name"`
+	DisplayName           *string       `json:"display_name"`
+	Description           *string       `json:"description"`
+	Category              string        `json:"category"`
+	FunctionName          string        `json:"function_name"`
+	IsOutputNode          bool          `json:"is_output_node"`
+	IsDeprecated          bool          `json:"is_deprecated"`
+	IsExperimental        bool          `json:"is_experimental"`
+	Inputs                []Input       `json:"inputs"`
+	HiddenInputs          []HiddenInput `json:"hidden_inputs"`
+	Outputs               []Output      `json:"outputs"`
+	Source                SourceInfo    `json:"source"`
+	TerraformResourceName string        `json:"terraform_resource_name"`
 }
 
 type Input struct {
-	Name           string        `json:"name"`
-	Type           string        `json:"type"`
-	Required       bool          `json:"required"`
-	IsLinkType     bool          `json:"is_link_type"`
-	Default        interface{}   `json:"default"`
-	Min            *float64      `json:"min"`
-	Max            *float64      `json:"max"`
-	Step           *float64      `json:"step"`
-	RawOptions     []interface{} `json:"options"`
-	Multiline      *bool         `json:"multiline"`
-	DynamicOptions *bool         `json:"dynamic_options"`
+	Name                 string        `json:"name"`
+	Type                 string        `json:"type"`
+	Required             bool          `json:"required"`
+	IsLinkType           bool          `json:"is_link_type"`
+	Default              interface{}   `json:"default"`
+	Min                  *float64      `json:"min"`
+	Max                  *float64      `json:"max"`
+	Step                 *float64      `json:"step"`
+	RawOptions           []interface{} `json:"options"`
+	Multiline            *bool         `json:"multiline"`
+	DynamicOptions       *bool         `json:"dynamic_options"`
+	DynamicOptionsSource *string       `json:"dynamic_options_source"`
+	Tooltip              *string       `json:"tooltip"`
+	DisplayName          *string       `json:"display_name"`
 }
 
 // StringOptions converts RawOptions to []string, handling int/float/bool values.
@@ -69,6 +75,17 @@ type Output struct {
 	Name      string `json:"name"`
 	Type      string `json:"type"`
 	SlotIndex int    `json:"slot_index"`
+}
+
+type HiddenInput struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
+type SourceInfo struct {
+	File       string `json:"file"`
+	Pattern    string `json:"pattern"`
+	LineNumber *int   `json:"line_number"`
 }
 
 // --- Template data structures ---
@@ -229,16 +246,7 @@ func buildResourceData(node Node) (ResourceData, []string) {
 	suffix := sanitizeName(rawSuffix)
 	structName := toPascalCase(suffix)
 
-	desc := fmt.Sprintf("ComfyUI %s node", node.ClassName)
-	if node.DisplayName != nil && *node.DisplayName != "" {
-		desc = fmt.Sprintf("ComfyUI %s node — %s", node.ClassName, *node.DisplayName)
-	}
-	if node.Description != nil && *node.Description != "" {
-		desc = *node.Description
-	}
-	if node.Category != "" {
-		desc += " [" + node.Category + "]"
-	}
+	desc := buildNodeDescription(node)
 	if node.IsDeprecated {
 		desc = "(DEPRECATED) " + desc
 	}
@@ -316,15 +324,7 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 
 	fmt.Fprintf(&b, "%q: %s{\n", tfName, attrType)
 
-	// Description
-	descParts := []string{fmt.Sprintf("Input: %s", inp.Type)}
-	if inp.IsLinkType {
-		descParts = append(descParts, "(link)")
-	}
-	if inp.Default != nil {
-		descParts = append(descParts, fmt.Sprintf("default: %v", inp.Default))
-	}
-	fmt.Fprintf(&b, "\t\t\t\tDescription: %q,\n", strings.Join(descParts, " "))
+	fmt.Fprintf(&b, "\t\t\t\tMarkdownDescription: %q,\n", buildInputDescription(inp))
 
 	// Required/Optional
 	if inp.Required {
@@ -366,9 +366,159 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 func buildOutputAttribute(out Output, tfName string) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "%q: schema.StringAttribute{\n", tfName)
-	fmt.Fprintf(&b, "\t\t\t\tDescription: \"Output: %s (slot %d)\",\n", out.Type, out.SlotIndex)
+	fmt.Fprintf(&b, "\t\t\t\tMarkdownDescription: \"Output: %s (slot %d).\",\n", out.Type, out.SlotIndex)
 	b.WriteString("\t\t\t\tComputed: true,\n")
 	b.WriteString("\t\t\t\tPlanModifiers: []planmodifier.String{\n\t\t\t\t\tstringplanmodifier.UseStateForUnknown(),\n\t\t\t\t},\n")
 	b.WriteString("\t\t\t},")
 	return b.String()
+}
+
+func buildNodeDescription(node Node) string {
+	desc := fmt.Sprintf("ComfyUI %s node", node.ClassName)
+	if node.DisplayName != nil && *node.DisplayName != "" {
+		desc = fmt.Sprintf("ComfyUI %s node — %s", node.ClassName, *node.DisplayName)
+	}
+	if node.Description != nil && *node.Description != "" {
+		desc = strings.TrimSpace(*node.Description)
+	}
+
+	parts := []string{desc}
+	if node.Category != "" {
+		parts = append(parts, "["+node.Category+"]")
+	}
+	if hidden := formatHiddenInputs(node.HiddenInputs); hidden != "" {
+		parts = append(parts, "Hidden runtime inputs: "+hidden+".")
+	}
+	if source := formatSourceInfo(node.Source); source != "" {
+		parts = append(parts, source)
+	}
+
+	return strings.Join(parts, " ")
+}
+
+func buildInputDescription(inp Input) string {
+	parts := []string{fmt.Sprintf("Input: %s.", inp.Type)}
+	if inp.DisplayName != nil && *inp.DisplayName != "" && *inp.DisplayName != inp.Name {
+		parts = append(parts, sentence("Display name", *inp.DisplayName))
+	}
+	if inp.IsLinkType {
+		parts = append(parts, "Link input.")
+	}
+	if inp.Default != nil {
+		parts = append(parts, fmt.Sprintf("Default: %s.", formatValue(inp.Default)))
+	}
+	if rangeHint := formatRangeHint(inp.Min, inp.Max); rangeHint != "" {
+		parts = append(parts, rangeHint)
+	}
+	if inp.Step != nil {
+		parts = append(parts, fmt.Sprintf("Step: %s.", formatNumber(*inp.Step)))
+	}
+	if inp.DynamicOptions != nil && *inp.DynamicOptions {
+		if inp.DynamicOptionsSource != nil && *inp.DynamicOptionsSource != "" {
+			if source, ok := conciseDynamicOptionsSource(*inp.DynamicOptionsSource); ok {
+				parts = append(parts, fmt.Sprintf("Dynamic options are resolved by ComfyUI at runtime from: %s.", source))
+			} else {
+				parts = append(parts, "Dynamic options are resolved by ComfyUI at runtime.")
+			}
+		} else {
+			parts = append(parts, "Dynamic options are resolved by ComfyUI at runtime.")
+		}
+	}
+	if inp.Multiline != nil && *inp.Multiline {
+		parts = append(parts, "Supports multiline text.")
+	}
+	if inp.Tooltip != nil && *inp.Tooltip != "" {
+		parts = append(parts, sentence("Tooltip", *inp.Tooltip))
+	}
+
+	return strings.Join(parts, " ")
+}
+
+func formatHiddenInputs(hiddenInputs []HiddenInput) string {
+	if len(hiddenInputs) == 0 {
+		return ""
+	}
+
+	values := make([]string, 0, len(hiddenInputs))
+	for _, hidden := range hiddenInputs {
+		values = append(values, fmt.Sprintf("%s (%s)", hidden.Name, hidden.Type))
+	}
+
+	return strings.Join(values, ", ")
+}
+
+func formatSourceInfo(source SourceInfo) string {
+	location := strings.TrimSpace(source.File)
+	if location != "" && source.LineNumber != nil {
+		location = fmt.Sprintf("%s:%d", location, *source.LineNumber)
+	}
+
+	switch {
+	case location != "" && source.Pattern != "":
+		return fmt.Sprintf("Source: %s (%s).", location, source.Pattern)
+	case location != "":
+		return fmt.Sprintf("Source: %s.", location)
+	case source.Pattern != "":
+		return fmt.Sprintf("Source pattern: %s.", source.Pattern)
+	default:
+		return ""
+	}
+}
+
+func formatRangeHint(min, max *float64) string {
+	switch {
+	case min != nil && max != nil:
+		return fmt.Sprintf("Allowed range: %s to %s.", formatNumber(*min), formatNumber(*max))
+	case min != nil:
+		return fmt.Sprintf("Minimum value: %s.", formatNumber(*min))
+	case max != nil:
+		return fmt.Sprintf("Maximum value: %s.", formatNumber(*max))
+	default:
+		return ""
+	}
+}
+
+func formatValue(value interface{}) string {
+	switch v := value.(type) {
+	case string:
+		return strconv.Quote(v)
+	case float64:
+		return formatNumber(v)
+	case float32:
+		return formatNumber(float64(v))
+	case int:
+		return strconv.Itoa(v)
+	case int64:
+		return strconv.FormatInt(v, 10)
+	case bool:
+		return strconv.FormatBool(v)
+	default:
+		return fmt.Sprintf("%v", value)
+	}
+}
+
+func formatNumber(value float64) string {
+	return strconv.FormatFloat(value, 'f', -1, 64)
+}
+
+func conciseDynamicOptionsSource(source string) (string, bool) {
+	trimmed := strings.TrimSpace(source)
+	if trimmed == "" {
+		return "", false
+	}
+	if strings.ContainsAny(trimmed, "[]{}\n") || len(trimmed) > 80 {
+		return "", false
+	}
+	return trimmed, true
+}
+
+func sentence(label, value string) string {
+	text := strings.TrimSpace(value)
+	if text == "" {
+		return ""
+	}
+	if !strings.HasSuffix(text, ".") && !strings.HasSuffix(text, "!") && !strings.HasSuffix(text, "?") {
+		text += "."
+	}
+	return fmt.Sprintf("%s: %s", label, text)
 }

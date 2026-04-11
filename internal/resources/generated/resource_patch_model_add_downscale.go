@@ -46,69 +46,69 @@ func (r *PatchModelAddDownscaleResource) Metadata(_ context.Context, req resourc
 
 func (r *PatchModelAddDownscaleResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI PatchModelAddDownscale node — PatchModelAddDownscale (Kohya Deep Shrink) [model_patches/unet]",
+		MarkdownDescription: "ComfyUI PatchModelAddDownscale node — PatchModelAddDownscale (Kohya Deep Shrink) [model_patches/unet] Source: comfy_extras/nodes_model_downscale.py:6 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"block_number": schema.Int64Attribute{
-				Description: "Input: INT default: 3",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 3. Allowed range: 1 to 32. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 32),
 				},
 			},
 			"downscale_factor": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 2",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 2. Allowed range: 0.1 to 9. Step: 0.001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 9),
 				},
 			},
 			"start_percent": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"end_percent": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.35",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.35. Allowed range: 0 to 1. Step: 0.001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"downscale_after_skip": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true.",
+				Required:            true,
 			},
 			"downscale_method": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.",
+				Required:            true,
 			},
 			"upscale_method": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.",
+				Required:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -45,59 +45,59 @@ func (r *StabilityStableImageUltraNodeResource) Metadata(_ context.Context, req 
 
 func (r *StabilityStableImageUltraNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI StabilityStableImageUltraNode node — Stability AI Stable Image Ultra [api node/image/Stability AI]",
+		MarkdownDescription: "ComfyUI StabilityStableImageUltraNode node — Stability AI Stable Image Ultra [api node/image/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:55 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text.",
+				Required:            true,
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: StabilityAspectRatio. Tooltip: Aspect ratio of generated image.",
+				Required:            true,
 			},
 			"style_preset": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_stability_style_presets(). Tooltip: Optional desired style of generated image.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 4294967294. Step: 1. Tooltip: The random seed used for creating the noise.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4294967294),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Tooltip: A blurb of text describing what you do not wish to see in the output image. This is an advanced feature.",
+				Optional:            true,
 			},
 			"image_denoise": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

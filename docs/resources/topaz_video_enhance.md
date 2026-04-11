@@ -3,12 +3,12 @@
 page_title: "comfyui_topaz_video_enhance Resource - comfyui"
 subcategory: ""
 description: |-
-  Breathe new life into video with powerful upscaling and recovery technology. [api node/video/Topaz]
+  Breathe new life into video with powerful upscaling and recovery technology. [api node/video/Topaz] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_topaz.py:228 (v3_api).
 ---
 
 # comfyui_topaz_video_enhance (Resource)
 
-Breathe new life into video with powerful upscaling and recovery technology. [api node/video/Topaz]
+Breathe new life into video with powerful upscaling and recovery technology. [api node/video/Topaz] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_topaz.py:228 (v3_api).
 
 
 
@@ -17,24 +17,24 @@ Breathe new life into video with powerful upscaling and recovery technology. [ap
 
 ### Required
 
-- `upscaler_enabled` (Boolean) Input: BOOLEAN default: true
-- `upscaler_model` (String) Input: COMBO
-- `upscaler_resolution` (String) Input: COMBO
-- `video` (String) Input: VIDEO (link)
+- `upscaler_enabled` (Boolean) Input: BOOLEAN. Default: true.
+- `upscaler_model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(UPSCALER_MODELS_MAP.keys()).
+- `upscaler_resolution` (String) Input: COMBO.
+- `video` (String) Input: VIDEO. Link input.
 
 ### Optional
 
-- `dynamic_compression_level` (String) Input: COMBO default: Low
-- `interpolation_duplicate` (Boolean) Input: BOOLEAN default: false
-- `interpolation_duplicate_threshold` (Number) Input: FLOAT default: 0.01
-- `interpolation_enabled` (Boolean) Input: BOOLEAN default: false
-- `interpolation_frame_rate` (Number) Input: INT default: 60
-- `interpolation_model` (String) Input: COMBO default: apo-8
-- `interpolation_slowmo` (Number) Input: INT default: 1
-- `upscaler_creativity` (String) Input: COMBO default: low
+- `dynamic_compression_level` (String) Input: COMBO. Default: "Low". Tooltip: CQP level.
+- `interpolation_duplicate` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Analyze the input for duplicate frames and remove them.
+- `interpolation_duplicate_threshold` (Number) Input: FLOAT. Default: 0.01. Allowed range: 0.001 to 0.1. Step: 0.001. Tooltip: Detection sensitivity for duplicate frames.
+- `interpolation_enabled` (Boolean) Input: BOOLEAN. Default: false.
+- `interpolation_frame_rate` (Number) Input: INT. Default: 60. Allowed range: 15 to 240. Tooltip: Output frame rate.
+- `interpolation_model` (String) Input: COMBO. Default: "apo-8".
+- `interpolation_slowmo` (Number) Input: INT. Default: 1. Allowed range: 1 to 16. Tooltip: Slow-motion factor applied to the input video. For example, 2 makes the output twice as slow and doubles the duration.
+- `upscaler_creativity` (String) Input: COMBO. Default: "low". Tooltip: Creativity level (applies only to Starlight (Astra) Creative).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

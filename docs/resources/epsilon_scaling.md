@@ -3,12 +3,12 @@
 page_title: "comfyui_epsilon_scaling Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EpsilonScaling node [model_patches/unet]
+  ComfyUI EpsilonScaling node [model_patches/unet] Source: comfy_extras/nodes_eps.py:8 (v3_extras).
 ---
 
 # comfyui_epsilon_scaling (Resource)
 
-ComfyUI EpsilonScaling node [model_patches/unet]
+ComfyUI EpsilonScaling node [model_patches/unet] Source: comfy_extras/nodes_eps.py:8 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI EpsilonScaling node [model_patches/unet]
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `scaling_factor` (Number) Input: FLOAT default: 1.005
+- `model` (String) Input: MODEL. Link input.
+- `scaling_factor` (Number) Input: FLOAT. Default: 1.005. Allowed range: 0.5 to 1.5. Step: 0.001.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

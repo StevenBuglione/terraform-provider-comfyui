@@ -3,12 +3,12 @@
 page_title: "comfyui_canny Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Canny node — Canny [image/preprocessors]
+  ComfyUI Canny node — Canny [image/preprocessors] Source: comfy_extras/nodes_canny.py:9 (v3_extras).
 ---
 
 # comfyui_canny (Resource)
 
-ComfyUI Canny node — Canny [image/preprocessors]
+ComfyUI Canny node — Canny [image/preprocessors] Source: comfy_extras/nodes_canny.py:9 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI Canny node — Canny [image/preprocessors]
 
 ### Required
 
-- `high_threshold` (Number) Input: FLOAT default: 0.8
-- `image` (String) Input: IMAGE (link)
-- `low_threshold` (Number) Input: FLOAT default: 0.4
+- `high_threshold` (Number) Input: FLOAT. Default: 0.8. Allowed range: 0.01 to 0.99. Step: 0.01.
+- `image` (String) Input: IMAGE. Link input.
+- `low_threshold` (Number) Input: FLOAT. Default: 0.4. Allowed range: 0.01 to 0.99. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

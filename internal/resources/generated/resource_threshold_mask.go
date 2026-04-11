@@ -39,36 +39,36 @@ func (r *ThresholdMaskResource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *ThresholdMaskResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ThresholdMask node [mask]",
+		MarkdownDescription: "ComfyUI ThresholdMask node [mask] Source: comfy_extras/nodes_mask.py:378 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"mask": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MASK. Link input.",
+				Required:            true,
 			},
 			"value": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"mask_output": schema.StringAttribute{
-				Description: "Output: MASK (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MASK (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

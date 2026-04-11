@@ -3,12 +3,12 @@
 page_title: "comfyui_comfy_switch_node Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SwitchNode node — Switch [logic]
+  (EXPERIMENTAL) ComfyUI SwitchNode node — Switch [logic] Source: comfy_extras/nodes_logic.py:11 (v3_extras).
 ---
 
 # comfyui_comfy_switch_node (Resource)
 
-(EXPERIMENTAL) ComfyUI SwitchNode node — Switch [logic]
+(EXPERIMENTAL) ComfyUI SwitchNode node — Switch [logic] Source: comfy_extras/nodes_logic.py:11 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `on_false` (String) Input: COMFY_MATCHTYPE_V3
-- `on_true` (String) Input: COMFY_MATCHTYPE_V3
-- `switch` (Boolean) Input: BOOLEAN
+- `on_false` (String) Input: COMFY_MATCHTYPE_V3.
+- `on_true` (String) Input: COMFY_MATCHTYPE_V3.
+- `switch` (Boolean) Input: BOOLEAN.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `output_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `output_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0).

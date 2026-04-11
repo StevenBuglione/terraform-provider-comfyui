@@ -3,12 +3,12 @@
 page_title: "comfyui_sd_pose_keypoint_extractor Resource - comfyui"
 subcategory: ""
 description: |-
-  Extract pose keypoints from images using the SDPose model: https://huggingface.co/Comfy-Org/SDPose/tree/main/checkpoints [image/preprocessors]
+  Extract pose keypoints from images using the SDPose model: https://huggingface.co/Comfy-Org/SDPose/tree/main/checkpoints [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:416 (v3_extras).
 ---
 
 # comfyui_sd_pose_keypoint_extractor (Resource)
 
-Extract pose keypoints from images using the SDPose model: https://huggingface.co/Comfy-Org/SDPose/tree/main/checkpoints [image/preprocessors]
+Extract pose keypoints from images using the SDPose model: https://huggingface.co/Comfy-Org/SDPose/tree/main/checkpoints [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:416 (v3_extras).
 
 
 
@@ -17,17 +17,17 @@ Extract pose keypoints from images using the SDPose model: https://huggingface.c
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 16
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: MODEL (link)
-- `vae` (String) Input: VAE (link)
+- `batch_size` (Number) Input: INT. Default: 16. Allowed range: 1 to 10000. Step: 1.
+- `image` (String) Input: IMAGE. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Optional
 
-- `bboxes` (String) Input: BOUNDING_BOX (link)
+- `bboxes` (String) Input: BOUNDING_BOX. Link input. Tooltip: Optional bounding boxes for more accurate detections. Required for multi-person detection.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `keypoints_output` (String) Output: POSE_KEYPOINT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `keypoints_output` (String) Output: POSE_KEYPOINT (slot 0).
+- `node_id` (String) ComfyUI node class type.

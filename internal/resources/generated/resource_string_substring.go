@@ -38,37 +38,37 @@ func (r *StringSubstringResource) Metadata(_ context.Context, req resource.Metad
 
 func (r *StringSubstringResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI StringSubstring node — Substring [utils/string]",
+		MarkdownDescription: "ComfyUI StringSubstring node — Substring [utils/string] Source: comfy_extras/nodes_string.py:30 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"string": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"start": schema.Int64Attribute{
-				Description: "Input: INT",
-				Required:    true,
+				MarkdownDescription: "Input: INT.",
+				Required:            true,
 			},
 			"end": schema.Int64Attribute{
-				Description: "Input: INT",
-				Required:    true,
+				MarkdownDescription: "Input: INT.",
+				Required:            true,
 			},
 			"string_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -44,61 +44,61 @@ func (r *WanMoveVisualizeTracksResource) Metadata(_ context.Context, req resourc
 
 func (r *WanMoveVisualizeTracksResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI WanMoveVisualizeTracks node [conditioning/video_models]",
+		MarkdownDescription: "ComfyUI WanMoveVisualizeTracks node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:245 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"tracks": schema.StringAttribute{
-				Description: "Input: TRACKS (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: TRACKS. Link input.",
+				Optional:            true,
 			},
 			"line_resolution": schema.Int64Attribute{
-				Description: "Input: INT default: 24",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 24. Allowed range: 1 to 1024.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 1024),
 				},
 			},
 			"circle_size": schema.Int64Attribute{
-				Description: "Input: INT default: 12",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 12. Allowed range: 1 to 128.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 128),
 				},
 			},
 			"opacity": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.75",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.75. Allowed range: 0 to 1. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"line_width": schema.Int64Attribute{
-				Description: "Input: INT default: 16",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 16. Allowed range: 1 to 128.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 128),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

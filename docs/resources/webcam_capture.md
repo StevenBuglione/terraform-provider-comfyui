@@ -3,12 +3,12 @@
 page_title: "comfyui_webcam_capture Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI WebcamCapture node — Webcam Capture [image]
+  ComfyUI WebcamCapture node — Webcam Capture [image] Source: comfy_extras/nodes_webcam.py:7 (v1_extras).
 ---
 
 # comfyui_webcam_capture (Resource)
 
-ComfyUI WebcamCapture node — Webcam Capture [image]
+ComfyUI WebcamCapture node — Webcam Capture [image] Source: comfy_extras/nodes_webcam.py:7 (v1_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI WebcamCapture node — Webcam Capture [image]
 
 ### Required
 
-- `capture_on_queue` (Boolean) Input: BOOLEAN default: true
-- `height` (Number) Input: INT default: 0
-- `image` (String) Input: WEBCAM (link)
-- `width` (Number) Input: INT default: 0
+- `capture_on_queue` (Boolean) Input: BOOLEAN. Default: true.
+- `height` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
+- `image` (String) Input: WEBCAM. Link input.
+- `width` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

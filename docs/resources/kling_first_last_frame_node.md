@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_first_last_frame_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate videos with Kling V3 using first and last frames. [api node/video/Kling]
+  Generate videos with Kling V3 using first and last frames. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:3033 (v3_api).
 ---
 
 # comfyui_kling_first_last_frame_node (Resource)
 
-Generate videos with Kling V3 using first and last frames. [api node/video/Kling]
+Generate videos with Kling V3 using first and last frames. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:3033 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Generate videos with Kling V3 using first and last frames. [api node/video/Kling
 
 ### Required
 
-- `duration` (Number) Input: INT default: 5
-- `end_frame` (String) Input: IMAGE (link)
-- `first_frame` (String) Input: IMAGE (link)
-- `generate_audio` (Boolean) Input: BOOLEAN default: true
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 0
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 15.
+- `end_frame` (String) Input: IMAGE. Link input.
+- `first_frame` (String) Input: IMAGE. Link input.
+- `generate_audio` (Boolean) Input: BOOLEAN. Default: true.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model and generation settings.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

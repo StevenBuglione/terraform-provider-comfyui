@@ -40,40 +40,40 @@ func (r *SdPoseFaceBBoxesResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *SdPoseFaceBBoxesResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SDPoseFaceBBoxes node [image/preprocessors]",
+		MarkdownDescription: "ComfyUI SDPoseFaceBBoxes node [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:592 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"keypoints": schema.StringAttribute{
-				Description: "Input: POSE_KEYPOINT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: POSE_KEYPOINT. Link input.",
+				Required:            true,
 			},
 			"scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1.5. Allowed range: 1 to 10. Step: 0.1. Tooltip: Multiplier for the bounding box area around each detected face.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 10),
 				},
 			},
 			"force_square": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Expand the shorter bbox axis so the crop region is always square.",
+				Required:            true,
 			},
 			"bboxes_output": schema.StringAttribute{
-				Description: "Output: BOUNDING_BOX (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: BOUNDING_BOX (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -51,37 +51,37 @@ func (r *TopazVideoEnhanceResource) Metadata(_ context.Context, req resource.Met
 
 func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Breathe new life into video with powerful upscaling and recovery technology. [api node/video/Topaz]",
+		MarkdownDescription: "Breathe new life into video with powerful upscaling and recovery technology. [api node/video/Topaz] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_topaz.py:228 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"video": schema.StringAttribute{
-				Description: "Input: VIDEO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VIDEO. Link input.",
+				Required:            true,
 			},
 			"upscaler_enabled": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true.",
+				Required:            true,
 			},
 			"upscaler_model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(UPSCALER_MODELS_MAP.keys()).",
+				Required:            true,
 			},
 			"upscaler_resolution": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"FullHD (1080p)",
@@ -90,8 +90,8 @@ func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"upscaler_creativity": schema.StringAttribute{
-				Description: "Input: COMBO default: low",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"low\". Tooltip: Creativity level (applies only to Starlight (Astra) Creative).",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"low",
@@ -101,12 +101,12 @@ func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"interpolation_enabled": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false.",
+				Optional:            true,
 			},
 			"interpolation_model": schema.StringAttribute{
-				Description: "Input: COMBO default: apo-8",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"apo-8\".",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"apo-8",
@@ -114,33 +114,33 @@ func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"interpolation_slowmo": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 16. Tooltip: Slow-motion factor applied to the input video. For example, 2 makes the output twice as slow and doubles the duration.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 16),
 				},
 			},
 			"interpolation_frame_rate": schema.Int64Attribute{
-				Description: "Input: INT default: 60",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 60. Allowed range: 15 to 240. Tooltip: Output frame rate.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(15, 240),
 				},
 			},
 			"interpolation_duplicate": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Analyze the input for duplicate frames and remove them.",
+				Optional:            true,
 			},
 			"interpolation_duplicate_threshold": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.01",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.01. Allowed range: 0.001 to 0.1. Step: 0.001. Tooltip: Detection sensitivity for duplicate frames.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.001, 0.1),
 				},
 			},
 			"dynamic_compression_level": schema.StringAttribute{
-				Description: "Input: COMBO default: Low",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"Low\". Tooltip: CQP level.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"Low",
@@ -150,8 +150,8 @@ func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

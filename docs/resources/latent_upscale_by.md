@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_upscale_by Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentUpscaleBy node — Upscale Latent By [latent]
+  ComfyUI LatentUpscaleBy node — Upscale Latent By [latent] Source: nodes.py:1335 (v1_core).
 ---
 
 # comfyui_latent_upscale_by (Resource)
 
-ComfyUI LatentUpscaleBy node — Upscale Latent By [latent]
+ComfyUI LatentUpscaleBy node — Upscale Latent By [latent] Source: nodes.py:1335 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI LatentUpscaleBy node — Upscale Latent By [latent]
 
 ### Required
 
-- `samples` (String) Input: LATENT (link)
-- `scale_by` (Number) Input: FLOAT default: 1.5
-- `upscale_method` (String) Input: COMBO
+- `samples` (String) Input: LATENT. Link input.
+- `scale_by` (Number) Input: FLOAT. Default: 1.5. Allowed range: 0.01 to 8. Step: 0.01.
+- `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.upscale_methods.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

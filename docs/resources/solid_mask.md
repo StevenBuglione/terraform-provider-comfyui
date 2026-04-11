@@ -3,12 +3,12 @@
 page_title: "comfyui_solid_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SolidMask node [mask]
+  ComfyUI SolidMask node [mask] Source: comfy_extras/nodes_mask.py:175 (v3_extras).
 ---
 
 # comfyui_solid_mask (Resource)
 
-ComfyUI SolidMask node [mask]
+ComfyUI SolidMask node [mask] Source: comfy_extras/nodes_mask.py:175 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI SolidMask node [mask]
 
 ### Required
 
-- `height` (Number) Input: INT default: 512
-- `value` (Number) Input: FLOAT default: 1
-- `width` (Number) Input: INT default: 512
+- `height` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
+- `value` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

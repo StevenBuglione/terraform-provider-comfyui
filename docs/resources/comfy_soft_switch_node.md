@@ -3,12 +3,12 @@
 page_title: "comfyui_comfy_soft_switch_node Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SoftSwitchNode node — Soft Switch [logic]
+  (EXPERIMENTAL) ComfyUI SoftSwitchNode node — Soft Switch [logic] Source: comfy_extras/nodes_logic.py:42 (v3_extras).
 ---
 
 # comfyui_comfy_soft_switch_node (Resource)
 
-(EXPERIMENTAL) ComfyUI SoftSwitchNode node — Soft Switch [logic]
+(EXPERIMENTAL) ComfyUI SoftSwitchNode node — Soft Switch [logic] Source: comfy_extras/nodes_logic.py:42 (v3_extras).
 
 
 
@@ -17,15 +17,15 @@ description: |-
 
 ### Required
 
-- `switch` (Boolean) Input: BOOLEAN
+- `switch` (Boolean) Input: BOOLEAN.
 
 ### Optional
 
-- `on_false` (String) Input: COMFY_MATCHTYPE_V3
-- `on_true` (String) Input: COMFY_MATCHTYPE_V3
+- `on_false` (String) Input: COMFY_MATCHTYPE_V3.
+- `on_true` (String) Input: COMFY_MATCHTYPE_V3.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `output_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `output_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0).

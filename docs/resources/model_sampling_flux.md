@@ -3,12 +3,12 @@
 page_title: "comfyui_model_sampling_flux Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelSamplingFlux node — ModelSamplingFlux [advanced/model]
+  ComfyUI ModelSamplingFlux node — ModelSamplingFlux [advanced/model] Source: comfy_extras/nodes_model_advanced.py:154 (v1_extras).
 ---
 
 # comfyui_model_sampling_flux (Resource)
 
-ComfyUI ModelSamplingFlux node — ModelSamplingFlux [advanced/model]
+ComfyUI ModelSamplingFlux node — ModelSamplingFlux [advanced/model] Source: comfy_extras/nodes_model_advanced.py:154 (v1_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI ModelSamplingFlux node — ModelSamplingFlux [advanced/model]
 
 ### Required
 
-- `base_shift` (Number) Input: FLOAT default: 0.5
-- `height` (Number) Input: INT default: 1024
-- `max_shift` (Number) Input: FLOAT default: 1.15
-- `model` (String) Input: MODEL (link)
-- `width` (Number) Input: INT default: 1024
+- `base_shift` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 100. Step: 0.01.
+- `height` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 8.
+- `max_shift` (Number) Input: FLOAT. Default: 1.15. Allowed range: 0 to 100. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `width` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

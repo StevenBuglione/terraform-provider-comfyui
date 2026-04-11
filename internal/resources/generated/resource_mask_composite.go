@@ -42,41 +42,41 @@ func (r *MaskCompositeResource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *MaskCompositeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI MaskComposite node [mask]",
+		MarkdownDescription: "ComfyUI MaskComposite node [mask] Source: comfy_extras/nodes_mask.py:244 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"destination": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MASK. Link input.",
+				Required:            true,
 			},
 			"source": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MASK. Link input.",
+				Required:            true,
 			},
 			"x": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0. Step: 1.",
+				Required:            true,
 			},
 			"y": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Minimum value: 0. Step: 1.",
+				Required:            true,
 			},
 			"operation": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"multiply",
@@ -89,8 +89,8 @@ func (r *MaskCompositeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"mask_output": schema.StringAttribute{
-				Description: "Output: MASK (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MASK (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

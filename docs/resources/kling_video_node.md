@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate videos with Kling V3. Supports text-to-video and image-to-video with optional storyboard multi-prompt and audio generation. [api node/video/Kling]
+  Generate videos with Kling V3. Supports text-to-video and image-to-video with optional storyboard multi-prompt and audio generation. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2819 (v3_api).
 ---
 
 # comfyui_kling_video_node (Resource)
 
-Generate videos with Kling V3. Supports text-to-video and image-to-video with optional storyboard multi-prompt and audio generation. [api node/video/Kling]
+Generate videos with Kling V3. Supports text-to-video and image-to-video with optional storyboard multi-prompt and audio generation. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2819 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ Generate videos with Kling V3. Supports text-to-video and image-to-video with op
 
 ### Required
 
-- `generate_audio` (Boolean) Input: BOOLEAN default: true
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `multi_shot` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `seed` (Number) Input: INT default: 0
+- `generate_audio` (Boolean) Input: BOOLEAN. Default: true.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model and generation settings.
+- `multi_shot` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Optional
 
-- `start_frame` (String) Input: IMAGE (link)
+- `start_frame` (String) Input: IMAGE. Link input. Tooltip: Optional start frame image. When connected, switches to image-to-video mode.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

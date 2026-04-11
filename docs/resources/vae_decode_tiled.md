@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_decode_tiled Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VAEDecodeTiled node — VAE Decode (Tiled) [_for_testing]
+  ComfyUI VAEDecodeTiled node — VAE Decode (Tiled) [_for_testing] Source: nodes.py:321 (v1_core).
 ---
 
 # comfyui_vae_decode_tiled (Resource)
 
-ComfyUI VAEDecodeTiled node — VAE Decode (Tiled) [_for_testing]
+ComfyUI VAEDecodeTiled node — VAE Decode (Tiled) [_for_testing] Source: nodes.py:321 (v1_core).
 
 
 
@@ -17,15 +17,15 @@ ComfyUI VAEDecodeTiled node — VAE Decode (Tiled) [_for_testing]
 
 ### Required
 
-- `overlap` (Number) Input: INT default: 64
-- `samples` (String) Input: LATENT (link)
-- `temporal_overlap` (Number) Input: INT default: 8
-- `temporal_size` (Number) Input: INT default: 64
-- `tile_size` (Number) Input: INT default: 512
-- `vae` (String) Input: VAE (link)
+- `overlap` (Number) Input: INT. Default: 64. Allowed range: 0 to 4096. Step: 32.
+- `samples` (String) Input: LATENT. Link input.
+- `temporal_overlap` (Number) Input: INT. Default: 8. Allowed range: 4 to 4096. Step: 4. Tooltip: Only used for video VAEs: Amount of frames to overlap.
+- `temporal_size` (Number) Input: INT. Default: 64. Allowed range: 8 to 4096. Step: 4. Tooltip: Only used for video VAEs: Amount of frames to decode at a time.
+- `tile_size` (Number) Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 32.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

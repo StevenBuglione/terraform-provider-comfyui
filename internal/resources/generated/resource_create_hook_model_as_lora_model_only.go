@@ -40,40 +40,40 @@ func (r *CreateHookModelAsLoraModelOnlyResource) Metadata(_ context.Context, req
 
 func (r *CreateHookModelAsLoraModelOnlyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI CreateHookModelAsLoraModelOnly node — Create Hook Model as LoRA (MO) [advanced/hooks/create]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI CreateHookModelAsLoraModelOnly node — Create Hook Model as LoRA (MO) [advanced/hooks/create] Source: comfy_extras/nodes_hooks.py:416 (v1_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"ckpt_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints').",
+				Required:            true,
 			},
 			"strength_model": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: -20 to 20. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-20, 20),
 				},
 			},
 			"prev_hooks": schema.StringAttribute{
-				Description: "Input: HOOKS (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: HOOKS. Link input.",
+				Optional:            true,
 			},
 			"hooks_output": schema.StringAttribute{
-				Description: "Output: HOOKS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: HOOKS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

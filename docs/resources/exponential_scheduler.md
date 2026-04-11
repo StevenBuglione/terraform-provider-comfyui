@@ -3,12 +3,12 @@
 page_title: "comfyui_exponential_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ExponentialScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI ExponentialScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:67 (v3_extras).
 ---
 
 # comfyui_exponential_scheduler (Resource)
 
-ComfyUI ExponentialScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI ExponentialScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:67 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ExponentialScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `sigma_max` (Number) Input: FLOAT default: 14.614642
-- `sigma_min` (Number) Input: FLOAT default: 0.0291675
-- `steps` (Number) Input: INT default: 20
+- `sigma_max` (Number) Input: FLOAT. Default: 14.614642. Allowed range: 0 to 5000. Step: 0.01.
+- `sigma_min` (Number) Input: FLOAT. Default: 0.0291675. Allowed range: 0 to 5000. Step: 0.01.
+- `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

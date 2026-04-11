@@ -3,12 +3,12 @@
 page_title: "comfyui_cosmos_image_to_video_latent Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CosmosImageToVideoLatent node [conditioning/inpaint]
+  ComfyUI CosmosImageToVideoLatent node [conditioning/inpaint] Source: comfy_extras/nodes_cosmos.py:43 (v3_extras).
 ---
 
 # comfyui_cosmos_image_to_video_latent (Resource)
 
-ComfyUI CosmosImageToVideoLatent node [conditioning/inpaint]
+ComfyUI CosmosImageToVideoLatent node [conditioning/inpaint] Source: comfy_extras/nodes_cosmos.py:43 (v3_extras).
 
 
 
@@ -17,19 +17,19 @@ ComfyUI CosmosImageToVideoLatent node [conditioning/inpaint]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `height` (Number) Input: INT default: 704
-- `length` (Number) Input: INT default: 121
-- `vae` (String) Input: VAE (link)
-- `width` (Number) Input: INT default: 1280
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `height` (Number) Input: INT. Default: 704. Minimum value: 16. Step: 16.
+- `length` (Number) Input: INT. Default: 121. Minimum value: 1. Step: 8.
+- `vae` (String) Input: VAE. Link input.
+- `width` (Number) Input: INT. Default: 1280. Minimum value: 16. Step: 16.
 
 ### Optional
 
-- `end_image` (String) Input: IMAGE (link)
-- `start_image` (String) Input: IMAGE (link)
+- `end_image` (String) Input: IMAGE. Link input.
+- `start_image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

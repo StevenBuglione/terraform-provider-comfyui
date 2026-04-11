@@ -3,12 +3,12 @@
 page_title: "comfyui_luma_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates images synchronously based on prompt and aspect ratio. [api node/image/Luma]
+  Generates images synchronously based on prompt and aspect ratio. [api node/image/Luma] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_luma.py:129 (v3_api).
 ---
 
 # comfyui_luma_image_node (Resource)
 
-Generates images synchronously based on prompt and aspect ratio. [api node/image/Luma]
+Generates images synchronously based on prompt and aspect ratio. [api node/image/Luma] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_luma.py:129 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ Generates images synchronously based on prompt and aspect ratio. [api node/image
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 0
-- `style_image_weight` (Number) Input: FLOAT default: 1
+- `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaAspectRatio.
+- `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaImageModel.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
+- `style_image_weight` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Weight of style image. Ignored if no style_image provided.
 
 ### Optional
 
-- `character_image` (String) Input: IMAGE (link)
-- `image_luma_ref` (String) Input: LumaIO.LUMA_REF (link)
-- `style_image` (String) Input: IMAGE (link)
+- `character_image` (String) Input: IMAGE. Link input. Tooltip: Character reference images; can be a batch of multiple, up to 4 images can be considered.
+- `image_luma_ref` (String) Input: LumaIO.LUMA_REF. Link input. Tooltip: Luma Reference node connection to influence generation with input images; up to 4 images can be considered.
+- `style_image` (String) Input: IMAGE. Link input. Tooltip: Style reference image; only 1 image will be used.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_align_your_steps_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI AlignYourStepsScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI AlignYourStepsScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_align_your_steps.py:26 (v3_extras).
 ---
 
 # comfyui_align_your_steps_scheduler (Resource)
 
-ComfyUI AlignYourStepsScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI AlignYourStepsScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_align_your_steps.py:26 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI AlignYourStepsScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `denoise` (Number) Input: FLOAT default: 1
-- `model_type` (String) Input: COMBO
-- `steps` (Number) Input: INT default: 10
+- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `model_type` (String) Input: COMBO.
+- `steps` (Number) Input: INT. Default: 10. Allowed range: 1 to 10000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

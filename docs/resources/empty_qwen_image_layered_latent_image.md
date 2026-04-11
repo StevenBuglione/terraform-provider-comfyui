@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_qwen_image_layered_latent_image Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EmptyQwenImageLayeredLatentImage node — Empty Qwen Image Layered Latent [latent/qwen]
+  ComfyUI EmptyQwenImageLayeredLatentImage node — Empty Qwen Image Layered Latent [latent/qwen] Source: comfy_extras/nodes_qwen.py:109 (v3_extras).
 ---
 
 # comfyui_empty_qwen_image_layered_latent_image (Resource)
 
-ComfyUI EmptyQwenImageLayeredLatentImage node — Empty Qwen Image Layered Latent [latent/qwen]
+ComfyUI EmptyQwenImageLayeredLatentImage node — Empty Qwen Image Layered Latent [latent/qwen] Source: comfy_extras/nodes_qwen.py:109 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI EmptyQwenImageLayeredLatentImage node — Empty Qwen Image Layered Laten
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `height` (Number) Input: INT default: 640
-- `layers` (Number) Input: INT default: 3
-- `width` (Number) Input: INT default: 640
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `height` (Number) Input: INT. Default: 640. Minimum value: 16. Step: 16.
+- `layers` (Number) Input: INT. Default: 3. Minimum value: 0. Step: 1.
+- `width` (Number) Input: INT. Default: 640. Minimum value: 16. Step: 16.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

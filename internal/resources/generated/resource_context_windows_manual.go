@@ -48,72 +48,72 @@ func (r *ContextWindowsManualResource) Metadata(_ context.Context, req resource.
 
 func (r *ContextWindowsManualResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) Manually set context windows. [context]",
+		MarkdownDescription: "(EXPERIMENTAL) Manually set context windows. [context] Source: comfy_extras/nodes_context_windows.py:7 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input. Tooltip: The model to apply context windows to during sampling.",
+				Required:            true,
 			},
 			"context_length": schema.Int64Attribute{
-				Description: "Input: INT default: 16",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 16. Minimum value: 1. Tooltip: The length of the context window.",
+				Required:            true,
 			},
 			"context_overlap": schema.Int64Attribute{
-				Description: "Input: INT default: 4",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 4. Minimum value: 0. Tooltip: The overlap of the context window.",
+				Required:            true,
 			},
 			"context_schedule": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The stride of the context window.",
+				Required:            true,
 			},
 			"context_stride": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Minimum value: 1. Tooltip: The stride of the context window; only applicable to uniform schedules.",
+				Required:            true,
 			},
 			"closed_loop": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to close the context window loop; only applicable to looped schedules.",
+				Required:            true,
 			},
 			"fuse_method": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.context_windows.ContextFuseMethods.LIST_STATIC. Tooltip: The method to use to fuse the context windows.",
+				Required:            true,
 			},
 			"dim": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 5. Tooltip: The dimension to apply the context windows to.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 5),
 				},
 			},
 			"freenoise": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to apply FreeNoise noise shuffling, improves window blending.",
+				Required:            true,
 			},
 			"cond_retain_index_list": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Tooltip: List of latent indices to retain in the conditioning tensors for each window, for example setting this to '0' will use the initial start image for each window.",
+				Required:            true,
 			},
 			"split_conds_to_windows": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to split multiple conditionings (created by ConditionCombine) to each window based on region index.",
+				Required:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

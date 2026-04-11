@@ -3,12 +3,12 @@
 page_title: "comfyui_primitive_float Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Float node — Float [utils/primitive]
+  ComfyUI Float node — Float [utils/primitive] Source: comfy_extras/nodes_primitive.py:62 (v3_extras).
 ---
 
 # comfyui_primitive_float (Resource)
 
-ComfyUI Float node — Float [utils/primitive]
+ComfyUI Float node — Float [utils/primitive] Source: comfy_extras/nodes_primitive.py:62 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI Float node — Float [utils/primitive]
 
 ### Required
 
-- `value` (Number) Input: FLOAT
+- `value` (Number) Input: FLOAT. Step: 0.1.
 
 ### Read-Only
 
-- `float_output` (String) Output: FLOAT (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `float_output` (String) Output: FLOAT (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

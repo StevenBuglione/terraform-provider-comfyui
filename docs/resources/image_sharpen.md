@@ -3,12 +3,12 @@
 page_title: "comfyui_image_sharpen Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Sharpen node [image/postprocessing]
+  ComfyUI Sharpen node [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:177 (v3_extras).
 ---
 
 # comfyui_image_sharpen (Resource)
 
-ComfyUI Sharpen node [image/postprocessing]
+ComfyUI Sharpen node [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:177 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI Sharpen node [image/postprocessing]
 
 ### Required
 
-- `alpha` (Number) Input: FLOAT default: 1
-- `image` (String) Input: IMAGE (link)
-- `sharpen_radius` (Number) Input: INT default: 1
-- `sigma` (Number) Input: FLOAT default: 1
+- `alpha` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 5. Step: 0.01.
+- `image` (String) Input: IMAGE. Link input.
+- `sharpen_radius` (Number) Input: INT. Default: 1. Allowed range: 1 to 31. Step: 1.
+- `sigma` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

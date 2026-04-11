@@ -3,12 +3,12 @@
 page_title: "comfyui_model_sampling_continuous_v Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelSamplingContinuousV node — ModelSamplingContinuousV [advanced/model]
+  ComfyUI ModelSamplingContinuousV node — ModelSamplingContinuousV [advanced/model] Source: comfy_extras/nodes_model_advanced.py:235 (v1_extras).
 ---
 
 # comfyui_model_sampling_continuous_v (Resource)
 
-ComfyUI ModelSamplingContinuousV node — ModelSamplingContinuousV [advanced/model]
+ComfyUI ModelSamplingContinuousV node — ModelSamplingContinuousV [advanced/model] Source: comfy_extras/nodes_model_advanced.py:235 (v1_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI ModelSamplingContinuousV node — ModelSamplingContinuousV [advanced/mod
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `sampling` (String) Input: COMBO
-- `sigma_max` (Number) Input: FLOAT default: 500
-- `sigma_min` (Number) Input: FLOAT default: 0.03
+- `model` (String) Input: MODEL. Link input.
+- `sampling` (String) Input: COMBO.
+- `sigma_max` (Number) Input: FLOAT. Default: 500. Allowed range: 0 to 1000. Step: 0.001.
+- `sigma_min` (Number) Input: FLOAT. Default: 0.03. Allowed range: 0 to 1000. Step: 0.001.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -40,48 +40,48 @@ func (r *Hunyuan3Dv2ConditioningMultiViewResource) Metadata(_ context.Context, r
 
 func (r *Hunyuan3Dv2ConditioningMultiViewResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI Hunyuan3Dv2ConditioningMultiView node [conditioning/video_models]",
+		MarkdownDescription: "ComfyUI Hunyuan3Dv2ConditioningMultiView node [conditioning/video_models] Source: comfy_extras/nodes_hunyuan3d.py:63 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"front": schema.StringAttribute{
-				Description: "Input: CLIP_VISION_OUTPUT (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: CLIP_VISION_OUTPUT. Link input.",
+				Optional:            true,
 			},
 			"left": schema.StringAttribute{
-				Description: "Input: CLIP_VISION_OUTPUT (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: CLIP_VISION_OUTPUT. Link input.",
+				Optional:            true,
 			},
 			"back": schema.StringAttribute{
-				Description: "Input: CLIP_VISION_OUTPUT (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: CLIP_VISION_OUTPUT. Link input.",
+				Optional:            true,
 			},
 			"right": schema.StringAttribute{
-				Description: "Input: CLIP_VISION_OUTPUT (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: CLIP_VISION_OUTPUT. Link input.",
+				Optional:            true,
 			},
 			"positive_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"negative_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

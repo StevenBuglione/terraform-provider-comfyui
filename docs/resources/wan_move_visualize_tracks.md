@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_move_visualize_tracks Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI WanMoveVisualizeTracks node [conditioning/video_models]
+  ComfyUI WanMoveVisualizeTracks node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:245 (v3_extras).
 ---
 
 # comfyui_wan_move_visualize_tracks (Resource)
 
-ComfyUI WanMoveVisualizeTracks node [conditioning/video_models]
+ComfyUI WanMoveVisualizeTracks node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:245 (v3_extras).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI WanMoveVisualizeTracks node [conditioning/video_models]
 
 ### Required
 
-- `circle_size` (Number) Input: INT default: 12
-- `images` (String) Input: IMAGE (link)
-- `line_resolution` (Number) Input: INT default: 24
-- `line_width` (Number) Input: INT default: 16
-- `opacity` (Number) Input: FLOAT default: 0.75
+- `circle_size` (Number) Input: INT. Default: 12. Allowed range: 1 to 128.
+- `images` (String) Input: IMAGE. Link input.
+- `line_resolution` (Number) Input: INT. Default: 24. Allowed range: 1 to 1024.
+- `line_width` (Number) Input: INT. Default: 16. Allowed range: 1 to 128.
+- `opacity` (Number) Input: FLOAT. Default: 0.75. Allowed range: 0 to 1. Step: 0.01.
 
 ### Optional
 
-- `tracks` (String) Input: TRACKS (link)
+- `tracks` (String) Input: TRACKS. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

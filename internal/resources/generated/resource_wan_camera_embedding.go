@@ -50,25 +50,25 @@ func (r *WanCameraEmbeddingResource) Metadata(_ context.Context, req resource.Me
 
 func (r *WanCameraEmbeddingResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI WanCameraEmbedding node [camera]",
+		MarkdownDescription: "ComfyUI WanCameraEmbedding node [camera] Source: comfy_extras/nodes_camera_trajectory.py:151 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"camera_pose": schema.StringAttribute{
-				Description: "Input: COMBO default: Static",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"Static\".",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"Static",
@@ -84,76 +84,76 @@ func (r *WanCameraEmbeddingResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 832",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 832. Minimum value: 16. Step: 16.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 480",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 480. Minimum value: 16. Step: 16.",
+				Required:            true,
 			},
 			"length": schema.Int64Attribute{
-				Description: "Input: INT default: 81",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 81. Minimum value: 1. Step: 4.",
+				Required:            true,
 			},
 			"speed": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.1.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"fx": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.000000001.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"fy": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.000000001.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"cx": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"cy": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Optional:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.",
+				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"camera_embedding_output": schema.StringAttribute{
-				Description: "Output: WAN_CAMERA_EMBEDDING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: WAN_CAMERA_EMBEDDING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"width_output": schema.StringAttribute{
-				Description: "Output: INT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"height_output": schema.StringAttribute{
-				Description: "Output: INT (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"length_output": schema.StringAttribute{
-				Description: "Output: INT (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

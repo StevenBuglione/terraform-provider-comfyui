@@ -3,12 +3,12 @@
 page_title: "comfyui_image_scale_to_total_pixels Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageScaleToTotalPixels node [image/upscaling]
+  ComfyUI ImageScaleToTotalPixels node [image/upscaling] Source: comfy_extras/nodes_post_processing.py:218 (v3_extras).
 ---
 
 # comfyui_image_scale_to_total_pixels (Resource)
 
-ComfyUI ImageScaleToTotalPixels node [image/upscaling]
+ComfyUI ImageScaleToTotalPixels node [image/upscaling] Source: comfy_extras/nodes_post_processing.py:218 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI ImageScaleToTotalPixels node [image/upscaling]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `megapixels` (Number) Input: FLOAT default: 1
-- `resolution_steps` (Number) Input: INT default: 1
-- `upscale_method` (String) Input: COMBO
+- `image` (String) Input: IMAGE. Link input.
+- `megapixels` (Number) Input: FLOAT. Default: 1. Allowed range: 0.01 to 16. Step: 0.01.
+- `resolution_steps` (Number) Input: INT. Default: 1. Allowed range: 1 to 256.
+- `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.upscale_methods.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

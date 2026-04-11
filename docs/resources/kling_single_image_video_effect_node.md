@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_single_image_video_effect_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Achieve different special effects when generating a video based on the effect_scene. [api node/video/Kling]
+  Achieve different special effects when generating a video based on the effect_scene. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2186 (v3_api).
 ---
 
 # comfyui_kling_single_image_video_effect_node (Resource)
 
-Achieve different special effects when generating a video based on the effect_scene. [api node/video/Kling]
+Achieve different special effects when generating a video based on the effect_scene. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2186 (v3_api).
 
 
 
@@ -17,15 +17,15 @@ Achieve different special effects when generating a video based on the effect_sc
 
 ### Required
 
-- `duration` (String) Input: COMBO
-- `effect_scene` (String) Input: COMBO
-- `image` (String) Input: IMAGE (link)
-- `model_name` (String) Input: COMBO
+- `duration` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
+- `effect_scene` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
+- `image` (String) Input: IMAGE. Link input. Tooltip: Reference Image. URL or Base64 encoded string (without data:image prefix). File size cannot exceed 10MB, resolution not less than 300*300px, aspect ratio between 1:2.5 ~ 2.5:1.
+- `model_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
 
 ### Read-Only
 
-- `duration_output` (String) Output: STRING (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_id_output` (String) Output: STRING (slot 1)
-- `video_output` (String) Output: VIDEO (slot 0)
+- `duration_output` (String) Output: STRING (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_id_output` (String) Output: STRING (slot 1).
+- `video_output` (String) Output: VIDEO (slot 0).

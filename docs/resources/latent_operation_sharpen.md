@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_operation_sharpen Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LatentOperationSharpen node [latent/advanced/operations]
+  (EXPERIMENTAL) ComfyUI LatentOperationSharpen node [latent/advanced/operations] Source: comfy_extras/nodes_latent.py:408 (v3_extras).
 ---
 
 # comfyui_latent_operation_sharpen (Resource)
 
-(EXPERIMENTAL) ComfyUI LatentOperationSharpen node [latent/advanced/operations]
+(EXPERIMENTAL) ComfyUI LatentOperationSharpen node [latent/advanced/operations] Source: comfy_extras/nodes_latent.py:408 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `alpha` (Number) Input: FLOAT default: 0.1
-- `sharpen_radius` (Number) Input: INT default: 9
-- `sigma` (Number) Input: FLOAT default: 1
+- `alpha` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0 to 5. Step: 0.01.
+- `sharpen_radius` (Number) Input: INT. Default: 9. Allowed range: 1 to 31. Step: 1.
+- `sigma` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 10. Step: 0.1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_operation_output` (String) Output: LATENT_OPERATION (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_operation_output` (String) Output: LATENT_OPERATION (slot 0).
+- `node_id` (String) ComfyUI node class type.

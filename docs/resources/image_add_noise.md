@@ -3,12 +3,12 @@
 page_title: "comfyui_image_add_noise Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageAddNoise node [image]
+  ComfyUI ImageAddNoise node [image] Source: comfy_extras/nodes_images.py:153 (v3_extras).
 ---
 
 # comfyui_image_add_noise (Resource)
 
-ComfyUI ImageAddNoise node [image]
+ComfyUI ImageAddNoise node [image] Source: comfy_extras/nodes_images.py:153 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ImageAddNoise node [image]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `seed` (Number) Input: INT default: 0
-- `strength` (Number) Input: FLOAT default: 0.5
+- `image` (String) Input: IMAGE. Link input.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `strength` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

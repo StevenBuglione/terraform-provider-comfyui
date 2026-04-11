@@ -40,33 +40,33 @@ func (r *AudioConcatResource) Metadata(_ context.Context, req resource.MetadataR
 
 func (r *AudioConcatResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Concatenates the audio1 to audio2 in the specified direction. [audio]",
+		MarkdownDescription: "Concatenates the audio1 to audio2 in the specified direction. [audio] Source: comfy_extras/nodes_audio.py:516 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"audio1": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO. Link input.",
+				Required:            true,
 			},
 			"audio2": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO. Link input.",
+				Required:            true,
 			},
 			"direction": schema.StringAttribute{
-				Description: "Input: COMBO default: after",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"after\". Tooltip: Whether to append audio2 after or before audio1.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"after",
@@ -75,8 +75,8 @@ func (r *AudioConcatResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"audio_output": schema.StringAttribute{
-				Description: "Output: AUDIO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

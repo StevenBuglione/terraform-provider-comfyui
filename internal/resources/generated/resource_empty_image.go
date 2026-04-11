@@ -41,47 +41,47 @@ func (r *EmptyImageResource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *EmptyImageResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI EmptyImage node — EmptyImage [image]",
+		MarkdownDescription: "ComfyUI EmptyImage node — EmptyImage [image] Source: nodes.py:1952 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Minimum value: 1. Step: 1.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Minimum value: 1. Step: 1.",
+				Required:            true,
 			},
 			"batch_size": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 4096.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 4096),
 				},
 			},
 			"color": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 16777215. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 16777215),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

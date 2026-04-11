@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_batch Resource - comfyui"
 subcategory: ""
 description: |-
-  (DEPRECATED) ComfyUI LatentBatch node [latent/batch]
+  (DEPRECATED) ComfyUI LatentBatch node [latent/batch] Source: comfy_extras/nodes_latent.py:259 (v3_extras).
 ---
 
 # comfyui_latent_batch (Resource)
 
-(DEPRECATED) ComfyUI LatentBatch node [latent/batch]
+(DEPRECATED) ComfyUI LatentBatch node [latent/batch] Source: comfy_extras/nodes_latent.py:259 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `samples1` (String) Input: LATENT (link)
-- `samples2` (String) Input: LATENT (link)
+- `samples1` (String) Input: LATENT. Link input.
+- `samples2` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

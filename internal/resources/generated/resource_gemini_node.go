@@ -46,29 +46,29 @@ func (r *GeminiNodeResource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *GeminiNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generate text responses with Google's Gemini AI model. You can provide multiple types of inputs (text, images, audio, video) as context for generating more relevant and meaningful responses. [api node/text/Gemini]",
+		MarkdownDescription: "Generate text responses with Google's Gemini AI model. You can provide multiple types of inputs (text, images, audio, video) as context for generating more relevant and meaningful responses. [api node/text/Gemini] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_gemini.py:260 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text inputs to the model, used to generate a response. You can include detailed instructions, questions, or context for the model.",
+				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO default: gemini-3-1-pro",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"gemini-3-1-pro\". Tooltip: The Gemini model to use for generating responses.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"gemini-2.5-pro-preview-05-06",
@@ -82,35 +82,35 @@ func (r *GeminiNodeResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 42",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 42. Allowed range: 0 to 18446744073709552000. Tooltip: When seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Optional image(s) to use as context for the model. To include multiple images, you can use the Batch Images node.",
+				Optional:            true,
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: AUDIO. Link input. Tooltip: Optional audio to use as context for the model.",
+				Optional:            true,
 			},
 			"video": schema.StringAttribute{
-				Description: "Input: VIDEO (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: VIDEO. Link input. Tooltip: Optional video to use as context for the model.",
+				Optional:            true,
 			},
 			"files": schema.StringAttribute{
-				Description: "Input: GEMINI_INPUT_FILES (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: GEMINI_INPUT_FILES. Link input. Tooltip: Optional file(s) to use as context for the model. Accepts inputs from the Gemini Generate Content Input Files node.",
+				Optional:            true,
 			},
 			"system_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Foundational instructions that dictate an AI's behavior.",
+				Optional:            true,
 			},
 			"string_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

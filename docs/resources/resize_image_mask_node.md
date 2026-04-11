@@ -3,12 +3,12 @@
 page_title: "comfyui_resize_image_mask_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Resize an image or mask using various scaling methods. [transform]
+  Resize an image or mask using various scaling methods. [transform] Source: comfy_extras/nodes_post_processing.py:407 (v3_extras).
 ---
 
 # comfyui_resize_image_mask_node (Resource)
 
-Resize an image or mask using various scaling methods. [transform]
+Resize an image or mask using various scaling methods. [transform] Source: comfy_extras/nodes_post_processing.py:407 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Resize an image or mask using various scaling methods. [transform]
 
 ### Required
 
-- `input` (String) Input: COMFY_MATCHTYPE_V3
-- `resize_type` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `scale_method` (String) Input: COMBO default: area
+- `input` (String) Input: COMFY_MATCHTYPE_V3.
+- `resize_type` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Select how to resize: by exact dimensions, scale factor, matching another image, etc.
+- `scale_method` (String) Input: COMBO. Default: "area". Dynamic options are resolved by ComfyUI at runtime from: cls.scale_methods. Tooltip: Interpolation algorithm. 'area' is best for downscaling, 'lanczos' for upscaling, 'nearest-exact' for pixel art.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `resized_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `resized_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_tencent_model_to3_duv_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Perform UV unfolding on a 3D model to generate UV texture. Input model must have less than 30000 faces. [api node/3d/Tencent]
+  Perform UV unfolding on a 3D model to generate UV texture. Input model must have less than 30000 faces. [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:395 (v3_api).
 ---
 
 # comfyui_tencent_model_to3_duv_node (Resource)
 
-Perform UV unfolding on a 3D model to generate UV texture. Input model must have less than 30000 faces. [api node/3d/Tencent]
+Perform UV unfolding on a 3D model to generate UV texture. Input model must have less than 30000 faces. [api node/3d/Tencent] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hunyuan3d.py:395 (v3_api).
 
 
 
@@ -17,12 +17,12 @@ Perform UV unfolding on a 3D model to generate UV texture. Input model must have
 
 ### Required
 
-- `model_3d` (String) Input: COMFY_MULTITYPED_V3
-- `seed` (Number) Input: INT default: 1
+- `model_3d` (String) Input: COMFY_MULTITYPED_V3. Tooltip: Input 3D model (GLB, OBJ, or FBX).
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `fbx_output` (String) Output: FILE_3D_FBX (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `obj_output` (String) Output: FILE_3D_OBJ (slot 0)
+- `fbx_output` (String) Output: FILE_3D_FBX (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `obj_output` (String) Output: FILE_3D_OBJ (slot 0).

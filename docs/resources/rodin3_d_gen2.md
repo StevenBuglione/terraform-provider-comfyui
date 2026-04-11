@@ -3,12 +3,12 @@
 page_title: "comfyui_rodin3_d_gen2 Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Rodin3D_Gen2 node — Rodin 3D Generate - Gen-2 Generate [api node/3d/Rodin]
+  ComfyUI Rodin3D_Gen2 node — Rodin 3D Generate - Gen-2 Generate [api node/3d/Rodin] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_rodin.py:469 (v3_api).
 ---
 
 # comfyui_rodin3_d_gen2 (Resource)
 
-ComfyUI Rodin3D_Gen2 node — Rodin 3D Generate - Gen-2 Generate [api node/3d/Rodin]
+ComfyUI Rodin3D_Gen2 node — Rodin 3D Generate - Gen-2 Generate [api node/3d/Rodin] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_rodin.py:469 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI Rodin3D_Gen2 node — Rodin 3D Generate - Gen-2 Generate [api node/3d/Ro
 
 ### Required
 
-- `images` (String) Input: IMAGE (link)
-- `tapose` (Boolean) Input: BOOLEAN default: false
+- `images` (String) Input: IMAGE. Link input.
+- `tapose` (Boolean) Input: BOOLEAN. Default: false.
 
 ### Optional
 
-- `material_type` (String) Input: COMBO default: PBR
-- `polygon_count` (String) Input: COMBO default: 500K-Triangle
-- `seed` (Number) Input: INT default: 0
+- `material_type` (String) Input: COMBO. Default: "PBR".
+- `polygon_count` (String) Input: COMBO. Default: "500K-Triangle".
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 65535.
 
 ### Read-Only
 
-- `_3d_model_path_output` (String) Output: STRING (slot 0)
-- `glb_output` (String) Output: FILE_3D_GLB (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `_3d_model_path_output` (String) Output: STRING (slot 0).
+- `glb_output` (String) Output: FILE_3D_GLB (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_save_image Resource - comfyui"
 subcategory: ""
 description: |-
-  Saves the input images to your ComfyUI output directory. [image]
+  Saves the input images to your ComfyUI output directory. [image] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: nodes.py:1627 (v1_core).
 ---
 
 # comfyui_save_image (Resource)
 
-Saves the input images to your ComfyUI output directory. [image]
+Saves the input images to your ComfyUI output directory. [image] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: nodes.py:1627 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ Saves the input images to your ComfyUI output directory. [image]
 
 ### Required
 
-- `filename_prefix` (String) Input: STRING default: ComfyUI
-- `images` (String) Input: IMAGE (link)
+- `filename_prefix` (String) Input: STRING. Default: "ComfyUI". Tooltip: The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes.
+- `images` (String) Input: IMAGE. Link input. Tooltip: The images to save.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

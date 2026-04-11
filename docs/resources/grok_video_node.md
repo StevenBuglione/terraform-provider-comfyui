@@ -3,12 +3,12 @@
 page_title: "comfyui_grok_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate video from a prompt or an image [api node/video/Grok]
+  Generate video from a prompt or an image [api node/video/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:286 (v3_api).
 ---
 
 # comfyui_grok_video_node (Resource)
 
-Generate video from a prompt or an image [api node/video/Grok]
+Generate video from a prompt or an image [api node/video/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:286 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Generate video from a prompt or an image [api node/video/Grok]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `duration` (Number) Input: INT default: 6
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `aspect_ratio` (String) Input: COMBO. Tooltip: The aspect ratio of the output video.
+- `duration` (Number) Input: INT. Default: 6. Allowed range: 1 to 15. Step: 1. Tooltip: The duration of the output video in seconds.
+- `model` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Text description of the desired video.
+- `resolution` (String) Input: COMBO. Tooltip: The resolution of the output video.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

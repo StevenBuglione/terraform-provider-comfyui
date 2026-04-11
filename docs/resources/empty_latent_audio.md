@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_latent_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EmptyLatentAudio node — Empty Latent Audio [latent/audio]
+  ComfyUI EmptyLatentAudio node — Empty Latent Audio [latent/audio] Source: comfy_extras/nodes_audio.py:15 (v3_extras).
 ---
 
 # comfyui_empty_latent_audio (Resource)
 
-ComfyUI EmptyLatentAudio node — Empty Latent Audio [latent/audio]
+ComfyUI EmptyLatentAudio node — Empty Latent Audio [latent/audio] Source: comfy_extras/nodes_audio.py:15 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI EmptyLatentAudio node — Empty Latent Audio [latent/audio]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `seconds` (Number) Input: FLOAT default: 47.6
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096. Tooltip: The number of latent images in the batch.
+- `seconds` (Number) Input: FLOAT. Default: 47.6. Allowed range: 1 to 1000. Step: 0.1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

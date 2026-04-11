@@ -3,12 +3,12 @@
 page_title: "comfyui_batch_images_masks_latents_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI BatchImagesMasksLatentsNode node — Batch Images/Masks/Latents [util]
+  ComfyUI BatchImagesMasksLatentsNode node — Batch Images/Masks/Latents [util] Source: comfy_extras/nodes_post_processing.py:627 (v3_extras).
 ---
 
 # comfyui_batch_images_masks_latents_node (Resource)
 
-ComfyUI BatchImagesMasksLatentsNode node — Batch Images/Masks/Latents [util]
+ComfyUI BatchImagesMasksLatentsNode node — Batch Images/Masks/Latents [util] Source: comfy_extras/nodes_post_processing.py:627 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI BatchImagesMasksLatentsNode node — Batch Images/Masks/Latents [util]
 
 ### Required
 
-- `inputs` (String) Input: COMFY_AUTOGROW_V3
+- `inputs` (String) Input: COMFY_AUTOGROW_V3.
 
 ### Read-Only
 
-- `comfy_matchtype_v3_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `comfy_matchtype_v3_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

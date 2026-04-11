@@ -42,56 +42,56 @@ func (r *KlingDualCharacterVideoEffectNodeResource) Metadata(_ context.Context, 
 
 func (r *KlingDualCharacterVideoEffectNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Achieve different special effects when generating a video based on the effect_scene. First image will be positioned on left side, second on right side of the composite. [api node/video/Kling]",
+		MarkdownDescription: "Achieve different special effects when generating a video based on the effect_scene. First image will be positioned on left side, second on right side of the composite. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2096 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image_left": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Left side image.",
+				Required:            true,
 			},
 			"image_right": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Right side image.",
+				Required:            true,
 			},
 			"effect_scene": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"model_name": schema.StringAttribute{
-				Description: "Input: COMBO default: kling-v1",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"kling-v1\". Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"mode": schema.StringAttribute{
-				Description: "Input: COMBO default: std",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"std\". Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"duration": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"duration_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

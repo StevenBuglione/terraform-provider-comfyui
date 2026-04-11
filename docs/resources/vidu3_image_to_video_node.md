@@ -3,12 +3,12 @@
 page_title: "comfyui_vidu3_image_to_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate a video from an image and an optional prompt. [api node/video/Vidu]
+  Generate a video from an image and an optional prompt. [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:1426 (v3_api).
 ---
 
 # comfyui_vidu3_image_to_video_node (Resource)
 
-Generate a video from an image and an optional prompt. [api node/video/Vidu]
+Generate a video from an image and an optional prompt. [api node/video/Vidu] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_vidu.py:1426 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ Generate a video from an image and an optional prompt. [api node/video/Vidu]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 1
+- `image` (String) Input: IMAGE. Link input. Tooltip: An image to be used as the start frame of the generated video.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: An optional text prompt for video generation (max 2000 characters).
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

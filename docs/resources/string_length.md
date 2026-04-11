@@ -3,12 +3,12 @@
 page_title: "comfyui_string_length Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StringLength node — Length [utils/string]
+  ComfyUI StringLength node — Length [utils/string] Source: comfy_extras/nodes_string.py:53 (v3_extras).
 ---
 
 # comfyui_string_length (Resource)
 
-ComfyUI StringLength node — Length [utils/string]
+ComfyUI StringLength node — Length [utils/string] Source: comfy_extras/nodes_string.py:53 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI StringLength node — Length [utils/string]
 
 ### Required
 
-- `string` (String) Input: STRING
+- `string` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `length_output` (String) Output: INT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `length_output` (String) Output: INT (slot 0).
+- `node_id` (String) ComfyUI node class type.

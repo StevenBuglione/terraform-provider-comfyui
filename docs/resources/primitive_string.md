@@ -3,12 +3,12 @@
 page_title: "comfyui_primitive_string Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI String node — String [utils/primitive]
+  ComfyUI String node — String [utils/primitive] Source: comfy_extras/nodes_primitive.py:7 (v3_extras).
 ---
 
 # comfyui_primitive_string (Resource)
 
-ComfyUI String node — String [utils/primitive]
+ComfyUI String node — String [utils/primitive] Source: comfy_extras/nodes_primitive.py:7 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI String node — String [utils/primitive]
 
 ### Required
 
-- `value` (String) Input: STRING
+- `value` (String) Input: STRING.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_save_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SaveAudio node — Save Audio (FLAC) [audio]
+  ComfyUI SaveAudio node — Save Audio (FLAC) [audio] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_audio.py:155 (v3_extras).
 ---
 
 # comfyui_save_audio (Resource)
 
-ComfyUI SaveAudio node — Save Audio (FLAC) [audio]
+ComfyUI SaveAudio node — Save Audio (FLAC) [audio] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_audio.py:155 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI SaveAudio node — Save Audio (FLAC) [audio]
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `filename_prefix` (String) Input: STRING default: audio/ComfyUI
+- `audio` (String) Input: AUDIO. Link input.
+- `filename_prefix` (String) Input: STRING. Default: "audio/ComfyUI".
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

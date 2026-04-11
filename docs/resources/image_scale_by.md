@@ -3,12 +3,12 @@
 page_title: "comfyui_image_scale_by Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageScaleBy node — Upscale Image By [image/upscaling]
+  ComfyUI ImageScaleBy node — Upscale Image By [image/upscaling] Source: nodes.py:1890 (v1_core).
 ---
 
 # comfyui_image_scale_by (Resource)
 
-ComfyUI ImageScaleBy node — Upscale Image By [image/upscaling]
+ComfyUI ImageScaleBy node — Upscale Image By [image/upscaling] Source: nodes.py:1890 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ImageScaleBy node — Upscale Image By [image/upscaling]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `scale_by` (Number) Input: FLOAT default: 1
-- `upscale_method` (String) Input: COMBO
+- `image` (String) Input: IMAGE. Link input.
+- `scale_by` (Number) Input: FLOAT. Default: 1. Allowed range: 0.01 to 8. Step: 0.01.
+- `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.upscale_methods.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

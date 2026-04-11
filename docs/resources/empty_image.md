@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_image Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EmptyImage node — EmptyImage [image]
+  ComfyUI EmptyImage node — EmptyImage [image] Source: nodes.py:1952 (v1_core).
 ---
 
 # comfyui_empty_image (Resource)
 
-ComfyUI EmptyImage node — EmptyImage [image]
+ComfyUI EmptyImage node — EmptyImage [image] Source: nodes.py:1952 (v1_core).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI EmptyImage node — EmptyImage [image]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `color` (Number) Input: INT default: 0
-- `height` (Number) Input: INT default: 512
-- `width` (Number) Input: INT default: 512
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `color` (Number) Input: INT. Default: 0. Allowed range: 0 to 16777215. Step: 1.
+- `height` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

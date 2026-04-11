@@ -3,12 +3,12 @@
 page_title: "comfyui_un_clip_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI unCLIPConditioning node — unCLIPConditioning [conditioning]
+  ComfyUI unCLIPConditioning node — unCLIPConditioning [conditioning] Source: nodes.py:1148 (v1_core).
 ---
 
 # comfyui_un_clip_conditioning (Resource)
 
-ComfyUI unCLIPConditioning node — unCLIPConditioning [conditioning]
+ComfyUI unCLIPConditioning node — unCLIPConditioning [conditioning] Source: nodes.py:1148 (v1_core).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI unCLIPConditioning node — unCLIPConditioning [conditioning]
 
 ### Required
 
-- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT (link)
-- `conditioning` (String) Input: CONDITIONING (link)
-- `noise_augmentation` (Number) Input: FLOAT default: 0
-- `strength` (Number) Input: FLOAT default: 1
+- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `noise_augmentation` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

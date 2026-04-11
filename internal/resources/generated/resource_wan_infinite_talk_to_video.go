@@ -57,119 +57,119 @@ func (r *WanInfiniteTalkToVideoResource) Metadata(_ context.Context, req resourc
 
 func (r *WanInfiniteTalkToVideoResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models]",
+		MarkdownDescription: "ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models] Source: comfy_extras/nodes_wan.py:1295 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"mode": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"model_patch": schema.StringAttribute{
-				Description: "Input: MODEL_PATCH (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL_PATCH. Link input.",
+				Required:            true,
 			},
 			"positive": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"negative": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 832",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 832. Minimum value: 16. Step: 16.",
+				Required:            true,
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 480",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 480. Minimum value: 16. Step: 16.",
+				Required:            true,
 			},
 			"length": schema.Int64Attribute{
-				Description: "Input: INT default: 81",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 81. Minimum value: 1. Step: 4.",
+				Required:            true,
 			},
 			"clip_vision_output": schema.StringAttribute{
-				Description: "Input: CLIP_VISION_OUTPUT (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: CLIP_VISION_OUTPUT. Link input.",
+				Optional:            true,
 			},
 			"start_image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"audio_encoder_output_1": schema.StringAttribute{
-				Description: "Input: AUDIO_ENCODER_OUTPUT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: AUDIO_ENCODER_OUTPUT. Link input.",
+				Required:            true,
 			},
 			"motion_frame_count": schema.Int64Attribute{
-				Description: "Input: INT default: 9",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 9. Allowed range: 1 to 33. Step: 1. Tooltip: Number of previous frames to use as motion context.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 33),
 				},
 			},
 			"audio_scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"previous_frames": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"positive_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"negative_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 3)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 3).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"trim_image_output": schema.StringAttribute{
-				Description: "Output: INT (slot 4)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 4).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

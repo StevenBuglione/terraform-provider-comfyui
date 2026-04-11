@@ -3,12 +3,12 @@
 page_title: "comfyui_gligen_text_box_apply Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI GLIGENTextBoxApply node — GLIGENTextBoxApply [conditioning/gligen]
+  ComfyUI GLIGENTextBoxApply node — GLIGENTextBoxApply [conditioning/gligen] Source: nodes.py:1183 (v1_core).
 ---
 
 # comfyui_gligen_text_box_apply (Resource)
 
-ComfyUI GLIGENTextBoxApply node — GLIGENTextBoxApply [conditioning/gligen]
+ComfyUI GLIGENTextBoxApply node — GLIGENTextBoxApply [conditioning/gligen] Source: nodes.py:1183 (v1_core).
 
 
 
@@ -17,17 +17,17 @@ ComfyUI GLIGENTextBoxApply node — GLIGENTextBoxApply [conditioning/gligen]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `conditioning_to` (String) Input: CONDITIONING (link)
-- `gligen_textbox_model` (String) Input: GLIGEN (link)
-- `height` (Number) Input: INT default: 64
-- `text` (String) Input: STRING
-- `width` (Number) Input: INT default: 64
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `clip` (String) Input: CLIP. Link input.
+- `conditioning_to` (String) Input: CONDITIONING. Link input.
+- `gligen_textbox_model` (String) Input: GLIGEN. Link input.
+- `height` (Number) Input: INT. Default: 64. Minimum value: 8. Step: 8.
+- `text` (String) Input: STRING. Supports multiline text.
+- `width` (Number) Input: INT. Default: 64. Minimum value: 8. Step: 8.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

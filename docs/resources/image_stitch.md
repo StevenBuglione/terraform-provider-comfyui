@@ -5,14 +5,14 @@ subcategory: ""
 description: |-
   Stitches image2 to image1 in the specified direction.
   If image2 is not provided, returns image1 unchanged.
-  Optional spacing can be added between images. [image/transform]
+  Optional spacing can be added between images. [image/transform] Source: comfy_extras/nodes_images.py:254 (v3_extras).
 ---
 
 # comfyui_image_stitch (Resource)
 
 Stitches image2 to image1 in the specified direction.
 If image2 is not provided, returns image1 unchanged.
-Optional spacing can be added between images. [image/transform]
+Optional spacing can be added between images. [image/transform] Source: comfy_extras/nodes_images.py:254 (v3_extras).
 
 
 
@@ -21,18 +21,18 @@ Optional spacing can be added between images. [image/transform]
 
 ### Required
 
-- `direction` (String) Input: COMBO default: right
-- `image1` (String) Input: IMAGE (link)
-- `match_image_size` (Boolean) Input: BOOLEAN default: true
-- `spacing_color` (String) Input: COMBO default: white
-- `spacing_width` (Number) Input: INT default: 0
+- `direction` (String) Input: COMBO. Default: "right".
+- `image1` (String) Input: IMAGE. Link input.
+- `match_image_size` (Boolean) Input: BOOLEAN. Default: true.
+- `spacing_color` (String) Input: COMBO. Default: "white".
+- `spacing_width` (Number) Input: INT. Default: 0. Allowed range: 0 to 1024. Step: 2.
 
 ### Optional
 
-- `image2` (String) Input: IMAGE (link)
+- `image2` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

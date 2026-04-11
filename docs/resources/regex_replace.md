@@ -3,12 +3,12 @@
 page_title: "comfyui_regex_replace Resource - comfyui"
 subcategory: ""
 description: |-
-  Find and replace text using regex patterns. [utils/string]
+  Find and replace text using regex patterns. [utils/string] Source: comfy_extras/nodes_string.py:341 (v3_extras).
 ---
 
 # comfyui_regex_replace (Resource)
 
-Find and replace text using regex patterns. [utils/string]
+Find and replace text using regex patterns. [utils/string] Source: comfy_extras/nodes_string.py:341 (v3_extras).
 
 
 
@@ -17,19 +17,19 @@ Find and replace text using regex patterns. [utils/string]
 
 ### Required
 
-- `regex_pattern` (String) Input: STRING
-- `replace` (String) Input: STRING
-- `string` (String) Input: STRING
+- `regex_pattern` (String) Input: STRING. Supports multiline text.
+- `replace` (String) Input: STRING. Supports multiline text.
+- `string` (String) Input: STRING. Supports multiline text.
 
 ### Optional
 
-- `case_insensitive` (Boolean) Input: BOOLEAN default: true
-- `count_value` (Number) Input: INT default: 0
-- `dotall` (Boolean) Input: BOOLEAN default: false
-- `multiline` (Boolean) Input: BOOLEAN default: false
+- `case_insensitive` (Boolean) Input: BOOLEAN. Default: true.
+- `count_value` (Number) Input: INT. Default: 0. Allowed range: 0 to 100. Tooltip: Maximum number of replacements to make. Set to 0 to replace all occurrences (default). Set to 1 to replace only the first match, 2 for the first two matches, etc.
+- `dotall` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When enabled, the dot (.) character will match any character including newline characters. When disabled, dots won't match newlines.
+- `multiline` (Boolean) Input: BOOLEAN. Default: false.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

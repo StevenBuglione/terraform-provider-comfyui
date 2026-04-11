@@ -43,61 +43,61 @@ func (r *VAEDecodeTiledResource) Metadata(_ context.Context, req resource.Metada
 
 func (r *VAEDecodeTiledResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI VAEDecodeTiled node — VAE Decode (Tiled) [_for_testing]",
+		MarkdownDescription: "ComfyUI VAEDecodeTiled node — VAE Decode (Tiled) [_for_testing] Source: nodes.py:321 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"samples": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"tile_size": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 32.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 4096),
 				},
 			},
 			"overlap": schema.Int64Attribute{
-				Description: "Input: INT default: 64",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 64. Allowed range: 0 to 4096. Step: 32.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4096),
 				},
 			},
 			"temporal_size": schema.Int64Attribute{
-				Description: "Input: INT default: 64",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 64. Allowed range: 8 to 4096. Step: 4. Tooltip: Only used for video VAEs: Amount of frames to decode at a time.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(8, 4096),
 				},
 			},
 			"temporal_overlap": schema.Int64Attribute{
-				Description: "Input: INT default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 8. Allowed range: 4 to 4096. Step: 4. Tooltip: Only used for video VAEs: Amount of frames to overlap.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(4, 4096),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

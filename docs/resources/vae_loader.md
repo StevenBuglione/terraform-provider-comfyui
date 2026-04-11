@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VAELoader node — Load VAE [loaders]
+  ComfyUI VAELoader node — Load VAE [loaders] Source: nodes.py:729 (v1_core).
 ---
 
 # comfyui_vae_loader (Resource)
 
-ComfyUI VAELoader node — Load VAE [loaders]
+ComfyUI VAELoader node — Load VAE [loaders] Source: nodes.py:729 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI VAELoader node — Load VAE [loaders]
 
 ### Required
 
-- `vae_name` (String) Input: COMBO
+- `vae_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.vae_list(s).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `vae_output` (String) Output: VAE (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `vae_output` (String) Output: VAE (slot 0).

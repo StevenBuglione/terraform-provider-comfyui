@@ -3,12 +3,12 @@
 page_title: "comfyui_control_net_apply_advanced Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ControlNetApplyAdvanced node — Apply ControlNet [conditioning/controlnet]
+  ComfyUI ControlNetApplyAdvanced node — Apply ControlNet [conditioning/controlnet] Source: nodes.py:900 (v1_core).
 ---
 
 # comfyui_control_net_apply_advanced (Resource)
 
-ComfyUI ControlNetApplyAdvanced node — Apply ControlNet [conditioning/controlnet]
+ComfyUI ControlNetApplyAdvanced node — Apply ControlNet [conditioning/controlnet] Source: nodes.py:900 (v1_core).
 
 
 
@@ -17,21 +17,21 @@ ComfyUI ControlNetApplyAdvanced node — Apply ControlNet [conditioning/controln
 
 ### Required
 
-- `control_net` (String) Input: CONTROL_NET (link)
-- `end_percent` (Number) Input: FLOAT default: 1
-- `image` (String) Input: IMAGE (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
-- `start_percent` (Number) Input: FLOAT default: 0
-- `strength` (Number) Input: FLOAT default: 1
+- `control_net` (String) Input: CONTROL_NET. Link input.
+- `end_percent` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `image` (String) Input: IMAGE. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Optional
 
-- `vae` (String) Input: VAE (link)
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

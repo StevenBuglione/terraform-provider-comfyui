@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_image_generation_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Kling Image Generation Node. Generate an image from a text prompt with an optional reference image. [api node/image/Kling]
+  Kling Image Generation Node. Generate an image from a text prompt with an optional reference image. [api node/image/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2446 (v3_api).
 ---
 
 # comfyui_kling_image_generation_node (Resource)
 
-Kling Image Generation Node. Generate an image from a text prompt with an optional reference image. [api node/image/Kling]
+Kling Image Generation Node. Generate an image from a text prompt with an optional reference image. [api node/image/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2446 (v3_api).
 
 
 
@@ -17,22 +17,22 @@ Kling Image Generation Node. Generate an image from a text prompt with an option
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO default: 16:9
-- `human_fidelity` (Number) Input: FLOAT default: 0.45
-- `image_fidelity` (Number) Input: FLOAT default: 0.5
-- `image_type` (String) Input: COMBO
-- `model_name` (String) Input: COMBO
-- `n` (Number) Input: INT default: 1
-- `negative_prompt` (String) Input: STRING
-- `prompt` (String) Input: STRING
+- `aspect_ratio` (String) Input: COMBO. Default: "16:9". Dynamic options are resolved by ComfyUI at runtime.
+- `human_fidelity` (Number) Input: FLOAT. Default: 0.45. Allowed range: 0 to 1. Step: 0.01. Tooltip: Subject reference similarity.
+- `image_fidelity` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Reference intensity for user-uploaded images.
+- `image_type` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
+- `model_name` (String) Input: COMBO.
+- `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 9. Tooltip: Number of generated images.
+- `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Negative text prompt.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.
 
 ### Optional
 
-- `image` (String) Input: IMAGE (link)
-- `seed` (Number) Input: INT default: 0
+- `image` (String) Input: IMAGE. Link input.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

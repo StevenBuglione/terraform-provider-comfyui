@@ -49,55 +49,55 @@ func (r *ByteDanceSeedreamNodeResource) Metadata(_ context.Context, req resource
 
 func (r *ByteDanceSeedreamNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Unified text-to-image generation and precise single-sentence editing at up to 4K resolution. [api node/image/ByteDance]",
+		MarkdownDescription: "Unified text-to-image generation and precise single-sentence editing at up to 4K resolution. [api node/image/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:188 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(SEEDREAM_MODELS.keys()).",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text prompt for creating or editing an image.",
+				Required:            true,
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Input image(s) for image-to-image generation. Reference image(s) for single or multi-reference generation.",
+				Optional:            true,
 			},
 			"size_preset": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Pick a recommended size. Select Custom to use the width and height below.",
+				Required:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 2048",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 2048. Allowed range: 1024 to 6240. Step: 2. Tooltip: Custom width for image. Value is working only if `size_preset` is set to `Custom`.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1024, 6240),
 				},
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 2048",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 2048. Allowed range: 1024 to 4992. Step: 2. Tooltip: Custom height for image. Value is working only if `size_preset` is set to `Custom`.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1024, 4992),
 				},
 			},
 			"sequential_image_generation": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Group image generation mode. 'disabled' generates a single image. 'auto' lets the model decide whether to generate multiple related images (e.g., story scenes, character variations).",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"disabled",
@@ -106,30 +106,30 @@ func (r *ByteDanceSeedreamNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"max_images": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 15. Step: 1. Tooltip: Maximum number of images to generate when sequential_image_generation='auto'. Total images (input + generated) cannot exceed 15.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 15),
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"watermark": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to add an \"AI generated\" watermark to the image.",
+				Optional:            true,
 			},
 			"fail_on_partial": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Optional:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: If enabled, abort execution if any requested images are missing or return an error.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_painter Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI PainterNode node — Painter [image]
+  ComfyUI PainterNode node — Painter [image] Source: comfy_extras/nodes_painter.py:26 (v3_extras).
 ---
 
 # comfyui_painter (Resource)
 
-ComfyUI PainterNode node — Painter [image]
+ComfyUI PainterNode node — Painter [image] Source: comfy_extras/nodes_painter.py:26 (v3_extras).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI PainterNode node — Painter [image]
 
 ### Required
 
-- `bg_color` (String) Input: COLOR default: #000000
-- `height` (Number) Input: INT default: 512
-- `mask` (String) Input: STRING default:
-- `width` (Number) Input: INT default: 512
+- `bg_color` (String) Input: COLOR. Default: "#000000".
+- `height` (Number) Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 64.
+- `mask` (String) Input: STRING. Default: "".
+- `width` (Number) Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 64.
 
 ### Optional
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input. Tooltip: Optional base image to paint over.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `mask_output` (String) Output: MASK (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `mask_output` (String) Output: MASK (slot 1).
+- `node_id` (String) ComfyUI node class type.

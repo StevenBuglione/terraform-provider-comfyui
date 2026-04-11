@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_text_to_image_api Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates an image based on a text prompt. [api node/image/Wan]
+  Generates an image based on a text prompt. [api node/image/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:58 (v3_api).
 ---
 
 # comfyui_wan_text_to_image_api (Resource)
 
-Generates an image based on a text prompt. [api node/image/Wan]
+Generates an image based on a text prompt. [api node/image/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:58 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ Generates an image based on a text prompt. [api node/image/Wan]
 
 ### Required
 
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
+- `model` (String) Input: COMBO. Tooltip: Model to use.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.
 
 ### Optional
 
-- `height` (Number) Input: INT default: 1024
-- `negative_prompt` (String) Input: STRING default:
-- `prompt_extend` (Boolean) Input: BOOLEAN default: true
-- `seed` (Number) Input: INT default: 0
-- `watermark` (Boolean) Input: BOOLEAN default: false
-- `width` (Number) Input: INT default: 1024
+- `height` (Number) Input: INT. Default: 1024. Allowed range: 768 to 1440. Step: 32.
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative prompt describing what to avoid.
+- `prompt_extend` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
+- `width` (Number) Input: INT. Default: 1024. Allowed range: 768 to 1440. Step: 32.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

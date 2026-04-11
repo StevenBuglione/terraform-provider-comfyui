@@ -3,12 +3,12 @@
 page_title: "comfyui_differential_diffusion Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI DifferentialDiffusion node — Differential Diffusion [_for_testing]
+  (EXPERIMENTAL) ComfyUI DifferentialDiffusion node — Differential Diffusion [_for_testing] Source: comfy_extras/nodes_differential_diffusion.py:9 (v3_extras).
 ---
 
 # comfyui_differential_diffusion (Resource)
 
-(EXPERIMENTAL) ComfyUI DifferentialDiffusion node — Differential Diffusion [_for_testing]
+(EXPERIMENTAL) ComfyUI DifferentialDiffusion node — Differential Diffusion [_for_testing] Source: comfy_extras/nodes_differential_diffusion.py:9 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
+- `model` (String) Input: MODEL. Link input.
 
 ### Optional
 
-- `strength` (Number) Input: FLOAT default: 1
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

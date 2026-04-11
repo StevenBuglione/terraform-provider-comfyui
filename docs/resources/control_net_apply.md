@@ -3,12 +3,12 @@
 page_title: "comfyui_control_net_apply Resource - comfyui"
 subcategory: ""
 description: |-
-  (DEPRECATED) ComfyUI ControlNetApply node — Apply ControlNet (OLD) [conditioning/controlnet]
+  (DEPRECATED) ComfyUI ControlNetApply node — Apply ControlNet (OLD) [conditioning/controlnet] Source: nodes.py:869 (v1_core).
 ---
 
 # comfyui_control_net_apply (Resource)
 
-(DEPRECATED) ComfyUI ControlNetApply node — Apply ControlNet (OLD) [conditioning/controlnet]
+(DEPRECATED) ComfyUI ControlNetApply node — Apply ControlNet (OLD) [conditioning/controlnet] Source: nodes.py:869 (v1_core).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `control_net` (String) Input: CONTROL_NET (link)
-- `image` (String) Input: IMAGE (link)
-- `strength` (Number) Input: FLOAT default: 1
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `control_net` (String) Input: CONTROL_NET. Link input.
+- `image` (String) Input: IMAGE. Link input.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

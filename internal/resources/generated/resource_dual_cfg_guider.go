@@ -45,55 +45,55 @@ func (r *DualCfgGuiderResource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *DualCfgGuiderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI DualCFGGuider node [sampling/custom_sampling/guiders]",
+		MarkdownDescription: "ComfyUI DualCFGGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/nodes_custom_sampler.py:865 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"cond1": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"cond2": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"negative": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input.",
+				Required:            true,
 			},
 			"cfg_conds": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"cfg_cond2_negative": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"style": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"regular",
@@ -102,8 +102,8 @@ func (r *DualCfgGuiderResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"guider_output": schema.StringAttribute{
-				Description: "Output: GUIDER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: GUIDER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

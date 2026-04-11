@@ -38,40 +38,40 @@ func (r *WanMoveTracksFromCoordsResource) Metadata(_ context.Context, req resour
 
 func (r *WanMoveTracksFromCoordsResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI WanMoveTracksFromCoords node [conditioning/video_models]",
+		MarkdownDescription: "ComfyUI WanMoveTracksFromCoords node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:281 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"track_coords": schema.StringAttribute{
-				Description: "Input: STRING default: []",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"[]\".",
+				Optional:            true,
 			},
 			"track_mask": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: MASK. Link input.",
+				Optional:            true,
 			},
 			"tracks_output": schema.StringAttribute{
-				Description: "Output: TRACKS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: TRACKS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"track_length_output": schema.StringAttribute{
-				Description: "Output: INT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

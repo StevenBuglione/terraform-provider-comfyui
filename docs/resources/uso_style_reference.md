@@ -3,12 +3,12 @@
 page_title: "comfyui_uso_style_reference Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI USOStyleReference node — USOStyleReference [advanced/model_patches/flux]
+  (EXPERIMENTAL) ComfyUI USOStyleReference node — USOStyleReference [advanced/model_patches/flux] Source: comfy_extras/nodes_model_patch.py:516 (v1_extras).
 ---
 
 # comfyui_uso_style_reference (Resource)
 
-(EXPERIMENTAL) ComfyUI USOStyleReference node — USOStyleReference [advanced/model_patches/flux]
+(EXPERIMENTAL) ComfyUI USOStyleReference node — USOStyleReference [advanced/model_patches/flux] Source: comfy_extras/nodes_model_patch.py:516 (v1_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT (link)
-- `model` (String) Input: MODEL (link)
-- `model_patch` (String) Input: MODEL_PATCH (link)
+- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `model_patch` (String) Input: MODEL_PATCH. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

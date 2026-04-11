@@ -3,12 +3,12 @@
 page_title: "comfyui_flux_pro_expand_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Outpaints image based on prompt. [api node/image/BFL]
+  Outpaints image based on prompt. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:278 (v3_api).
 ---
 
 # comfyui_flux_pro_expand_node (Resource)
 
-Outpaints image based on prompt. [api node/image/BFL]
+Outpaints image based on prompt. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:278 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Outpaints image based on prompt. [api node/image/BFL]
 
 ### Required
 
-- `bottom` (Number) Input: INT default: 0
-- `guidance` (Number) Input: FLOAT default: 60
-- `image` (String) Input: IMAGE (link)
-- `left` (Number) Input: INT default: 0
-- `prompt` (String) Input: STRING default:
-- `prompt_upsampling` (Boolean) Input: BOOLEAN default: false
-- `right` (Number) Input: INT default: 0
-- `seed` (Number) Input: INT default: 0
-- `steps` (Number) Input: INT default: 50
-- `top` (Number) Input: INT default: 0
+- `bottom` (Number) Input: INT. Default: 0. Allowed range: 0 to 2048. Tooltip: Number of pixels to expand at the bottom of the image.
+- `guidance` (Number) Input: FLOAT. Default: 60. Allowed range: 1.5 to 100. Tooltip: Guidance strength for the image generation process.
+- `image` (String) Input: IMAGE. Link input.
+- `left` (Number) Input: INT. Default: 0. Allowed range: 0 to 2048. Tooltip: Number of pixels to expand at the left of the image.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
+- `prompt_upsampling` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation, but results are nondeterministic (same seed will not produce exactly the same result).
+- `right` (Number) Input: INT. Default: 0. Allowed range: 0 to 2048. Tooltip: Number of pixels to expand at the right of the image.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `steps` (Number) Input: INT. Default: 50. Allowed range: 15 to 50. Tooltip: Number of steps for the image generation process.
+- `top` (Number) Input: INT. Default: 0. Allowed range: 0 to 2048. Tooltip: Number of pixels to expand at the top of the image.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

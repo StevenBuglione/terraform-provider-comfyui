@@ -3,12 +3,12 @@
 page_title: "comfyui_extend_intermediate_sigmas Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ExtendIntermediateSigmas node [sampling/custom_sampling/sigmas]
+  ComfyUI ExtendIntermediateSigmas node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:295 (v3_extras).
 ---
 
 # comfyui_extend_intermediate_sigmas (Resource)
 
-ComfyUI ExtendIntermediateSigmas node [sampling/custom_sampling/sigmas]
+ComfyUI ExtendIntermediateSigmas node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:295 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI ExtendIntermediateSigmas node [sampling/custom_sampling/sigmas]
 
 ### Required
 
-- `end_at_sigma` (Number) Input: FLOAT default: 12
-- `sigmas` (String) Input: SIGMAS (link)
-- `spacing` (String) Input: COMBO
-- `start_at_sigma` (Number) Input: FLOAT default: -1
-- `steps` (Number) Input: INT default: 2
+- `end_at_sigma` (Number) Input: FLOAT. Default: 12. Allowed range: 0 to 20000. Step: 0.01.
+- `sigmas` (String) Input: SIGMAS. Link input.
+- `spacing` (String) Input: COMBO.
+- `start_at_sigma` (Number) Input: FLOAT. Default: -1. Allowed range: -1 to 20000. Step: 0.01.
+- `steps` (Number) Input: INT. Default: 2. Allowed range: 1 to 100.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

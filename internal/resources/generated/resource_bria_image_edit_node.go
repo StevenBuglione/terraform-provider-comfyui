@@ -50,25 +50,25 @@ func (r *BriaImageEditNodeResource) Metadata(_ context.Context, req resource.Met
 
 func (r *BriaImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Edit images using Bria latest model [api node/image/Bria]",
+		MarkdownDescription: "Edit images using Bria latest model [api node/image/Bria] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bria.py:27 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"FIBO",
@@ -76,60 +76,60 @@ func (r *BriaImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Instruction to edit image.",
+				Required:            true,
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text.",
+				Required:            true,
 			},
 			"structured_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: A string containing the structured edit prompt in JSON format. Use this instead of usual prompt for precise, programmatic control.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 2147483647. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 2147483647),
 				},
 			},
 			"guidance_scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 3",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 3. Allowed range: 3 to 5. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(3, 5),
 				},
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 50",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 50. Allowed range: 20 to 50. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(20, 50),
 				},
 			},
 			"moderation": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings.",
+				Required:            true,
 			},
 			"mask": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: MASK. Link input. Tooltip: If omitted, the edit applies to the entire image.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"structured_prompt_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

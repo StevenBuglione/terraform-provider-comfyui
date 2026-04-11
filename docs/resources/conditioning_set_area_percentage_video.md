@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_set_area_percentage_video Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningSetAreaPercentageVideo node — ConditioningSetAreaPercentageVideo [conditioning]
+  ComfyUI ConditioningSetAreaPercentageVideo node — ConditioningSetAreaPercentageVideo [conditioning] Source: comfy_extras/nodes_video_model.py:126 (v1_extras).
 ---
 
 # comfyui_conditioning_set_area_percentage_video (Resource)
 
-ComfyUI ConditioningSetAreaPercentageVideo node — ConditioningSetAreaPercentageVideo [conditioning]
+ComfyUI ConditioningSetAreaPercentageVideo node — ConditioningSetAreaPercentageVideo [conditioning] Source: comfy_extras/nodes_video_model.py:126 (v1_extras).
 
 
 
@@ -17,17 +17,17 @@ ComfyUI ConditioningSetAreaPercentageVideo node — ConditioningSetAreaPercentag
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `height` (Number) Input: FLOAT default: 1
-- `strength` (Number) Input: FLOAT default: 1
-- `temporal` (Number) Input: FLOAT default: 1
-- `width` (Number) Input: FLOAT default: 1
-- `x` (Number) Input: FLOAT default: 0
-- `y` (Number) Input: FLOAT default: 0
-- `z` (Number) Input: FLOAT default: 0
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `height` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `temporal` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `width` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `x` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
+- `y` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
+- `z` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

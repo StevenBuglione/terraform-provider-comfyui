@@ -3,12 +3,12 @@
 page_title: "comfyui_model_sampling_aura_flow Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelSamplingAuraFlow node — ModelSamplingAuraFlow [advanced/model]
+  ComfyUI ModelSamplingAuraFlow node — ModelSamplingAuraFlow [advanced/model] Source: comfy_extras/nodes_model_advanced.py:142 (v1_extras).
 ---
 
 # comfyui_model_sampling_aura_flow (Resource)
 
-ComfyUI ModelSamplingAuraFlow node — ModelSamplingAuraFlow [advanced/model]
+ComfyUI ModelSamplingAuraFlow node — ModelSamplingAuraFlow [advanced/model] Source: comfy_extras/nodes_model_advanced.py:142 (v1_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ModelSamplingAuraFlow node — ModelSamplingAuraFlow [advanced/model]
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
-- `shift` (Number) Input: FLOAT default: 1.73
+- `model` (String) Input: MODEL. Link input.
+- `shift` (Number) Input: FLOAT. Default: 1.73. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

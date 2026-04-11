@@ -3,12 +3,12 @@
 page_title: "comfyui_wan2_video_continuation_api Resource - comfyui"
 subcategory: ""
 description: |-
-  Continue a video from where it left off, with optional last-frame control. [api node/video/Wan]
+  Continue a video from where it left off, with optional last-frame control. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:1150 (v3_api).
 ---
 
 # comfyui_wan2_video_continuation_api (Resource)
 
-Continue a video from where it left off, with optional last-frame control. [api node/video/Wan]
+Continue a video from where it left off, with optional last-frame control. [api node/video/Wan] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wan.py:1150 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Continue a video from where it left off, with optional last-frame control. [api 
 
 ### Required
 
-- `first_clip` (String) Input: VIDEO (link)
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `prompt_extend` (Boolean) Input: BOOLEAN default: true
-- `seed` (Number) Input: INT default: 0
-- `watermark` (Boolean) Input: BOOLEAN default: false
+- `first_clip` (String) Input: VIDEO. Link input. Tooltip: Input video to continue from. Duration: 2s-10s. The output aspect ratio is derived from this video.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `prompt_extend` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
 ### Optional
 
-- `last_frame` (String) Input: IMAGE (link)
+- `last_frame` (String) Input: IMAGE. Link input. Tooltip: Last frame image. The continuation will transition towards this frame.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

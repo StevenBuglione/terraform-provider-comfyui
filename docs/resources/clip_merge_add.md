@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_merge_add Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPAdd node — CLIPMergeAdd [advanced/model_merging]
+  ComfyUI CLIPAdd node — CLIPMergeAdd [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:116 (v1_extras).
 ---
 
 # comfyui_clip_merge_add (Resource)
 
-ComfyUI CLIPAdd node — CLIPMergeAdd [advanced/model_merging]
+ComfyUI CLIPAdd node — CLIPMergeAdd [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:116 (v1_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI CLIPAdd node — CLIPMergeAdd [advanced/model_merging]
 
 ### Required
 
-- `clip1` (String) Input: CLIP (link)
-- `clip2` (String) Input: CLIP (link)
+- `clip1` (String) Input: CLIP. Link input.
+- `clip2` (String) Input: CLIP. Link input.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

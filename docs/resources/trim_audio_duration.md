@@ -3,12 +3,12 @@
 page_title: "comfyui_trim_audio_duration Resource - comfyui"
 subcategory: ""
 description: |-
-  Trim audio tensor into chosen time range. [audio]
+  Trim audio tensor into chosen time range. [audio] Source: comfy_extras/nodes_audio.py:362 (v3_extras).
 ---
 
 # comfyui_trim_audio_duration (Resource)
 
-Trim audio tensor into chosen time range. [audio]
+Trim audio tensor into chosen time range. [audio] Source: comfy_extras/nodes_audio.py:362 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Trim audio tensor into chosen time range. [audio]
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `duration` (Number) Input: FLOAT default: 60
-- `start_index` (Number) Input: FLOAT default: 0
+- `audio` (String) Input: AUDIO. Link input.
+- `duration` (Number) Input: FLOAT. Default: 60. Minimum value: 0. Step: 0.01. Tooltip: Duration in seconds.
+- `start_index` (Number) Input: FLOAT. Default: 0. Allowed range: -18446744073709552000 to 18446744073709552000. Step: 0.01. Tooltip: Start time in seconds, can be negative to count from the end (supports sub-seconds).
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

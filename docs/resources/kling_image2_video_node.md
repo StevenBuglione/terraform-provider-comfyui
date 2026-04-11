@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_image2_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI KlingImage2VideoNode node — Kling Image(First Frame) to Video [api node/video/Kling]
+  ComfyUI KlingImage2VideoNode node — Kling Image(First Frame) to Video [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:1751 (v3_api).
 ---
 
 # comfyui_kling_image2_video_node (Resource)
 
-ComfyUI KlingImage2VideoNode node — Kling Image(First Frame) to Video [api node/video/Kling]
+ComfyUI KlingImage2VideoNode node — Kling Image(First Frame) to Video [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:1751 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ ComfyUI KlingImage2VideoNode node — Kling Image(First Frame) to Video [api nod
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `cfg_scale` (Number) Input: FLOAT default: 0.8
-- `duration` (String) Input: COMBO
-- `mode` (String) Input: COMBO
-- `model_name` (String) Input: COMBO default: kling-v2-master
-- `negative_prompt` (String) Input: STRING
-- `prompt` (String) Input: STRING
-- `start_frame` (String) Input: IMAGE (link)
+- `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenAspectRatio.
+- `cfg_scale` (Number) Input: FLOAT. Default: 0.8. Allowed range: 0 to 1.
+- `duration` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenDuration.
+- `mode` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenMode.
+- `model_name` (String) Input: COMBO. Default: "kling-v2-master". Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenModelName.
+- `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Negative text prompt.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.
+- `start_frame` (String) Input: IMAGE. Link input. Tooltip: The reference image used to generate the video.
 
 ### Read-Only
 
-- `duration_output` (String) Output: STRING (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_id_output` (String) Output: STRING (slot 1)
-- `video_output` (String) Output: VIDEO (slot 0)
+- `duration_output` (String) Output: STRING (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_id_output` (String) Output: STRING (slot 1).
+- `video_output` (String) Output: VIDEO (slot 0).

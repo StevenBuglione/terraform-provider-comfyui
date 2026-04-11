@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_pix_art_alpha Resource - comfyui"
 subcategory: ""
 description: |-
-  Encodes text and sets the resolution conditioning for PixArt Alpha. Does not apply to PixArt Sigma. [advanced/conditioning]
+  Encodes text and sets the resolution conditioning for PixArt Alpha. Does not apply to PixArt Sigma. [advanced/conditioning] Source: comfy_extras/nodes_pixart.py:5 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_pix_art_alpha (Resource)
 
-Encodes text and sets the resolution conditioning for PixArt Alpha. Does not apply to PixArt Sigma. [advanced/conditioning]
+Encodes text and sets the resolution conditioning for PixArt Alpha. Does not apply to PixArt Sigma. [advanced/conditioning] Source: comfy_extras/nodes_pixart.py:5 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ Encodes text and sets the resolution conditioning for PixArt Alpha. Does not app
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `height` (Number) Input: INT default: 1024
-- `text` (String) Input: STRING
-- `width` (Number) Input: INT default: 1024
+- `clip` (String) Input: CLIP. Link input.
+- `height` (Number) Input: INT. Default: 1024. Minimum value: 0.
+- `text` (String) Input: STRING. Supports multiline text.
+- `width` (Number) Input: INT. Default: 1024. Minimum value: 0.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

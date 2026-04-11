@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_dpm_adaptative Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerDPMAdaptative node [sampling/custom_sampling/samplers]
+  ComfyUI SamplerDPMAdaptative node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:552 (v3_extras).
 ---
 
 # comfyui_sampler_dpm_adaptative (Resource)
 
-ComfyUI SamplerDPMAdaptative node [sampling/custom_sampling/samplers]
+ComfyUI SamplerDPMAdaptative node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:552 (v3_extras).
 
 
 
@@ -17,19 +17,19 @@ ComfyUI SamplerDPMAdaptative node [sampling/custom_sampling/samplers]
 
 ### Required
 
-- `accept_safety` (Number) Input: FLOAT default: 0.81
-- `atol` (Number) Input: FLOAT default: 0.0078
-- `dcoeff` (Number) Input: FLOAT default: 0
-- `eta` (Number) Input: FLOAT default: 0
-- `h_init` (Number) Input: FLOAT default: 0.05
-- `icoeff` (Number) Input: FLOAT default: 1
-- `order` (Number) Input: INT default: 3
-- `pcoeff` (Number) Input: FLOAT default: 0
-- `rtol` (Number) Input: FLOAT default: 0.05
-- `s_noise` (Number) Input: FLOAT default: 1
+- `accept_safety` (Number) Input: FLOAT. Default: 0.81. Allowed range: 0 to 100. Step: 0.01.
+- `atol` (Number) Input: FLOAT. Default: 0.0078. Allowed range: 0 to 100. Step: 0.01.
+- `dcoeff` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.
+- `eta` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.
+- `h_init` (Number) Input: FLOAT. Default: 0.05. Allowed range: 0 to 100. Step: 0.01.
+- `icoeff` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `order` (Number) Input: INT. Default: 3. Allowed range: 2 to 3.
+- `pcoeff` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.
+- `rtol` (Number) Input: FLOAT. Default: 0.05. Allowed range: 0 to 100. Step: 0.01.
+- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

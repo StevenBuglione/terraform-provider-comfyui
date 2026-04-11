@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_controls Resource - comfyui"
 subcategory: ""
 description: |-
-  Create Recraft Controls for customizing Recraft generation. [api node/image/Recraft]
+  Create Recraft Controls for customizing Recraft generation. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:201 (v3_api).
 ---
 
 # comfyui_recraft_controls (Resource)
 
-Create Recraft Controls for customizing Recraft generation. [api node/image/Recraft]
+Create Recraft Controls for customizing Recraft generation. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:201 (v3_api).
 
 
 
@@ -17,11 +17,11 @@ Create Recraft Controls for customizing Recraft generation. [api node/image/Recr
 
 ### Optional
 
-- `background_color` (String) Input: RecraftIO.COLOR (link)
-- `colors` (String) Input: RecraftIO.COLOR (link)
+- `background_color` (String) Input: RecraftIO.COLOR. Link input.
+- `colors` (String) Input: RecraftIO.COLOR. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `recraft_controls_output` (String) Output: RecraftIO.CONTROLS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `recraft_controls_output` (String) Output: RecraftIO.CONTROLS (slot 0).

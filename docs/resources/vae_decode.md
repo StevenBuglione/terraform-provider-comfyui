@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_decode Resource - comfyui"
 subcategory: ""
 description: |-
-  Decodes latent images back into pixel space images. [latent]
+  Decodes latent images back into pixel space images. [latent] Source: nodes.py:294 (v1_core).
 ---
 
 # comfyui_vae_decode (Resource)
 
-Decodes latent images back into pixel space images. [latent]
+Decodes latent images back into pixel space images. [latent] Source: nodes.py:294 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ Decodes latent images back into pixel space images. [latent]
 
 ### Required
 
-- `samples` (String) Input: LATENT (link)
-- `vae` (String) Input: VAE (link)
+- `samples` (String) Input: LATENT. Link input. Tooltip: The latent to be decoded.
+- `vae` (String) Input: VAE. Link input. Tooltip: The VAE model used for decoding the latent.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

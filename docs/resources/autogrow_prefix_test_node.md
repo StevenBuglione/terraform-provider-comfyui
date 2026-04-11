@@ -3,12 +3,12 @@
 page_title: "comfyui_autogrow_prefix_test_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI AutogrowPrefixTestNode node — AutogrowPrefixTest [logic]
+  ComfyUI AutogrowPrefixTestNode node — AutogrowPrefixTest [logic] Source: comfy_extras/nodes_logic.py:190 (v3_extras).
 ---
 
 # comfyui_autogrow_prefix_test_node (Resource)
 
-ComfyUI AutogrowPrefixTestNode node — AutogrowPrefixTest [logic]
+ComfyUI AutogrowPrefixTestNode node — AutogrowPrefixTest [logic] Source: comfy_extras/nodes_logic.py:190 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI AutogrowPrefixTestNode node — AutogrowPrefixTest [logic]
 
 ### Required
 
-- `autogrow` (String) Input: COMFY_AUTOGROW_V3
+- `autogrow` (String) Input: COMFY_AUTOGROW_V3.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

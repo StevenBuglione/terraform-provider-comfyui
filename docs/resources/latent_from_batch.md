@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_from_batch Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentFromBatch node — Latent From Batch [latent/batch]
+  ComfyUI LatentFromBatch node — Latent From Batch [latent/batch] Source: nodes.py:1237 (v1_core).
 ---
 
 # comfyui_latent_from_batch (Resource)
 
-ComfyUI LatentFromBatch node — Latent From Batch [latent/batch]
+ComfyUI LatentFromBatch node — Latent From Batch [latent/batch] Source: nodes.py:1237 (v1_core).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI LatentFromBatch node — Latent From Batch [latent/batch]
 
 ### Required
 
-- `batch_index` (Number) Input: INT default: 0
-- `length` (Number) Input: INT default: 1
-- `samples` (String) Input: LATENT (link)
+- `batch_index` (Number) Input: INT. Default: 0. Allowed range: 0 to 63.
+- `length` (Number) Input: INT. Default: 1. Allowed range: 1 to 64.
+- `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

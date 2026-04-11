@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_omni_pro_first_last_frame_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Use a start frame, an optional end frame, or reference images with the latest Kling model. [api node/video/Kling]
+  Use a start frame, an optional end frame, or reference images with the latest Kling model. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:985 (v3_api).
 ---
 
 # comfyui_kling_omni_pro_first_last_frame_node (Resource)
 
-Use a start frame, an optional end frame, or reference images with the latest Kling model. [api node/video/Kling]
+Use a start frame, an optional end frame, or reference images with the latest Kling model. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:985 (v3_api).
 
 
 
@@ -17,22 +17,22 @@ Use a start frame, an optional end frame, or reference images with the latest Kl
 
 ### Required
 
-- `duration` (Number) Input: INT default: 5
-- `first_frame` (String) Input: IMAGE (link)
-- `model_name` (String) Input: COMBO
-- `prompt` (String) Input: STRING
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 15.
+- `first_frame` (String) Input: IMAGE. Link input.
+- `model_name` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A text prompt describing the video content. This can include both positive and negative descriptions. Ignored when storyboards are enabled.
 
 ### Optional
 
-- `end_frame` (String) Input: IMAGE (link)
-- `generate_audio` (Boolean) Input: BOOLEAN default: false
-- `reference_images` (String) Input: IMAGE (link)
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
-- `storyboards` (String) Input: COMFY_DYNAMICCOMBO_V3
+- `end_frame` (String) Input: IMAGE. Link input. Tooltip: An optional end frame for the video. This cannot be used simultaneously with 'reference_images'. Does not work with storyboards.
+- `generate_audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Generate audio for the video. Only supported for kling-v3-omni.
+- `reference_images` (String) Input: IMAGE. Link input. Tooltip: Up to 6 additional reference images.
+- `resolution` (String) Input: COMBO.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
+- `storyboards` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Only supported for kling-v3-omni.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

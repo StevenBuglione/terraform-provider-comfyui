@@ -3,12 +3,12 @@
 page_title: "comfyui_primitive_boolean Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Boolean node — Boolean [utils/primitive]
+  ComfyUI Boolean node — Boolean [utils/primitive] Source: comfy_extras/nodes_primitive.py:80 (v3_extras).
 ---
 
 # comfyui_primitive_boolean (Resource)
 
-ComfyUI Boolean node — Boolean [utils/primitive]
+ComfyUI Boolean node — Boolean [utils/primitive] Source: comfy_extras/nodes_primitive.py:80 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI Boolean node — Boolean [utils/primitive]
 
 ### Required
 
-- `value` (Boolean) Input: BOOLEAN
+- `value` (Boolean) Input: BOOLEAN.
 
 ### Read-Only
 
-- `boolean_output` (String) Output: BOOLEAN (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `boolean_output` (String) Output: BOOLEAN (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

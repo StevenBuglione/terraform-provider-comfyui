@@ -3,12 +3,12 @@
 page_title: "comfyui_make_training_dataset Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI MakeTrainingDataset node — Make Training Dataset [dataset]
+  (EXPERIMENTAL) ComfyUI MakeTrainingDataset node — Make Training Dataset [dataset] Source: comfy_extras/nodes_dataset.py:1231 (v3_extras).
 ---
 
 # comfyui_make_training_dataset (Resource)
 
-(EXPERIMENTAL) ComfyUI MakeTrainingDataset node — Make Training Dataset [dataset]
+(EXPERIMENTAL) ComfyUI MakeTrainingDataset node — Make Training Dataset [dataset] Source: comfy_extras/nodes_dataset.py:1231 (v3_extras).
 
 
 
@@ -17,17 +17,17 @@ description: |-
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `images` (String) Input: IMAGE (link)
-- `vae` (String) Input: VAE (link)
+- `clip` (String) Input: CLIP. Link input. Tooltip: CLIP model for encoding text to conditioning.
+- `images` (String) Input: IMAGE. Link input. Tooltip: List of images to encode.
+- `vae` (String) Input: VAE. Link input. Tooltip: VAE model for encoding images to latents.
 
 ### Optional
 
-- `texts` (String) Input: STRING
+- `texts` (String) Input: STRING. Tooltip: List of text captions. Can be length n (matching images), 1 (repeated for all), or omitted (uses empty string).
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `latents_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `latents_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

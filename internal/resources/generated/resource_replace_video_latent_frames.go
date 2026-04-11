@@ -38,37 +38,37 @@ func (r *ReplaceVideoLatentFramesResource) Metadata(_ context.Context, req resou
 
 func (r *ReplaceVideoLatentFramesResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ReplaceVideoLatentFrames node [latent/batch]",
+		MarkdownDescription: "ComfyUI ReplaceVideoLatentFrames node [latent/batch] Source: comfy_extras/nodes_latent.py:445 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"destination": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input. Tooltip: The destination latent where frames will be replaced.",
+				Required:            true,
 			},
 			"source": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: LATENT. Link input. Tooltip: The source latent providing frames to insert into the destination latent. If not provided, the destination latent is returned unchanged.",
+				Optional:            true,
 			},
 			"index": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Step: 1. Tooltip: The starting latent frame index in the destination latent where the source latent frames will be placed. Negative values count from the end.",
+				Required:            true,
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

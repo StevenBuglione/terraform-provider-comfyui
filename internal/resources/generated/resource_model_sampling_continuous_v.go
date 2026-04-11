@@ -42,29 +42,29 @@ func (r *ModelSamplingContinuousVResource) Metadata(_ context.Context, req resou
 
 func (r *ModelSamplingContinuousVResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ModelSamplingContinuousV node — ModelSamplingContinuousV [advanced/model]",
+		MarkdownDescription: "ComfyUI ModelSamplingContinuousV node — ModelSamplingContinuousV [advanced/model] Source: comfy_extras/nodes_model_advanced.py:235 (v1_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"sampling": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"v_prediction",
@@ -72,22 +72,22 @@ func (r *ModelSamplingContinuousVResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"sigma_max": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 500",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 500. Allowed range: 0 to 1000. Step: 0.001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1000),
 				},
 			},
 			"sigma_min": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.03",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.03. Allowed range: 0 to 1000. Step: 0.001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1000),
 				},
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

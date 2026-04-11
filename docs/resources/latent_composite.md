@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_composite Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentComposite node — Latent Composite [latent]
+  ComfyUI LatentComposite node — Latent Composite [latent] Source: nodes.py:1402 (v1_core).
 ---
 
 # comfyui_latent_composite (Resource)
 
-ComfyUI LatentComposite node — Latent Composite [latent]
+ComfyUI LatentComposite node — Latent Composite [latent] Source: nodes.py:1402 (v1_core).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI LatentComposite node — Latent Composite [latent]
 
 ### Required
 
-- `feather` (Number) Input: INT default: 0
-- `samples_from` (String) Input: LATENT (link)
-- `samples_to` (String) Input: LATENT (link)
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `feather` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `samples_from` (String) Input: LATENT. Link input.
+- `samples_to` (String) Input: LATENT. Link input.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -43,60 +43,60 @@ func (r *LaplaceSchedulerResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *LaplaceSchedulerResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI LaplaceScheduler node [sampling/custom_sampling/schedulers]",
+		MarkdownDescription: "ComfyUI LaplaceScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:110 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 20",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 20. Allowed range: 1 to 10000.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 10000),
 				},
 			},
 			"sigma_max": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 14.614642",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 14.614642. Allowed range: 0 to 5000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 5000),
 				},
 			},
 			"sigma_min": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.0291675",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.0291675. Allowed range: 0 to 5000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 5000),
 				},
 			},
 			"mu": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"beta": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 10. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"sigmas_output": schema.StringAttribute{
-				Description: "Output: SIGMAS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SIGMAS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -3,12 +3,12 @@
 page_title: "comfyui_generate_tracks Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI GenerateTracks node [conditioning/video_models]
+  ComfyUI GenerateTracks node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:322 (v3_extras).
 ---
 
 # comfyui_generate_tracks (Resource)
 
-ComfyUI GenerateTracks node [conditioning/video_models]
+ComfyUI GenerateTracks node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:322 (v3_extras).
 
 
 
@@ -17,27 +17,27 @@ ComfyUI GenerateTracks node [conditioning/video_models]
 
 ### Required
 
-- `bezier` (Boolean) Input: BOOLEAN default: false
-- `end_x` (Number) Input: FLOAT default: 1
-- `end_y` (Number) Input: FLOAT default: 1
-- `height` (Number) Input: INT default: 480
-- `interpolation` (String) Input: COMBO
-- `mid_x` (Number) Input: FLOAT default: 0.5
-- `mid_y` (Number) Input: FLOAT default: 0.5
-- `num_frames` (Number) Input: INT default: 81
-- `num_tracks` (Number) Input: INT default: 5
-- `start_x` (Number) Input: FLOAT default: 0
-- `start_y` (Number) Input: FLOAT default: 0
-- `track_spread` (Number) Input: FLOAT default: 0.025
-- `width` (Number) Input: INT default: 832
+- `bezier` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Enable Bezier curve path using the mid point as control point.
+- `end_x` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for end position.
+- `end_y` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for end position.
+- `height` (Number) Input: INT. Default: 480. Allowed range: 16 to 4096. Step: 16.
+- `interpolation` (String) Input: COMBO. Tooltip: Controls the timing/speed of movement along the path.
+- `mid_x` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X control point for Bezier curve. Only used when 'bezier' is enabled.
+- `mid_y` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y control point for Bezier curve. Only used when 'bezier' is enabled.
+- `num_frames` (Number) Input: INT. Default: 81. Allowed range: 1 to 1024.
+- `num_tracks` (Number) Input: INT. Default: 5. Allowed range: 1 to 100.
+- `start_x` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for start position.
+- `start_y` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for start position.
+- `track_spread` (Number) Input: FLOAT. Default: 0.025. Allowed range: 0 to 1. Step: 0.001. Tooltip: Normalized distance between tracks. Tracks are spread perpendicular to the motion direction.
+- `width` (Number) Input: INT. Default: 832. Allowed range: 16 to 4096. Step: 16.
 
 ### Optional
 
-- `track_mask` (String) Input: MASK (link)
+- `track_mask` (String) Input: MASK. Link input. Tooltip: Optional mask to indicate visible frames.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `track_length_output` (String) Output: INT (slot 1)
-- `tracks_output` (String) Output: TRACKS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `track_length_output` (String) Output: INT (slot 1).
+- `tracks_output` (String) Output: TRACKS (slot 0).

@@ -42,54 +42,54 @@ func (r *EasyCacheResource) Metadata(_ context.Context, req resource.MetadataReq
 
 func (r *EasyCacheResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) Native EasyCache implementation. [advanced/debug/model]",
+		MarkdownDescription: "(EXPERIMENTAL) Native EasyCache implementation. [advanced/debug/model] Source: comfy_extras/nodes_easycache.py:359 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input. Tooltip: The model to add EasyCache to.",
+				Required:            true,
 			},
 			"reuse_threshold": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.2",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.2. Allowed range: 0 to 3. Step: 0.01. Tooltip: The threshold for reusing cached steps.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 3),
 				},
 			},
 			"start_percent": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.15",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.15. Allowed range: 0 to 1. Step: 0.01. Tooltip: The relative sampling step to begin use of EasyCache.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"end_percent": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.95",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0 to 1. Step: 0.01. Tooltip: The relative sampling step to end use of EasyCache.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"verbose": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to log verbose information.",
+				Required:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -4,14 +4,14 @@ page_title: "comfyui_quadruple_clip_loader Resource - comfyui"
 subcategory: ""
 description: |-
   [Recipes]
-  hidream: long clip-l, long clip-g, t5xxl, llama_8b_3.1_instruct [advanced/loaders]
+  hidream: long clip-l, long clip-g, t5xxl, llama_8b_3.1_instruct [advanced/loaders] Source: comfy_extras/nodes_hidream.py:9 (v3_extras).
 ---
 
 # comfyui_quadruple_clip_loader (Resource)
 
 [Recipes]
 
-hidream: long clip-l, long clip-g, t5xxl, llama_8b_3.1_instruct [advanced/loaders]
+hidream: long clip-l, long clip-g, t5xxl, llama_8b_3.1_instruct [advanced/loaders] Source: comfy_extras/nodes_hidream.py:9 (v3_extras).
 
 
 
@@ -20,13 +20,13 @@ hidream: long clip-l, long clip-g, t5xxl, llama_8b_3.1_instruct [advanced/loader
 
 ### Required
 
-- `clip_name1` (String) Input: COMBO
-- `clip_name2` (String) Input: COMBO
-- `clip_name3` (String) Input: COMBO
-- `clip_name4` (String) Input: COMBO
+- `clip_name1` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
+- `clip_name2` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
+- `clip_name3` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
+- `clip_name4` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

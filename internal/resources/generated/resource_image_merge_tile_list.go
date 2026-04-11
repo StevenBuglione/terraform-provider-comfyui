@@ -41,50 +41,50 @@ func (r *ImageMergeTileListResource) Metadata(_ context.Context, req resource.Me
 
 func (r *ImageMergeTileListResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ImageMergeTileList node — Merge List of Tiles to Image [image/batch]",
+		MarkdownDescription: "ComfyUI ImageMergeTileList node — Merge List of Tiles to Image [image/batch] Source: comfy_extras/nodes_images.py:748 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image_list": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"final_width": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Allowed range: 64 to 32768.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 32768),
 				},
 			},
 			"final_height": schema.Int64Attribute{
-				Description: "Input: INT default: 1024",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1024. Allowed range: 64 to 32768.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 32768),
 				},
 			},
 			"overlap": schema.Int64Attribute{
-				Description: "Input: INT default: 128",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 128. Allowed range: 0 to 4096.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 4096),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

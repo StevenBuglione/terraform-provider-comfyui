@@ -3,12 +3,12 @@
 page_title: "comfyui_vp_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VPScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI VPScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:180 (v3_extras).
 ---
 
 # comfyui_vp_scheduler (Resource)
 
-ComfyUI VPScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI VPScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:180 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI VPScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `beta_d` (Number) Input: FLOAT default: 19.9
-- `beta_min` (Number) Input: FLOAT default: 0.1
-- `eps_s` (Number) Input: FLOAT default: 0.001
-- `steps` (Number) Input: INT default: 20
+- `beta_d` (Number) Input: FLOAT. Default: 19.9. Allowed range: 0 to 5000. Step: 0.01.
+- `beta_min` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0 to 5000. Step: 0.01.
+- `eps_s` (Number) Input: FLOAT. Default: 0.001. Allowed range: 0 to 1. Step: 0.0001.
+- `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

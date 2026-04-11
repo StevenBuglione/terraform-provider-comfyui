@@ -3,12 +3,12 @@
 page_title: "comfyui_combine_hooks8 Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CombineHooksEight node — Combine Hooks [8] [advanced/hooks/combine]
+  (EXPERIMENTAL) ComfyUI CombineHooksEight node — Combine Hooks [8] [advanced/hooks/combine] Source: comfy_extras/nodes_hooks.py:679 (v1_extras).
 ---
 
 # comfyui_combine_hooks8 (Resource)
 
-(EXPERIMENTAL) ComfyUI CombineHooksEight node — Combine Hooks [8] [advanced/hooks/combine]
+(EXPERIMENTAL) ComfyUI CombineHooksEight node — Combine Hooks [8] [advanced/hooks/combine] Source: comfy_extras/nodes_hooks.py:679 (v1_extras).
 
 
 
@@ -17,17 +17,17 @@ description: |-
 
 ### Optional
 
-- `hooks_a` (String) Input: HOOKS (link)
-- `hooks_b` (String) Input: HOOKS (link)
-- `hooks_c` (String) Input: HOOKS (link)
-- `hooks_d` (String) Input: HOOKS (link)
-- `hooks_e` (String) Input: HOOKS (link)
-- `hooks_f` (String) Input: HOOKS (link)
-- `hooks_g` (String) Input: HOOKS (link)
-- `hooks_h` (String) Input: HOOKS (link)
+- `hooks_a` (String) Input: HOOKS. Link input.
+- `hooks_b` (String) Input: HOOKS. Link input.
+- `hooks_c` (String) Input: HOOKS. Link input.
+- `hooks_d` (String) Input: HOOKS. Link input.
+- `hooks_e` (String) Input: HOOKS. Link input.
+- `hooks_f` (String) Input: HOOKS. Link input.
+- `hooks_g` (String) Input: HOOKS. Link input.
+- `hooks_h` (String) Input: HOOKS. Link input.
 
 ### Read-Only
 
-- `hooks_output` (String) Output: HOOKS (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `hooks_output` (String) Output: HOOKS (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_image_only_checkpoint_save Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageOnlyCheckpointSave node — ImageOnlyCheckpointSave [advanced/model_merging]
+  ComfyUI ImageOnlyCheckpointSave node — ImageOnlyCheckpointSave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video_model.py:110 (v1_extras).
 ---
 
 # comfyui_image_only_checkpoint_save (Resource)
 
-ComfyUI ImageOnlyCheckpointSave node — ImageOnlyCheckpointSave [advanced/model_merging]
+ComfyUI ImageOnlyCheckpointSave node — ImageOnlyCheckpointSave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video_model.py:110 (v1_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ImageOnlyCheckpointSave node — ImageOnlyCheckpointSave [advanced/model
 
 ### Required
 
-- `clip_vision` (String) Input: CLIP_VISION (link)
-- `filename_prefix` (String) Input: STRING default: checkpoints/ComfyUI
-- `model` (String) Input: MODEL (link)
-- `vae` (String) Input: VAE (link)
+- `clip_vision` (String) Input: CLIP_VISION. Link input.
+- `filename_prefix` (String) Input: STRING. Default: "checkpoints/ComfyUI".
+- `model` (String) Input: MODEL. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

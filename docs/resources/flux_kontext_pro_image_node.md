@@ -3,12 +3,12 @@
 page_title: "comfyui_flux_kontext_pro_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Edits images using Flux.1 Kontext [pro] via api based on prompt and aspect ratio. [api node/image/BFL]
+  Edits images using Flux.1 Kontext [pro] via api based on prompt and aspect ratio. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:156 (v3_api).
 ---
 
 # comfyui_flux_kontext_pro_image_node (Resource)
 
-Edits images using Flux.1 Kontext [pro] via api based on prompt and aspect ratio. [api node/image/BFL]
+Edits images using Flux.1 Kontext [pro] via api based on prompt and aspect ratio. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:156 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Edits images using Flux.1 Kontext [pro] via api based on prompt and aspect ratio
 
 ### Required
 
-- `aspect_ratio` (String) Input: STRING default: 16:9
-- `guidance` (Number) Input: FLOAT default: 3
-- `prompt` (String) Input: STRING default:
-- `prompt_upsampling` (Boolean) Input: BOOLEAN default: false
-- `seed` (Number) Input: INT default: 1234
-- `steps` (Number) Input: INT default: 50
+- `aspect_ratio` (String) Input: STRING. Default: "16:9". Tooltip: Aspect ratio of image; must be between 1:4 and 4:1.
+- `guidance` (Number) Input: FLOAT. Default: 3. Allowed range: 0.1 to 99. Step: 0.1. Tooltip: Guidance strength for the image generation process.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation - specify what and how to edit.
+- `prompt_upsampling` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation, but results are nondeterministic (same seed will not produce exactly the same result).
+- `seed` (Number) Input: INT. Default: 1234. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `steps` (Number) Input: INT. Default: 50. Allowed range: 1 to 150. Tooltip: Number of steps for the image generation process.
 
 ### Optional
 
-- `input_image` (String) Input: IMAGE (link)
+- `input_image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

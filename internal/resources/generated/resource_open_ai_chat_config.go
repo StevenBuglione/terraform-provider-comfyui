@@ -41,25 +41,25 @@ func (r *OpenAiChatConfigResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *OpenAiChatConfigResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Allows specifying advanced configuration options for the OpenAI Chat Nodes. [api node/text/OpenAI]",
+		MarkdownDescription: "Allows specifying advanced configuration options for the OpenAI Chat Nodes. [api node/text/OpenAI] Source: comfy_api_nodes/nodes_openai.py:845 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"truncation": schema.StringAttribute{
-				Description: "Input: COMBO default: auto",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: The truncation strategy to use for the model response. auto: If the context of this response and previous ones exceeds the model's context window size, the model will truncate the response to fit the context window by dropping input items in the middle of the conversation.disabled: If a model response will exceed the context window size for a model, the request will fail with a 400 error.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"auto",
@@ -68,19 +68,19 @@ func (r *OpenAiChatConfigResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"max_output_tokens": schema.Int64Attribute{
-				Description: "Input: INT default: 4096",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 4096. Allowed range: 16 to 16384. Tooltip: An upper bound for the number of tokens that can be generated for a response, including visible output tokens.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(16, 16384),
 				},
 			},
 			"instructions": schema.StringAttribute{
-				Description: "Input: STRING",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: Instructions for the model on how to generate the response.",
+				Optional:            true,
 			},
 			"openai_chat_config_output": schema.StringAttribute{
-				Description: "Output: OPENAI_CHAT_CONFIG (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: OPENAI_CHAT_CONFIG (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

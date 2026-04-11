@@ -40,43 +40,43 @@ func (r *ResolutionSelectorResource) Metadata(_ context.Context, req resource.Me
 
 func (r *ResolutionSelectorResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Calculate width and height from aspect ratio and megapixel target. Useful for setting up Empty Latent Image dimensions. [utils]",
+		MarkdownDescription: "Calculate width and height from aspect ratio and megapixel target. Useful for setting up Empty Latent Image dimensions. [utils] Source: comfy_extras/nodes_resolution.py:31 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: AspectRatio. Tooltip: The aspect ratio for the output dimensions.",
+				Required:            true,
 			},
 			"megapixels": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.1 to 16. Step: 0.1. Tooltip: Target total megapixels. 1.0 MP ≈ 1024×1024 for square.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 16),
 				},
 			},
 			"width_output": schema.StringAttribute{
-				Description: "Output: INT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"height_output": schema.StringAttribute{
-				Description: "Output: INT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

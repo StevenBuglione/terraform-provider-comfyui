@@ -3,12 +3,12 @@
 page_title: "comfyui_skip_layer_guidance_di_t Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Generic version of SkipLayerGuidance node that can be used on every DiT model. [advanced/guidance]
+  (EXPERIMENTAL) Generic version of SkipLayerGuidance node that can be used on every DiT model. [advanced/guidance] Source: comfy_extras/nodes_slg.py:8 (v3_extras).
 ---
 
 # comfyui_skip_layer_guidance_di_t (Resource)
 
-(EXPERIMENTAL) Generic version of SkipLayerGuidance node that can be used on every DiT model. [advanced/guidance]
+(EXPERIMENTAL) Generic version of SkipLayerGuidance node that can be used on every DiT model. [advanced/guidance] Source: comfy_extras/nodes_slg.py:8 (v3_extras).
 
 
 
@@ -17,16 +17,16 @@ description: |-
 
 ### Required
 
-- `double_layers` (String) Input: STRING default: 7, 8, 9
-- `end_percent` (Number) Input: FLOAT default: 0.15
-- `model` (String) Input: MODEL (link)
-- `rescaling_scale` (Number) Input: FLOAT default: 0
-- `scale` (Number) Input: FLOAT default: 3
-- `single_layers` (String) Input: STRING default: 7, 8, 9
-- `start_percent` (Number) Input: FLOAT default: 0.01
+- `double_layers` (String) Input: STRING. Default: "7, 8, 9".
+- `end_percent` (Number) Input: FLOAT. Default: 0.15. Allowed range: 0 to 1. Step: 0.001.
+- `model` (String) Input: MODEL. Link input.
+- `rescaling_scale` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 10. Step: 0.01.
+- `scale` (Number) Input: FLOAT. Default: 3. Allowed range: 0 to 10. Step: 0.1.
+- `single_layers` (String) Input: STRING. Default: "7, 8, 9".
+- `start_percent` (Number) Input: FLOAT. Default: 0.01. Allowed range: 0 to 1. Step: 0.001.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

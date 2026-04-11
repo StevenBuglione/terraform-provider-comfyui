@@ -3,12 +3,12 @@
 page_title: "comfyui_flux2_pro_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates images synchronously based on prompt and resolution. [api node/image/BFL]
+  Generates images synchronously based on prompt and resolution. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:522 (v3_api).
 ---
 
 # comfyui_flux2_pro_image_node (Resource)
 
-Generates images synchronously based on prompt and resolution. [api node/image/BFL]
+Generates images synchronously based on prompt and resolution. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:522 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Generates images synchronously based on prompt and resolution. [api node/image/B
 
 ### Required
 
-- `height` (Number) Input: INT default: 768
-- `prompt` (String) Input: STRING default:
-- `prompt_upsampling` (Boolean) Input: BOOLEAN default: true
-- `seed` (Number) Input: INT default: 0
-- `width` (Number) Input: INT default: 1024
+- `height` (Number) Input: INT. Default: 768. Allowed range: 256 to 2048. Step: 32.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation or edit.
+- `prompt_upsampling` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `width` (Number) Input: INT. Default: 1024. Allowed range: 256 to 2048. Step: 32.
 
 ### Optional
 
-- `images` (String) Input: IMAGE (link)
+- `images` (String) Input: IMAGE. Link input. Tooltip: Up to 9 images to be used as references.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

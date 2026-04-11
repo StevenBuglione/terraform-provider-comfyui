@@ -3,12 +3,12 @@
 page_title: "comfyui_sd_turbo_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SDTurboScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI SDTurboScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:134 (v3_extras).
 ---
 
 # comfyui_sd_turbo_scheduler (Resource)
 
-ComfyUI SDTurboScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI SDTurboScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:134 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI SDTurboScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `denoise` (Number) Input: FLOAT default: 1
-- `model` (String) Input: MODEL (link)
-- `steps` (Number) Input: INT default: 1
+- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `steps` (Number) Input: INT. Default: 1. Allowed range: 1 to 10.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

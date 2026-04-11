@@ -3,12 +3,12 @@
 page_title: "comfyui_quiver_text_to_svg_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate an SVG from a text prompt using Quiver AI. [api node/image/Quiver]
+  Generate an SVG from a text prompt using Quiver AI. [api node/image/Quiver] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_quiver.py:21 (v3_api).
 ---
 
 # comfyui_quiver_text_to_svg_node (Resource)
 
-Generate an SVG from a text prompt using Quiver AI. [api node/image/Quiver]
+Generate an SVG from a text prompt using Quiver AI. [api node/image/Quiver] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_quiver.py:21 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ Generate an SVG from a text prompt using Quiver AI. [api node/image/Quiver]
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 0
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for SVG generation.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of the desired SVG output.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 
-- `instructions` (String) Input: STRING default:
-- `reference_images` (String) Input: COMFY_AUTOGROW_V3
+- `instructions` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Additional style or formatting guidance.
+- `reference_images` (String) Input: COMFY_AUTOGROW_V3. Tooltip: Up to 4 reference images to guide the generation.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `svg_output` (String) Output: SVG (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `svg_output` (String) Output: SVG (slot 0).

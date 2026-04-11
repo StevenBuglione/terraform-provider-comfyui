@@ -3,12 +3,12 @@
 page_title: "comfyui_image_quantize Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Quantize node [image/postprocessing]
+  ComfyUI Quantize node [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:112 (v3_extras).
 ---
 
 # comfyui_image_quantize (Resource)
 
-ComfyUI Quantize node [image/postprocessing]
+ComfyUI Quantize node [image/postprocessing] Source: comfy_extras/nodes_post_processing.py:112 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI Quantize node [image/postprocessing]
 
 ### Required
 
-- `colors` (Number) Input: INT default: 256
-- `dither` (String) Input: COMBO
-- `image` (String) Input: IMAGE (link)
+- `colors` (Number) Input: INT. Default: 256. Allowed range: 1 to 256. Step: 1.
+- `dither` (String) Input: COMBO.
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

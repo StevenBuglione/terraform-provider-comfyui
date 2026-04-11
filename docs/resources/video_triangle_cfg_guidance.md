@@ -3,12 +3,12 @@
 page_title: "comfyui_video_triangle_cfg_guidance Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VideoTriangleCFGGuidance node — VideoTriangleCFGGuidance [sampling/video_models]
+  ComfyUI VideoTriangleCFGGuidance node — VideoTriangleCFGGuidance [sampling/video_models] Source: comfy_extras/nodes_video_model.py:83 (v1_extras).
 ---
 
 # comfyui_video_triangle_cfg_guidance (Resource)
 
-ComfyUI VideoTriangleCFGGuidance node — VideoTriangleCFGGuidance [sampling/video_models]
+ComfyUI VideoTriangleCFGGuidance node — VideoTriangleCFGGuidance [sampling/video_models] Source: comfy_extras/nodes_video_model.py:83 (v1_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI VideoTriangleCFGGuidance node — VideoTriangleCFGGuidance [sampling/vid
 
 ### Required
 
-- `min_cfg` (Number) Input: FLOAT default: 1
-- `model` (String) Input: MODEL (link)
+- `min_cfg` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.5.
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -37,37 +37,37 @@ func (r *ImageOnlyCheckpointSaveResource) Metadata(_ context.Context, req resour
 
 func (r *ImageOnlyCheckpointSaveResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI ImageOnlyCheckpointSave node — ImageOnlyCheckpointSave [advanced/model_merging]",
+		MarkdownDescription: "ComfyUI ImageOnlyCheckpointSave node — ImageOnlyCheckpointSave [advanced/model_merging] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video_model.py:110 (v1_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"clip_vision": schema.StringAttribute{
-				Description: "Input: CLIP_VISION (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP_VISION. Link input.",
+				Required:            true,
 			},
 			"vae": schema.StringAttribute{
-				Description: "Input: VAE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: VAE. Link input.",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: checkpoints/ComfyUI",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"checkpoints/ComfyUI\".",
+				Required:            true,
 			},
 		},
 	}

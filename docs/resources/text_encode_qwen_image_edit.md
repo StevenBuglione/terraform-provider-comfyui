@@ -3,12 +3,12 @@
 page_title: "comfyui_text_encode_qwen_image_edit Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TextEncodeQwenImageEdit node [advanced/conditioning]
+  ComfyUI TextEncodeQwenImageEdit node [advanced/conditioning] Source: comfy_extras/nodes_qwen.py:10 (v3_extras).
 ---
 
 # comfyui_text_encode_qwen_image_edit (Resource)
 
-ComfyUI TextEncodeQwenImageEdit node [advanced/conditioning]
+ComfyUI TextEncodeQwenImageEdit node [advanced/conditioning] Source: comfy_extras/nodes_qwen.py:10 (v3_extras).
 
 
 
@@ -17,16 +17,16 @@ ComfyUI TextEncodeQwenImageEdit node [advanced/conditioning]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `prompt` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input.
+- `prompt` (String) Input: STRING. Supports multiline text.
 
 ### Optional
 
-- `image` (String) Input: IMAGE (link)
-- `vae` (String) Input: VAE (link)
+- `image` (String) Input: IMAGE. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

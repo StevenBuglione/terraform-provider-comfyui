@@ -3,12 +3,12 @@
 page_title: "comfyui_sd_pose_draw_keypoints Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SDPoseDrawKeypoints node [image/preprocessors]
+  ComfyUI SDPoseDrawKeypoints node [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:350 (v3_extras).
 ---
 
 # comfyui_sd_pose_draw_keypoints (Resource)
 
-ComfyUI SDPoseDrawKeypoints node [image/preprocessors]
+ComfyUI SDPoseDrawKeypoints node [image/preprocessors] Source: comfy_extras/nodes_sdpose.py:350 (v3_extras).
 
 
 
@@ -17,17 +17,17 @@ ComfyUI SDPoseDrawKeypoints node [image/preprocessors]
 
 ### Required
 
-- `draw_body` (Boolean) Input: BOOLEAN default: true
-- `draw_face` (Boolean) Input: BOOLEAN default: true
-- `draw_feet` (Boolean) Input: BOOLEAN default: false
-- `draw_hands` (Boolean) Input: BOOLEAN default: true
-- `face_point_size` (Number) Input: INT default: 3
-- `keypoints` (String) Input: POSE_KEYPOINT (link)
-- `score_threshold` (Number) Input: FLOAT default: 0.3
-- `stick_width` (Number) Input: INT default: 4
+- `draw_body` (Boolean) Input: BOOLEAN. Default: true.
+- `draw_face` (Boolean) Input: BOOLEAN. Default: true.
+- `draw_feet` (Boolean) Input: BOOLEAN. Default: false.
+- `draw_hands` (Boolean) Input: BOOLEAN. Default: true.
+- `face_point_size` (Number) Input: INT. Default: 3. Allowed range: 1 to 10. Step: 1.
+- `keypoints` (String) Input: POSE_KEYPOINT. Link input.
+- `score_threshold` (Number) Input: FLOAT. Default: 0.3. Allowed range: 0 to 1. Step: 0.01.
+- `stick_width` (Number) Input: INT. Default: 4. Allowed range: 1 to 10. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

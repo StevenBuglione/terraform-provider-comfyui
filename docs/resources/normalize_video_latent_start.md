@@ -3,12 +3,12 @@
 page_title: "comfyui_normalize_video_latent_start Resource - comfyui"
 subcategory: ""
 description: |-
-  Normalizes the initial frames of a video latent to match the mean and standard deviation of subsequent reference frames. Helps reduce differences between the starting frames and the rest of the video. [conditioning/video_models]
+  Normalizes the initial frames of a video latent to match the mean and standard deviation of subsequent reference frames. Helps reduce differences between the starting frames and the rest of the video. [conditioning/video_models] Source: comfy_extras/nodes_kandinsky5.py:69 (v3_extras).
 ---
 
 # comfyui_normalize_video_latent_start (Resource)
 
-Normalizes the initial frames of a video latent to match the mean and standard deviation of subsequent reference frames. Helps reduce differences between the starting frames and the rest of the video. [conditioning/video_models]
+Normalizes the initial frames of a video latent to match the mean and standard deviation of subsequent reference frames. Helps reduce differences between the starting frames and the rest of the video. [conditioning/video_models] Source: comfy_extras/nodes_kandinsky5.py:69 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Normalizes the initial frames of a video latent to match the mean and standard d
 
 ### Required
 
-- `latent` (String) Input: LATENT (link)
-- `reference_frame_count` (Number) Input: INT default: 5
-- `start_frame_count` (Number) Input: INT default: 4
+- `latent` (String) Input: LATENT. Link input.
+- `reference_frame_count` (Number) Input: INT. Default: 5. Minimum value: 1. Step: 1. Tooltip: Number of latent frames after the start frames to use as reference.
+- `start_frame_count` (Number) Input: INT. Default: 4. Minimum value: 1. Step: 1. Tooltip: Number of latent frames to normalize, counted from the start.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

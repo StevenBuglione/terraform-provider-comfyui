@@ -3,12 +3,12 @@
 page_title: "comfyui_split_image_with_alpha Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SplitImageWithAlpha node — Split Image with Alpha [mask/compositing]
+  ComfyUI SplitImageWithAlpha node — Split Image with Alpha [mask/compositing] Source: comfy_extras/nodes_compositing.py:164 (v3_extras).
 ---
 
 # comfyui_split_image_with_alpha (Resource)
 
-ComfyUI SplitImageWithAlpha node — Split Image with Alpha [mask/compositing]
+ComfyUI SplitImageWithAlpha node — Split Image with Alpha [mask/compositing] Source: comfy_extras/nodes_compositing.py:164 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI SplitImageWithAlpha node — Split Image with Alpha [mask/compositing]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `mask_output` (String) Output: MASK (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `mask_output` (String) Output: MASK (slot 1).
+- `node_id` (String) ComfyUI node class type.

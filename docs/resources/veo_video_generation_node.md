@@ -3,12 +3,12 @@
 page_title: "comfyui_veo_video_generation_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates videos from text prompts using Google's Veo 2 API [api node/video/Veo]
+  Generates videos from text prompts using Google's Veo 2 API [api node/video/Veo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_veo2.py:34 (v3_api).
 ---
 
 # comfyui_veo_video_generation_node (Resource)
 
-Generates videos from text prompts using Google's Veo 2 API [api node/video/Veo]
+Generates videos from text prompts using Google's Veo 2 API [api node/video/Veo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_veo2.py:34 (v3_api).
 
 
 
@@ -17,21 +17,21 @@ Generates videos from text prompts using Google's Veo 2 API [api node/video/Veo]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO default: 16:9
-- `prompt` (String) Input: STRING default:
+- `aspect_ratio` (String) Input: COMBO. Default: "16:9". Tooltip: Aspect ratio of the output video.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of the video.
 
 ### Optional
 
-- `duration_seconds` (Number) Input: INT default: 5
-- `enhance_prompt` (Boolean) Input: BOOLEAN default: true
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO default: veo-2.0-generate-001
-- `negative_prompt` (String) Input: STRING default:
-- `person_generation` (String) Input: COMBO default: ALLOW
-- `seed` (Number) Input: INT default: 0
+- `duration_seconds` (Number) Input: INT. Default: 5. Allowed range: 5 to 8. Step: 1. Tooltip: Duration of the output video in seconds.
+- `enhance_prompt` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.
+- `image` (String) Input: IMAGE. Link input. Tooltip: Optional reference image to guide video generation.
+- `model` (String) Input: COMBO. Default: "veo-2.0-generate-001". Tooltip: Veo 2 model to use for video generation.
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative text prompt to guide what to avoid in the video.
+- `person_generation` (String) Input: COMBO. Default: "ALLOW". Tooltip: Whether to allow generating people in the video.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Seed for video generation (0 for random).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

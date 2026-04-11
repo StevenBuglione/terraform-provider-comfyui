@@ -3,12 +3,12 @@
 page_title: "comfyui_reve_image_edit_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Edit images using natural language instructions with Reve. [api node/image/Reve]
+  Edit images using natural language instructions with Reve. [api node/image/Reve] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_reve.py:183 (v3_api).
 ---
 
 # comfyui_reve_image_edit_node (Resource)
 
-Edit images using natural language instructions with Reve. [api node/image/Reve]
+Edit images using natural language instructions with Reve. [api node/image/Reve] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_reve.py:183 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ Edit images using natural language instructions with Reve. [api node/image/Reve]
 
 ### Required
 
-- `edit_instruction` (String) Input: STRING default:
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `seed` (Number) Input: INT default: 0
+- `edit_instruction` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of how to edit the image. Maximum 2560 characters.
+- `image` (String) Input: IMAGE. Link input. Tooltip: The image to edit.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model version to use for editing.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

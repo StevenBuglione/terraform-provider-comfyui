@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_text_encode_flux Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CLIPTextEncodeFlux node [advanced/conditioning/flux]
+  ComfyUI CLIPTextEncodeFlux node [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:11 (v3_extras).
 ---
 
 # comfyui_clip_text_encode_flux (Resource)
 
-ComfyUI CLIPTextEncodeFlux node [advanced/conditioning/flux]
+ComfyUI CLIPTextEncodeFlux node [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:11 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI CLIPTextEncodeFlux node [advanced/conditioning/flux]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `clip_l` (String) Input: STRING
-- `guidance` (Number) Input: FLOAT default: 3.5
-- `t5xxl` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input.
+- `clip_l` (String) Input: STRING. Supports multiline text.
+- `guidance` (Number) Input: FLOAT. Default: 3.5. Allowed range: 0 to 100. Step: 0.1.
+- `t5xxl` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

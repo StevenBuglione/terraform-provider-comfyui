@@ -36,29 +36,29 @@ func (r *RecraftStyleV3RealisticImageResource) Metadata(_ context.Context, req r
 
 func (r *RecraftStyleV3RealisticImageResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Select realistic_image style and optional substyle. [api node/image/Recraft]",
+		MarkdownDescription: "Select realistic_image style and optional substyle. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:223 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"substyle": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_v3_substyles(cls.RECRAFT_STYLE).",
+				Required:            true,
 			},
 			"recraft_style_output": schema.StringAttribute{
-				Description: "Output: RecraftIO.STYLEV3 (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: RecraftIO.STYLEV3 (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

@@ -61,72 +61,72 @@ func (r *TrainLoraNodeResource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI TrainLoraNode node — Train LoRA [training]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI TrainLoraNode node — Train LoRA [training] Source: comfy_extras/nodes_train.py:948 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input. Tooltip: The model to train the LoRA on.",
+				Required:            true,
 			},
 			"latents": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input. Tooltip: The Latents to use for training, serve as dataset/input of the model.",
+				Required:            true,
 			},
 			"positive": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input. Tooltip: The positive conditioning to use for training.",
+				Required:            true,
 			},
 			"batch_size": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 10000. Tooltip: The batch size to use for training.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 10000),
 				},
 			},
 			"grad_accumulation_steps": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 1024. Tooltip: The number of gradient accumulation steps to use for training.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 1024),
 				},
 			},
 			"steps": schema.Int64Attribute{
-				Description: "Input: INT default: 16",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 16. Allowed range: 1 to 100000. Tooltip: The number of steps to train the LoRA for.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100000),
 				},
 			},
 			"learning_rate": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.0005",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.0005. Allowed range: 0.0000001 to 1. Step: 0.0000001. Tooltip: The learning rate to use for training.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1e-07, 1),
 				},
 			},
 			"rank": schema.Int64Attribute{
-				Description: "Input: INT default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 8. Allowed range: 1 to 128. Tooltip: The rank of the LoRA layers.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 128),
 				},
 			},
 			"optimizer": schema.StringAttribute{
-				Description: "Input: COMBO default: AdamW",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"AdamW\". Tooltip: The optimizer to use for training.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"AdamW",
@@ -137,8 +137,8 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"loss_function": schema.StringAttribute{
-				Description: "Input: COMBO default: MSE",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"MSE\". Tooltip: The loss function to use for training.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"MSE",
@@ -149,15 +149,15 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The seed to use for training (used in generator for LoRA weight initialization and noise sampling).",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"training_dtype": schema.StringAttribute{
-				Description: "Input: COMBO default: bf16",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"bf16\". Tooltip: The dtype to use for training. 'none' preserves the model's native compute dtype instead of overriding it. For fp16 models, GradScaler is automatically enabled.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"bf16",
@@ -167,8 +167,8 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"lora_dtype": schema.StringAttribute{
-				Description: "Input: COMBO default: bf16",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"bf16\". Tooltip: The dtype to use for lora.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"bf16",
@@ -177,53 +177,53 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"algorithm": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(adapter_maps.keys()). Tooltip: The algorithm to use for training.",
+				Required:            true,
 			},
 			"gradient_checkpointing": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Use gradient checkpointing for training.",
+				Required:            true,
 			},
 			"checkpoint_depth": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 5. Tooltip: Depth level for gradient checkpointing.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 5),
 				},
 			},
 			"offloading": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Offload model weights to CPU during training to save GPU memory.",
+				Required:            true,
 			},
 			"existing_lora": schema.StringAttribute{
-				Description: "Input: COMBO default: [None]",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"[None]\". Dynamic options are resolved by ComfyUI at runtime. Tooltip: The existing LoRA to append to. Set to None for new LoRA.",
+				Required:            true,
 			},
 			"bucket_mode": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Enable resolution bucket mode. When enabled, expects pre-bucketed latents from ResolutionBucket node.",
+				Required:            true,
 			},
 			"bypass_mode": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Enable bypass mode for training. When enabled, adapters are applied via forward hooks instead of weight modification. Useful for quantized models where weights cannot be directly modified.",
+				Required:            true,
 			},
 			"lora_output": schema.StringAttribute{
-				Description: "Output: LORA_MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LORA_MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"loss_map_output": schema.StringAttribute{
-				Description: "Output: LOSS_MAP (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: LOSS_MAP (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"steps_output": schema.StringAttribute{
-				Description: "Output: INT (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

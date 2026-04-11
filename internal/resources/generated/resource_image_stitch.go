@@ -44,29 +44,29 @@ func (r *ImageStitchResource) Metadata(_ context.Context, req resource.MetadataR
 
 func (r *ImageStitchResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Stitches image2 to image1 in the specified direction.\nIf image2 is not provided, returns image1 unchanged.\nOptional spacing can be added between images. [image/transform]",
+		MarkdownDescription: "Stitches image2 to image1 in the specified direction.\nIf image2 is not provided, returns image1 unchanged.\nOptional spacing can be added between images. [image/transform] Source: comfy_extras/nodes_images.py:254 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image1": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"direction": schema.StringAttribute{
-				Description: "Input: COMBO default: right",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"right\".",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"right",
@@ -77,19 +77,19 @@ func (r *ImageStitchResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"match_image_size": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true.",
+				Required:            true,
 			},
 			"spacing_width": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 1024. Step: 2.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 1024),
 				},
 			},
 			"spacing_color": schema.StringAttribute{
-				Description: "Input: COMBO default: white",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"white\".",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"white",
@@ -101,12 +101,12 @@ func (r *ImageStitchResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"image2": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

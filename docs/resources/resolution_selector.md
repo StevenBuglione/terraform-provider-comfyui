@@ -3,12 +3,12 @@
 page_title: "comfyui_resolution_selector Resource - comfyui"
 subcategory: ""
 description: |-
-  Calculate width and height from aspect ratio and megapixel target. Useful for setting up Empty Latent Image dimensions. [utils]
+  Calculate width and height from aspect ratio and megapixel target. Useful for setting up Empty Latent Image dimensions. [utils] Source: comfy_extras/nodes_resolution.py:31 (v3_extras).
 ---
 
 # comfyui_resolution_selector (Resource)
 
-Calculate width and height from aspect ratio and megapixel target. Useful for setting up Empty Latent Image dimensions. [utils]
+Calculate width and height from aspect ratio and megapixel target. Useful for setting up Empty Latent Image dimensions. [utils] Source: comfy_extras/nodes_resolution.py:31 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Calculate width and height from aspect ratio and megapixel target. Useful for se
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `megapixels` (Number) Input: FLOAT default: 1
+- `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: AspectRatio. Tooltip: The aspect ratio for the output dimensions.
+- `megapixels` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 16. Step: 0.1. Tooltip: Target total megapixels. 1.0 MP ≈ 1024×1024 for square.
 
 ### Read-Only
 
-- `height_output` (String) Output: INT (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `width_output` (String) Output: INT (slot 0)
+- `height_output` (String) Output: INT (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `width_output` (String) Output: INT (slot 0).

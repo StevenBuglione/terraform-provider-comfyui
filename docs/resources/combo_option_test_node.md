@@ -3,12 +3,12 @@
 page_title: "comfyui_combo_option_test_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ComboOutputTestNode node — ComboOptionTest [logic]
+  ComfyUI ComboOutputTestNode node — ComboOptionTest [logic] Source: comfy_extras/nodes_logic.py:210 (v3_extras).
 ---
 
 # comfyui_combo_option_test_node (Resource)
 
-ComfyUI ComboOutputTestNode node — ComboOptionTest [logic]
+ComfyUI ComboOutputTestNode node — ComboOptionTest [logic] Source: comfy_extras/nodes_logic.py:210 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ComboOutputTestNode node — ComboOptionTest [logic]
 
 ### Required
 
-- `combo` (String) Input: COMBO
-- `combo2` (String) Input: COMBO
+- `combo` (String) Input: COMBO.
+- `combo2` (String) Input: COMBO.
 
 ### Read-Only
 
-- `combo_output` (String) Output: COMBO (slot 0)
-- `combo_output_2` (String) Output: COMBO (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `combo_output` (String) Output: COMBO (slot 0).
+- `combo_output_2` (String) Output: COMBO (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

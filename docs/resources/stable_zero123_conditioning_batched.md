@@ -3,12 +3,12 @@
 page_title: "comfyui_stable_zero123_conditioning_batched Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StableZero123_Conditioning_Batched node [conditioning/3d_models]
+  ComfyUI StableZero123_Conditioning_Batched node [conditioning/3d_models] Source: comfy_extras/nodes_stable3d.py:63 (v3_extras).
 ---
 
 # comfyui_stable_zero123_conditioning_batched (Resource)
 
-ComfyUI StableZero123_Conditioning_Batched node [conditioning/3d_models]
+ComfyUI StableZero123_Conditioning_Batched node [conditioning/3d_models] Source: comfy_extras/nodes_stable3d.py:63 (v3_extras).
 
 
 
@@ -17,21 +17,21 @@ ComfyUI StableZero123_Conditioning_Batched node [conditioning/3d_models]
 
 ### Required
 
-- `azimuth` (Number) Input: FLOAT default: 0
-- `azimuth_batch_increment` (Number) Input: FLOAT default: 0
-- `batch_size` (Number) Input: INT default: 1
-- `clip_vision` (String) Input: CLIP_VISION (link)
-- `elevation` (Number) Input: FLOAT default: 0
-- `elevation_batch_increment` (Number) Input: FLOAT default: 0
-- `height` (Number) Input: INT default: 256
-- `init_image` (String) Input: IMAGE (link)
-- `vae` (String) Input: VAE (link)
-- `width` (Number) Input: INT default: 256
+- `azimuth` (Number) Input: FLOAT. Default: 0. Allowed range: -180 to 180. Step: 0.1.
+- `azimuth_batch_increment` (Number) Input: FLOAT. Default: 0. Allowed range: -180 to 180. Step: 0.1.
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `clip_vision` (String) Input: CLIP_VISION. Link input.
+- `elevation` (Number) Input: FLOAT. Default: 0. Allowed range: -180 to 180. Step: 0.1.
+- `elevation_batch_increment` (Number) Input: FLOAT. Default: 0. Allowed range: -180 to 180. Step: 0.1.
+- `height` (Number) Input: INT. Default: 256. Minimum value: 16. Step: 8.
+- `init_image` (String) Input: IMAGE. Link input.
+- `vae` (String) Input: VAE. Link input.
+- `width` (Number) Input: INT. Default: 256. Minimum value: 16. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LTXVScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI LTXVScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_lt.py:484 (v3_extras).
 ---
 
 # comfyui_ltxv_scheduler (Resource)
 
-ComfyUI LTXVScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI LTXVScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_lt.py:484 (v3_extras).
 
 
 
@@ -17,16 +17,16 @@ ComfyUI LTXVScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `base_shift` (Number) Input: FLOAT default: 0.95
-- `max_shift` (Number) Input: FLOAT default: 2.05
-- `steps` (Number) Input: INT default: 20
+- `base_shift` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0 to 100. Step: 0.01.
+- `max_shift` (Number) Input: FLOAT. Default: 2.05. Allowed range: 0 to 100. Step: 0.01.
+- `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Optional
 
-- `latent` (String) Input: LATENT (link)
+- `latent` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

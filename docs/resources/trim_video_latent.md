@@ -3,12 +3,12 @@
 page_title: "comfyui_trim_video_latent Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TrimVideoLatent node [latent/video]
+  ComfyUI TrimVideoLatent node [latent/video] Source: comfy_extras/nodes_wan.py:373 (v3_extras).
 ---
 
 # comfyui_trim_video_latent (Resource)
 
-ComfyUI TrimVideoLatent node [latent/video]
+ComfyUI TrimVideoLatent node [latent/video] Source: comfy_extras/nodes_wan.py:373 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI TrimVideoLatent node [latent/video]
 
 ### Required
 
-- `samples` (String) Input: LATENT (link)
-- `trim_amount` (Number) Input: INT default: 0
+- `samples` (String) Input: LATENT. Link input.
+- `trim_amount` (Number) Input: INT. Default: 0. Allowed range: 0 to 99999.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

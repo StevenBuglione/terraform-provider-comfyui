@@ -3,12 +3,12 @@
 page_title: "comfyui_save_training_dataset Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI SaveTrainingDataset node — Save Training Dataset [dataset]
+  (EXPERIMENTAL) ComfyUI SaveTrainingDataset node — Save Training Dataset [dataset] Source: comfy_extras/nodes_dataset.py:1317 (v3_extras).
 ---
 
 # comfyui_save_training_dataset (Resource)
 
-(EXPERIMENTAL) ComfyUI SaveTrainingDataset node — Save Training Dataset [dataset]
+(EXPERIMENTAL) ComfyUI SaveTrainingDataset node — Save Training Dataset [dataset] Source: comfy_extras/nodes_dataset.py:1317 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ description: |-
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `folder_name` (String) Input: STRING default: training_dataset
-- `latents` (String) Input: LATENT (link)
-- `shard_size` (Number) Input: INT default: 1000
+- `conditioning` (String) Input: CONDITIONING. Link input. Tooltip: List of conditioning lists from MakeTrainingDataset.
+- `folder_name` (String) Input: STRING. Default: "training_dataset". Tooltip: Name of folder to save dataset (inside output directory).
+- `latents` (String) Input: LATENT. Link input. Tooltip: List of latent dicts from MakeTrainingDataset.
+- `shard_size` (Number) Input: INT. Default: 1000. Allowed range: 1 to 100000. Tooltip: Number of samples per shard file.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

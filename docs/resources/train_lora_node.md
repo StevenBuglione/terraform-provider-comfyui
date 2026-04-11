@@ -3,12 +3,12 @@
 page_title: "comfyui_train_lora_node Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI TrainLoraNode node — Train LoRA [training]
+  (EXPERIMENTAL) ComfyUI TrainLoraNode node — Train LoRA [training] Source: comfy_extras/nodes_train.py:948 (v3_extras).
 ---
 
 # comfyui_train_lora_node (Resource)
 
-(EXPERIMENTAL) ComfyUI TrainLoraNode node — Train LoRA [training]
+(EXPERIMENTAL) ComfyUI TrainLoraNode node — Train LoRA [training] Source: comfy_extras/nodes_train.py:948 (v3_extras).
 
 
 
@@ -17,31 +17,31 @@ description: |-
 
 ### Required
 
-- `algorithm` (String) Input: COMBO
-- `batch_size` (Number) Input: INT default: 1
-- `bucket_mode` (Boolean) Input: BOOLEAN default: false
-- `bypass_mode` (Boolean) Input: BOOLEAN default: false
-- `checkpoint_depth` (Number) Input: INT default: 1
-- `existing_lora` (String) Input: COMBO default: [None]
-- `grad_accumulation_steps` (Number) Input: INT default: 1
-- `gradient_checkpointing` (Boolean) Input: BOOLEAN default: true
-- `latents` (String) Input: LATENT (link)
-- `learning_rate` (Number) Input: FLOAT default: 0.0005
-- `lora_dtype` (String) Input: COMBO default: bf16
-- `loss_function` (String) Input: COMBO default: MSE
-- `model` (String) Input: MODEL (link)
-- `offloading` (Boolean) Input: BOOLEAN default: false
-- `optimizer` (String) Input: COMBO default: AdamW
-- `positive` (String) Input: CONDITIONING (link)
-- `rank` (Number) Input: INT default: 8
-- `seed` (Number) Input: INT default: 0
-- `steps` (Number) Input: INT default: 16
-- `training_dtype` (String) Input: COMBO default: bf16
+- `algorithm` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(adapter_maps.keys()). Tooltip: The algorithm to use for training.
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 10000. Tooltip: The batch size to use for training.
+- `bucket_mode` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Enable resolution bucket mode. When enabled, expects pre-bucketed latents from ResolutionBucket node.
+- `bypass_mode` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Enable bypass mode for training. When enabled, adapters are applied via forward hooks instead of weight modification. Useful for quantized models where weights cannot be directly modified.
+- `checkpoint_depth` (Number) Input: INT. Default: 1. Allowed range: 1 to 5. Tooltip: Depth level for gradient checkpointing.
+- `existing_lora` (String) Input: COMBO. Default: "[None]". Dynamic options are resolved by ComfyUI at runtime. Tooltip: The existing LoRA to append to. Set to None for new LoRA.
+- `grad_accumulation_steps` (Number) Input: INT. Default: 1. Allowed range: 1 to 1024. Tooltip: The number of gradient accumulation steps to use for training.
+- `gradient_checkpointing` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Use gradient checkpointing for training.
+- `latents` (String) Input: LATENT. Link input. Tooltip: The Latents to use for training, serve as dataset/input of the model.
+- `learning_rate` (Number) Input: FLOAT. Default: 0.0005. Allowed range: 0.0000001 to 1. Step: 0.0000001. Tooltip: The learning rate to use for training.
+- `lora_dtype` (String) Input: COMBO. Default: "bf16". Tooltip: The dtype to use for lora.
+- `loss_function` (String) Input: COMBO. Default: "MSE". Tooltip: The loss function to use for training.
+- `model` (String) Input: MODEL. Link input. Tooltip: The model to train the LoRA on.
+- `offloading` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Offload model weights to CPU during training to save GPU memory.
+- `optimizer` (String) Input: COMBO. Default: "AdamW". Tooltip: The optimizer to use for training.
+- `positive` (String) Input: CONDITIONING. Link input. Tooltip: The positive conditioning to use for training.
+- `rank` (Number) Input: INT. Default: 8. Allowed range: 1 to 128. Tooltip: The rank of the LoRA layers.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The seed to use for training (used in generator for LoRA weight initialization and noise sampling).
+- `steps` (Number) Input: INT. Default: 16. Allowed range: 1 to 100000. Tooltip: The number of steps to train the LoRA for.
+- `training_dtype` (String) Input: COMBO. Default: "bf16". Tooltip: The dtype to use for training. 'none' preserves the model's native compute dtype instead of overriding it. For fp16 models, GradScaler is automatically enabled.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `lora_output` (String) Output: LORA_MODEL (slot 0)
-- `loss_map_output` (String) Output: LOSS_MAP (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `steps_output` (String) Output: INT (slot 2)
+- `id` (String) Unique identifier for this node instance.
+- `lora_output` (String) Output: LORA_MODEL (slot 0).
+- `loss_map_output` (String) Output: LOSS_MAP (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `steps_output` (String) Output: INT (slot 2).

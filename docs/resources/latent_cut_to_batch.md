@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_cut_to_batch Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentCutToBatch node [latent/advanced]
+  ComfyUI LatentCutToBatch node [latent/advanced] Source: comfy_extras/nodes_latent.py:217 (v3_extras).
 ---
 
 # comfyui_latent_cut_to_batch (Resource)
 
-ComfyUI LatentCutToBatch node [latent/advanced]
+ComfyUI LatentCutToBatch node [latent/advanced] Source: comfy_extras/nodes_latent.py:217 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI LatentCutToBatch node [latent/advanced]
 
 ### Required
 
-- `dim` (String) Input: COMBO
-- `samples` (String) Input: LATENT (link)
-- `slice_size` (Number) Input: INT default: 1
+- `dim` (String) Input: COMBO.
+- `samples` (String) Input: LATENT. Link input.
+- `slice_size` (Number) Input: INT. Default: 1. Minimum value: 1. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

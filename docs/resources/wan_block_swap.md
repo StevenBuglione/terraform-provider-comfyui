@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_block_swap Resource - comfyui"
 subcategory: ""
 description: |-
-  (DEPRECATED) NOP
+  (DEPRECATED) NOP Source: comfy_extras/nodes_nop.py:10 (v3_extras).
 ---
 
 # comfyui_wan_block_swap (Resource)
 
-(DEPRECATED) NOP
+(DEPRECATED) NOP Source: comfy_extras/nodes_nop.py:10 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

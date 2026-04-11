@@ -3,12 +3,12 @@
 page_title: "comfyui_lora_model_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI LoraModelLoader node — Load LoRA Model [loaders]
+  (EXPERIMENTAL) ComfyUI LoraModelLoader node — Load LoRA Model [loaders] Source: comfy_extras/nodes_train.py:1294 (v3_extras).
 ---
 
 # comfyui_lora_model_loader (Resource)
 
-(EXPERIMENTAL) ComfyUI LoraModelLoader node — Load LoRA Model [loaders]
+(EXPERIMENTAL) ComfyUI LoraModelLoader node — Load LoRA Model [loaders] Source: comfy_extras/nodes_train.py:1294 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `bypass` (Boolean) Input: BOOLEAN default: false
-- `lora` (String) Input: LORA_MODEL (link)
-- `model` (String) Input: MODEL (link)
-- `strength_model` (Number) Input: FLOAT default: 1
+- `bypass` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When enabled, applies LoRA in bypass mode without modifying base model weights. Useful for training and when model weights are offloaded.
+- `lora` (String) Input: LORA_MODEL. Link input. Tooltip: The LoRA model to apply to the diffusion model.
+- `model` (String) Input: MODEL. Link input. Tooltip: The diffusion model the LoRA will be applied to.
+- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Tooltip: How strongly to modify the diffusion model. This value can be negative.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

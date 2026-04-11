@@ -42,50 +42,50 @@ func (r *FreScaResource) Metadata(_ context.Context, req resource.MetadataReques
 
 func (r *FreScaResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) Applies frequency-dependent scaling to the guidance [_for_testing]",
+		MarkdownDescription: "(EXPERIMENTAL) Applies frequency-dependent scaling to the guidance [_for_testing] Source: comfy_extras/nodes_fresca.py:56 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"scale_low": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01. Tooltip: Scaling factor for low-frequency components.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"scale_high": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1.25",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1.25. Allowed range: 0 to 10. Step: 0.01. Tooltip: Scaling factor for high-frequency components.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"freq_cutoff": schema.Int64Attribute{
-				Description: "Input: INT default: 20",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 20. Allowed range: 1 to 10000. Step: 1. Tooltip: Number of frequency indices around center to consider as low-frequency.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 10000),
 				},
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

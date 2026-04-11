@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_multiply Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentMultiply node [latent/advanced]
+  ComfyUI LatentMultiply node [latent/advanced] Source: comfy_extras/nodes_latent.py:73 (v3_extras).
 ---
 
 # comfyui_latent_multiply (Resource)
 
-ComfyUI LatentMultiply node [latent/advanced]
+ComfyUI LatentMultiply node [latent/advanced] Source: comfy_extras/nodes_latent.py:73 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI LatentMultiply node [latent/advanced]
 
 ### Required
 
-- `multiplier` (Number) Input: FLOAT default: 1
-- `samples` (String) Input: LATENT (link)
+- `multiplier` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

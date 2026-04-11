@@ -39,37 +39,37 @@ func (r *SaveTrainingDatasetResource) Metadata(_ context.Context, req resource.M
 
 func (r *SaveTrainingDatasetResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI SaveTrainingDataset node — Save Training Dataset [dataset]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI SaveTrainingDataset node — Save Training Dataset [dataset] Source: comfy_extras/nodes_dataset.py:1317 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"latents": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input. Tooltip: List of latent dicts from MakeTrainingDataset.",
+				Required:            true,
 			},
 			"conditioning": schema.StringAttribute{
-				Description: "Input: CONDITIONING (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CONDITIONING. Link input. Tooltip: List of conditioning lists from MakeTrainingDataset.",
+				Required:            true,
 			},
 			"folder_name": schema.StringAttribute{
-				Description: "Input: STRING default: training_dataset",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"training_dataset\". Tooltip: Name of folder to save dataset (inside output directory).",
+				Required:            true,
 			},
 			"shard_size": schema.Int64Attribute{
-				Description: "Input: INT default: 1000",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 1000. Allowed range: 1 to 100000. Tooltip: Number of samples per shard file.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100000),
 				},

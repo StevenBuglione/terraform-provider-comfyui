@@ -3,12 +3,12 @@
 page_title: "comfyui_text_encode_hunyuan_video_image_to_video Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TextEncodeHunyuanVideo_ImageToVideo node [advanced/conditioning]
+  ComfyUI TextEncodeHunyuanVideo_ImageToVideo node [advanced/conditioning] Source: comfy_extras/nodes_hunyuan.py:272 (v3_extras).
 ---
 
 # comfyui_text_encode_hunyuan_video_image_to_video (Resource)
 
-ComfyUI TextEncodeHunyuanVideo_ImageToVideo node [advanced/conditioning]
+ComfyUI TextEncodeHunyuanVideo_ImageToVideo node [advanced/conditioning] Source: comfy_extras/nodes_hunyuan.py:272 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI TextEncodeHunyuanVideo_ImageToVideo node [advanced/conditioning]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT (link)
-- `image_interleave` (Number) Input: INT default: 2
-- `prompt` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input.
+- `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
+- `image_interleave` (Number) Input: INT. Default: 2. Allowed range: 1 to 512. Tooltip: How much the image influences things vs the text prompt. Higher number means more influence from the text prompt.
+- `prompt` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

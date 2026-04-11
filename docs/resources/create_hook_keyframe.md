@@ -3,12 +3,12 @@
 page_title: "comfyui_create_hook_keyframe Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CreateHookKeyframe node — Create Hook Keyframe [advanced/hooks/scheduling]
+  (EXPERIMENTAL) ComfyUI CreateHookKeyframe node — Create Hook Keyframe [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:471 (v1_extras).
 ---
 
 # comfyui_create_hook_keyframe (Resource)
 
-(EXPERIMENTAL) ComfyUI CreateHookKeyframe node — Create Hook Keyframe [advanced/hooks/scheduling]
+(EXPERIMENTAL) ComfyUI CreateHookKeyframe node — Create Hook Keyframe [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:471 (v1_extras).
 
 
 
@@ -17,15 +17,15 @@ description: |-
 
 ### Required
 
-- `start_percent` (Number) Input: FLOAT default: 0
-- `strength_mult` (Number) Input: FLOAT default: 1
+- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `strength_mult` (Number) Input: FLOAT. Default: 1. Allowed range: -20 to 20. Step: 0.01.
 
 ### Optional
 
-- `prev_hook_kf` (String) Input: HOOK_KEYFRAMES (link)
+- `prev_hook_kf` (String) Input: HOOK_KEYFRAMES. Link input.
 
 ### Read-Only
 
-- `hook_kf_output` (String) Output: HOOK_KEYFRAMES (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `hook_kf_output` (String) Output: HOOK_KEYFRAMES (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

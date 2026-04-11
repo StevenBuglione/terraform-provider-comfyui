@@ -3,12 +3,12 @@
 page_title: "comfyui_flip_sigmas Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI FlipSigmas node [sampling/custom_sampling/sigmas]
+  ComfyUI FlipSigmas node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:252 (v3_extras).
 ---
 
 # comfyui_flip_sigmas (Resource)
 
-ComfyUI FlipSigmas node [sampling/custom_sampling/sigmas]
+ComfyUI FlipSigmas node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:252 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI FlipSigmas node [sampling/custom_sampling/sigmas]
 
 ### Required
 
-- `sigmas` (String) Input: SIGMAS (link)
+- `sigmas` (String) Input: SIGMAS. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

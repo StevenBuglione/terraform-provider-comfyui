@@ -3,12 +3,12 @@
 page_title: "comfyui_manual_sigmas Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI ManualSigmas node [_for_testing/custom_sampling]
+  (EXPERIMENTAL) ComfyUI ManualSigmas node [_for_testing/custom_sampling] Source: comfy_extras/nodes_custom_sampler.py:1031 (v3_extras).
 ---
 
 # comfyui_manual_sigmas (Resource)
 
-(EXPERIMENTAL) ComfyUI ManualSigmas node [_for_testing/custom_sampling]
+(EXPERIMENTAL) ComfyUI ManualSigmas node [_for_testing/custom_sampling] Source: comfy_extras/nodes_custom_sampler.py:1031 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `sigmas` (String) Input: STRING default: 1, 0.5
+- `sigmas` (String) Input: STRING. Default: "1, 0.5".
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

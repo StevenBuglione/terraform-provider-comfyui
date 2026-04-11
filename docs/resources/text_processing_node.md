@@ -3,12 +3,12 @@
 page_title: "comfyui_text_processing_node Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI TextProcessingNode node [dataset/text]
+  (EXPERIMENTAL) ComfyUI TextProcessingNode node [dataset/text] Source: comfy_extras/nodes_dataset.py:470 (v3_extras).
 ---
 
 # comfyui_text_processing_node (Resource)
 
-(EXPERIMENTAL) ComfyUI TextProcessingNode node [dataset/text]
+(EXPERIMENTAL) ComfyUI TextProcessingNode node [dataset/text] Source: comfy_extras/nodes_dataset.py:470 (v3_extras).
 
 
 
@@ -17,6 +17,6 @@ description: |-
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `texts_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `texts_output` (String) Output: STRING (slot 0).

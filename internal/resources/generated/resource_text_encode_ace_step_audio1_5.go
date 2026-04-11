@@ -54,58 +54,58 @@ func (r *TextEncodeAceStepAudio15Resource) Metadata(_ context.Context, req resou
 
 func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI TextEncodeAceStepAudio15 node [conditioning]",
+		MarkdownDescription: "ComfyUI TextEncodeAceStepAudio15 node [conditioning] Source: comfy_extras/nodes_ace.py:31 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip": schema.StringAttribute{
-				Description: "Input: CLIP (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP. Link input.",
+				Required:            true,
 			},
 			"tags": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"lyrics": schema.StringAttribute{
-				Description: "Input: STRING",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Supports multiline text.",
+				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"bpm": schema.Int64Attribute{
-				Description: "Input: INT default: 120",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 120. Allowed range: 10 to 300.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(10, 300),
 				},
 			},
 			"duration": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 120",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 120. Allowed range: 0 to 2000. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 2000),
 				},
 			},
 			"timesignature": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"2",
@@ -116,8 +116,8 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"language": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"en",
@@ -147,51 +147,51 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"keyscale": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.",
+				Required:            true,
 			},
 			"generate_audio_codes": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: true",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Enable the LLM that generates audio codes. This can be slow but will increase the quality of the generated audio. Turn this off if you are giving the model an audio reference.",
+				Required:            true,
 			},
 			"cfg_scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 2",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 2. Allowed range: 0 to 100. Step: 0.1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"temperature": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.85",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.85. Allowed range: 0 to 2. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 2),
 				},
 			},
 			"top_p": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.9",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.9. Allowed range: 0 to 2000. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 2000),
 				},
 			},
 			"top_k": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 100.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 100),
 				},
 			},
 			"min_p": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"conditioning_output": schema.StringAttribute{
-				Description: "Output: CONDITIONING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CONDITIONING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

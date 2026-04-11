@@ -3,12 +3,12 @@
 page_title: "comfyui_set_union_control_net_type Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SetUnionControlNetType node [conditioning/controlnet]
+  ComfyUI SetUnionControlNetType node [conditioning/controlnet] Source: comfy_extras/nodes_controlnet.py:7 (v3_extras).
 ---
 
 # comfyui_set_union_control_net_type (Resource)
 
-ComfyUI SetUnionControlNetType node [conditioning/controlnet]
+ComfyUI SetUnionControlNetType node [conditioning/controlnet] Source: comfy_extras/nodes_controlnet.py:7 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI SetUnionControlNetType node [conditioning/controlnet]
 
 ### Required
 
-- `control_net` (String) Input: CONTROL_NET (link)
-- `type` (String) Input: COMBO
+- `control_net` (String) Input: CONTROL_NET. Link input.
+- `type` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
 
 ### Read-Only
 
-- `control_net_output` (String) Output: CONTROL_NET (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `control_net_output` (String) Output: CONTROL_NET (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

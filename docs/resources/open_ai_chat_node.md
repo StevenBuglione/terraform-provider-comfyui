@@ -3,12 +3,12 @@
 page_title: "comfyui_open_ai_chat_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate text responses from an OpenAI model. [api node/text/OpenAI]
+  Generate text responses from an OpenAI model. [api node/text/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:567 (v3_api).
 ---
 
 # comfyui_open_ai_chat_node (Resource)
 
-Generate text responses from an OpenAI model. [api node/text/OpenAI]
+Generate text responses from an OpenAI model. [api node/text/OpenAI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_openai.py:567 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Generate text responses from an OpenAI model. [api node/text/OpenAI]
 
 ### Required
 
-- `model` (String) Input: COMBO
-- `persist_context` (Boolean) Input: BOOLEAN default: false
-- `prompt` (String) Input: STRING default:
+- `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: SupportedOpenAIModel. Tooltip: The model used to generate the response.
+- `persist_context` (Boolean) Input: BOOLEAN. Default: false. Tooltip: This parameter is deprecated and has no effect.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text inputs to the model, used to generate a response.
 
 ### Optional
 
-- `advanced_options` (String) Input: OPENAI_CHAT_CONFIG (link)
-- `files` (String) Input: OPENAI_INPUT_FILES (link)
-- `images` (String) Input: IMAGE (link)
+- `advanced_options` (String) Input: OPENAI_CHAT_CONFIG. Link input. Tooltip: Optional configuration for the model. Accepts inputs from the OpenAI Chat Advanced Options node.
+- `files` (String) Input: OPENAI_INPUT_FILES. Link input. Tooltip: Optional file(s) to use as context for the model. Accepts inputs from the OpenAI Chat Input Files node.
+- `images` (String) Input: IMAGE. Link input. Tooltip: Optional image(s) to use as context for the model. To include multiple images, you can use the Batch Images node.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

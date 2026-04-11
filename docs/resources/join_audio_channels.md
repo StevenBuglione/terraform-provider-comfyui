@@ -3,12 +3,12 @@
 page_title: "comfyui_join_audio_channels Resource - comfyui"
 subcategory: ""
 description: |-
-  Joins left and right mono audio channels into a stereo audio. [audio]
+  Joins left and right mono audio channels into a stereo audio. [audio] Source: comfy_extras/nodes_audio.py:448 (v3_extras).
 ---
 
 # comfyui_join_audio_channels (Resource)
 
-Joins left and right mono audio channels into a stereo audio. [audio]
+Joins left and right mono audio channels into a stereo audio. [audio] Source: comfy_extras/nodes_audio.py:448 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ Joins left and right mono audio channels into a stereo audio. [audio]
 
 ### Required
 
-- `audio_left` (String) Input: AUDIO (link)
-- `audio_right` (String) Input: AUDIO (link)
+- `audio_left` (String) Input: AUDIO. Link input.
+- `audio_right` (String) Input: AUDIO. Link input.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

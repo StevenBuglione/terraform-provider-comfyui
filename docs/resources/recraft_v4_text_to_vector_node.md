@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_v4_text_to_vector_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates SVG using Recraft V4 or V4 Pro models. [api node/image/Recraft]
+  Generates SVG using Recraft V4 or V4 Pro models. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:1207 (v3_api).
 ---
 
 # comfyui_recraft_v4_text_to_vector_node (Resource)
 
-Generates SVG using Recraft V4 or V4 Pro models. [api node/image/Recraft]
+Generates SVG using Recraft V4 or V4 Pro models. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:1207 (v3_api).
 
 
 
@@ -17,18 +17,18 @@ Generates SVG using Recraft V4 or V4 Pro models. [api node/image/Recraft]
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `n` (Number) Input: INT default: 1
-- `negative_prompt` (String) Input: STRING
-- `prompt` (String) Input: STRING
-- `seed` (Number) Input: INT default: 0
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for generation.
+- `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 6. Tooltip: The number of images to generate.
+- `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: An optional text description of undesired elements on an image.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Prompt for the image generation. Maximum 10,000 characters.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 
-- `recraft_controls` (String) Input: RecraftIO.CONTROLS (link)
+- `recraft_controls` (String) Input: RecraftIO.CONTROLS. Link input. Tooltip: Optional additional controls over the generation via the Recraft Controls node.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `svg_output` (String) Output: SVG (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `svg_output` (String) Output: SVG (slot 0).

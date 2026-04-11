@@ -3,12 +3,12 @@
 page_title: "comfyui_pixverse_transition_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates videos based on prompt and output_size. [api node/video/PixVerse]
+  Generates videos based on prompt and output_size. [api node/video/PixVerse] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_pixverse.py:307 (v3_api).
 ---
 
 # comfyui_pixverse_transition_video_node (Resource)
 
-Generates videos based on prompt and output_size. [api node/video/PixVerse]
+Generates videos based on prompt and output_size. [api node/video/PixVerse] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_pixverse.py:307 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ Generates videos based on prompt and output_size. [api node/video/PixVerse]
 
 ### Required
 
-- `duration_seconds` (String) Input: COMBO
-- `first_frame` (String) Input: IMAGE (link)
-- `last_frame` (String) Input: IMAGE (link)
-- `motion_mode` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `quality` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `duration_seconds` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: PixverseDuration.
+- `first_frame` (String) Input: IMAGE. Link input.
+- `last_frame` (String) Input: IMAGE. Link input.
+- `motion_mode` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: PixverseMotionMode.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the video generation.
+- `quality` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: PixverseQuality.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed for video generation.
 
 ### Optional
 
-- `negative_prompt` (String) Input: STRING default:
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: An optional text description of undesired elements on an image.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

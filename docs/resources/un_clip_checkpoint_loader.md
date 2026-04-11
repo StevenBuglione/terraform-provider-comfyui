@@ -3,12 +3,12 @@
 page_title: "comfyui_un_clip_checkpoint_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI unCLIPCheckpointLoader node — unCLIPCheckpointLoader [loaders]
+  ComfyUI unCLIPCheckpointLoader node — unCLIPCheckpointLoader [loaders] Source: nodes.py:640 (v1_core).
 ---
 
 # comfyui_un_clip_checkpoint_loader (Resource)
 
-ComfyUI unCLIPCheckpointLoader node — unCLIPCheckpointLoader [loaders]
+ComfyUI unCLIPCheckpointLoader node — unCLIPCheckpointLoader [loaders] Source: nodes.py:640 (v1_core).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI unCLIPCheckpointLoader node — unCLIPCheckpointLoader [loaders]
 
 ### Required
 
-- `ckpt_name` (String) Input: COMBO
+- `ckpt_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints').
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 1)
-- `clip_vision_output` (String) Output: CLIP_VISION (slot 3)
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `vae_output` (String) Output: VAE (slot 2)
+- `clip_output` (String) Output: CLIP (slot 1).
+- `clip_vision_output` (String) Output: CLIP_VISION (slot 3).
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `vae_output` (String) Output: VAE (slot 2).

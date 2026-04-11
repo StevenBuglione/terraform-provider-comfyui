@@ -3,12 +3,12 @@
 page_title: "comfyui_stable_cascade_stage_c_vae_encode Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StableCascade_StageC_VAEEncode node [latent/stable_cascade]
+  ComfyUI StableCascade_StageC_VAEEncode node [latent/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:56 (v3_extras).
 ---
 
 # comfyui_stable_cascade_stage_c_vae_encode (Resource)
 
-ComfyUI StableCascade_StageC_VAEEncode node [latent/stable_cascade]
+ComfyUI StableCascade_StageC_VAEEncode node [latent/stable_cascade] Source: comfy_extras/nodes_stable_cascade.py:56 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI StableCascade_StageC_VAEEncode node [latent/stable_cascade]
 
 ### Required
 
-- `compression` (Number) Input: INT default: 42
-- `image` (String) Input: IMAGE (link)
-- `vae` (String) Input: VAE (link)
+- `compression` (Number) Input: INT. Default: 42. Allowed range: 4 to 128. Step: 1.
+- `image` (String) Input: IMAGE. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `stage_b_output` (String) Output: LATENT (slot 1)
-- `stage_c_output` (String) Output: LATENT (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `stage_b_output` (String) Output: LATENT (slot 1).
+- `stage_c_output` (String) Output: LATENT (slot 0).

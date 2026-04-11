@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_img_to_video_inplace Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LTXVImgToVideoInplace node [conditioning/video_models]
+  ComfyUI LTXVImgToVideoInplace node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:84 (v3_extras).
 ---
 
 # comfyui_ltxv_img_to_video_inplace (Resource)
 
-ComfyUI LTXVImgToVideoInplace node [conditioning/video_models]
+ComfyUI LTXVImgToVideoInplace node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:84 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI LTXVImgToVideoInplace node [conditioning/video_models]
 
 ### Required
 
-- `bypass` (Boolean) Input: BOOLEAN default: false
-- `image` (String) Input: IMAGE (link)
-- `latent` (String) Input: LATENT (link)
-- `strength` (Number) Input: FLOAT default: 1
-- `vae` (String) Input: VAE (link)
+- `bypass` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Bypass the conditioning.
+- `image` (String) Input: IMAGE. Link input.
+- `latent` (String) Input: LATENT. Link input.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

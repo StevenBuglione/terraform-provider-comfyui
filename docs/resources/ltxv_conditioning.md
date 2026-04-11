@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LTXVConditioning node [conditioning/video_models]
+  ComfyUI LTXVConditioning node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:415 (v3_extras).
 ---
 
 # comfyui_ltxv_conditioning (Resource)
 
-ComfyUI LTXVConditioning node [conditioning/video_models]
+ComfyUI LTXVConditioning node [conditioning/video_models] Source: comfy_extras/nodes_lt.py:415 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI LTXVConditioning node [conditioning/video_models]
 
 ### Required
 
-- `frame_rate` (Number) Input: FLOAT default: 25
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
+- `frame_rate` (Number) Input: FLOAT. Default: 25. Allowed range: 0 to 1000. Step: 0.01.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

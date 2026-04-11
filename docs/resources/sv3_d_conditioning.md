@@ -3,12 +3,12 @@
 page_title: "comfyui_sv3_d_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SV3D_Conditioning node [conditioning/3d_models]
+  ComfyUI SV3D_Conditioning node [conditioning/3d_models] Source: comfy_extras/nodes_stable3d.py:110 (v3_extras).
 ---
 
 # comfyui_sv3_d_conditioning (Resource)
 
-ComfyUI SV3D_Conditioning node [conditioning/3d_models]
+ComfyUI SV3D_Conditioning node [conditioning/3d_models] Source: comfy_extras/nodes_stable3d.py:110 (v3_extras).
 
 
 
@@ -17,18 +17,18 @@ ComfyUI SV3D_Conditioning node [conditioning/3d_models]
 
 ### Required
 
-- `clip_vision` (String) Input: CLIP_VISION (link)
-- `elevation` (Number) Input: FLOAT default: 0
-- `height` (Number) Input: INT default: 576
-- `init_image` (String) Input: IMAGE (link)
-- `vae` (String) Input: VAE (link)
-- `video_frames` (Number) Input: INT default: 21
-- `width` (Number) Input: INT default: 576
+- `clip_vision` (String) Input: CLIP_VISION. Link input.
+- `elevation` (Number) Input: FLOAT. Default: 0. Allowed range: -90 to 90. Step: 0.1.
+- `height` (Number) Input: INT. Default: 576. Minimum value: 16. Step: 8.
+- `init_image` (String) Input: IMAGE. Link input.
+- `vae` (String) Input: VAE. Link input.
+- `video_frames` (Number) Input: INT. Default: 21. Allowed range: 1 to 4096.
+- `width` (Number) Input: INT. Default: 576. Minimum value: 16. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

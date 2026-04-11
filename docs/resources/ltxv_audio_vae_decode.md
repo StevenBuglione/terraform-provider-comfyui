@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_audio_vae_decode Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LTXVAudioVAEDecode node — LTXV Audio VAE Decode [audio]
+  ComfyUI LTXVAudioVAEDecode node — LTXV Audio VAE Decode [audio] Source: comfy_extras/nodes_lt_audio.py:64 (v3_extras).
 ---
 
 # comfyui_ltxv_audio_vae_decode (Resource)
 
-ComfyUI LTXVAudioVAEDecode node — LTXV Audio VAE Decode [audio]
+ComfyUI LTXVAudioVAEDecode node — LTXV Audio VAE Decode [audio] Source: comfy_extras/nodes_lt_audio.py:64 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI LTXVAudioVAEDecode node — LTXV Audio VAE Decode [audio]
 
 ### Required
 
-- `samples` (String) Input: LATENT (link)
+- `samples` (String) Input: LATENT. Link input. Tooltip: The latent to be decoded.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_text_encode_ace_step_audio1_5 Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TextEncodeAceStepAudio15 node [conditioning]
+  ComfyUI TextEncodeAceStepAudio15 node [conditioning] Source: comfy_extras/nodes_ace.py:31 (v3_extras).
 ---
 
 # comfyui_text_encode_ace_step_audio1_5 (Resource)
 
-ComfyUI TextEncodeAceStepAudio15 node [conditioning]
+ComfyUI TextEncodeAceStepAudio15 node [conditioning] Source: comfy_extras/nodes_ace.py:31 (v3_extras).
 
 
 
@@ -17,24 +17,24 @@ ComfyUI TextEncodeAceStepAudio15 node [conditioning]
 
 ### Required
 
-- `bpm` (Number) Input: INT default: 120
-- `cfg_scale` (Number) Input: FLOAT default: 2
-- `clip` (String) Input: CLIP (link)
-- `duration` (Number) Input: FLOAT default: 120
-- `generate_audio_codes` (Boolean) Input: BOOLEAN default: true
-- `keyscale` (String) Input: COMBO
-- `language` (String) Input: COMBO
-- `lyrics` (String) Input: STRING
-- `min_p` (Number) Input: FLOAT default: 0
-- `seed` (Number) Input: INT default: 0
-- `tags` (String) Input: STRING
-- `temperature` (Number) Input: FLOAT default: 0.85
-- `timesignature` (String) Input: COMBO
-- `top_k` (Number) Input: INT default: 0
-- `top_p` (Number) Input: FLOAT default: 0.9
+- `bpm` (Number) Input: INT. Default: 120. Allowed range: 10 to 300.
+- `cfg_scale` (Number) Input: FLOAT. Default: 2. Allowed range: 0 to 100. Step: 0.1.
+- `clip` (String) Input: CLIP. Link input.
+- `duration` (Number) Input: FLOAT. Default: 120. Allowed range: 0 to 2000. Step: 0.1.
+- `generate_audio_codes` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Enable the LLM that generates audio codes. This can be slow but will increase the quality of the generated audio. Turn this off if you are giving the model an audio reference.
+- `keyscale` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
+- `language` (String) Input: COMBO.
+- `lyrics` (String) Input: STRING. Supports multiline text.
+- `min_p` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.
+- `tags` (String) Input: STRING. Supports multiline text.
+- `temperature` (Number) Input: FLOAT. Default: 0.85. Allowed range: 0 to 2. Step: 0.01.
+- `timesignature` (String) Input: COMBO.
+- `top_k` (Number) Input: INT. Default: 0. Allowed range: 0 to 100.
+- `top_p` (Number) Input: FLOAT. Default: 0.9. Allowed range: 0 to 2000. Step: 0.01.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

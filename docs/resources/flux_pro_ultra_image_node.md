@@ -3,12 +3,12 @@
 page_title: "comfyui_flux_pro_ultra_image_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates images using Flux Pro 1.1 Ultra via api based on prompt and resolution. [api node/image/BFL]
+  Generates images using Flux Pro 1.1 Ultra via api based on prompt and resolution. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:38 (v3_api).
 ---
 
 # comfyui_flux_pro_ultra_image_node (Resource)
 
-Generates images using Flux Pro 1.1 Ultra via api based on prompt and resolution. [api node/image/BFL]
+Generates images using Flux Pro 1.1 Ultra via api based on prompt and resolution. [api node/image/BFL] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bfl.py:38 (v3_api).
 
 
 
@@ -17,19 +17,19 @@ Generates images using Flux Pro 1.1 Ultra via api based on prompt and resolution
 
 ### Required
 
-- `aspect_ratio` (String) Input: STRING default: 16:9
-- `prompt` (String) Input: STRING default:
-- `prompt_upsampling` (Boolean) Input: BOOLEAN default: false
-- `raw` (Boolean) Input: BOOLEAN default: false
-- `seed` (Number) Input: INT default: 0
+- `aspect_ratio` (String) Input: STRING. Default: "16:9". Tooltip: Aspect ratio of image; must be between 1:4 and 4:1.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
+- `prompt_upsampling` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation, but results are nondeterministic (same seed will not produce exactly the same result).
+- `raw` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When True, generate less processed, more natural-looking images.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
 
 ### Optional
 
-- `image_prompt` (String) Input: IMAGE (link)
-- `image_prompt_strength` (Number) Input: FLOAT default: 0.1
+- `image_prompt` (String) Input: IMAGE. Link input.
+- `image_prompt_strength` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Blend between the prompt and the image prompt.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

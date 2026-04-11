@@ -3,12 +3,12 @@
 page_title: "comfyui_replace_video_latent_frames Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ReplaceVideoLatentFrames node [latent/batch]
+  ComfyUI ReplaceVideoLatentFrames node [latent/batch] Source: comfy_extras/nodes_latent.py:445 (v3_extras).
 ---
 
 # comfyui_replace_video_latent_frames (Resource)
 
-ComfyUI ReplaceVideoLatentFrames node [latent/batch]
+ComfyUI ReplaceVideoLatentFrames node [latent/batch] Source: comfy_extras/nodes_latent.py:445 (v3_extras).
 
 
 
@@ -17,15 +17,15 @@ ComfyUI ReplaceVideoLatentFrames node [latent/batch]
 
 ### Required
 
-- `destination` (String) Input: LATENT (link)
-- `index` (Number) Input: INT default: 0
+- `destination` (String) Input: LATENT. Link input. Tooltip: The destination latent where frames will be replaced.
+- `index` (Number) Input: INT. Default: 0. Step: 1. Tooltip: The starting latent frame index in the destination latent where the source latent frames will be placed. Negative values count from the end.
 
 ### Optional
 
-- `source` (String) Input: LATENT (link)
+- `source` (String) Input: LATENT. Link input. Tooltip: The source latent providing frames to insert into the destination latent. If not provided, the destination latent is returned unchanged.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

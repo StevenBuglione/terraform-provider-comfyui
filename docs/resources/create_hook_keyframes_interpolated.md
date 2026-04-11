@@ -3,12 +3,12 @@
 page_title: "comfyui_create_hook_keyframes_interpolated Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CreateHookKeyframesInterpolated node — Create Hook Keyframes Interp. [advanced/hooks/scheduling]
+  (EXPERIMENTAL) ComfyUI CreateHookKeyframesInterpolated node — Create Hook Keyframes Interp. [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:501 (v1_extras).
 ---
 
 # comfyui_create_hook_keyframes_interpolated (Resource)
 
-(EXPERIMENTAL) ComfyUI CreateHookKeyframesInterpolated node — Create Hook Keyframes Interp. [advanced/hooks/scheduling]
+(EXPERIMENTAL) ComfyUI CreateHookKeyframesInterpolated node — Create Hook Keyframes Interp. [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:501 (v1_extras).
 
 
 
@@ -17,20 +17,20 @@ description: |-
 
 ### Required
 
-- `end_percent` (Number) Input: FLOAT default: 1
-- `interpolation` (String) Input: COMBO
-- `keyframes_count` (Number) Input: INT default: 5
-- `print_keyframes` (Boolean) Input: BOOLEAN default: false
-- `start_percent` (Number) Input: FLOAT default: 0
-- `strength_end` (Number) Input: FLOAT default: 1
-- `strength_start` (Number) Input: FLOAT default: 1
+- `end_percent` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `interpolation` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.hooks.InterpolationMethod._LIST.
+- `keyframes_count` (Number) Input: INT. Default: 5. Allowed range: 2 to 100. Step: 1.
+- `print_keyframes` (Boolean) Input: BOOLEAN. Default: false.
+- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `strength_end` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.001.
+- `strength_start` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.001.
 
 ### Optional
 
-- `prev_hook_kf` (String) Input: HOOK_KEYFRAMES (link)
+- `prev_hook_kf` (String) Input: HOOK_KEYFRAMES. Link input.
 
 ### Read-Only
 
-- `hook_kf_output` (String) Output: HOOK_KEYFRAMES (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `hook_kf_output` (String) Output: HOOK_KEYFRAMES (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

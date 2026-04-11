@@ -3,12 +3,12 @@
 page_title: "comfyui_image_scale_to_max_dimension Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageScaleToMaxDimension node [image/upscaling]
+  ComfyUI ImageScaleToMaxDimension node [image/upscaling] Source: comfy_extras/nodes_images.py:646 (v3_extras).
 ---
 
 # comfyui_image_scale_to_max_dimension (Resource)
 
-ComfyUI ImageScaleToMaxDimension node [image/upscaling]
+ComfyUI ImageScaleToMaxDimension node [image/upscaling] Source: comfy_extras/nodes_images.py:646 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ImageScaleToMaxDimension node [image/upscaling]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `largest_size` (Number) Input: INT default: 512
-- `upscale_method` (String) Input: COMBO
+- `image` (String) Input: IMAGE. Link input.
+- `largest_size` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 1.
+- `upscale_method` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

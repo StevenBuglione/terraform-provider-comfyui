@@ -3,12 +3,12 @@
 page_title: "comfyui_eleven_labs_speech_to_speech Resource - comfyui"
 subcategory: ""
 description: |-
-  Transform speech from one voice to another while preserving the original content and emotion. [api node/audio/ElevenLabs]
+  Transform speech from one voice to another while preserving the original content and emotion. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:655 (v3_api).
 ---
 
 # comfyui_eleven_labs_speech_to_speech (Resource)
 
-Transform speech from one voice to another while preserving the original content and emotion. [api node/audio/ElevenLabs]
+Transform speech from one voice to another while preserving the original content and emotion. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_elevenlabs.py:655 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Transform speech from one voice to another while preserving the original content
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `output_format` (String) Input: COMBO
-- `remove_background_noise` (Boolean) Input: BOOLEAN default: false
-- `seed` (Number) Input: INT default: 0
-- `stability` (Number) Input: FLOAT default: 0.5
-- `voice` (String) Input: ELEVENLABS_VOICE (link)
+- `audio` (String) Input: AUDIO. Link input. Tooltip: Source audio to transform.
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for speech-to-speech transformation.
+- `output_format` (String) Input: COMBO. Tooltip: Audio output format.
+- `remove_background_noise` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Remove background noise from input audio using audio isolation.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967295. Tooltip: Seed for reproducibility.
+- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
+- `voice` (String) Input: ELEVENLABS_VOICE. Link input. Tooltip: Target voice for the transformation. Connect from Voice Selector or Instant Voice Clone.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_hyper_tile Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI HyperTile node [model_patches/unet]
+  ComfyUI HyperTile node [model_patches/unet] Source: comfy_extras/nodes_hypertile.py:25 (v3_extras).
 ---
 
 # comfyui_hyper_tile (Resource)
 
-ComfyUI HyperTile node [model_patches/unet]
+ComfyUI HyperTile node [model_patches/unet] Source: comfy_extras/nodes_hypertile.py:25 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI HyperTile node [model_patches/unet]
 
 ### Required
 
-- `max_depth` (Number) Input: INT default: 0
-- `model` (String) Input: MODEL (link)
-- `scale_depth` (Boolean) Input: BOOLEAN default: false
-- `swap_size` (Number) Input: INT default: 2
-- `tile_size` (Number) Input: INT default: 256
+- `max_depth` (Number) Input: INT. Default: 0. Allowed range: 0 to 10.
+- `model` (String) Input: MODEL. Link input.
+- `scale_depth` (Boolean) Input: BOOLEAN. Default: false.
+- `swap_size` (Number) Input: INT. Default: 2. Allowed range: 1 to 128.
+- `tile_size` (Number) Input: INT. Default: 256. Allowed range: 1 to 2048.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

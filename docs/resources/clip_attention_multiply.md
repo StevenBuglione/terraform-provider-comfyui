@@ -3,12 +3,12 @@
 page_title: "comfyui_clip_attention_multiply Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CLIPAttentionMultiply node [_for_testing/attention_experiments]
+  (EXPERIMENTAL) ComfyUI CLIPAttentionMultiply node [_for_testing/attention_experiments] Source: comfy_extras/nodes_attention_multiply.py:69 (v3_extras).
 ---
 
 # comfyui_clip_attention_multiply (Resource)
 
-(EXPERIMENTAL) ComfyUI CLIPAttentionMultiply node [_for_testing/attention_experiments]
+(EXPERIMENTAL) ComfyUI CLIPAttentionMultiply node [_for_testing/attention_experiments] Source: comfy_extras/nodes_attention_multiply.py:69 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `k` (Number) Input: FLOAT default: 1
-- `out` (Number) Input: FLOAT default: 1
-- `q` (Number) Input: FLOAT default: 1
-- `v` (Number) Input: FLOAT default: 1
+- `clip` (String) Input: CLIP. Link input.
+- `k` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `out` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `q` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `v` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_ltxv_latent_video Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EmptyLTXVLatentVideo node [latent/video/ltxv]
+  ComfyUI EmptyLTXVLatentVideo node [latent/video/ltxv] Source: comfy_extras/nodes_lt.py:15 (v3_extras).
 ---
 
 # comfyui_empty_ltxv_latent_video (Resource)
 
-ComfyUI EmptyLTXVLatentVideo node [latent/video/ltxv]
+ComfyUI EmptyLTXVLatentVideo node [latent/video/ltxv] Source: comfy_extras/nodes_lt.py:15 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI EmptyLTXVLatentVideo node [latent/video/ltxv]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `height` (Number) Input: INT default: 512
-- `length` (Number) Input: INT default: 97
-- `width` (Number) Input: INT default: 768
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `height` (Number) Input: INT. Default: 512. Minimum value: 64. Step: 32.
+- `length` (Number) Input: INT. Default: 97. Minimum value: 1. Step: 8.
+- `width` (Number) Input: INT. Default: 768. Minimum value: 64. Step: 32.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

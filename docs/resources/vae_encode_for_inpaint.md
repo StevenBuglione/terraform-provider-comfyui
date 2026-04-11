@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_encode_for_inpaint Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VAEEncodeForInpaint node — VAE Encode (for Inpainting) [latent/inpaint]
+  ComfyUI VAEEncodeForInpaint node — VAE Encode (for Inpainting) [latent/inpaint] Source: nodes.py:386 (v1_core).
 ---
 
 # comfyui_vae_encode_for_inpaint (Resource)
 
-ComfyUI VAEEncodeForInpaint node — VAE Encode (for Inpainting) [latent/inpaint]
+ComfyUI VAEEncodeForInpaint node — VAE Encode (for Inpainting) [latent/inpaint] Source: nodes.py:386 (v1_core).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI VAEEncodeForInpaint node — VAE Encode (for Inpainting) [latent/inpaint
 
 ### Required
 
-- `grow_mask_by` (Number) Input: INT default: 6
-- `mask` (String) Input: MASK (link)
-- `pixels` (String) Input: IMAGE (link)
-- `vae` (String) Input: VAE (link)
+- `grow_mask_by` (Number) Input: INT. Default: 6. Allowed range: 0 to 64. Step: 1.
+- `mask` (String) Input: MASK. Link input.
+- `pixels` (String) Input: IMAGE. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

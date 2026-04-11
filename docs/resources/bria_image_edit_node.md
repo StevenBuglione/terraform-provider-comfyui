@@ -3,12 +3,12 @@
 page_title: "comfyui_bria_image_edit_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Edit images using Bria latest model [api node/image/Bria]
+  Edit images using Bria latest model [api node/image/Bria] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bria.py:27 (v3_api).
 ---
 
 # comfyui_bria_image_edit_node (Resource)
 
-Edit images using Bria latest model [api node/image/Bria]
+Edit images using Bria latest model [api node/image/Bria] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bria.py:27 (v3_api).
 
 
 
@@ -17,23 +17,23 @@ Edit images using Bria latest model [api node/image/Bria]
 
 ### Required
 
-- `guidance_scale` (Number) Input: FLOAT default: 3
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO
-- `moderation` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `negative_prompt` (String) Input: STRING default:
-- `prompt` (String) Input: STRING default:
-- `seed` (Number) Input: INT default: 1
-- `steps` (Number) Input: INT default: 50
-- `structured_prompt` (String) Input: STRING default:
+- `guidance_scale` (Number) Input: FLOAT. Default: 3. Allowed range: 3 to 5. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.
+- `image` (String) Input: IMAGE. Link input.
+- `model` (String) Input: COMBO.
+- `moderation` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings.
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Instruction to edit image.
+- `seed` (Number) Input: INT. Default: 1. Allowed range: 1 to 2147483647. Step: 1.
+- `steps` (Number) Input: INT. Default: 50. Allowed range: 20 to 50. Step: 1.
+- `structured_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: A string containing the structured edit prompt in JSON format. Use this instead of usual prompt for precise, programmatic control.
 
 ### Optional
 
-- `mask` (String) Input: MASK (link)
+- `mask` (String) Input: MASK. Link input. Tooltip: If omitted, the edit applies to the entire image.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `structured_prompt_output` (String) Output: STRING (slot 1)
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `structured_prompt_output` (String) Output: STRING (slot 1).

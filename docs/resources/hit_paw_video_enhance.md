@@ -3,12 +3,12 @@
 page_title: "comfyui_hit_paw_video_enhance Resource - comfyui"
 subcategory: ""
 description: |-
-  Upscale low-resolution videos to high resolution, eliminate artifacts and noise. Prices shown are per second of video. [api node/video/HitPaw]
+  Upscale low-resolution videos to high resolution, eliminate artifacts and noise. Prices shown are per second of video. [api node/video/HitPaw] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hitpaw.py:186 (v3_api).
 ---
 
 # comfyui_hit_paw_video_enhance (Resource)
 
-Upscale low-resolution videos to high resolution, eliminate artifacts and noise. Prices shown are per second of video. [api node/video/HitPaw]
+Upscale low-resolution videos to high resolution, eliminate artifacts and noise. Prices shown are per second of video. [api node/video/HitPaw] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_hitpaw.py:186 (v3_api).
 
 
 
@@ -17,11 +17,11 @@ Upscale low-resolution videos to high resolution, eliminate artifacts and noise.
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `video` (String) Input: VIDEO (link)
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime from: model_options.
+- `video` (String) Input: VIDEO. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

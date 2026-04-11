@@ -3,12 +3,12 @@
 page_title: "comfyui_mahiro Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Modify the guidance to scale more on the 'direction' of the positive prompt rather than the difference between the negative prompt. [_for_testing]
+  (EXPERIMENTAL) Modify the guidance to scale more on the 'direction' of the positive prompt rather than the difference between the negative prompt. [_for_testing] Source: comfy_extras/nodes_mahiro.py:8 (v3_extras).
 ---
 
 # comfyui_mahiro (Resource)
 
-(EXPERIMENTAL) Modify the guidance to scale more on the 'direction' of the positive prompt rather than the difference between the negative prompt. [_for_testing]
+(EXPERIMENTAL) Modify the guidance to scale more on the 'direction' of the positive prompt rather than the difference between the negative prompt. [_for_testing] Source: comfy_extras/nodes_mahiro.py:8 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `patched_model_output` (String) Output: MODEL (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `patched_model_output` (String) Output: MODEL (slot 0).

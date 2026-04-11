@@ -3,12 +3,12 @@
 page_title: "comfyui_wavespeed_image_upscale_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Boost image resolution and quality, upscaling photos to 4K or 8K for sharp, detailed results. [api node/image/WaveSpeed]
+  Boost image resolution and quality, upscaling photos to 4K or 8K for sharp, detailed results. [api node/image/WaveSpeed] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wavespeed.py:96 (v3_api).
 ---
 
 # comfyui_wavespeed_image_upscale_node (Resource)
 
-Boost image resolution and quality, upscaling photos to 4K or 8K for sharp, detailed results. [api node/image/WaveSpeed]
+Boost image resolution and quality, upscaling photos to 4K or 8K for sharp, detailed results. [api node/image/WaveSpeed] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_wavespeed.py:96 (v3_api).
 
 
 
@@ -17,12 +17,12 @@ Boost image resolution and quality, upscaling photos to 4K or 8K for sharp, deta
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO
-- `target_resolution` (String) Input: COMBO
+- `image` (String) Input: IMAGE. Link input.
+- `model` (String) Input: COMBO.
+- `target_resolution` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

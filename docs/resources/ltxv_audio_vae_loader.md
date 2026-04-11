@@ -3,12 +3,12 @@
 page_title: "comfyui_ltxv_audio_vae_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LTXVAudioVAELoader node — LTXV Audio VAE Loader [audio]
+  ComfyUI LTXVAudioVAELoader node — LTXV Audio VAE Loader [audio] Source: comfy_extras/nodes_lt_audio.py:10 (v3_extras).
 ---
 
 # comfyui_ltxv_audio_vae_loader (Resource)
 
-ComfyUI LTXVAudioVAELoader node — LTXV Audio VAE Loader [audio]
+ComfyUI LTXVAudioVAELoader node — LTXV Audio VAE Loader [audio] Source: comfy_extras/nodes_lt_audio.py:10 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI LTXVAudioVAELoader node — LTXV Audio VAE Loader [audio]
 
 ### Required
 
-- `ckpt_name` (String) Input: COMBO
+- `ckpt_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints'). Tooltip: Audio VAE checkpoint to load.
 
 ### Read-Only
 
-- `audio_vae_output` (String) Output: VAE (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_vae_output` (String) Output: VAE (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

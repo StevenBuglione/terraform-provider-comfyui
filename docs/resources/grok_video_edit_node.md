@@ -3,12 +3,12 @@
 page_title: "comfyui_grok_video_edit_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Edit an existing video based on a text prompt. [api node/video/Grok]
+  Edit an existing video based on a text prompt. [api node/video/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:398 (v3_api).
 ---
 
 # comfyui_grok_video_edit_node (Resource)
 
-Edit an existing video based on a text prompt. [api node/video/Grok]
+Edit an existing video based on a text prompt. [api node/video/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:398 (v3_api).
 
 
 
@@ -17,13 +17,13 @@ Edit an existing video based on a text prompt. [api node/video/Grok]
 
 ### Required
 
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING
-- `seed` (Number) Input: INT default: 0
-- `video` (String) Input: VIDEO (link)
+- `model` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Text description of the desired video.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
+- `video` (String) Input: VIDEO. Link input. Tooltip: Maximum supported duration is 8.7 seconds and 50MB file size.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

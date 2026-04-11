@@ -3,12 +3,12 @@
 page_title: "comfyui_ksampler_advanced Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling]
+  ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling] Source: nodes.py:1593 (v1_core).
 ---
 
 # comfyui_ksampler_advanced (Resource)
 
-ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling]
+ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling] Source: nodes.py:1593 (v1_core).
 
 
 
@@ -17,22 +17,22 @@ ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling]
 
 ### Required
 
-- `add_noise` (String) Input: COMBO
-- `cfg` (Number) Input: FLOAT default: 8
-- `end_at_step` (Number) Input: INT default: 10000
-- `latent_image` (String) Input: LATENT (link)
-- `model` (String) Input: MODEL (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `noise_seed` (Number) Input: INT default: 0
-- `positive` (String) Input: CONDITIONING (link)
-- `return_with_leftover_noise` (String) Input: COMBO
-- `sampler_name` (String) Input: COMBO
-- `scheduler` (String) Input: COMBO
-- `start_at_step` (Number) Input: INT default: 0
-- `steps` (Number) Input: INT default: 20
+- `add_noise` (String) Input: COMBO.
+- `cfg` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `end_at_step` (Number) Input: INT. Default: 10000. Allowed range: 0 to 10000.
+- `latent_image` (String) Input: LATENT. Link input.
+- `model` (String) Input: MODEL. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `noise_seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `return_with_leftover_noise` (String) Input: COMBO.
+- `sampler_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.KSampler.SAMPLERS.
+- `scheduler` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.KSampler.SCHEDULERS.
+- `start_at_step` (Number) Input: INT. Default: 0. Allowed range: 0 to 10000.
+- `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

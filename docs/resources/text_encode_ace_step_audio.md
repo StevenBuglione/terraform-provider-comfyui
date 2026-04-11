@@ -3,12 +3,12 @@
 page_title: "comfyui_text_encode_ace_step_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TextEncodeAceStepAudio node [conditioning]
+  ComfyUI TextEncodeAceStepAudio node [conditioning] Source: comfy_extras/nodes_ace.py:9 (v3_extras).
 ---
 
 # comfyui_text_encode_ace_step_audio (Resource)
 
-ComfyUI TextEncodeAceStepAudio node [conditioning]
+ComfyUI TextEncodeAceStepAudio node [conditioning] Source: comfy_extras/nodes_ace.py:9 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI TextEncodeAceStepAudio node [conditioning]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `lyrics` (String) Input: STRING
-- `lyrics_strength` (Number) Input: FLOAT default: 1
-- `tags` (String) Input: STRING
+- `clip` (String) Input: CLIP. Link input.
+- `lyrics` (String) Input: STRING. Supports multiline text.
+- `lyrics_strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `tags` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

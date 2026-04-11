@@ -3,12 +3,12 @@
 page_title: "comfyui_latent_crop Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LatentCrop node — Crop Latent [latent/transform]
+  ComfyUI LatentCrop node — Crop Latent [latent/transform] Source: nodes.py:1489 (v1_core).
 ---
 
 # comfyui_latent_crop (Resource)
 
-ComfyUI LatentCrop node — Crop Latent [latent/transform]
+ComfyUI LatentCrop node — Crop Latent [latent/transform] Source: nodes.py:1489 (v1_core).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI LatentCrop node — Crop Latent [latent/transform]
 
 ### Required
 
-- `height` (Number) Input: INT default: 512
-- `samples` (String) Input: LATENT (link)
-- `width` (Number) Input: INT default: 512
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `height` (Number) Input: INT. Default: 512. Minimum value: 64. Step: 8.
+- `samples` (String) Input: LATENT. Link input.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 64. Step: 8.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

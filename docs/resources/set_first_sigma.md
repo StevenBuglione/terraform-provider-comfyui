@@ -3,12 +3,12 @@
 page_title: "comfyui_set_first_sigma Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SetFirstSigma node [sampling/custom_sampling/sigmas]
+  ComfyUI SetFirstSigma node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:274 (v3_extras).
 ---
 
 # comfyui_set_first_sigma (Resource)
 
-ComfyUI SetFirstSigma node [sampling/custom_sampling/sigmas]
+ComfyUI SetFirstSigma node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:274 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI SetFirstSigma node [sampling/custom_sampling/sigmas]
 
 ### Required
 
-- `sigma` (Number) Input: FLOAT default: 136
-- `sigmas` (String) Input: SIGMAS (link)
+- `sigma` (Number) Input: FLOAT. Default: 136. Allowed range: 0 to 20000. Step: 0.001.
+- `sigmas` (String) Input: SIGMAS. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

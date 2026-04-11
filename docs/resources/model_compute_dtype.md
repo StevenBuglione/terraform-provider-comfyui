@@ -3,12 +3,12 @@
 page_title: "comfyui_model_compute_dtype Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelComputeDtype node — ModelComputeDtype [advanced/debug/model]
+  ComfyUI ModelComputeDtype node — ModelComputeDtype [advanced/debug/model] Source: comfy_extras/nodes_model_advanced.py:303 (v1_extras).
 ---
 
 # comfyui_model_compute_dtype (Resource)
 
-ComfyUI ModelComputeDtype node — ModelComputeDtype [advanced/debug/model]
+ComfyUI ModelComputeDtype node — ModelComputeDtype [advanced/debug/model] Source: comfy_extras/nodes_model_advanced.py:303 (v1_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI ModelComputeDtype node — ModelComputeDtype [advanced/debug/model]
 
 ### Required
 
-- `dtype` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
+- `dtype` (String) Input: COMBO.
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

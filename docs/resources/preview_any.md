@@ -3,12 +3,12 @@
 page_title: "comfyui_preview_any Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI PreviewAny node — Preview as Text [utils]
+  ComfyUI PreviewAny node — Preview as Text [utils] Source: comfy_extras/nodes_preview_any.py:7 (v1_extras).
 ---
 
 # comfyui_preview_any (Resource)
 
-ComfyUI PreviewAny node — Preview as Text [utils]
+ComfyUI PreviewAny node — Preview as Text [utils] Source: comfy_extras/nodes_preview_any.py:7 (v1_extras).
 
 
 
@@ -17,9 +17,9 @@ ComfyUI PreviewAny node — Preview as Text [utils]
 
 ### Required
 
-- `source` (String) Input: ANY (link)
+- `source` (String) Input: ANY. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

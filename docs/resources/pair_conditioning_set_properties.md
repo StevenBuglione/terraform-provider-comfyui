@@ -3,12 +3,12 @@
 page_title: "comfyui_pair_conditioning_set_properties Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI PairConditioningSetProperties node — Cond Pair Set Props [advanced/hooks/cond pair]
+  (EXPERIMENTAL) ComfyUI PairConditioningSetProperties node — Cond Pair Set Props [advanced/hooks/cond pair] Source: comfy_extras/nodes_hooks.py:18 (v1_extras).
 ---
 
 # comfyui_pair_conditioning_set_properties (Resource)
 
-(EXPERIMENTAL) ComfyUI PairConditioningSetProperties node — Cond Pair Set Props [advanced/hooks/cond pair]
+(EXPERIMENTAL) ComfyUI PairConditioningSetProperties node — Cond Pair Set Props [advanced/hooks/cond pair] Source: comfy_extras/nodes_hooks.py:18 (v1_extras).
 
 
 
@@ -17,20 +17,20 @@ description: |-
 
 ### Required
 
-- `negative_new` (String) Input: CONDITIONING (link)
-- `positive_new` (String) Input: CONDITIONING (link)
-- `set_cond_area` (String) Input: COMBO
-- `strength` (Number) Input: FLOAT default: 1
+- `negative_new` (String) Input: CONDITIONING. Link input.
+- `positive_new` (String) Input: CONDITIONING. Link input.
+- `set_cond_area` (String) Input: COMBO.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Optional
 
-- `hooks` (String) Input: HOOKS (link)
-- `mask` (String) Input: MASK (link)
-- `timesteps` (String) Input: TIMESTEPS_RANGE (link)
+- `hooks` (String) Input: HOOKS. Link input.
+- `mask` (String) Input: MASK. Link input.
+- `timesteps` (String) Input: TIMESTEPS_RANGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

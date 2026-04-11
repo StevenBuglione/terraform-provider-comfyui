@@ -3,12 +3,12 @@
 page_title: "comfyui_load_image Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LoadImage node — Load Image [image]
+  ComfyUI LoadImage node — Load Image [image] Source: nodes.py:1700 (v1_core).
 ---
 
 # comfyui_load_image (Resource)
 
-ComfyUI LoadImage node — Load Image [image]
+ComfyUI LoadImage node — Load Image [image] Source: nodes.py:1700 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI LoadImage node — Load Image [image]
 
 ### Required
 
-- `image` (String) Input: COMBO
+- `image` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: sorted(files).
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `mask_output` (String) Output: MASK (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `mask_output` (String) Output: MASK (slot 1).
+- `node_id` (String) ComfyUI node class type.

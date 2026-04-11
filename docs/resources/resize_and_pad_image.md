@@ -3,12 +3,12 @@
 page_title: "comfyui_resize_and_pad_image Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ResizeAndPadImage node [image/transform]
+  ComfyUI ResizeAndPadImage node [image/transform] Source: comfy_extras/nodes_images.py:430 (v3_extras).
 ---
 
 # comfyui_resize_and_pad_image (Resource)
 
-ComfyUI ResizeAndPadImage node [image/transform]
+ComfyUI ResizeAndPadImage node [image/transform] Source: comfy_extras/nodes_images.py:430 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI ResizeAndPadImage node [image/transform]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `interpolation` (String) Input: COMBO
-- `padding_color` (String) Input: COMBO
-- `target_height` (Number) Input: INT default: 512
-- `target_width` (Number) Input: INT default: 512
+- `image` (String) Input: IMAGE. Link input.
+- `interpolation` (String) Input: COMBO.
+- `padding_color` (String) Input: COMBO.
+- `target_height` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
+- `target_width` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_wan_move_concat_track Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI WanMoveConcatTrack node [conditioning/video_models]
+  ComfyUI WanMoveConcatTrack node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:432 (v3_extras).
 ---
 
 # comfyui_wan_move_concat_track (Resource)
 
-ComfyUI WanMoveConcatTrack node [conditioning/video_models]
+ComfyUI WanMoveConcatTrack node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:432 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI WanMoveConcatTrack node [conditioning/video_models]
 
 ### Required
 
-- `tracks_1` (String) Input: TRACKS (link)
+- `tracks_1` (String) Input: TRACKS. Link input.
 
 ### Optional
 
-- `tracks_2` (String) Input: TRACKS (link)
+- `tracks_2` (String) Input: TRACKS. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `tracks_output` (String) Output: TRACKS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `tracks_output` (String) Output: TRACKS (slot 0).

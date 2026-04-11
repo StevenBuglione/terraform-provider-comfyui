@@ -3,12 +3,12 @@
 page_title: "comfyui_lora_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together. [loaders]
+  LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together. [loaders] Source: nodes.py:671 (v1_core).
 ---
 
 # comfyui_lora_loader (Resource)
 
-LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together. [loaders]
+LoRAs are used to modify diffusion and CLIP models, altering the way in which latents are denoised such as applying styles. Multiple LoRA nodes can be linked together. [loaders] Source: nodes.py:671 (v1_core).
 
 
 
@@ -17,15 +17,15 @@ LoRAs are used to modify diffusion and CLIP models, altering the way in which la
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `lora_name` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
-- `strength_clip` (Number) Input: FLOAT default: 1
-- `strength_model` (Number) Input: FLOAT default: 1
+- `clip` (String) Input: CLIP. Link input. Tooltip: The CLIP model the LoRA will be applied to.
+- `lora_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('loras'). Tooltip: The name of the LoRA.
+- `model` (String) Input: MODEL. Link input. Tooltip: The diffusion model the LoRA will be applied to.
+- `strength_clip` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Step: 0.01. Tooltip: How strongly to modify the CLIP model. This value can be negative.
+- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Step: 0.01. Tooltip: How strongly to modify the diffusion model. This value can be negative.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

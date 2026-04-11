@@ -38,37 +38,37 @@ func (r *NormalizeVideoLatentStartResource) Metadata(_ context.Context, req reso
 
 func (r *NormalizeVideoLatentStartResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Normalizes the initial frames of a video latent to match the mean and standard deviation of subsequent reference frames. Helps reduce differences between the starting frames and the rest of the video. [conditioning/video_models]",
+		MarkdownDescription: "Normalizes the initial frames of a video latent to match the mean and standard deviation of subsequent reference frames. Helps reduce differences between the starting frames and the rest of the video. [conditioning/video_models] Source: comfy_extras/nodes_kandinsky5.py:69 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"latent": schema.StringAttribute{
-				Description: "Input: LATENT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: LATENT. Link input.",
+				Required:            true,
 			},
 			"start_frame_count": schema.Int64Attribute{
-				Description: "Input: INT default: 4",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 4. Minimum value: 1. Step: 1. Tooltip: Number of latent frames to normalize, counted from the start.",
+				Required:            true,
 			},
 			"reference_frame_count": schema.Int64Attribute{
-				Description: "Input: INT default: 5",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 5. Minimum value: 1. Step: 1. Tooltip: Number of latent frames after the start frames to use as reference.",
+				Required:            true,
 			},
 			"latent_output": schema.StringAttribute{
-				Description: "Output: LATENT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

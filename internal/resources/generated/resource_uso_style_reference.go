@@ -38,37 +38,37 @@ func (r *UsoStyleReferenceResource) Metadata(_ context.Context, req resource.Met
 
 func (r *UsoStyleReferenceResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI USOStyleReference node — USOStyleReference [advanced/model_patches/flux]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI USOStyleReference node — USOStyleReference [advanced/model_patches/flux] Source: comfy_extras/nodes_model_patch.py:516 (v1_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"model_patch": schema.StringAttribute{
-				Description: "Input: MODEL_PATCH (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL_PATCH. Link input.",
+				Required:            true,
 			},
 			"clip_vision_output": schema.StringAttribute{
-				Description: "Input: CLIP_VISION_OUTPUT (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP_VISION_OUTPUT. Link input.",
+				Required:            true,
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

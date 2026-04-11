@@ -3,12 +3,12 @@
 page_title: "comfyui_audio_equalizer3_band Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI AudioEqualizer3Band node — Audio Equalizer (3-Band) [audio]
+  (EXPERIMENTAL) ComfyUI AudioEqualizer3Band node — Audio Equalizer (3-Band) [audio] Source: comfy_extras/nodes_audio.py:707 (v3_extras).
 ---
 
 # comfyui_audio_equalizer3_band (Resource)
 
-(EXPERIMENTAL) ComfyUI AudioEqualizer3Band node — Audio Equalizer (3-Band) [audio]
+(EXPERIMENTAL) ComfyUI AudioEqualizer3Band node — Audio Equalizer (3-Band) [audio] Source: comfy_extras/nodes_audio.py:707 (v3_extras).
 
 
 
@@ -17,17 +17,17 @@ description: |-
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `high_freq` (Number) Input: INT default: 5000
-- `high_gain_db` (Number) Input: FLOAT default: 0
-- `low_freq` (Number) Input: INT default: 100
-- `low_gain_db` (Number) Input: FLOAT default: 0
-- `mid_freq` (Number) Input: INT default: 1000
-- `mid_gain_db` (Number) Input: FLOAT default: 0
-- `mid_q` (Number) Input: FLOAT default: 0.707
+- `audio` (String) Input: AUDIO. Link input.
+- `high_freq` (Number) Input: INT. Default: 5000. Allowed range: 1000 to 15000. Tooltip: Cutoff frequency for High shelf.
+- `high_gain_db` (Number) Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for High frequencies (Treble).
+- `low_freq` (Number) Input: INT. Default: 100. Allowed range: 20 to 500. Tooltip: Cutoff frequency for Low shelf.
+- `low_gain_db` (Number) Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for Low frequencies (Bass).
+- `mid_freq` (Number) Input: INT. Default: 1000. Allowed range: 200 to 4000. Tooltip: Center frequency for Mids.
+- `mid_gain_db` (Number) Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for Mid frequencies.
+- `mid_q` (Number) Input: FLOAT. Default: 0.707. Allowed range: 0.1 to 10. Step: 0.1. Tooltip: Q factor (bandwidth) for Mids.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

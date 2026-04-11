@@ -3,12 +3,12 @@
 page_title: "comfyui_audio_merge Resource - comfyui"
 subcategory: ""
 description: |-
-  Combine two audio tracks by overlaying their waveforms. [audio]
+  Combine two audio tracks by overlaying their waveforms. [audio] Source: comfy_extras/nodes_audio.py:564 (v3_extras).
 ---
 
 # comfyui_audio_merge (Resource)
 
-Combine two audio tracks by overlaying their waveforms. [audio]
+Combine two audio tracks by overlaying their waveforms. [audio] Source: comfy_extras/nodes_audio.py:564 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Combine two audio tracks by overlaying their waveforms. [audio]
 
 ### Required
 
-- `audio1` (String) Input: AUDIO (link)
-- `audio2` (String) Input: AUDIO (link)
-- `merge_method` (String) Input: COMBO
+- `audio1` (String) Input: AUDIO. Link input.
+- `audio2` (String) Input: AUDIO. Link input.
+- `merge_method` (String) Input: COMBO. Tooltip: The method used to combine the audio waveforms.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -4,14 +4,14 @@ page_title: "comfyui_ltxav_text_encoder_loader Resource - comfyui"
 subcategory: ""
 description: |-
   [Recipes]
-  ltxav: gemma 3 12B [advanced/loaders]
+  ltxav: gemma 3 12B [advanced/loaders] Source: comfy_extras/nodes_lt_audio.py:172 (v3_extras).
 ---
 
 # comfyui_ltxav_text_encoder_loader (Resource)
 
 [Recipes]
 
-ltxav: gemma 3 12B [advanced/loaders]
+ltxav: gemma 3 12B [advanced/loaders] Source: comfy_extras/nodes_lt_audio.py:172 (v3_extras).
 
 
 
@@ -20,12 +20,12 @@ ltxav: gemma 3 12B [advanced/loaders]
 
 ### Required
 
-- `ckpt_name` (String) Input: COMBO
-- `device` (String) Input: COMBO
-- `text_encoder` (String) Input: COMBO
+- `ckpt_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints').
+- `device` (String) Input: COMBO.
+- `text_encoder` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

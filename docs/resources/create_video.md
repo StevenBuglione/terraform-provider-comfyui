@@ -3,12 +3,12 @@
 page_title: "comfyui_create_video Resource - comfyui"
 subcategory: ""
 description: |-
-  Create a video from images. [image/video]
+  Create a video from images. [image/video] Source: comfy_extras/nodes_video.py:117 (v3_extras).
 ---
 
 # comfyui_create_video (Resource)
 
-Create a video from images. [image/video]
+Create a video from images. [image/video] Source: comfy_extras/nodes_video.py:117 (v3_extras).
 
 
 
@@ -17,15 +17,15 @@ Create a video from images. [image/video]
 
 ### Required
 
-- `fps` (Number) Input: FLOAT default: 30
-- `images` (String) Input: IMAGE (link)
+- `fps` (Number) Input: FLOAT. Default: 30. Allowed range: 1 to 120. Step: 1.
+- `images` (String) Input: IMAGE. Link input. Tooltip: The images to create a video from.
 
 ### Optional
 
-- `audio` (String) Input: AUDIO (link)
+- `audio` (String) Input: AUDIO. Link input. Tooltip: The audio to add to the video.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

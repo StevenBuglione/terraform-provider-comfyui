@@ -42,25 +42,25 @@ func (r *SamplerDpmpp2MSdeResource) Metadata(_ context.Context, req resource.Met
 
 func (r *SamplerDpmpp2MSdeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SamplerDPMPP_2M_SDE node [sampling/custom_sampling/samplers]",
+		MarkdownDescription: "ComfyUI SamplerDPMPP_2M_SDE node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:419 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"solver_type": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"midpoint",
@@ -69,22 +69,22 @@ func (r *SamplerDpmpp2MSdeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"eta": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"s_noise": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"noise_device": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"gpu",
@@ -93,8 +93,8 @@ func (r *SamplerDpmpp2MSdeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"sampler_output": schema.StringAttribute{
-				Description: "Output: SAMPLER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SAMPLER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

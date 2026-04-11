@@ -3,12 +3,12 @@
 page_title: "comfyui_mask_preview Resource - comfyui"
 subcategory: ""
 description: |-
-  Saves the input images to your ComfyUI output directory. [mask]
+  Saves the input images to your ComfyUI output directory. [mask] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_mask.py:403 (v3_extras).
 ---
 
 # comfyui_mask_preview (Resource)
 
-Saves the input images to your ComfyUI output directory. [mask]
+Saves the input images to your ComfyUI output directory. [mask] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_mask.py:403 (v3_extras).
 
 
 
@@ -17,9 +17,9 @@ Saves the input images to your ComfyUI output directory. [mask]
 
 ### Required
 
-- `mask` (String) Input: MASK (link)
+- `mask` (String) Input: MASK. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_grok_video_reference_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate video guided by reference images as style and content references. [api node/video/Grok]
+  Generate video guided by reference images as style and content references. [api node/video/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:476 (v3_api).
 ---
 
 # comfyui_grok_video_reference_node (Resource)
 
-Generate video guided by reference images as style and content references. [api node/video/Grok]
+Generate video guided by reference images as style and content references. [api node/video/Grok] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_grok.py:476 (v3_api).
 
 
 
@@ -17,12 +17,12 @@ Generate video guided by reference images as style and content references. [api 
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `prompt` (String) Input: STRING
-- `seed` (Number) Input: INT default: 0
+- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for video generation.
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Text description of the desired video.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

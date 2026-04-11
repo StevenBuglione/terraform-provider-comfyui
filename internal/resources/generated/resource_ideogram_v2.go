@@ -47,41 +47,41 @@ func (r *IdeogramV2Resource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *IdeogramV2Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Generates images using the Ideogram V2 model. [api node/image/Ideogram]",
+		MarkdownDescription: "Generates images using the Ideogram V2 model. [api node/image/Ideogram] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_ideogram.py:356 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Prompt for the image generation.",
+				Required:            true,
 			},
 			"turbo": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Whether to use turbo mode (faster generation, potentially lower quality).",
+				Required:            true,
 			},
 			"aspect_ratio": schema.StringAttribute{
-				Description: "Input: COMBO default: 1:1",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"1:1\". Dynamic options are resolved by ComfyUI at runtime from: list(V1_V2_RATIO_MAP.keys()). Tooltip: The aspect ratio for image generation. Ignored if resolution is not set to AUTO.",
+				Optional:            true,
 			},
 			"resolution": schema.StringAttribute{
-				Description: "Input: COMBO default: Auto",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"Auto\". Dynamic options are resolved by ComfyUI at runtime from: list(V1_V1_RES_MAP.keys()). Tooltip: The resolution for image generation. If not set to AUTO, this overrides the aspect_ratio setting.",
+				Optional:            true,
 			},
 			"magic_prompt_option": schema.StringAttribute{
-				Description: "Input: COMBO default: AUTO",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"AUTO\". Tooltip: Determine if MagicPrompt should be used in generation.",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"AUTO",
@@ -91,15 +91,15 @@ func (r *IdeogramV2Resource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"style_type": schema.StringAttribute{
-				Description: "Input: COMBO default: NONE",
-				Optional:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"NONE\". Tooltip: Style type for generation (V2 only).",
+				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"AUTO",
@@ -112,19 +112,19 @@ func (r *IdeogramV2Resource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"negative_prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Optional:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Description of what to exclude from the image.",
+				Optional:            true,
 			},
 			"num_images": schema.Int64Attribute{
-				Description: "Input: INT default: 1",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 8),
 				},
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

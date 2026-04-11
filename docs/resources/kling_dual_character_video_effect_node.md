@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_dual_character_video_effect_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Achieve different special effects when generating a video based on the effect_scene. First image will be positioned on left side, second on right side of the composite. [api node/video/Kling]
+  Achieve different special effects when generating a video based on the effect_scene. First image will be positioned on left side, second on right side of the composite. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2096 (v3_api).
 ---
 
 # comfyui_kling_dual_character_video_effect_node (Resource)
 
-Achieve different special effects when generating a video based on the effect_scene. First image will be positioned on left side, second on right side of the composite. [api node/video/Kling]
+Achieve different special effects when generating a video based on the effect_scene. First image will be positioned on left side, second on right side of the composite. [api node/video/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2096 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Achieve different special effects when generating a video based on the effect_sc
 
 ### Required
 
-- `duration` (String) Input: COMBO
-- `effect_scene` (String) Input: COMBO
-- `image_left` (String) Input: IMAGE (link)
-- `image_right` (String) Input: IMAGE (link)
-- `mode` (String) Input: COMBO default: std
-- `model_name` (String) Input: COMBO default: kling-v1
+- `duration` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
+- `effect_scene` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
+- `image_left` (String) Input: IMAGE. Link input. Tooltip: Left side image.
+- `image_right` (String) Input: IMAGE. Link input. Tooltip: Right side image.
+- `mode` (String) Input: COMBO. Default: "std". Dynamic options are resolved by ComfyUI at runtime.
+- `model_name` (String) Input: COMBO. Default: "kling-v1". Dynamic options are resolved by ComfyUI at runtime.
 
 ### Read-Only
 
-- `duration_output` (String) Output: STRING (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `duration_output` (String) Output: STRING (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

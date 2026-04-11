@@ -3,12 +3,12 @@
 page_title: "comfyui_image_crop Resource - comfyui"
 subcategory: ""
 description: |-
-  (DEPRECATED) ComfyUI ImageCrop node — Image Crop (Deprecated) [image/transform]
+  (DEPRECATED) ComfyUI ImageCrop node — Image Crop (Deprecated) [image/transform] Source: comfy_extras/nodes_images.py:21 (v3_extras).
 ---
 
 # comfyui_image_crop (Resource)
 
-(DEPRECATED) ComfyUI ImageCrop node — Image Crop (Deprecated) [image/transform]
+(DEPRECATED) ComfyUI ImageCrop node — Image Crop (Deprecated) [image/transform] Source: comfy_extras/nodes_images.py:21 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `height` (Number) Input: INT default: 512
-- `image` (String) Input: IMAGE (link)
-- `width` (Number) Input: INT default: 512
-- `x` (Number) Input: INT default: 0
-- `y` (Number) Input: INT default: 0
+- `height` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
+- `image` (String) Input: IMAGE. Link input.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
+- `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
+- `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_conditioning_stable_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ConditioningStableAudio node [conditioning]
+  ComfyUI ConditioningStableAudio node [conditioning] Source: comfy_extras/nodes_audio.py:41 (v3_extras).
 ---
 
 # comfyui_conditioning_stable_audio (Resource)
 
-ComfyUI ConditioningStableAudio node [conditioning]
+ComfyUI ConditioningStableAudio node [conditioning] Source: comfy_extras/nodes_audio.py:41 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI ConditioningStableAudio node [conditioning]
 
 ### Required
 
-- `negative` (String) Input: CONDITIONING (link)
-- `positive` (String) Input: CONDITIONING (link)
-- `seconds_start` (Number) Input: FLOAT default: 0
-- `seconds_total` (Number) Input: FLOAT default: 47
+- `negative` (String) Input: CONDITIONING. Link input.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `seconds_start` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1000. Step: 0.1.
+- `seconds_total` (Number) Input: FLOAT. Default: 47. Allowed range: 0 to 1000. Step: 0.1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

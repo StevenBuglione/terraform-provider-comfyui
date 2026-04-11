@@ -3,12 +3,12 @@
 page_title: "comfyui_luma_image_to_video_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generates videos synchronously based on prompt, input images, and output_size. [api node/video/Luma]
+  Generates videos synchronously based on prompt, input images, and output_size. [api node/video/Luma] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_luma.py:467 (v3_api).
 ---
 
 # comfyui_luma_image_to_video_node (Resource)
 
-Generates videos synchronously based on prompt, input images, and output_size. [api node/video/Luma]
+Generates videos synchronously based on prompt, input images, and output_size. [api node/video/Luma] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_luma.py:467 (v3_api).
 
 
 
@@ -17,21 +17,21 @@ Generates videos synchronously based on prompt, input images, and output_size. [
 
 ### Required
 
-- `duration` (String) Input: COMBO
-- `loop` (Boolean) Input: BOOLEAN default: false
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `resolution` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
+- `duration` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
+- `loop` (Boolean) Input: BOOLEAN. Default: false.
+- `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaVideoModel.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the video generation.
+- `resolution` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaVideoOutputResolution.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 
-- `first_image` (String) Input: IMAGE (link)
-- `last_image` (String) Input: IMAGE (link)
-- `luma_concepts` (String) Input: LumaIO.LUMA_CONCEPTS (link)
+- `first_image` (String) Input: IMAGE. Link input. Tooltip: First frame of generated video.
+- `last_image` (String) Input: IMAGE. Link input. Tooltip: Last frame of generated video.
+- `luma_concepts` (String) Input: LumaIO.LUMA_CONCEPTS. Link input. Tooltip: Optional Camera Concepts to dictate camera motion via the Luma Concepts node.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

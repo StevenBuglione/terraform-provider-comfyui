@@ -3,12 +3,12 @@
 page_title: "comfyui_luma_concepts_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Camera Concepts for use with Luma Text to Video and Luma Image to Video nodes. [api node/video/Luma]
+  Camera Concepts for use with Luma Text to Video and Luma Image to Video nodes. [api node/video/Luma] Source: comfy_api_nodes/nodes_luma.py:80 (v3_api).
 ---
 
 # comfyui_luma_concepts_node (Resource)
 
-Camera Concepts for use with Luma Text to Video and Luma Image to Video nodes. [api node/video/Luma]
+Camera Concepts for use with Luma Text to Video and Luma Image to Video nodes. [api node/video/Luma] Source: comfy_api_nodes/nodes_luma.py:80 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ Camera Concepts for use with Luma Text to Video and Luma Image to Video nodes. [
 
 ### Required
 
-- `concept1` (String) Input: COMBO
-- `concept2` (String) Input: COMBO
-- `concept3` (String) Input: COMBO
-- `concept4` (String) Input: COMBO
+- `concept1` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_luma_concepts(include_none=True).
+- `concept2` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_luma_concepts(include_none=True).
+- `concept3` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_luma_concepts(include_none=True).
+- `concept4` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: get_luma_concepts(include_none=True).
 
 ### Optional
 
-- `luma_concepts` (String) Input: LumaIO.LUMA_CONCEPTS (link)
+- `luma_concepts` (String) Input: LumaIO.LUMA_CONCEPTS. Link input. Tooltip: Optional Camera Concepts to add to the ones chosen here.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `luma_concepts_output` (String) Output: LumaIO.LUMA_CONCEPTS (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `luma_concepts_output` (String) Output: LumaIO.LUMA_CONCEPTS (slot 0).
+- `node_id` (String) ComfyUI node class type.

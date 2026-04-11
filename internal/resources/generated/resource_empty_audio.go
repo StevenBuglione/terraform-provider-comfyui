@@ -41,46 +41,46 @@ func (r *EmptyAudioResource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *EmptyAudioResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI EmptyAudio node — Empty Audio [audio]",
+		MarkdownDescription: "ComfyUI EmptyAudio node — Empty Audio [audio] Source: comfy_extras/nodes_audio.py:661 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"duration": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 60",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 60. Allowed range: 0 to 18446744073709552000. Step: 0.01. Tooltip: Duration of the empty audio clip in seconds.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1.8446744073709552e+19),
 				},
 			},
 			"sample_rate": schema.Int64Attribute{
-				Description: "Input: INT default: 44100",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 44100. Allowed range: 1 to 192000. Tooltip: Sample rate of the empty audio clip.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 192000),
 				},
 			},
 			"channels": schema.Int64Attribute{
-				Description: "Input: INT default: 2",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 2. Allowed range: 1 to 2. Tooltip: Number of audio channels (1 for mono, 2 for stereo).",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 2),
 				},
 			},
 			"audio_output": schema.StringAttribute{
-				Description: "Output: AUDIO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: AUDIO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

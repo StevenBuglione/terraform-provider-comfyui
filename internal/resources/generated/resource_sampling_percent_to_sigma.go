@@ -40,40 +40,40 @@ func (r *SamplingPercentToSigmaResource) Metadata(_ context.Context, req resourc
 
 func (r *SamplingPercentToSigmaResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SamplingPercentToSigma node [sampling/custom_sampling/sigmas]",
+		MarkdownDescription: "ComfyUI SamplingPercentToSigma node [sampling/custom_sampling/sigmas] Source: comfy_extras/nodes_custom_sampler.py:349 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input.",
+				Required:            true,
 			},
 			"sampling_percent": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.0001.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"return_actual_sigma": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Return the actual sigma value instead of the value used for interval checks.\nThis only affects results at 0.0 and 1.0.",
+				Required:            true,
 			},
 			"sigma_value_output": schema.StringAttribute{
-				Description: "Output: FLOAT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: FLOAT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

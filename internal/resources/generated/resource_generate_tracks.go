@@ -54,106 +54,106 @@ func (r *GenerateTracksResource) Metadata(_ context.Context, req resource.Metada
 
 func (r *GenerateTracksResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI GenerateTracks node [conditioning/video_models]",
+		MarkdownDescription: "ComfyUI GenerateTracks node [conditioning/video_models] Source: comfy_extras/nodes_wanmove.py:322 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 832",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 832. Allowed range: 16 to 4096. Step: 16.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(16, 4096),
 				},
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 480",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 480. Allowed range: 16 to 4096. Step: 16.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(16, 4096),
 				},
 			},
 			"start_x": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for start position.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"start_y": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for start position.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"end_x": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for end position.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"end_y": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for end position.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"num_frames": schema.Int64Attribute{
-				Description: "Input: INT default: 81",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 81. Allowed range: 1 to 1024.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 1024),
 				},
 			},
 			"num_tracks": schema.Int64Attribute{
-				Description: "Input: INT default: 5",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 5. Allowed range: 1 to 100.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(1, 100),
 				},
 			},
 			"track_spread": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.025",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.025. Allowed range: 0 to 1. Step: 0.001. Tooltip: Normalized distance between tracks. Tracks are spread perpendicular to the motion direction.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"bezier": schema.BoolAttribute{
-				Description: "Input: BOOLEAN default: false",
-				Required:    true,
+				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Enable Bezier curve path using the mid point as control point.",
+				Required:            true,
 			},
 			"mid_x": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X control point for Bezier curve. Only used when 'bezier' is enabled.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"mid_y": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y control point for Bezier curve. Only used when 'bezier' is enabled.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"interpolation": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Tooltip: Controls the timing/speed of movement along the path.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"linear",
@@ -165,19 +165,19 @@ func (r *GenerateTracksResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"track_mask": schema.StringAttribute{
-				Description: "Input: MASK (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: MASK. Link input. Tooltip: Optional mask to indicate visible frames.",
+				Optional:            true,
 			},
 			"tracks_output": schema.StringAttribute{
-				Description: "Output: TRACKS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: TRACKS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"track_length_output": schema.StringAttribute{
-				Description: "Output: INT (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: INT (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

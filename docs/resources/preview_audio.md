@@ -3,12 +3,12 @@
 page_title: "comfyui_preview_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI PreviewAudio node — Preview Audio [audio]
+  ComfyUI PreviewAudio node — Preview Audio [audio] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_audio.py:238 (v3_extras).
 ---
 
 # comfyui_preview_audio (Resource)
 
-ComfyUI PreviewAudio node — Preview Audio [audio]
+ComfyUI PreviewAudio node — Preview Audio [audio] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_audio.py:238 (v3_extras).
 
 
 
@@ -17,9 +17,9 @@ ComfyUI PreviewAudio node — Preview Audio [audio]
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
+- `audio` (String) Input: AUDIO. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

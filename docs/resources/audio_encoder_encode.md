@@ -3,12 +3,12 @@
 page_title: "comfyui_audio_encoder_encode Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI AudioEncoderEncode node [conditioning]
+  ComfyUI AudioEncoderEncode node [conditioning] Source: comfy_extras/nodes_audio_encoder.py:33 (v3_extras).
 ---
 
 # comfyui_audio_encoder_encode (Resource)
 
-ComfyUI AudioEncoderEncode node [conditioning]
+ComfyUI AudioEncoderEncode node [conditioning] Source: comfy_extras/nodes_audio_encoder.py:33 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI AudioEncoderEncode node [conditioning]
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `audio_encoder` (String) Input: AUDIO_ENCODER (link)
+- `audio` (String) Input: AUDIO. Link input.
+- `audio_encoder` (String) Input: AUDIO_ENCODER. Link input.
 
 ### Read-Only
 
-- `audio_encoder_output_output` (String) Output: AUDIO_ENCODER_OUTPUT (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_encoder_output_output` (String) Output: AUDIO_ENCODER_OUTPUT (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

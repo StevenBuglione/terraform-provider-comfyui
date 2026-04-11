@@ -3,12 +3,12 @@
 page_title: "comfyui_stability_text_to_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StabilityTextToAudio node — Stability AI Text To Audio [api node/audio/Stability AI]
+  ComfyUI StabilityTextToAudio node — Stability AI Text To Audio [api node/audio/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:625 (v3_api).
 ---
 
 # comfyui_stability_text_to_audio (Resource)
 
-ComfyUI StabilityTextToAudio node — Stability AI Text To Audio [api node/audio/Stability AI]
+ComfyUI StabilityTextToAudio node — Stability AI Text To Audio [api node/audio/Stability AI] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_stability.py:625 (v3_api).
 
 
 
@@ -17,17 +17,17 @@ ComfyUI StabilityTextToAudio node — Stability AI Text To Audio [api node/audio
 
 ### Required
 
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
+- `model` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
 
 ### Optional
 
-- `duration` (Number) Input: INT default: 190
-- `seed` (Number) Input: INT default: 0
-- `steps` (Number) Input: INT default: 8
+- `duration` (Number) Input: INT. Default: 190. Allowed range: 1 to 190. Step: 1. Tooltip: Controls the duration in seconds of the generated audio.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967294. Step: 1. Tooltip: The random seed used for generation.
+- `steps` (Number) Input: INT. Default: 8. Allowed range: 4 to 8. Step: 1. Tooltip: Controls the number of sampling steps.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

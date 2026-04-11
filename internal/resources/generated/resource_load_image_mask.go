@@ -37,33 +37,33 @@ func (r *LoadImageMaskResource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *LoadImageMaskResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI LoadImageMask node — Load Image (as Mask) [mask]",
+		MarkdownDescription: "ComfyUI LoadImageMask node — Load Image (as Mask) [mask] Source: nodes.py:1781 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: sorted(files).",
+				Required:            true,
 			},
 			"channel": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s._color_channels.",
+				Required:            true,
 			},
 			"mask_output": schema.StringAttribute{
-				Description: "Output: MASK (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MASK (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

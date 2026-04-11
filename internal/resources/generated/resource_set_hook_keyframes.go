@@ -37,33 +37,33 @@ func (r *SetHookKeyframesResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *SetHookKeyframesResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI SetHookKeyframes node — Set Hook Keyframes [advanced/hooks/scheduling]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI SetHookKeyframes node — Set Hook Keyframes [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:446 (v1_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"hooks": schema.StringAttribute{
-				Description: "Input: HOOKS (link)",
-				Required:    true,
+				MarkdownDescription: "Input: HOOKS. Link input.",
+				Required:            true,
 			},
 			"hook_kf": schema.StringAttribute{
-				Description: "Input: HOOK_KEYFRAMES (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: HOOK_KEYFRAMES. Link input.",
+				Optional:            true,
 			},
 			"hooks_output": schema.StringAttribute{
-				Description: "Output: HOOKS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: HOOKS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

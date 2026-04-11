@@ -3,12 +3,12 @@
 page_title: "comfyui_primitive_string_multiline Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StringMultiline node — String (Multiline) [utils/primitive]
+  ComfyUI StringMultiline node — String (Multiline) [utils/primitive] Source: comfy_extras/nodes_primitive.py:25 (v3_extras).
 ---
 
 # comfyui_primitive_string_multiline (Resource)
 
-ComfyUI StringMultiline node — String (Multiline) [utils/primitive]
+ComfyUI StringMultiline node — String (Multiline) [utils/primitive] Source: comfy_extras/nodes_primitive.py:25 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI StringMultiline node — String (Multiline) [utils/primitive]
 
 ### Required
 
-- `value` (String) Input: STRING
+- `value` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

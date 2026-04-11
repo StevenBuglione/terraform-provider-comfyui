@@ -3,12 +3,12 @@
 page_title: "comfyui_image_from_batch Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageFromBatch node [image/batch]
+  ComfyUI ImageFromBatch node [image/batch] Source: comfy_extras/nodes_images.py:127 (v3_extras).
 ---
 
 # comfyui_image_from_batch (Resource)
 
-ComfyUI ImageFromBatch node [image/batch]
+ComfyUI ImageFromBatch node [image/batch] Source: comfy_extras/nodes_images.py:127 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI ImageFromBatch node [image/batch]
 
 ### Required
 
-- `batch_index` (Number) Input: INT default: 0
-- `image` (String) Input: IMAGE (link)
-- `length` (Number) Input: INT default: 1
+- `batch_index` (Number) Input: INT. Default: 0. Allowed range: 0 to 4095.
+- `image` (String) Input: IMAGE. Link input.
+- `length` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

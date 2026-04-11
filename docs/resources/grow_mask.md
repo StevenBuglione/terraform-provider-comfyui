@@ -3,12 +3,12 @@
 page_title: "comfyui_grow_mask Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI GrowMask node — Grow Mask [mask]
+  ComfyUI GrowMask node — Grow Mask [mask] Source: comfy_extras/nodes_mask.py:340 (v3_extras).
 ---
 
 # comfyui_grow_mask (Resource)
 
-ComfyUI GrowMask node — Grow Mask [mask]
+ComfyUI GrowMask node — Grow Mask [mask] Source: comfy_extras/nodes_mask.py:340 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI GrowMask node — Grow Mask [mask]
 
 ### Required
 
-- `expand` (Number) Input: INT default: 0
-- `mask` (String) Input: MASK (link)
-- `tapered_corners` (Boolean) Input: BOOLEAN default: true
+- `expand` (Number) Input: INT. Default: 0. Step: 1.
+- `mask` (String) Input: MASK. Link input.
+- `tapered_corners` (Boolean) Input: BOOLEAN. Default: true.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `mask_output` (String) Output: MASK (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `mask_output` (String) Output: MASK (slot 0).
+- `node_id` (String) ComfyUI node class type.

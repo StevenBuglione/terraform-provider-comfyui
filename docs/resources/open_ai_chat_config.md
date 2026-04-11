@@ -3,12 +3,12 @@
 page_title: "comfyui_open_ai_chat_config Resource - comfyui"
 subcategory: ""
 description: |-
-  Allows specifying advanced configuration options for the OpenAI Chat Nodes. [api node/text/OpenAI]
+  Allows specifying advanced configuration options for the OpenAI Chat Nodes. [api node/text/OpenAI] Source: comfy_api_nodes/nodes_openai.py:845 (v3_api).
 ---
 
 # comfyui_open_ai_chat_config (Resource)
 
-Allows specifying advanced configuration options for the OpenAI Chat Nodes. [api node/text/OpenAI]
+Allows specifying advanced configuration options for the OpenAI Chat Nodes. [api node/text/OpenAI] Source: comfy_api_nodes/nodes_openai.py:845 (v3_api).
 
 
 
@@ -17,15 +17,15 @@ Allows specifying advanced configuration options for the OpenAI Chat Nodes. [api
 
 ### Required
 
-- `truncation` (String) Input: COMBO default: auto
+- `truncation` (String) Input: COMBO. Default: "auto". Tooltip: The truncation strategy to use for the model response. auto: If the context of this response and previous ones exceeds the model's context window size, the model will truncate the response to fit the context window by dropping input items in the middle of the conversation.disabled: If a model response will exceed the context window size for a model, the request will fail with a 400 error.
 
 ### Optional
 
-- `instructions` (String) Input: STRING
-- `max_output_tokens` (Number) Input: INT default: 4096
+- `instructions` (String) Input: STRING. Supports multiline text. Tooltip: Instructions for the model on how to generate the response.
+- `max_output_tokens` (Number) Input: INT. Default: 4096. Allowed range: 16 to 16384. Tooltip: An upper bound for the number of tokens that can be generated for a response, including visible output tokens.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `openai_chat_config_output` (String) Output: OPENAI_CHAT_CONFIG (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `openai_chat_config_output` (String) Output: OPENAI_CHAT_CONFIG (slot 0).

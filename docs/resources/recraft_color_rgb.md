@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_color_rgb Resource - comfyui"
 subcategory: ""
 description: |-
-  Create Recraft Color by choosing specific RGB values. [api node/image/Recraft]
+  Create Recraft Color by choosing specific RGB values. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:175 (v3_api).
 ---
 
 # comfyui_recraft_color_rgb (Resource)
 
-Create Recraft Color by choosing specific RGB values. [api node/image/Recraft]
+Create Recraft Color by choosing specific RGB values. [api node/image/Recraft] Source: comfy_api_nodes/nodes_recraft.py:175 (v3_api).
 
 
 
@@ -17,16 +17,16 @@ Create Recraft Color by choosing specific RGB values. [api node/image/Recraft]
 
 ### Required
 
-- `b` (Number) Input: INT default: 0
-- `g` (Number) Input: INT default: 0
-- `r` (Number) Input: INT default: 0
+- `b` (Number) Input: INT. Default: 0. Allowed range: 0 to 255. Tooltip: Blue value of color.
+- `g` (Number) Input: INT. Default: 0. Allowed range: 0 to 255. Tooltip: Green value of color.
+- `r` (Number) Input: INT. Default: 0. Allowed range: 0 to 255. Tooltip: Red value of color.
 
 ### Optional
 
-- `recraft_color` (String) Input: RecraftIO.COLOR (link)
+- `recraft_color` (String) Input: RecraftIO.COLOR. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `recraft_color_output` (String) Output: RecraftIO.COLOR (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `recraft_color_output` (String) Output: RecraftIO.COLOR (slot 0).

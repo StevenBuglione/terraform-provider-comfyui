@@ -3,12 +3,12 @@
 page_title: "comfyui_create_hook_keyframes_from_floats Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI CreateHookKeyframesFromFloats node — Create Hook Keyframes From Floats [advanced/hooks/scheduling]
+  (EXPERIMENTAL) ComfyUI CreateHookKeyframesFromFloats node — Create Hook Keyframes From Floats [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:549 (v1_extras).
 ---
 
 # comfyui_create_hook_keyframes_from_floats (Resource)
 
-(EXPERIMENTAL) ComfyUI CreateHookKeyframesFromFloats node — Create Hook Keyframes From Floats [advanced/hooks/scheduling]
+(EXPERIMENTAL) ComfyUI CreateHookKeyframesFromFloats node — Create Hook Keyframes From Floats [advanced/hooks/scheduling] Source: comfy_extras/nodes_hooks.py:549 (v1_extras).
 
 
 
@@ -17,17 +17,17 @@ description: |-
 
 ### Required
 
-- `end_percent` (Number) Input: FLOAT default: 1
-- `floats_strength` (String) Input: FLOATS (link) default: -1
-- `print_keyframes` (Boolean) Input: BOOLEAN default: false
-- `start_percent` (Number) Input: FLOAT default: 0
+- `end_percent` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `floats_strength` (String) Input: FLOATS. Link input. Default: -1. Minimum value: -1. Step: 0.001.
+- `print_keyframes` (Boolean) Input: BOOLEAN. Default: false.
+- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
 
 ### Optional
 
-- `prev_hook_kf` (String) Input: HOOK_KEYFRAMES (link)
+- `prev_hook_kf` (String) Input: HOOK_KEYFRAMES. Link input.
 
 ### Read-Only
 
-- `hook_kf_output` (String) Output: HOOK_KEYFRAMES (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `hook_kf_output` (String) Output: HOOK_KEYFRAMES (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

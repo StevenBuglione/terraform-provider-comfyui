@@ -3,12 +3,12 @@
 page_title: "comfyui_audio_adjust_volume Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI AudioAdjustVolume node — Audio Adjust Volume [audio]
+  ComfyUI AudioAdjustVolume node — Audio Adjust Volume [audio] Source: comfy_extras/nodes_audio.py:625 (v3_extras).
 ---
 
 # comfyui_audio_adjust_volume (Resource)
 
-ComfyUI AudioAdjustVolume node — Audio Adjust Volume [audio]
+ComfyUI AudioAdjustVolume node — Audio Adjust Volume [audio] Source: comfy_extras/nodes_audio.py:625 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI AudioAdjustVolume node — Audio Adjust Volume [audio]
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `volume` (Number) Input: INT default: 1
+- `audio` (String) Input: AUDIO. Link input.
+- `volume` (Number) Input: INT. Default: 1. Allowed range: -100 to 100. Tooltip: Volume adjustment in decibels (dB). 0 = no change, +6 = double, -6 = half, etc.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

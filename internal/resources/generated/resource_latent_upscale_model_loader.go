@@ -36,29 +36,29 @@ func (r *LatentUpscaleModelLoaderResource) Metadata(_ context.Context, req resou
 
 func (r *LatentUpscaleModelLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI LatentUpscaleModelLoader node — Load Latent Upscale Model [loaders]",
+		MarkdownDescription: "ComfyUI LatentUpscaleModelLoader node — Load Latent Upscale Model [loaders] Source: comfy_extras/nodes_hunyuan.py:173 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('latent_upscale_models').",
+				Required:            true,
 			},
 			"latent_upscale_model_output": schema.StringAttribute{
-				Description: "Output: LATENT_UPSCALE_MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: LATENT_UPSCALE_MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

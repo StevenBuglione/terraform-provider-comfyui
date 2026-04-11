@@ -3,12 +3,12 @@
 page_title: "comfyui_kling_virtual_try_on_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Kling Virtual Try On Node. Input a human image and a cloth image to try on the cloth on the human. You can merge multiple clothing item pictures into one image with a white background. [api node/image/Kling]
+  Kling Virtual Try On Node. Input a human image and a cloth image to try on the cloth on the human. You can merge multiple clothing item pictures into one image with a white background. [api node/image/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2379 (v3_api).
 ---
 
 # comfyui_kling_virtual_try_on_node (Resource)
 
-Kling Virtual Try On Node. Input a human image and a cloth image to try on the cloth on the human. You can merge multiple clothing item pictures into one image with a white background. [api node/image/Kling]
+Kling Virtual Try On Node. Input a human image and a cloth image to try on the cloth on the human. You can merge multiple clothing item pictures into one image with a white background. [api node/image/Kling] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_kling.py:2379 (v3_api).
 
 
 
@@ -17,12 +17,12 @@ Kling Virtual Try On Node. Input a human image and a cloth image to try on the c
 
 ### Required
 
-- `cloth_image` (String) Input: IMAGE (link)
-- `human_image` (String) Input: IMAGE (link)
-- `model_name` (String) Input: COMBO default: kolors-virtual-try-on-v1
+- `cloth_image` (String) Input: IMAGE. Link input.
+- `human_image` (String) Input: IMAGE. Link input.
+- `model_name` (String) Input: COMBO. Default: "kolors-virtual-try-on-v1". Dynamic options are resolved by ComfyUI at runtime.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

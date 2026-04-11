@@ -3,12 +3,12 @@
 page_title: "comfyui_control_net_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ControlNetLoader node — Load ControlNet Model [loaders]
+  ComfyUI ControlNetLoader node — Load ControlNet Model [loaders] Source: nodes.py:834 (v1_core).
 ---
 
 # comfyui_control_net_loader (Resource)
 
-ComfyUI ControlNetLoader node — Load ControlNet Model [loaders]
+ComfyUI ControlNetLoader node — Load ControlNet Model [loaders] Source: nodes.py:834 (v1_core).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI ControlNetLoader node — Load ControlNet Model [loaders]
 
 ### Required
 
-- `control_net_name` (String) Input: COMBO
+- `control_net_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('controlnet').
 
 ### Read-Only
 
-- `control_net_output` (String) Output: CONTROL_NET (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `control_net_output` (String) Output: CONTROL_NET (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

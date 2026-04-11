@@ -3,12 +3,12 @@
 page_title: "comfyui_save_video Resource - comfyui"
 subcategory: ""
 description: |-
-  Saves the input images to your ComfyUI output directory. [image/video]
+  Saves the input images to your ComfyUI output directory. [image/video] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video.py:68 (v3_extras).
 ---
 
 # comfyui_save_video (Resource)
 
-Saves the input images to your ComfyUI output directory. [image/video]
+Saves the input images to your ComfyUI output directory. [image/video] Hidden runtime inputs: prompt (PROMPT), extra_pnginfo (EXTRA_PNGINFO). Source: comfy_extras/nodes_video.py:68 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Saves the input images to your ComfyUI output directory. [image/video]
 
 ### Required
 
-- `codec` (String) Input: COMBO default: auto
-- `filename_prefix` (String) Input: STRING default: video/ComfyUI
-- `format` (String) Input: COMBO default: auto
-- `video` (String) Input: VIDEO (link)
+- `codec` (String) Input: COMBO. Default: "auto". Dynamic options are resolved by ComfyUI at runtime from: Types.VideoCodec.as_input(). Tooltip: The codec to use for the video.
+- `filename_prefix` (String) Input: STRING. Default: "video/ComfyUI". Tooltip: The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes.
+- `format` (String) Input: COMBO. Default: "auto". Dynamic options are resolved by ComfyUI at runtime from: Types.VideoContainer.as_input(). Tooltip: The format to save the video as.
+- `video` (String) Input: VIDEO. Link input. Tooltip: The video to save.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

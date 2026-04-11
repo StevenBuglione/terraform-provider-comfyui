@@ -3,12 +3,12 @@
 page_title: "comfyui_gemini_image2_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate or edit images synchronously via Google Vertex API. [api node/image/Gemini]
+  Generate or edit images synchronously via Google Vertex API. [api node/image/Gemini] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_gemini.py:699 (v3_api).
 ---
 
 # comfyui_gemini_image2_node (Resource)
 
-Generate or edit images synchronously via Google Vertex API. [api node/image/Gemini]
+Generate or edit images synchronously via Google Vertex API. [api node/image/Gemini] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_gemini.py:699 (v3_api).
 
 
 
@@ -17,22 +17,22 @@ Generate or edit images synchronously via Google Vertex API. [api node/image/Gem
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO default: auto
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `resolution` (String) Input: COMBO
-- `response_modalities` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 42
+- `aspect_ratio` (String) Input: COMBO. Default: "auto". Tooltip: If set to 'auto', matches your input image's aspect ratio; if no image is provided, a 16:9 square is usually generated.
+- `model` (String) Input: COMBO.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt describing the image to generate or the edits to apply. Include any constraints, styles, or details the model should follow.
+- `resolution` (String) Input: COMBO. Tooltip: Target output resolution. For 2K/4K the native Gemini upscaler is used.
+- `response_modalities` (String) Input: COMBO. Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.
+- `seed` (Number) Input: INT. Default: 42. Allowed range: 0 to 18446744073709552000. Tooltip: When the seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.
 
 ### Optional
 
-- `files` (String) Input: GEMINI_INPUT_FILES (link)
-- `images` (String) Input: IMAGE (link)
-- `system_prompt` (String) Input: STRING
+- `files` (String) Input: GEMINI_INPUT_FILES. Link input. Tooltip: Optional file(s) to use as context for the model. Accepts inputs from the Gemini Generate Content Input Files node.
+- `images` (String) Input: IMAGE. Link input. Tooltip: Optional reference image(s). To include multiple images, use the Batch Images node (up to 14).
+- `system_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Foundational instructions that dictate an AI's behavior.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 1)
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 1).

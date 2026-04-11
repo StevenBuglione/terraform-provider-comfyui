@@ -3,12 +3,12 @@
 page_title: "comfyui_image_compare Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Compares two images side by side with a slider. [image]
+  (EXPERIMENTAL) Compares two images side by side with a slider. [image] Source: comfy_extras/nodes_image_compare.py:7 (v3_extras).
 ---
 
 # comfyui_image_compare (Resource)
 
-(EXPERIMENTAL) Compares two images side by side with a slider. [image]
+(EXPERIMENTAL) Compares two images side by side with a slider. [image] Source: comfy_extras/nodes_image_compare.py:7 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `compare_view` (String) Input: IMAGECOMPARE
+- `compare_view` (String) Input: IMAGECOMPARE.
 
 ### Optional
 
-- `image_a` (String) Input: IMAGE (link)
-- `image_b` (String) Input: IMAGE (link)
+- `image_a` (String) Input: IMAGE. Link input.
+- `image_b` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

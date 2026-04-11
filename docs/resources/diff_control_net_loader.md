@@ -3,12 +3,12 @@
 page_title: "comfyui_diff_control_net_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI DiffControlNetLoader node — Load ControlNet Model (diff) [loaders]
+  ComfyUI DiffControlNetLoader node — Load ControlNet Model (diff) [loaders] Source: nodes.py:852 (v1_core).
 ---
 
 # comfyui_diff_control_net_loader (Resource)
 
-ComfyUI DiffControlNetLoader node — Load ControlNet Model (diff) [loaders]
+ComfyUI DiffControlNetLoader node — Load ControlNet Model (diff) [loaders] Source: nodes.py:852 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI DiffControlNetLoader node — Load ControlNet Model (diff) [loaders]
 
 ### Required
 
-- `control_net_name` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
+- `control_net_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('controlnet').
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `control_net_output` (String) Output: CONTROL_NET (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `control_net_output` (String) Output: CONTROL_NET (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -36,33 +36,33 @@ func (r *ImageCompareResource) Metadata(_ context.Context, req resource.Metadata
 
 func (r *ImageCompareResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) Compares two images side by side with a slider. [image]",
+		MarkdownDescription: "(EXPERIMENTAL) Compares two images side by side with a slider. [image] Source: comfy_extras/nodes_image_compare.py:7 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image_a": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"image_b": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"compare_view": schema.StringAttribute{
-				Description: "Input: IMAGECOMPARE",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGECOMPARE.",
+				Required:            true,
 			},
 		},
 	}

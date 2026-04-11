@@ -37,33 +37,33 @@ func (r *CombineHooks2Resource) Metadata(_ context.Context, req resource.Metadat
 
 func (r *CombineHooks2Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI CombineHooks node — Combine Hooks [2] [advanced/hooks/combine]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI CombineHooks node — Combine Hooks [2] [advanced/hooks/combine] Source: comfy_extras/nodes_hooks.py:624 (v1_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"hooks_a": schema.StringAttribute{
-				Description: "Input: HOOKS (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: HOOKS. Link input.",
+				Optional:            true,
 			},
 			"hooks_b": schema.StringAttribute{
-				Description: "Input: HOOKS (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: HOOKS. Link input.",
+				Optional:            true,
 			},
 			"hooks_output": schema.StringAttribute{
-				Description: "Output: HOOKS (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: HOOKS (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

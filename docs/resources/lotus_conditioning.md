@@ -3,12 +3,12 @@
 page_title: "comfyui_lotus_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI LotusConditioning node [conditioning/lotus]
+  ComfyUI LotusConditioning node [conditioning/lotus] Source: comfy_extras/nodes_lotus.py:8 (v3_extras).
 ---
 
 # comfyui_lotus_conditioning (Resource)
 
-ComfyUI LotusConditioning node [conditioning/lotus]
+ComfyUI LotusConditioning node [conditioning/lotus] Source: comfy_extras/nodes_lotus.py:8 (v3_extras).
 
 
 
@@ -17,6 +17,6 @@ ComfyUI LotusConditioning node [conditioning/lotus]
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

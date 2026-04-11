@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EmptyAudio node — Empty Audio [audio]
+  ComfyUI EmptyAudio node — Empty Audio [audio] Source: comfy_extras/nodes_audio.py:661 (v3_extras).
 ---
 
 # comfyui_empty_audio (Resource)
 
-ComfyUI EmptyAudio node — Empty Audio [audio]
+ComfyUI EmptyAudio node — Empty Audio [audio] Source: comfy_extras/nodes_audio.py:661 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI EmptyAudio node — Empty Audio [audio]
 
 ### Required
 
-- `channels` (Number) Input: INT default: 2
-- `duration` (Number) Input: FLOAT default: 60
-- `sample_rate` (Number) Input: INT default: 44100
+- `channels` (Number) Input: INT. Default: 2. Allowed range: 1 to 2. Tooltip: Number of audio channels (1 for mono, 2 for stereo).
+- `duration` (Number) Input: FLOAT. Default: 60. Allowed range: 0 to 18446744073709552000. Step: 0.01. Tooltip: Duration of the empty audio clip in seconds.
+- `sample_rate` (Number) Input: INT. Default: 44100. Allowed range: 1 to 192000. Tooltip: Sample rate of the empty audio clip.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

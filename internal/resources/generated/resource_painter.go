@@ -43,58 +43,58 @@ func (r *PainterResource) Metadata(_ context.Context, req resource.MetadataReque
 
 func (r *PainterResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI PainterNode node — Painter [image]",
+		MarkdownDescription: "ComfyUI PainterNode node — Painter [image] Source: comfy_extras/nodes_painter.py:26 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Optional base image to paint over.",
+				Optional:            true,
 			},
 			"mask": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\".",
+				Required:            true,
 			},
 			"width": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 64.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 4096),
 				},
 			},
 			"height": schema.Int64Attribute{
-				Description: "Input: INT default: 512",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: 512. Allowed range: 64 to 4096. Step: 64.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(64, 4096),
 				},
 			},
 			"bg_color": schema.StringAttribute{
-				Description: "Input: COLOR default: #000000",
-				Required:    true,
+				MarkdownDescription: "Input: COLOR. Default: \"#000000\".",
+				Required:            true,
 			},
 			"image_output": schema.StringAttribute{
-				Description: "Output: IMAGE (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: IMAGE (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"mask_output": schema.StringAttribute{
-				Description: "Output: MASK (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: MASK (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

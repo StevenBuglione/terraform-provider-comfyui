@@ -3,12 +3,12 @@
 page_title: "comfyui_model_merge_blocks Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ModelMergeBlocks node — ModelMergeBlocks [advanced/model_merging]
+  ComfyUI ModelMergeBlocks node — ModelMergeBlocks [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:138 (v1_extras).
 ---
 
 # comfyui_model_merge_blocks (Resource)
 
-ComfyUI ModelMergeBlocks node — ModelMergeBlocks [advanced/model_merging]
+ComfyUI ModelMergeBlocks node — ModelMergeBlocks [advanced/model_merging] Source: comfy_extras/nodes_model_merging.py:138 (v1_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI ModelMergeBlocks node — ModelMergeBlocks [advanced/model_merging]
 
 ### Required
 
-- `input` (Number) Input: FLOAT default: 1
-- `middle` (Number) Input: FLOAT default: 1
-- `model1` (String) Input: MODEL (link)
-- `model2` (String) Input: MODEL (link)
-- `out` (Number) Input: FLOAT default: 1
+- `input` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `middle` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `model1` (String) Input: MODEL. Link input.
+- `model2` (String) Input: MODEL. Link input.
+- `out` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

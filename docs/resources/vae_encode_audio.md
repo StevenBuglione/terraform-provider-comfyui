@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_encode_audio Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VAEEncodeAudio node — VAE Encode Audio [latent/audio]
+  ComfyUI VAEEncodeAudio node — VAE Encode Audio [latent/audio] Source: comfy_extras/nodes_audio.py:68 (v3_extras).
 ---
 
 # comfyui_vae_encode_audio (Resource)
 
-ComfyUI VAEEncodeAudio node — VAE Encode Audio [latent/audio]
+ComfyUI VAEEncodeAudio node — VAE Encode Audio [latent/audio] Source: comfy_extras/nodes_audio.py:68 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI VAEEncodeAudio node — VAE Encode Audio [latent/audio]
 
 ### Required
 
-- `audio` (String) Input: AUDIO (link)
-- `vae` (String) Input: VAE (link)
+- `audio` (String) Input: AUDIO. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

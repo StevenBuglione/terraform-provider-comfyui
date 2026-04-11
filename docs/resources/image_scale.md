@@ -3,12 +3,12 @@
 page_title: "comfyui_image_scale Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI ImageScale node — Upscale Image [image/upscaling]
+  ComfyUI ImageScale node — Upscale Image [image/upscaling] Source: nodes.py:1858 (v1_core).
 ---
 
 # comfyui_image_scale (Resource)
 
-ComfyUI ImageScale node — Upscale Image [image/upscaling]
+ComfyUI ImageScale node — Upscale Image [image/upscaling] Source: nodes.py:1858 (v1_core).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI ImageScale node — Upscale Image [image/upscaling]
 
 ### Required
 
-- `crop` (String) Input: COMBO
-- `height` (Number) Input: INT default: 512
-- `image` (String) Input: IMAGE (link)
-- `upscale_method` (String) Input: COMBO
-- `width` (Number) Input: INT default: 512
+- `crop` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.crop_methods.
+- `height` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 1.
+- `image` (String) Input: IMAGE. Link input.
+- `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.upscale_methods.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 1.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

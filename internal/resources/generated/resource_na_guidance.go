@@ -41,50 +41,50 @@ func (r *NaGuidanceResource) Metadata(_ context.Context, req resource.MetadataRe
 
 func (r *NaGuidanceResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) Applies Normalized Attention Guidance to models, enabling negative prompts on distilled/schnell models. [advanced/guidance]",
+		MarkdownDescription: "(EXPERIMENTAL) Applies Normalized Attention Guidance to models, enabling negative prompts on distilled/schnell models. [advanced/guidance] Source: comfy_extras/nodes_nag.py:6 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: MODEL (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL. Link input. Tooltip: The model to apply NAG to.",
+				Required:            true,
 			},
 			"nag_scale": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 5. Allowed range: 0 to 50. Step: 0.1. Tooltip: The guidance scale factor. Higher values push further from the negative prompt.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 50),
 				},
 			},
 			"nag_alpha": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 0.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Blending factor for the normalized attention. 1.0 is full replacement, 0.0 is no effect.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"nag_tau": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1.5",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1.5. Allowed range: 1 to 10. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 10),
 				},
 			},
 			"model_output": schema.StringAttribute{
-				Description: "Output: MODEL (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: MODEL (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

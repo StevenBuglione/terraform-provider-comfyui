@@ -40,40 +40,40 @@ func (r *CreateVideoResource) Metadata(_ context.Context, req resource.MetadataR
 
 func (r *CreateVideoResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Create a video from images. [image/video]",
+		MarkdownDescription: "Create a video from images. [image/video] Source: comfy_extras/nodes_video.py:117 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: The images to create a video from.",
+				Required:            true,
 			},
 			"fps": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 30",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 30. Allowed range: 1 to 120. Step: 1.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 120),
 				},
 			},
 			"audio": schema.StringAttribute{
-				Description: "Input: AUDIO (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: AUDIO. Link input. Tooltip: The audio to add to the video.",
+				Optional:            true,
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

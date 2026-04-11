@@ -3,12 +3,12 @@
 page_title: "comfyui_sampler_lms Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SamplerLMS node [sampling/custom_sampling/samplers]
+  ComfyUI SamplerLMS node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:535 (v3_extras).
 ---
 
 # comfyui_sampler_lms (Resource)
 
-ComfyUI SamplerLMS node [sampling/custom_sampling/samplers]
+ComfyUI SamplerLMS node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_custom_sampler.py:535 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI SamplerLMS node [sampling/custom_sampling/samplers]
 
 ### Required
 
-- `order` (Number) Input: INT default: 4
+- `order` (Number) Input: INT. Default: 4. Allowed range: 1 to 100.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sampler_output` (String) Output: SAMPLER (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sampler_output` (String) Output: SAMPLER (slot 0).

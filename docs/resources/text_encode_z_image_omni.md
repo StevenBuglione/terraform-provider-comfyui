@@ -3,12 +3,12 @@
 page_title: "comfyui_text_encode_z_image_omni Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI TextEncodeZImageOmni node [advanced/conditioning]
+  (EXPERIMENTAL) ComfyUI TextEncodeZImageOmni node [advanced/conditioning] Source: comfy_extras/nodes_zimage.py:8 (v3_extras).
 ---
 
 # comfyui_text_encode_z_image_omni (Resource)
 
-(EXPERIMENTAL) ComfyUI TextEncodeZImageOmni node [advanced/conditioning]
+(EXPERIMENTAL) ComfyUI TextEncodeZImageOmni node [advanced/conditioning] Source: comfy_extras/nodes_zimage.py:8 (v3_extras).
 
 
 
@@ -17,20 +17,20 @@ description: |-
 
 ### Required
 
-- `auto_resize_images` (Boolean) Input: BOOLEAN default: true
-- `clip` (String) Input: CLIP (link)
-- `prompt` (String) Input: STRING
+- `auto_resize_images` (Boolean) Input: BOOLEAN. Default: true.
+- `clip` (String) Input: CLIP. Link input.
+- `prompt` (String) Input: STRING. Supports multiline text.
 
 ### Optional
 
-- `image1` (String) Input: IMAGE (link)
-- `image2` (String) Input: IMAGE (link)
-- `image3` (String) Input: IMAGE (link)
-- `image_encoder` (String) Input: CLIP_VISION (link)
-- `vae` (String) Input: VAE (link)
+- `image1` (String) Input: IMAGE. Link input.
+- `image2` (String) Input: IMAGE. Link input.
+- `image3` (String) Input: IMAGE. Link input.
+- `image_encoder` (String) Input: CLIP_VISION. Link input.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

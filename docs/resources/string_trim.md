@@ -3,12 +3,12 @@
 page_title: "comfyui_string_trim Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StringTrim node — Trim [utils/string]
+  ComfyUI StringTrim node — Trim [utils/string] Source: comfy_extras/nodes_string.py:107 (v3_extras).
 ---
 
 # comfyui_string_trim (Resource)
 
-ComfyUI StringTrim node — Trim [utils/string]
+ComfyUI StringTrim node — Trim [utils/string] Source: comfy_extras/nodes_string.py:107 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI StringTrim node — Trim [utils/string]
 
 ### Required
 
-- `mode` (String) Input: COMBO
-- `string` (String) Input: STRING
+- `mode` (String) Input: COMBO.
+- `string` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `string_output` (String) Output: STRING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `string_output` (String) Output: STRING (slot 0).

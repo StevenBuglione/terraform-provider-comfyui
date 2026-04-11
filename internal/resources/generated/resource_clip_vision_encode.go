@@ -40,33 +40,33 @@ func (r *CLIPVisionEncodeResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *CLIPVisionEncodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI CLIPVisionEncode node — CLIP Vision Encode [conditioning]",
+		MarkdownDescription: "ComfyUI CLIPVisionEncode node — CLIP Vision Encode [conditioning] Source: nodes.py:1050 (v1_core).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"clip_vision": schema.StringAttribute{
-				Description: "Input: CLIP_VISION (link)",
-				Required:    true,
+				MarkdownDescription: "Input: CLIP_VISION. Link input.",
+				Required:            true,
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Required:            true,
 			},
 			"crop": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"center",
@@ -75,8 +75,8 @@ func (r *CLIPVisionEncodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"clip_vision_output_output": schema.StringAttribute{
-				Description: "Output: CLIP_VISION_OUTPUT (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: CLIP_VISION_OUTPUT (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

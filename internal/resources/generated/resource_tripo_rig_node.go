@@ -38,43 +38,43 @@ func (r *TripoRigNodeResource) Metadata(_ context.Context, req resource.Metadata
 
 func (r *TripoRigNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI TripoRigNode node — Tripo: Rig model [api node/3d/Tripo]",
+		MarkdownDescription: "ComfyUI TripoRigNode node — Tripo: Rig model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:573 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"original_model_task_id": schema.StringAttribute{
-				Description: "Input: MODEL_TASK_ID (link)",
-				Required:    true,
+				MarkdownDescription: "Input: MODEL_TASK_ID. Link input.",
+				Required:            true,
 			},
 			"model_file_output": schema.StringAttribute{
-				Description: "Output: STRING (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: STRING (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"rig_task_id_output": schema.StringAttribute{
-				Description: "Output: RIG_TASK_ID (slot 1)",
-				Computed:    true,
+				MarkdownDescription: "Output: RIG_TASK_ID (slot 1).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"glb_output": schema.StringAttribute{
-				Description: "Output: FILE_3D_GLB (slot 2)",
-				Computed:    true,
+				MarkdownDescription: "Output: FILE_3D_GLB (slot 2).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

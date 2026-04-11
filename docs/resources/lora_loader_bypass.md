@@ -3,12 +3,12 @@
 page_title: "comfyui_lora_loader_bypass Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Apply LoRA in bypass mode. Unlike regular LoRA, this doesn't modify model weights - instead it injects the LoRA computation during forward pass. Useful for training scenarios. [loaders]
+  (EXPERIMENTAL) Apply LoRA in bypass mode. Unlike regular LoRA, this doesn't modify model weights - instead it injects the LoRA computation during forward pass. Useful for training scenarios. [loaders] Source: comfy_extras/nodes_lora_debug.py:6 (v1_extras).
 ---
 
 # comfyui_lora_loader_bypass (Resource)
 
-(EXPERIMENTAL) Apply LoRA in bypass mode. Unlike regular LoRA, this doesn't modify model weights - instead it injects the LoRA computation during forward pass. Useful for training scenarios. [loaders]
+(EXPERIMENTAL) Apply LoRA in bypass mode. Unlike regular LoRA, this doesn't modify model weights - instead it injects the LoRA computation during forward pass. Useful for training scenarios. [loaders] Source: comfy_extras/nodes_lora_debug.py:6 (v1_extras).
 
 
 
@@ -17,15 +17,15 @@ description: |-
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `lora_name` (String) Input: COMBO
-- `model` (String) Input: MODEL (link)
-- `strength_clip` (Number) Input: FLOAT default: 1
-- `strength_model` (Number) Input: FLOAT default: 1
+- `clip` (String) Input: CLIP. Link input. Tooltip: The CLIP model the LoRA will be applied to.
+- `lora_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('loras'). Tooltip: The name of the LoRA.
+- `model` (String) Input: MODEL. Link input. Tooltip: The diffusion model the LoRA will be applied to.
+- `strength_clip` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Step: 0.01. Tooltip: How strongly to modify the CLIP model. This value can be negative.
+- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Step: 0.01. Tooltip: How strongly to modify the diffusion model. This value can be negative.
 
 ### Read-Only
 
-- `clip_output` (String) Output: CLIP (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `clip_output` (String) Output: CLIP (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

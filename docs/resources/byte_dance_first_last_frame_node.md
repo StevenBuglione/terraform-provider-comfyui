@@ -3,12 +3,12 @@
 page_title: "comfyui_byte_dance_first_last_frame_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate video using prompt and first and last frames. [api node/video/ByteDance]
+  Generate video using prompt and first and last frames. [api node/video/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:661 (v3_api).
 ---
 
 # comfyui_byte_dance_first_last_frame_node (Resource)
 
-Generate video using prompt and first and last frames. [api node/video/ByteDance]
+Generate video using prompt and first and last frames. [api node/video/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:661 (v3_api).
 
 
 
@@ -17,23 +17,23 @@ Generate video using prompt and first and last frames. [api node/video/ByteDance
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO
-- `duration` (Number) Input: INT default: 5
-- `first_frame` (String) Input: IMAGE (link)
-- `last_frame` (String) Input: IMAGE (link)
-- `model` (String) Input: COMBO default: seedance-1-0-lite-i2v-250428
-- `prompt` (String) Input: STRING
-- `resolution` (String) Input: COMBO
+- `aspect_ratio` (String) Input: COMBO. Tooltip: The aspect ratio of the output video.
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 12. Step: 1. Tooltip: The duration of the output video in seconds.
+- `first_frame` (String) Input: IMAGE. Link input. Tooltip: First frame to be used for the video.
+- `last_frame` (String) Input: IMAGE. Link input. Tooltip: Last frame to be used for the video.
+- `model` (String) Input: COMBO. Default: "seedance-1-0-lite-i2v-250428".
+- `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the video.
+- `resolution` (String) Input: COMBO. Tooltip: The resolution of the output video.
 
 ### Optional
 
-- `camera_fixed` (Boolean) Input: BOOLEAN default: false
-- `generate_audio` (Boolean) Input: BOOLEAN default: false
-- `seed` (Number) Input: INT default: 0
-- `watermark` (Boolean) Input: BOOLEAN default: false
+- `camera_fixed` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Specifies whether to fix the camera. The platform appends an instruction to fix the camera to your prompt, but does not guarantee the actual effect.
+- `generate_audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: This parameter is ignored for any model except seedance-1-5-pro.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an "AI generated" watermark to the video.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

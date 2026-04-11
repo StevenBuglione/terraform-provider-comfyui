@@ -3,12 +3,12 @@
 page_title: "comfyui_recraft_remove_background_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Remove background from image, and return processed image and mask. [api node/image/Recraft]
+  Remove background from image, and return processed image and mask. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:960 (v3_api).
 ---
 
 # comfyui_recraft_remove_background_node (Resource)
 
-Remove background from image, and return processed image and mask. [api node/image/Recraft]
+Remove background from image, and return processed image and mask. [api node/image/Recraft] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_recraft.py:960 (v3_api).
 
 
 
@@ -17,11 +17,11 @@ Remove background from image, and return processed image and mask. [api node/ima
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `mask_output` (String) Output: MASK (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `mask_output` (String) Output: MASK (slot 1).
+- `node_id` (String) ComfyUI node class type.

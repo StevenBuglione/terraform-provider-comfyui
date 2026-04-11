@@ -3,12 +3,12 @@
 page_title: "comfyui_get_image_size Resource - comfyui"
 subcategory: ""
 description: |-
-  Returns width and height of the image, and passes it through unchanged. [image]
+  Returns width and height of the image, and passes it through unchanged. [image] Hidden runtime inputs: unique_id (UNIQUE_ID). Source: comfy_extras/nodes_images.py:553 (v3_extras).
 ---
 
 # comfyui_get_image_size (Resource)
 
-Returns width and height of the image, and passes it through unchanged. [image]
+Returns width and height of the image, and passes it through unchanged. [image] Hidden runtime inputs: unique_id (UNIQUE_ID). Source: comfy_extras/nodes_images.py:553 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ Returns width and height of the image, and passes it through unchanged. [image]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `batch_size_output` (String) Output: INT (slot 2)
-- `height_output` (String) Output: INT (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `width_output` (String) Output: INT (slot 0)
+- `batch_size_output` (String) Output: INT (slot 2).
+- `height_output` (String) Output: INT (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `width_output` (String) Output: INT (slot 0).

@@ -3,12 +3,12 @@
 page_title: "comfyui_flux_kontext_multi_reference_latent_method Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI FluxKontextMultiReferenceLatentMethod node — Edit Model Reference Method [advanced/conditioning/flux]
+  (EXPERIMENTAL) ComfyUI FluxKontextMultiReferenceLatentMethod node — Edit Model Reference Method [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:153 (v3_extras).
 ---
 
 # comfyui_flux_kontext_multi_reference_latent_method (Resource)
 
-(EXPERIMENTAL) ComfyUI FluxKontextMultiReferenceLatentMethod node — Edit Model Reference Method [advanced/conditioning/flux]
+(EXPERIMENTAL) ComfyUI FluxKontextMultiReferenceLatentMethod node — Edit Model Reference Method [advanced/conditioning/flux] Source: comfy_extras/nodes_flux.py:153 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `reference_latents_method` (String) Input: COMBO
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `reference_latents_method` (String) Input: COMBO.
 
 ### Read-Only
 
-- `conditioning_output` (String) Output: CONDITIONING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `conditioning_output` (String) Output: CONDITIONING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

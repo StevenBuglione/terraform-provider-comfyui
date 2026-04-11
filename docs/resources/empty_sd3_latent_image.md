@@ -3,12 +3,12 @@
 page_title: "comfyui_empty_sd3_latent_image Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI EmptySD3LatentImage node [latent/sd3]
+  ComfyUI EmptySD3LatentImage node [latent/sd3] Source: comfy_extras/nodes_sd3.py:39 (v3_extras).
 ---
 
 # comfyui_empty_sd3_latent_image (Resource)
 
-ComfyUI EmptySD3LatentImage node [latent/sd3]
+ComfyUI EmptySD3LatentImage node [latent/sd3] Source: comfy_extras/nodes_sd3.py:39 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI EmptySD3LatentImage node [latent/sd3]
 
 ### Required
 
-- `batch_size` (Number) Input: INT default: 1
-- `height` (Number) Input: INT default: 1024
-- `width` (Number) Input: INT default: 1024
+- `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
+- `height` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 16.
+- `width` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 16.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 0).
+- `node_id` (String) ComfyUI node class type.

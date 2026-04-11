@@ -36,29 +36,29 @@ func (r *PhotoMakerLoaderResource) Metadata(_ context.Context, req resource.Meta
 
 func (r *PhotoMakerLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI PhotoMakerLoader node [_for_testing/photomaker]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI PhotoMakerLoader node [_for_testing/photomaker] Source: comfy_extras/nodes_photomaker.py:121 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"photomaker_model_name": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('photomaker').",
+				Required:            true,
 			},
 			"photomaker_output": schema.StringAttribute{
-				Description: "Output: PHOTOMAKER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: PHOTOMAKER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

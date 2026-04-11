@@ -3,12 +3,12 @@
 page_title: "comfyui_string_contains Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI StringContains node — Contains [utils/string]
+  ComfyUI StringContains node — Contains [utils/string] Source: comfy_extras/nodes_string.py:161 (v3_extras).
 ---
 
 # comfyui_string_contains (Resource)
 
-ComfyUI StringContains node — Contains [utils/string]
+ComfyUI StringContains node — Contains [utils/string] Source: comfy_extras/nodes_string.py:161 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI StringContains node — Contains [utils/string]
 
 ### Required
 
-- `case_sensitive` (Boolean) Input: BOOLEAN default: true
-- `string` (String) Input: STRING
-- `substring` (String) Input: STRING
+- `case_sensitive` (Boolean) Input: BOOLEAN. Default: true.
+- `string` (String) Input: STRING. Supports multiline text.
+- `substring` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only
 
-- `contains_output` (String) Output: BOOLEAN (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `contains_output` (String) Output: BOOLEAN (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

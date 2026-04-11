@@ -3,12 +3,12 @@
 page_title: "comfyui_load_image_output Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) Load an image from the output folder. When the refresh button is clicked, the node will update the image list and automatically select the first image, allowing for easy iteration. [image]
+  (EXPERIMENTAL) Load an image from the output folder. When the refresh button is clicked, the node will update the image list and automatically select the first image, allowing for easy iteration. [image] Source: nodes.py:1834 (v1_core).
 ---
 
 # comfyui_load_image_output (Resource)
 
-(EXPERIMENTAL) Load an image from the output folder. When the refresh button is clicked, the node will update the image list and automatically select the first image, allowing for easy iteration. [image]
+(EXPERIMENTAL) Load an image from the output folder. When the refresh button is clicked, the node will update the image list and automatically select the first image, allowing for easy iteration. [image] Source: nodes.py:1834 (v1_core).
 
 
 
@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `image` (String) Input: COMBO
+- `image` (String) Input: COMBO.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `mask_output` (String) Output: MASK (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `mask_output` (String) Output: MASK (slot 1).
+- `node_id` (String) ComfyUI node class type.

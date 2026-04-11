@@ -3,12 +3,12 @@
 page_title: "comfyui_tripo_text_to_model_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TripoTextToModelNode node — Tripo: Text to Model [api node/3d/Tripo]
+  ComfyUI TripoTextToModelNode node — Tripo: Text to Model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:72 (v3_api).
 ---
 
 # comfyui_tripo_text_to_model_node (Resource)
 
-ComfyUI TripoTextToModelNode node — Tripo: Text to Model [api node/3d/Tripo]
+ComfyUI TripoTextToModelNode node — Tripo: Text to Model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:72 (v3_api).
 
 
 
@@ -17,27 +17,27 @@ ComfyUI TripoTextToModelNode node — Tripo: Text to Model [api node/3d/Tripo]
 
 ### Required
 
-- `prompt` (String) Input: STRING
+- `prompt` (String) Input: STRING. Supports multiline text.
 
 ### Optional
 
-- `face_limit` (Number) Input: INT default: -1
-- `geometry_quality` (String) Input: COMBO default: standard
-- `image_seed` (Number) Input: INT default: 42
-- `model_seed` (Number) Input: INT default: 42
-- `model_version` (String) Input: COMBO
-- `negative_prompt` (String) Input: STRING
-- `pbr` (Boolean) Input: BOOLEAN default: true
-- `quad` (Boolean) Input: BOOLEAN default: false
-- `style` (String) Input: COMBO default: None
-- `texture` (Boolean) Input: BOOLEAN default: true
-- `texture_quality` (String) Input: COMBO default: standard
-- `texture_seed` (Number) Input: INT default: 42
+- `face_limit` (Number) Input: INT. Default: -1. Allowed range: -1 to 2000000.
+- `geometry_quality` (String) Input: COMBO. Default: "standard".
+- `image_seed` (Number) Input: INT. Default: 42.
+- `model_seed` (Number) Input: INT. Default: 42.
+- `model_version` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: TripoModelVersion.
+- `negative_prompt` (String) Input: STRING. Supports multiline text.
+- `pbr` (Boolean) Input: BOOLEAN. Default: true.
+- `quad` (Boolean) Input: BOOLEAN. Default: false.
+- `style` (String) Input: COMBO. Default: "None". Dynamic options are resolved by ComfyUI at runtime from: TripoStyle.
+- `texture` (Boolean) Input: BOOLEAN. Default: true.
+- `texture_quality` (String) Input: COMBO. Default: "standard".
+- `texture_seed` (Number) Input: INT. Default: 42.
 
 ### Read-Only
 
-- `glb_output` (String) Output: FILE_3D_GLB (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `model_file_output` (String) Output: STRING (slot 0)
-- `model_task_id_output` (String) Output: MODEL_TASK_ID (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `glb_output` (String) Output: FILE_3D_GLB (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `model_file_output` (String) Output: STRING (slot 0).
+- `model_task_id_output` (String) Output: MODEL_TASK_ID (slot 1).
+- `node_id` (String) ComfyUI node class type.

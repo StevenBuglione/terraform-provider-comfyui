@@ -41,43 +41,43 @@ func (r *SamplerLcmUpscaleResource) Metadata(_ context.Context, req resource.Met
 
 func (r *SamplerLcmUpscaleResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers]",
+		MarkdownDescription: "ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers] Source: comfy_extras/nodes_advanced_samplers.py:41 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"scale_ratio": schema.Float64Attribute{
-				Description: "Input: FLOAT default: 1",
-				Required:    true,
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.1 to 20. Step: 0.01.",
+				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 20),
 				},
 			},
 			"scale_steps": schema.Int64Attribute{
-				Description: "Input: INT default: -1",
-				Required:    true,
+				MarkdownDescription: "Input: INT. Default: -1. Allowed range: -1 to 1000. Step: 1.",
+				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(-1, 1000),
 				},
 			},
 			"upscale_method": schema.StringAttribute{
-				Description: "Input: COMBO",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.",
+				Required:            true,
 			},
 			"sampler_output": schema.StringAttribute{
-				Description: "Output: SAMPLER (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: SAMPLER (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

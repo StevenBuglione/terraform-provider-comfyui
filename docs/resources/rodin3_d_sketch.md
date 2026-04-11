@@ -3,12 +3,12 @@
 page_title: "comfyui_rodin3_d_sketch Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI Rodin3D_Sketch node — Rodin 3D Generate - Sketch Generate [api node/3d/Rodin]
+  ComfyUI Rodin3D_Sketch node — Rodin 3D Generate - Sketch Generate [api node/3d/Rodin] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_rodin.py:407 (v3_api).
 ---
 
 # comfyui_rodin3_d_sketch (Resource)
 
-ComfyUI Rodin3D_Sketch node — Rodin 3D Generate - Sketch Generate [api node/3d/Rodin]
+ComfyUI Rodin3D_Sketch node — Rodin 3D Generate - Sketch Generate [api node/3d/Rodin] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_rodin.py:407 (v3_api).
 
 
 
@@ -17,15 +17,15 @@ ComfyUI Rodin3D_Sketch node — Rodin 3D Generate - Sketch Generate [api node/3d
 
 ### Required
 
-- `images` (String) Input: IMAGE (link)
+- `images` (String) Input: IMAGE. Link input.
 
 ### Optional
 
-- `seed` (Number) Input: INT default: 0
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 65535.
 
 ### Read-Only
 
-- `_3d_model_path_output` (String) Output: STRING (slot 0)
-- `glb_output` (String) Output: FILE_3D_GLB (slot 1)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `_3d_model_path_output` (String) Output: STRING (slot 0).
+- `glb_output` (String) Output: FILE_3D_GLB (slot 1).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

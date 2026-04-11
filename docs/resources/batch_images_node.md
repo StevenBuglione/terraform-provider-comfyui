@@ -3,12 +3,12 @@
 page_title: "comfyui_batch_images_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI BatchImagesNode node — Batch Images [image]
+  ComfyUI BatchImagesNode node — Batch Images [image] Source: comfy_extras/nodes_post_processing.py:563 (v3_extras).
 ---
 
 # comfyui_batch_images_node (Resource)
 
-ComfyUI BatchImagesNode node — Batch Images [image]
+ComfyUI BatchImagesNode node — Batch Images [image] Source: comfy_extras/nodes_post_processing.py:563 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI BatchImagesNode node — Batch Images [image]
 
 ### Required
 
-- `images` (String) Input: COMFY_AUTOGROW_V3
+- `images` (String) Input: COMFY_AUTOGROW_V3.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

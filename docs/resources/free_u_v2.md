@@ -3,12 +3,12 @@
 page_title: "comfyui_free_u_v2 Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI FreeU_V2 node [model_patches/unet]
+  ComfyUI FreeU_V2 node [model_patches/unet] Source: comfy_extras/nodes_freelunch.py:74 (v3_extras).
 ---
 
 # comfyui_free_u_v2 (Resource)
 
-ComfyUI FreeU_V2 node [model_patches/unet]
+ComfyUI FreeU_V2 node [model_patches/unet] Source: comfy_extras/nodes_freelunch.py:74 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ ComfyUI FreeU_V2 node [model_patches/unet]
 
 ### Required
 
-- `b1` (Number) Input: FLOAT default: 1.3
-- `b2` (Number) Input: FLOAT default: 1.4
-- `model` (String) Input: MODEL (link)
-- `s1` (Number) Input: FLOAT default: 0.9
-- `s2` (Number) Input: FLOAT default: 0.2
+- `b1` (Number) Input: FLOAT. Default: 1.3. Allowed range: 0 to 10. Step: 0.01.
+- `b2` (Number) Input: FLOAT. Default: 1.4. Allowed range: 0 to 10. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `s1` (Number) Input: FLOAT. Default: 0.9. Allowed range: 0 to 10. Step: 0.01.
+- `s2` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

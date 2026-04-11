@@ -3,12 +3,12 @@
 page_title: "comfyui_basic_scheduler Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI BasicScheduler node [sampling/custom_sampling/schedulers]
+  ComfyUI BasicScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:15 (v3_extras).
 ---
 
 # comfyui_basic_scheduler (Resource)
 
-ComfyUI BasicScheduler node [sampling/custom_sampling/schedulers]
+ComfyUI BasicScheduler node [sampling/custom_sampling/schedulers] Source: comfy_extras/nodes_custom_sampler.py:15 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI BasicScheduler node [sampling/custom_sampling/schedulers]
 
 ### Required
 
-- `denoise` (Number) Input: FLOAT default: 1
-- `model` (String) Input: MODEL (link)
-- `scheduler` (String) Input: COMBO
-- `steps` (Number) Input: INT default: 20
+- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `scheduler` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.SCHEDULER_NAMES.
+- `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `sigmas_output` (String) Output: SIGMAS (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `sigmas_output` (String) Output: SIGMAS (slot 0).

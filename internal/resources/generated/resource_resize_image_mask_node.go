@@ -38,37 +38,37 @@ func (r *ResizeImageMaskNodeResource) Metadata(_ context.Context, req resource.M
 
 func (r *ResizeImageMaskNodeResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "Resize an image or mask using various scaling methods. [transform]",
+		MarkdownDescription: "Resize an image or mask using various scaling methods. [transform] Source: comfy_extras/nodes_post_processing.py:407 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"input": schema.StringAttribute{
-				Description: "Input: COMFY_MATCHTYPE_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_MATCHTYPE_V3.",
+				Required:            true,
 			},
 			"resize_type": schema.StringAttribute{
-				Description: "Input: COMFY_DYNAMICCOMBO_V3",
-				Required:    true,
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Select how to resize: by exact dimensions, scale factor, matching another image, etc.",
+				Required:            true,
 			},
 			"scale_method": schema.StringAttribute{
-				Description: "Input: COMBO default: area",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"area\". Dynamic options are resolved by ComfyUI at runtime from: cls.scale_methods. Tooltip: Interpolation algorithm. 'area' is best for downscaling, 'lanczos' for upscaling, 'nearest-exact' for pixel art.",
+				Required:            true,
 			},
 			"resized_output": schema.StringAttribute{
-				Description: "Output: COMFY_MATCHTYPE_V3 (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: COMFY_MATCHTYPE_V3 (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

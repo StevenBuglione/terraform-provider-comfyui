@@ -3,12 +3,12 @@
 page_title: "comfyui_renorm_cfg Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI RenormCFG node [advanced/model]
+  ComfyUI RenormCFG node [advanced/model] Source: comfy_extras/nodes_lumina2.py:7 (v3_extras).
 ---
 
 # comfyui_renorm_cfg (Resource)
 
-ComfyUI RenormCFG node [advanced/model]
+ComfyUI RenormCFG node [advanced/model] Source: comfy_extras/nodes_lumina2.py:7 (v3_extras).
 
 
 
@@ -17,12 +17,12 @@ ComfyUI RenormCFG node [advanced/model]
 
 ### Required
 
-- `cfg_trunc` (Number) Input: FLOAT default: 100
-- `model` (String) Input: MODEL (link)
-- `renorm_cfg` (Number) Input: FLOAT default: 1
+- `cfg_trunc` (Number) Input: FLOAT. Default: 100. Allowed range: 0 to 100. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `renorm_cfg` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

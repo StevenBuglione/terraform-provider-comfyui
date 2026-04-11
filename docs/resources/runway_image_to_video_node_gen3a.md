@@ -3,12 +3,12 @@
 page_title: "comfyui_runway_image_to_video_node_gen3a Resource - comfyui"
 subcategory: ""
 description: |-
-  Generate a video from a single starting frame using Gen3a Turbo model. Before diving in, review these best practices to ensure that your input selections will set your generation up for success: https://help.runwayml.com/hc/en-us/articles/33927968552339-Creating-with-Act-One-on-Gen-3-Alpha-and-Turbo. [api node/video/Runway]
+  Generate a video from a single starting frame using Gen3a Turbo model. Before diving in, review these best practices to ensure that your input selections will set your generation up for success: https://help.runwayml.com/hc/en-us/articles/33927968552339-Creating-with-Act-One-on-Gen-3-Alpha-and-Turbo. [api node/video/Runway] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_runway.py:136 (v3_api).
 ---
 
 # comfyui_runway_image_to_video_node_gen3a (Resource)
 
-Generate a video from a single starting frame using Gen3a Turbo model. Before diving in, review these best practices to ensure that your input selections will set your generation up for success: https://help.runwayml.com/hc/en-us/articles/33927968552339-Creating-with-Act-One-on-Gen-3-Alpha-and-Turbo. [api node/video/Runway]
+Generate a video from a single starting frame using Gen3a Turbo model. Before diving in, review these best practices to ensure that your input selections will set your generation up for success: https://help.runwayml.com/hc/en-us/articles/33927968552339-Creating-with-Act-One-on-Gen-3-Alpha-and-Turbo. [api node/video/Runway] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_runway.py:136 (v3_api).
 
 
 
@@ -17,14 +17,14 @@ Generate a video from a single starting frame using Gen3a Turbo model. Before di
 
 ### Required
 
-- `duration` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `ratio` (String) Input: COMBO
-- `seed` (Number) Input: INT default: 0
-- `start_frame` (String) Input: IMAGE (link)
+- `duration` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: Duration.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt for the generation.
+- `ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: RunwayGen3aAspectRatio.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Random seed for generation.
+- `start_frame` (String) Input: IMAGE. Link input. Tooltip: Start frame to be used for the video.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `video_output` (String) Output: VIDEO (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `video_output` (String) Output: VIDEO (slot 0).

@@ -44,25 +44,25 @@ func (r *OpenAiVideoSora2Resource) Metadata(_ context.Context, req resource.Meta
 
 func (r *OpenAiVideoSora2Resource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "OpenAI video and audio generation. [api node/video/Sora]",
+		MarkdownDescription: "OpenAI video and audio generation. [api node/video/Sora] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_sora.py:31 (v3_api).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"model": schema.StringAttribute{
-				Description: "Input: COMBO default: sora-2",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"sora-2\".",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"sora-2",
@@ -71,12 +71,12 @@ func (r *OpenAiVideoSora2Resource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"prompt": schema.StringAttribute{
-				Description: "Input: STRING default: ",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Guiding text; may be empty if an input image is present.",
+				Required:            true,
 			},
 			"size": schema.StringAttribute{
-				Description: "Input: COMBO default: 1280x720",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: \"1280x720\".",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"720x1280",
@@ -87,8 +87,8 @@ func (r *OpenAiVideoSora2Resource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"duration": schema.StringAttribute{
-				Description: "Input: COMBO default: 8",
-				Required:    true,
+				MarkdownDescription: "Input: COMBO. Default: 8.",
+				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
 						"4",
@@ -98,19 +98,19 @@ func (r *OpenAiVideoSora2Resource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"image": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Optional:    true,
+				MarkdownDescription: "Input: IMAGE. Link input.",
+				Optional:            true,
 			},
 			"seed": schema.Int64Attribute{
-				Description: "Input: INT default: 0",
-				Optional:    true,
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
+				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 2147483647),
 				},
 			},
 			"video_output": schema.StringAttribute{
-				Description: "Output: VIDEO (slot 0)",
-				Computed:    true,
+				MarkdownDescription: "Output: VIDEO (slot 0).",
+				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},

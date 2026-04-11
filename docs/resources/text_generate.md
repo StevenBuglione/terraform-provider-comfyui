@@ -3,12 +3,12 @@
 page_title: "comfyui_text_generate Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TextGenerate node [textgen/]
+  ComfyUI TextGenerate node [textgen/] Source: comfy_extras/nodes_textgen.py:4 (v3_extras).
 ---
 
 # comfyui_text_generate (Resource)
 
-ComfyUI TextGenerate node [textgen/]
+ComfyUI TextGenerate node [textgen/] Source: comfy_extras/nodes_textgen.py:4 (v3_extras).
 
 
 
@@ -17,17 +17,17 @@ ComfyUI TextGenerate node [textgen/]
 
 ### Required
 
-- `clip` (String) Input: CLIP (link)
-- `max_length` (Number) Input: INT default: 256
-- `prompt` (String) Input: STRING default:
-- `sampling_mode` (String) Input: COMFY_DYNAMICCOMBO_V3
+- `clip` (String) Input: CLIP. Link input.
+- `max_length` (Number) Input: INT. Default: 256. Allowed range: 1 to 2048.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `sampling_mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Display name: Sampling Mode. Dynamic options are resolved by ComfyUI at runtime from: sampling_options.
 
 ### Optional
 
-- `image` (String) Input: IMAGE (link)
+- `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only
 
-- `generated_text_output` (String) Output: STRING (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `generated_text_output` (String) Output: STRING (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

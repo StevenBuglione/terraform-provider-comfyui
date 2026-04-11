@@ -3,12 +3,12 @@
 page_title: "comfyui_upscale_model_loader Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI UpscaleModelLoader node — Load Upscale Model [loaders]
+  ComfyUI UpscaleModelLoader node — Load Upscale Model [loaders] Source: comfy_extras/nodes_upscale_model.py:18 (v3_extras).
 ---
 
 # comfyui_upscale_model_loader (Resource)
 
-ComfyUI UpscaleModelLoader node — Load Upscale Model [loaders]
+ComfyUI UpscaleModelLoader node — Load Upscale Model [loaders] Source: comfy_extras/nodes_upscale_model.py:18 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI UpscaleModelLoader node — Load Upscale Model [loaders]
 
 ### Required
 
-- `model_name` (String) Input: COMBO
+- `model_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('upscale_models').
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `upscale_model_output` (String) Output: UPSCALE_MODEL (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `upscale_model_output` (String) Output: UPSCALE_MODEL (slot 0).

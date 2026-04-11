@@ -3,12 +3,12 @@
 page_title: "comfyui_byte_dance_seedream_node Resource - comfyui"
 subcategory: ""
 description: |-
-  Unified text-to-image generation and precise single-sentence editing at up to 4K resolution. [api node/image/ByteDance]
+  Unified text-to-image generation and precise single-sentence editing at up to 4K resolution. [api node/image/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:188 (v3_api).
 ---
 
 # comfyui_byte_dance_seedream_node (Resource)
 
-Unified text-to-image generation and precise single-sentence editing at up to 4K resolution. [api node/image/ByteDance]
+Unified text-to-image generation and precise single-sentence editing at up to 4K resolution. [api node/image/ByteDance] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bytedance.py:188 (v3_api).
 
 
 
@@ -17,23 +17,23 @@ Unified text-to-image generation and precise single-sentence editing at up to 4K
 
 ### Required
 
-- `model` (String) Input: COMBO
-- `prompt` (String) Input: STRING default:
-- `size_preset` (String) Input: COMBO
+- `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(SEEDREAM_MODELS.keys()).
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt for creating or editing an image.
+- `size_preset` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Pick a recommended size. Select Custom to use the width and height below.
 
 ### Optional
 
-- `fail_on_partial` (Boolean) Input: BOOLEAN default: true
-- `height` (Number) Input: INT default: 2048
-- `image` (String) Input: IMAGE (link)
-- `max_images` (Number) Input: INT default: 1
-- `seed` (Number) Input: INT default: 0
-- `sequential_image_generation` (String) Input: COMBO
-- `watermark` (Boolean) Input: BOOLEAN default: false
-- `width` (Number) Input: INT default: 2048
+- `fail_on_partial` (Boolean) Input: BOOLEAN. Default: true. Tooltip: If enabled, abort execution if any requested images are missing or return an error.
+- `height` (Number) Input: INT. Default: 2048. Allowed range: 1024 to 4992. Step: 2. Tooltip: Custom height for image. Value is working only if `size_preset` is set to `Custom`.
+- `image` (String) Input: IMAGE. Link input. Tooltip: Input image(s) for image-to-image generation. Reference image(s) for single or multi-reference generation.
+- `max_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 15. Step: 1. Tooltip: Maximum number of images to generate when sequential_image_generation='auto'. Total images (input + generated) cannot exceed 15.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
+- `sequential_image_generation` (String) Input: COMBO. Tooltip: Group image generation mode. 'disabled' generates a single image. 'auto' lets the model decide whether to generate multiple related images (e.g., story scenes, character variations).
+- `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an "AI generated" watermark to the image.
+- `width` (Number) Input: INT. Default: 2048. Allowed range: 1024 to 6240. Step: 2. Tooltip: Custom width for image. Value is working only if `size_preset` is set to `Custom`.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

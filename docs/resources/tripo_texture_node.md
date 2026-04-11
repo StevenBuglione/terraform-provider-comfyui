@@ -3,12 +3,12 @@
 page_title: "comfyui_tripo_texture_node Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI TripoTextureNode node — Tripo: Texture model [api node/3d/Tripo]
+  ComfyUI TripoTextureNode node — Tripo: Texture model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:466 (v3_api).
 ---
 
 # comfyui_tripo_texture_node (Resource)
 
-ComfyUI TripoTextureNode node — Tripo: Texture model [api node/3d/Tripo]
+ComfyUI TripoTextureNode node — Tripo: Texture model [api node/3d/Tripo] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_tripo.py:466 (v3_api).
 
 
 
@@ -17,20 +17,20 @@ ComfyUI TripoTextureNode node — Tripo: Texture model [api node/3d/Tripo]
 
 ### Required
 
-- `model_task_id` (String) Input: MODEL_TASK_ID (link)
+- `model_task_id` (String) Input: MODEL_TASK_ID. Link input.
 
 ### Optional
 
-- `pbr` (Boolean) Input: BOOLEAN default: true
-- `texture` (Boolean) Input: BOOLEAN default: true
-- `texture_alignment` (String) Input: COMBO default: original_image
-- `texture_quality` (String) Input: COMBO default: standard
-- `texture_seed` (Number) Input: INT default: 42
+- `pbr` (Boolean) Input: BOOLEAN. Default: true.
+- `texture` (Boolean) Input: BOOLEAN. Default: true.
+- `texture_alignment` (String) Input: COMBO. Default: "original_image".
+- `texture_quality` (String) Input: COMBO. Default: "standard".
+- `texture_seed` (Number) Input: INT. Default: 42.
 
 ### Read-Only
 
-- `glb_output` (String) Output: FILE_3D_GLB (slot 2)
-- `id` (String) Unique identifier for this node instance
-- `model_file_output` (String) Output: STRING (slot 0)
-- `model_task_id_output` (String) Output: MODEL_TASK_ID (slot 1)
-- `node_id` (String) ComfyUI node class type
+- `glb_output` (String) Output: FILE_3D_GLB (slot 2).
+- `id` (String) Unique identifier for this node instance.
+- `model_file_output` (String) Output: STRING (slot 0).
+- `model_task_id_output` (String) Output: MODEL_TASK_ID (slot 1).
+- `node_id` (String) ComfyUI node class type.

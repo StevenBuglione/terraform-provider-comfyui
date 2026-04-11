@@ -3,12 +3,12 @@
 page_title: "comfyui_u_net_temporal_attention_multiply Resource - comfyui"
 subcategory: ""
 description: |-
-  (EXPERIMENTAL) ComfyUI UNetTemporalAttentionMultiply node [_for_testing/attention_experiments]
+  (EXPERIMENTAL) ComfyUI UNetTemporalAttentionMultiply node [_for_testing/attention_experiments] Source: comfy_extras/nodes_attention_multiply.py:104 (v3_extras).
 ---
 
 # comfyui_u_net_temporal_attention_multiply (Resource)
 
-(EXPERIMENTAL) ComfyUI UNetTemporalAttentionMultiply node [_for_testing/attention_experiments]
+(EXPERIMENTAL) ComfyUI UNetTemporalAttentionMultiply node [_for_testing/attention_experiments] Source: comfy_extras/nodes_attention_multiply.py:104 (v3_extras).
 
 
 
@@ -17,14 +17,14 @@ description: |-
 
 ### Required
 
-- `cross_structural` (Number) Input: FLOAT default: 1
-- `cross_temporal` (Number) Input: FLOAT default: 1
-- `model` (String) Input: MODEL (link)
-- `self_structural` (Number) Input: FLOAT default: 1
-- `self_temporal` (Number) Input: FLOAT default: 1
+- `cross_structural` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `cross_temporal` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `model` (String) Input: MODEL. Link input.
+- `self_structural` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `self_temporal` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `model_output` (String) Output: MODEL (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `model_output` (String) Output: MODEL (slot 0).
+- `node_id` (String) ComfyUI node class type.

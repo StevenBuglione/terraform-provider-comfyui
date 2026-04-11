@@ -3,12 +3,12 @@
 page_title: "comfyui_bria_remove_image_background Resource - comfyui"
 subcategory: ""
 description: |-
-  Remove the background from an image using Bria RMBG 2.0. [api node/image/Bria]
+  Remove the background from an image using Bria RMBG 2.0. [api node/image/Bria] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bria.py:165 (v3_api).
 ---
 
 # comfyui_bria_remove_image_background (Resource)
 
-Remove the background from an image using Bria RMBG 2.0. [api node/image/Bria]
+Remove the background from an image using Bria RMBG 2.0. [api node/image/Bria] Hidden runtime inputs: auth_token_comfy_org (AUTH_TOKEN_COMFY_ORG), api_key_comfy_org (API_KEY_COMFY_ORG), unique_id (UNIQUE_ID). Source: comfy_api_nodes/nodes_bria.py:165 (v3_api).
 
 
 
@@ -17,12 +17,12 @@ Remove the background from an image using Bria RMBG 2.0. [api node/image/Bria]
 
 ### Required
 
-- `image` (String) Input: IMAGE (link)
-- `moderation` (String) Input: COMFY_DYNAMICCOMBO_V3
-- `seed` (Number) Input: INT default: 0
+- `image` (String) Input: IMAGE. Link input.
+- `moderation` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `image_output` (String) Output: IMAGE (slot 0)
-- `node_id` (String) ComfyUI node class type
+- `id` (String) Unique identifier for this node instance.
+- `image_output` (String) Output: IMAGE (slot 0).
+- `node_id` (String) ComfyUI node class type.

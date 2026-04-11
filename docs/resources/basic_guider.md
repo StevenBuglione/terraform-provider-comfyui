@@ -3,12 +3,12 @@
 page_title: "comfyui_basic_guider Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI BasicGuider node [sampling/custom_sampling/guiders]
+  ComfyUI BasicGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/nodes_custom_sampler.py:791 (v3_extras).
 ---
 
 # comfyui_basic_guider (Resource)
 
-ComfyUI BasicGuider node [sampling/custom_sampling/guiders]
+ComfyUI BasicGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/nodes_custom_sampler.py:791 (v3_extras).
 
 
 
@@ -17,11 +17,11 @@ ComfyUI BasicGuider node [sampling/custom_sampling/guiders]
 
 ### Required
 
-- `conditioning` (String) Input: CONDITIONING (link)
-- `model` (String) Input: MODEL (link)
+- `conditioning` (String) Input: CONDITIONING. Link input.
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `guider_output` (String) Output: GUIDER (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `guider_output` (String) Output: GUIDER (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

@@ -3,12 +3,12 @@
 page_title: "comfyui_cfg_zero_star Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI CFGZeroStar node [advanced/guidance]
+  ComfyUI CFGZeroStar node [advanced/guidance] Source: comfy_extras/nodes_cfg.py:24 (v3_extras).
 ---
 
 # comfyui_cfg_zero_star (Resource)
 
-ComfyUI CFGZeroStar node [advanced/guidance]
+ComfyUI CFGZeroStar node [advanced/guidance] Source: comfy_extras/nodes_cfg.py:24 (v3_extras).
 
 
 
@@ -17,10 +17,10 @@ ComfyUI CFGZeroStar node [advanced/guidance]
 
 ### Required
 
-- `model` (String) Input: MODEL (link)
+- `model` (String) Input: MODEL. Link input.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
-- `patched_model_output` (String) Output: MODEL (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.
+- `patched_model_output` (String) Output: MODEL (slot 0).

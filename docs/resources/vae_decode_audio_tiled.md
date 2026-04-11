@@ -3,12 +3,12 @@
 page_title: "comfyui_vae_decode_audio_tiled Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI VAEDecodeAudioTiled node — VAE Decode Audio (Tiled) [latent/audio]
+  ComfyUI VAEDecodeAudioTiled node — VAE Decode Audio (Tiled) [latent/audio] Source: comfy_extras/nodes_audio.py:133 (v3_extras).
 ---
 
 # comfyui_vae_decode_audio_tiled (Resource)
 
-ComfyUI VAEDecodeAudioTiled node — VAE Decode Audio (Tiled) [latent/audio]
+ComfyUI VAEDecodeAudioTiled node — VAE Decode Audio (Tiled) [latent/audio] Source: comfy_extras/nodes_audio.py:133 (v3_extras).
 
 
 
@@ -17,13 +17,13 @@ ComfyUI VAEDecodeAudioTiled node — VAE Decode Audio (Tiled) [latent/audio]
 
 ### Required
 
-- `overlap` (Number) Input: INT default: 64
-- `samples` (String) Input: LATENT (link)
-- `tile_size` (Number) Input: INT default: 512
-- `vae` (String) Input: VAE (link)
+- `overlap` (Number) Input: INT. Default: 64. Allowed range: 0 to 1024. Step: 8.
+- `samples` (String) Input: LATENT. Link input.
+- `tile_size` (Number) Input: INT. Default: 512. Allowed range: 32 to 8192. Step: 8.
+- `vae` (String) Input: VAE. Link input.
 
 ### Read-Only
 
-- `audio_output` (String) Output: AUDIO (slot 0)
-- `id` (String) Unique identifier for this node instance
-- `node_id` (String) ComfyUI node class type
+- `audio_output` (String) Output: AUDIO (slot 0).
+- `id` (String) Unique identifier for this node instance.
+- `node_id` (String) ComfyUI node class type.

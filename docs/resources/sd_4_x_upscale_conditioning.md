@@ -3,12 +3,12 @@
 page_title: "comfyui_sd_4_x_upscale_conditioning Resource - comfyui"
 subcategory: ""
 description: |-
-  ComfyUI SD_4XUpscale_Conditioning node [conditioning/upscale_diffusion]
+  ComfyUI SD_4XUpscale_Conditioning node [conditioning/upscale_diffusion] Source: comfy_extras/nodes_sdupscale.py:7 (v3_extras).
 ---
 
 # comfyui_sd_4_x_upscale_conditioning (Resource)
 
-ComfyUI SD_4XUpscale_Conditioning node [conditioning/upscale_diffusion]
+ComfyUI SD_4XUpscale_Conditioning node [conditioning/upscale_diffusion] Source: comfy_extras/nodes_sdupscale.py:7 (v3_extras).
 
 
 
@@ -17,16 +17,16 @@ ComfyUI SD_4XUpscale_Conditioning node [conditioning/upscale_diffusion]
 
 ### Required
 
-- `images` (String) Input: IMAGE (link)
-- `negative` (String) Input: CONDITIONING (link)
-- `noise_augmentation` (Number) Input: FLOAT default: 0
-- `positive` (String) Input: CONDITIONING (link)
-- `scale_ratio` (Number) Input: FLOAT default: 4
+- `images` (String) Input: IMAGE. Link input.
+- `negative` (String) Input: CONDITIONING. Link input.
+- `noise_augmentation` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `positive` (String) Input: CONDITIONING. Link input.
+- `scale_ratio` (Number) Input: FLOAT. Default: 4. Allowed range: 0 to 10. Step: 0.01.
 
 ### Read-Only
 
-- `id` (String) Unique identifier for this node instance
-- `latent_output` (String) Output: LATENT (slot 2)
-- `negative_output` (String) Output: CONDITIONING (slot 1)
-- `node_id` (String) ComfyUI node class type
-- `positive_output` (String) Output: CONDITIONING (slot 0)
+- `id` (String) Unique identifier for this node instance.
+- `latent_output` (String) Output: LATENT (slot 2).
+- `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_id` (String) ComfyUI node class type.
+- `positive_output` (String) Output: CONDITIONING (slot 0).

@@ -36,33 +36,33 @@ func (r *SaveImageDataSetToFolderResource) Metadata(_ context.Context, req resou
 
 func (r *SaveImageDataSetToFolderResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
-		Description: "(EXPERIMENTAL) ComfyUI SaveImageDataSetToFolderNode node — Save Image Dataset to Folder [dataset]",
+		MarkdownDescription: "(EXPERIMENTAL) ComfyUI SaveImageDataSetToFolderNode node — Save Image Dataset to Folder [dataset] Source: comfy_extras/nodes_dataset.py:204 (v3_extras).",
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
-				Computed:    true,
-				Description: "Unique identifier for this node instance",
+				Computed:            true,
+				MarkdownDescription: "Unique identifier for this node instance.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"node_id": schema.StringAttribute{
-				Computed:    true,
-				Description: "ComfyUI node class type",
+				Computed:            true,
+				MarkdownDescription: "ComfyUI node class type.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
 			"images": schema.StringAttribute{
-				Description: "Input: IMAGE (link)",
-				Required:    true,
+				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: List of images to save.",
+				Required:            true,
 			},
 			"folder_name": schema.StringAttribute{
-				Description: "Input: STRING default: dataset",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"dataset\". Tooltip: Name of the folder to save images to (inside output directory).",
+				Required:            true,
 			},
 			"filename_prefix": schema.StringAttribute{
-				Description: "Input: STRING default: image",
-				Required:    true,
+				MarkdownDescription: "Input: STRING. Default: \"image\". Tooltip: Prefix for saved image filenames.",
+				Required:            true,
 			},
 		},
 	}
