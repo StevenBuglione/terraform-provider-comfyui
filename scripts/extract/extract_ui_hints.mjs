@@ -12,6 +12,17 @@ function toFiniteNumber(value) {
   return Number.isFinite(value) ? Number(value) : null;
 }
 
+function stableArtifactShape(output) {
+  return {
+    version: output.version,
+    comfyui_commit_sha: output.comfyui_commit_sha,
+    comfyui_version: output.comfyui_version,
+    total_nodes: output.total_nodes,
+    failed_nodes: output.failed_nodes,
+    nodes: output.nodes,
+  };
+}
+
 async function extractNodeUIHints() {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -125,6 +136,13 @@ async function extractNodeUIHints() {
       failed_nodes: [],
       nodes: normalizedNodes,
     };
+
+    if (fs.existsSync(outputPath)) {
+      const existing = JSON.parse(fs.readFileSync(outputPath, 'utf-8'));
+      if (JSON.stringify(stableArtifactShape(existing)) === JSON.stringify(stableArtifactShape(output))) {
+        output.extracted_at = existing.extracted_at;
+      }
+    }
 
     fs.writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`, 'utf-8');
   } finally {
