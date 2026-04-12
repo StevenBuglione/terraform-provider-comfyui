@@ -60,6 +60,11 @@ test('verifies release candidate workflows and translations in the real ComfyUI 
         expect(metrics.groupCount).toBeGreaterThan(0);
       }
 
+      if (scenarioName === 'release_gallery') {
+        expect(metrics.minVerticalGap).not.toBeNull();
+        expect(metrics.minVerticalGap!).toBeGreaterThanOrEqual(40);
+      }
+
       await page.screenshot({
         path: path.join(browserArtifactsDir, `${scenarioName}.png`),
         fullPage: true,

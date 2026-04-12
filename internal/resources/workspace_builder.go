@@ -16,12 +16,14 @@ const (
 	defaultNodeWidth         = 240.0
 	defaultNodeHeight        = 120.0
 	defaultNodeEdgePadding   = 40.0
+	multilineNodeMinWidth    = 400.0
+	multilineNodeMinHeight   = 200.0
 	nodeHeightBase           = 62.0
 	nodeHeightPerRow         = 20.0
 	defaultGroupHeaderHeight = 40.0
 	defaultGroupBodyTopPad   = 40.0
-	defaultNodeColumnGap     = defaultNodeWidth + defaultNodeEdgePadding
-	defaultNodeRowGap        = defaultNodeHeight + defaultNodeEdgePadding
+	defaultNodeColumnGap     = defaultNodeEdgePadding
+	defaultNodeRowGap        = defaultNodeEdgePadding
 	defaultGroupFontSize     = 24
 )
 
@@ -485,20 +487,25 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 	if rowGap <= 0 {
 		rowGap = defaultNodeRowGap
 	}
-	nodePadding := rowGap - defaultNodeHeight
-	if nodePadding < 0 {
-		nodePadding = 0
-	}
 
 	rowHeights := make(map[int]float64)
+	columnWidths := make(map[int]float64)
 	maxRow := 0
+	maxLevelSeen := 0
 	for _, node := range nodes {
 		row := int(nodeRows[node.ID])
 		if node.Size[1] > rowHeights[row] {
 			rowHeights[row] = node.Size[1]
 		}
+		level := levels[node.ID]
+		if node.Size[0] > columnWidths[level] {
+			columnWidths[level] = node.Size[0]
+		}
 		if row > maxRow {
 			maxRow = row
+		}
+		if level > maxLevelSeen {
+			maxLevelSeen = level
 		}
 	}
 
@@ -510,7 +517,18 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 		if height == 0 {
 			height = defaultNodeHeight
 		}
-		currentY += height + nodePadding
+		currentY += height + rowGap
+	}
+
+	columnOffsets := make(map[int]float64, maxLevelSeen+1)
+	currentX := 0.0
+	for level := 0; level <= maxLevelSeen; level++ {
+		columnOffsets[level] = currentX
+		width := columnWidths[level]
+		if width == 0 {
+			width = defaultNodeWidth
+		}
+		currentX += width + columnGap
 	}
 
 	// Position nodes
@@ -518,7 +536,7 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 		level := levels[node.ID]
 		row := int(nodeRows[node.ID])
 
-		x := float64(level) * columnGap
+		x := columnOffsets[level]
 		y := rowOffsets[row]
 
 		nodes[nodeIndexByID[node.ID]].Pos = []float64{x, y}
@@ -528,11 +546,12 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 }
 
 func buildWorkspaceNode(nodeID int, classType string, info client.NodeInfo, orderedInputs []string, rawInputs map[string]interface{}, baseX, baseY float64, nodeIndex int, order int) (workspaceNode, []interface{}) {
+	width, height := estimateWorkspaceNodeSize(info, orderedInputs)
 	node := workspaceNode{
 		ID:         nodeID,
 		Type:       classType,
 		Pos:        []float64{baseX, baseY},
-		Size:       []float64{defaultNodeWidth, estimateWorkspaceNodeHeight(len(orderedInputs), len(info.Output))},
+		Size:       []float64{width, height},
 		Flags:      map[string]interface{}{},
 		Order:      order,
 		Mode:       0,
@@ -583,6 +602,26 @@ func buildWorkspaceNode(nodeID int, classType string, info client.NodeInfo, orde
 	return node, widgetValues
 }
 
+func estimateWorkspaceNodeSize(info client.NodeInfo, orderedInputs []string) (float64, float64) {
+	width := defaultNodeWidth
+	height := estimateWorkspaceNodeHeight(len(orderedInputs), len(info.Output))
+
+	for _, inputName := range orderedInputs {
+		if inputType := lookupNodeInputType(info, inputName); !isWidgetInputType(inputType) {
+			continue
+		}
+		minWidth, minHeight := widgetMinimumNodeSize(info, inputName)
+		if minWidth > width {
+			width = minWidth
+		}
+		if minHeight > height {
+			height = minHeight
+		}
+	}
+
+	return width, height
+}
+
 func estimateWorkspaceNodeHeight(inputCount, outputCount int) float64 {
 	rowCount := inputCount
 	if outputCount > rowCount {
@@ -597,6 +636,19 @@ func estimateWorkspaceNodeHeight(inputCount, outputCount int) float64 {
 	return height
 }
 
+func widgetMinimumNodeSize(info client.NodeInfo, inputName string) (float64, float64) {
+	metadata, ok := lookupNodeInputMetadata(info, inputName)
+	if !ok {
+		return 0, 0
+	}
+
+	if multiline, ok := metadata["multiline"].(bool); ok && multiline {
+		return multilineNodeMinWidth, multilineNodeMinHeight
+	}
+
+	return 0, 0
+}
+
 func lookupNodeInputType(info client.NodeInfo, inputName string) string {
 	if inputType, ok := extractInputType(info.Input.Required[inputName]); ok {
 		return inputType
@@ -605,6 +657,16 @@ func lookupNodeInputType(info client.NodeInfo, inputName string) string {
 		return inputType
 	}
 	return "UNKNOWN"
+}
+
+func lookupNodeInputMetadata(info client.NodeInfo, inputName string) (map[string]interface{}, bool) {
+	if metadata, ok := extractInputMetadata(info.Input.Required[inputName]); ok {
+		return metadata, true
+	}
+	if metadata, ok := extractInputMetadata(info.Input.Optional[inputName]); ok {
+		return metadata, true
+	}
+	return nil, false
 }
 
 func extractInputType(raw interface{}) (string, bool) {
@@ -620,6 +682,18 @@ func extractInputType(raw interface{}) (string, bool) {
 		return "", false
 	}
 	return value, true
+}
+
+func extractInputMetadata(raw interface{}) (map[string]interface{}, bool) {
+	values, ok := raw.([]interface{})
+	if !ok || len(values) < 2 {
+		return nil, false
+	}
+	metadata, ok := values[1].(map[string]interface{})
+	if !ok {
+		return nil, false
+	}
+	return metadata, true
 }
 
 func parsePromptConnection(value interface{}) (string, int, bool) {

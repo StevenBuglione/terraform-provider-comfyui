@@ -8,6 +8,7 @@ export type GraphMetrics = {
   nodesWithInvalidGeometry: number[];
   maxInDegree: number;
   maxOutDegree: number;
+  minVerticalGap: number | null;
 };
 
 export async function readGraphMetrics(page: Page): Promise<GraphMetrics> {
@@ -48,6 +49,29 @@ export async function readGraphMetrics(page: Page): Promise<GraphMetrics> {
       return Math.max(max, degree);
     }, 0);
 
+    const nodesByColumn = new Map<number, any[]>();
+    for (const node of nodes) {
+      const x = node?.pos?.[0];
+      if (!Number.isFinite(x)) {
+        continue;
+      }
+      const bucket = nodesByColumn.get(x) ?? [];
+      bucket.push(node);
+      nodesByColumn.set(x, bucket);
+    }
+
+    let minVerticalGap = Number.POSITIVE_INFINITY;
+    for (const columnNodes of nodesByColumn.values()) {
+      const sorted = [...columnNodes].sort((a: any, b: any) => (a.pos?.[1] ?? 0) - (b.pos?.[1] ?? 0));
+      for (let index = 1; index < sorted.length; index += 1) {
+        const prev = sorted[index - 1];
+        const curr = sorted[index];
+        const prevBottom = (prev.pos?.[1] ?? 0) + (prev.size?.[1] ?? 0);
+        const currTop = curr.pos?.[1] ?? 0;
+        minVerticalGap = Math.min(minVerticalGap, currTop - prevBottom);
+      }
+    }
+
     return {
       nodeCount: nodes.length,
       groupCount: (graph?._groups ?? []).length,
@@ -56,6 +80,7 @@ export async function readGraphMetrics(page: Page): Promise<GraphMetrics> {
       nodesWithInvalidGeometry,
       maxInDegree,
       maxOutDegree,
+      minVerticalGap: Number.isFinite(minVerticalGap) ? minVerticalGap : null,
     };
   });
 }

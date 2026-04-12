@@ -871,6 +871,52 @@ func TestBuildWorkspaceNodeExpandsHeightForDenseControlNodes(t *testing.T) {
 	}
 }
 
+func TestBuildWorkspaceNodeHonorsMultilineWidgetMinSize(t *testing.T) {
+	info := client.NodeInfo{
+		Input: client.NodeInputInfo{
+			Required: map[string]interface{}{
+				"text": []interface{}{"STRING", map[string]interface{}{
+					"multiline": true,
+				}},
+				"clip": []interface{}{"CLIP", map[string]interface{}{}},
+			},
+		},
+		InputOrder:   map[string][]string{"required": {"text", "clip"}},
+		Output:       []string{"CONDITIONING"},
+		OutputName:   []string{"CONDITIONING"},
+		OutputIsList: []bool{false},
+		Name:         "CLIPTextEncode",
+		DisplayName:  "CLIP Text Encode (Prompt)",
+	}
+
+	orderedInputs, err := orderedNodeInputs(info)
+	if err != nil {
+		t.Fatalf("orderedNodeInputs returned error: %v", err)
+	}
+
+	node, _ := buildWorkspaceNode(
+		1,
+		"CLIPTextEncode",
+		info,
+		orderedInputs,
+		map[string]interface{}{
+			"text": "hero product shot, reflective chrome, dramatic studio rim light",
+			"clip": []interface{}{"2", 0},
+		},
+		0,
+		0,
+		0,
+		0,
+	)
+
+	if node.Size[0] != 400 {
+		t.Fatalf("expected multiline widget min width 400, got %v", node.Size[0])
+	}
+	if node.Size[1] != 200 {
+		t.Fatalf("expected multiline widget min height 200, got %v", node.Size[1])
+	}
+}
+
 func TestWorkspaceBuilderUsesActualNodeHeightsForVerticalSpacing(t *testing.T) {
 	nodes := []workspaceNode{
 		{ID: 1, Type: "SamplerNode", Pos: []float64{0, 0}, Size: []float64{240, 262}},
@@ -889,6 +935,49 @@ func TestWorkspaceBuilderUsesActualNodeHeightsForVerticalSpacing(t *testing.T) {
 	}
 	if nodes[2].Pos[1] < nodes[1].Pos[1]+nodes[1].Size[1]+expectedNodePadding {
 		t.Fatalf("expected third node below second node bottom + padding, got second=%v third=%v", nodes[1], nodes[2])
+	}
+}
+
+func TestWorkspaceBuilderTreatsConfiguredRowGapAsEmptySpace(t *testing.T) {
+	nodes := []workspaceNode{
+		{ID: 1, Type: "SourceNode", Pos: []float64{0, 0}, Size: []float64{240, 120}},
+		{ID: 2, Type: "SourceNode", Pos: []float64{0, 0}, Size: []float64{240, 120}},
+	}
+	nodeIndexByID := map[int]int{1: 0, 2: 1}
+
+	if err := layoutWorkflowNodesLeftToRight(nodes, nodeIndexByID, nil, workspaceNodeLayoutConfig{
+		Mode:      "dag",
+		Direction: "left_to_right",
+		RowGap:    120,
+	}); err != nil {
+		t.Fatalf("layoutWorkflowNodesLeftToRight returned error: %v", err)
+	}
+
+	if gap := nodes[1].Pos[1] - (nodes[0].Pos[1] + nodes[0].Size[1]); gap != 120 {
+		t.Fatalf("expected configured row_gap to create 120px empty space, got %v", gap)
+	}
+}
+
+func TestWorkspaceBuilderUsesActualNodeWidthsForHorizontalSpacing(t *testing.T) {
+	nodes := []workspaceNode{
+		{ID: 1, Type: "WideNode", Pos: []float64{0, 0}, Size: []float64{400, 200}},
+		{ID: 2, Type: "TargetNode", Pos: []float64{0, 0}, Size: []float64{240, 120}},
+	}
+	nodeIndexByID := map[int]int{1: 0, 2: 1}
+	links := []workspaceLink{
+		{ID: 1, OriginID: 1, OriginSlot: 0, TargetID: 2, TargetSlot: 0, Type: "TEXT"},
+	}
+
+	if err := layoutWorkflowNodesLeftToRight(nodes, nodeIndexByID, links, workspaceNodeLayoutConfig{
+		Mode:      "dag",
+		Direction: "left_to_right",
+		ColumnGap: 40,
+	}); err != nil {
+		t.Fatalf("layoutWorkflowNodesLeftToRight returned error: %v", err)
+	}
+
+	if gap := nodes[1].Pos[0] - (nodes[0].Pos[0] + nodes[0].Size[0]); gap != 40 {
+		t.Fatalf("expected configured column_gap to create 40px empty space after actual node width, got %v", gap)
 	}
 }
 
