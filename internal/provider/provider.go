@@ -148,5 +148,7 @@ func (p *ComfyUIProvider) DataSources(_ context.Context) []func() datasource.Dat
 		datasources.NewSubgraphCatalogDataSource,
 		datasources.NewSubgraphDefinitionDataSource,
 		datasources.NewProviderInfoDataSource(p.version),
+		datasources.NewJobDataSource,
+		datasources.NewJobsDataSource,
 	}
 }

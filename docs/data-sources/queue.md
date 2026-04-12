@@ -26,6 +26,35 @@ output "queue_pending" {
 ### Read-Only
 
 - `pending_count` (Number) Number of pending queue items.
+- `pending_items` (Attributes List) Structured details for pending queue items. (see [below for nested schema](#nestedatt--pending_items))
 - `queue_pending` (String) JSON representation of pending queue items.
 - `queue_running` (String) JSON representation of running queue items.
 - `running_count` (Number) Number of currently running queue items.
+- `running_items` (Attributes List) Structured details for currently running queue items. (see [below for nested schema](#nestedatt--running_items))
+
+<a id="nestedatt--pending_items"></a>
+### Nested Schema for `pending_items`
+
+Read-Only:
+
+- `create_time` (Number) Unix timestamp recorded in queue extra_data when available.
+- `extra_data_json` (String) JSON representation of queue extra_data.
+- `outputs_to_execute_json` (String) JSON representation of the node targets selected for execution.
+- `priority` (Number) Queue priority/number assigned by ComfyUI.
+- `prompt_id` (String) Prompt identifier for the queued workflow.
+- `prompt_json` (String) JSON representation of the queued prompt graph.
+- `workflow_id` (String) Workflow identifier embedded in extra_pnginfo when available.
+
+
+<a id="nestedatt--running_items"></a>
+### Nested Schema for `running_items`
+
+Read-Only:
+
+- `create_time` (Number) Unix timestamp recorded in queue extra_data when available.
+- `extra_data_json` (String) JSON representation of queue extra_data.
+- `outputs_to_execute_json` (String) JSON representation of the node targets selected for execution.
+- `priority` (Number) Queue priority/number assigned by ComfyUI.
+- `prompt_id` (String) Prompt identifier for the queued workflow.
+- `prompt_json` (String) JSON representation of the queued prompt graph.
+- `workflow_id` (String) Workflow identifier embedded in extra_pnginfo when available.

@@ -263,10 +263,10 @@ func TestGetHistory(t *testing.T) {
 		}
 		resp := HistoryResponse{
 			"prompt-abc": HistoryEntry{
-				Outputs: map[string]NodeOutput{
-					"9": {
-						Images: []ImageOutput{
-							{Filename: "output_0001.png", Subfolder: "", Type: "output"},
+				Outputs: map[string]interface{}{
+					"9": map[string]interface{}{
+						"images": []interface{}{
+							map[string]interface{}{"filename": "output_0001.png", "subfolder": "", "type": "output"},
 						},
 					},
 				},
@@ -295,15 +295,23 @@ func TestGetHistory(t *testing.T) {
 	if entry.Status.StatusStr != "success" {
 		t.Errorf("expected status=success, got %s", entry.Status.StatusStr)
 	}
-	nodeOut, ok := entry.Outputs["9"]
+	nodeOut, ok := entry.Outputs["9"].(map[string]interface{})
 	if !ok {
 		t.Fatal("expected output for node 9")
 	}
-	if len(nodeOut.Images) != 1 {
-		t.Fatalf("expected 1 image, got %d", len(nodeOut.Images))
+	images, ok := nodeOut["images"].([]interface{})
+	if !ok {
+		t.Fatal("expected images output slice for node 9")
 	}
-	if nodeOut.Images[0].Filename != "output_0001.png" {
-		t.Errorf("unexpected filename: %s", nodeOut.Images[0].Filename)
+	if len(images) != 1 {
+		t.Fatalf("expected 1 image, got %d", len(images))
+	}
+	image, ok := images[0].(map[string]interface{})
+	if !ok {
+		t.Fatal("expected first image to be an object")
+	}
+	if image["filename"] != "output_0001.png" {
+		t.Errorf("unexpected filename: %v", image["filename"])
 	}
 }
 
@@ -785,4 +793,515 @@ func TestDownloadView(t *testing.T) {
 	if resp.ContentType != "image/png" {
 		t.Fatalf("expected content_type=image/png, got %q", resp.ContentType)
 	}
+}
+
+// TestGetJob tests GET /api/jobs/{id}
+func TestGetJob(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Errorf("expected GET, got %s", r.Method)
+		}
+		if r.URL.Path != "/api/jobs/test-job-123" {
+			t.Errorf("expected path /api/jobs/test-job-123, got %s", r.URL.Path)
+		}
+		mustEncodeJSON(t, w, map[string]interface{}{
+			"id":                   "test-job-123",
+			"status":               "completed",
+			"priority":             0,
+			"create_time":          1234567890,
+			"execution_start_time": 1234567900,
+			"execution_end_time":   1234567950,
+			"outputs_count":        2,
+			"workflow_id":          "wf-abc",
+			"preview_output": map[string]interface{}{
+				"type":     "image",
+				"filename": "preview.png",
+			},
+			"outputs": map[string]interface{}{
+				"3": map[string]interface{}{
+					"images": []map[string]interface{}{
+						{"filename": "output_01.png", "subfolder": "", "type": "output"},
+					},
+				},
+			},
+			"execution_status": map[string]interface{}{
+				"status_str": "success",
+				"completed":  true,
+			},
+			"workflow": map[string]interface{}{
+				"prompt": map[string]interface{}{
+					"1": map[string]interface{}{"class_type": "LoadImage"},
+				},
+				"extra_data": map[string]interface{}{
+					"client_id": "test-client",
+				},
+			},
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	job, err := c.GetJob("test-job-123")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if job.ID != "test-job-123" {
+		t.Errorf("expected ID=test-job-123, got %s", job.ID)
+	}
+	if job.Status != "completed" {
+		t.Errorf("expected status=completed, got %s", job.Status)
+	}
+	if job.WorkflowID != "wf-abc" {
+		t.Errorf("expected workflow_id=wf-abc, got %s", job.WorkflowID)
+	}
+	if job.OutputsCount == nil || *job.OutputsCount != 2 {
+		t.Errorf("expected outputs_count=2, got %v", job.OutputsCount)
+	}
+	if job.CreateTime == nil || *job.CreateTime != 1234567890 {
+		t.Errorf("expected create_time=1234567890, got %v", job.CreateTime)
+	}
+	if job.ExecutionStartTime == nil || *job.ExecutionStartTime != 1234567900 {
+		t.Errorf("expected execution_start_time=1234567900, got %v", job.ExecutionStartTime)
+	}
+	if job.ExecutionEndTime == nil || *job.ExecutionEndTime != 1234567950 {
+		t.Errorf("expected execution_end_time=1234567950, got %v", job.ExecutionEndTime)
+	}
+	if job.PreviewOutput == nil {
+		t.Fatal("expected preview_output to be non-nil")
+	}
+	if job.Outputs == nil {
+		t.Fatal("expected outputs to be non-nil")
+	}
+	if job.ExecutionStatus == nil {
+		t.Fatal("expected execution_status to be non-nil")
+	}
+	if job.Workflow == nil {
+		t.Fatal("expected workflow to be non-nil")
+	}
+	if job.Workflow.Prompt == nil {
+		t.Fatal("expected workflow.prompt to be non-nil")
+	}
+	if job.Workflow.ExtraData == nil {
+		t.Fatal("expected workflow.extra_data to be non-nil")
+	}
+}
+
+// TestGetJob_PathEscaping tests special characters in job ID
+func TestGetJob_PathEscaping(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// The URL path is automatically decoded by the server
+		if r.URL.Path != "/api/jobs/job/with/slashes" {
+			t.Errorf("expected path /api/jobs/job/with/slashes, got %s", r.URL.Path)
+		}
+		mustEncodeJSON(t, w, map[string]interface{}{
+			"id":            "job/with/slashes",
+			"status":        "queued",
+			"outputs_count": 0,
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	job, err := c.GetJob("job/with/slashes")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if job.ID != "job/with/slashes" {
+		t.Errorf("expected ID=job/with/slashes, got %s", job.ID)
+	}
+}
+
+// TestGetJob_EmptyID tests validation for empty job ID
+func TestGetJob_EmptyID(t *testing.T) {
+	c := NewClient("localhost", 8188, "")
+	_, err := c.GetJob("")
+	if err == nil {
+		t.Fatal("expected error for empty job ID, got nil")
+	}
+	if !strings.Contains(err.Error(), "cannot be empty") {
+		t.Errorf("expected error about empty ID, got %v", err)
+	}
+}
+
+// TestGetJob_DecodeError tests error handling for malformed JSON
+func TestGetJob_DecodeError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mustWriteBody(t, w, "{invalid json")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	_, err := c.GetJob("test-job-123")
+	if err == nil {
+		t.Fatal("expected decode error, got nil")
+	}
+	if !strings.Contains(err.Error(), "failed to decode job response") {
+		t.Errorf("expected decode error message, got %v", err)
+	}
+	if !strings.Contains(err.Error(), "test-job-123") {
+		t.Errorf("expected job ID in error message, got %v", err)
+	}
+}
+
+// TestGetJob_HTTPError tests handling of non-200 response
+func TestGetJob_HTTPError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		mustWriteBody(t, w, "job not found")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	_, err := c.GetJob("nonexistent")
+	if err == nil {
+		t.Fatal("expected error for 404, got nil")
+	}
+	if !strings.Contains(err.Error(), "404") {
+		t.Errorf("expected 404 in error, got %v", err)
+	}
+}
+
+// TestListJobs tests GET /api/jobs with filters
+func TestListJobs(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET" {
+			t.Errorf("expected GET, got %s", r.Method)
+		}
+		if r.URL.Path != "/api/jobs" {
+			t.Errorf("expected path /api/jobs, got %s", r.URL.Path)
+		}
+		// Check query parameters
+		q := r.URL.Query()
+		if q.Get("status") != "completed,failed" {
+			t.Errorf("expected status=completed,failed, got %s", q.Get("status"))
+		}
+		if q.Get("sort_by") != "created_at" {
+			t.Errorf("expected sort_by=created_at, got %s", q.Get("sort_by"))
+		}
+		if q.Get("limit") != "10" {
+			t.Errorf("expected limit=10, got %s", q.Get("limit"))
+		}
+
+		mustEncodeJSON(t, w, map[string]interface{}{
+			"jobs": []map[string]interface{}{
+				{
+					"id":            "job-1",
+					"status":        "completed",
+					"outputs_count": 2,
+				},
+				{
+					"id":            "job-2",
+					"status":        "failed",
+					"outputs_count": 0,
+				},
+			},
+			"has_more": false,
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	filter := JobListFilter{
+		Status: []string{"completed", "failed"},
+		SortBy: "created_at",
+		Limit:  intPtr(10),
+	}
+	result, err := c.ListJobs(filter)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(result.Jobs) != 2 {
+		t.Errorf("expected 2 jobs, got %d", len(result.Jobs))
+	}
+	if result.Jobs[0].ID != "job-1" {
+		t.Errorf("expected first job ID=job-1, got %s", result.Jobs[0].ID)
+	}
+	if result.HasMore {
+		t.Errorf("expected has_more=false, got true")
+	}
+}
+
+// TestInterruptPrompt tests POST /interrupt
+func TestInterruptPrompt(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("expected POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/interrupt" {
+			t.Errorf("expected path /interrupt, got %s", r.URL.Path)
+		}
+
+		var reqBody map[string]interface{}
+		if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+			t.Fatalf("failed to decode request body: %v", err)
+		}
+
+		if reqBody["prompt_id"] != "prompt-to-interrupt" {
+			t.Errorf("expected prompt_id=prompt-to-interrupt, got %v", reqBody["prompt_id"])
+		}
+
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.InterruptPrompt("prompt-to-interrupt")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+// TestInterruptPrompt_GlobalInterrupt tests POST /interrupt with empty promptID (global interrupt)
+func TestInterruptPrompt_GlobalInterrupt(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("expected POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/interrupt" {
+			t.Errorf("expected path /interrupt, got %s", r.URL.Path)
+		}
+
+		var reqBody map[string]interface{}
+		if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+			t.Fatalf("failed to decode request body: %v", err)
+		}
+
+		// Global interrupt should not have prompt_id field
+		if _, exists := reqBody["prompt_id"]; exists {
+			t.Errorf("expected no prompt_id field for global interrupt, got %v", reqBody["prompt_id"])
+		}
+
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.InterruptPrompt("")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+// TestInterruptPrompt_HTTPError tests error handling for non-200 response
+func TestInterruptPrompt_HTTPError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		mustWriteBody(t, w, "internal server error")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.InterruptPrompt("prompt-123")
+	if err == nil {
+		t.Fatal("expected error for 500, got nil")
+	}
+	if !strings.Contains(err.Error(), "500") {
+		t.Errorf("expected 500 in error, got %v", err)
+	}
+}
+
+// TestDeleteQueuedPrompt tests POST /queue with delete
+func TestDeleteQueuedPrompt(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("expected POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/queue" {
+			t.Errorf("expected path /queue, got %s", r.URL.Path)
+		}
+
+		var reqBody map[string]interface{}
+		if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+			t.Fatalf("failed to decode request body: %v", err)
+		}
+
+		deleteList, ok := reqBody["delete"].([]interface{})
+		if !ok {
+			t.Fatalf("expected delete to be an array")
+		}
+		if len(deleteList) != 1 {
+			t.Errorf("expected 1 item to delete, got %d", len(deleteList))
+		}
+		if deleteList[0] != "item-1" {
+			t.Errorf("expected delete item=item-1, got %v", deleteList[0])
+		}
+
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.DeleteQueuedPrompt("item-1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+// TestDeleteQueuedPrompt_HTTPError tests error handling for non-200 response
+func TestDeleteQueuedPrompt_HTTPError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		mustWriteBody(t, w, "bad request")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.DeleteQueuedPrompt("item-1")
+	if err == nil {
+		t.Fatal("expected error for 400, got nil")
+	}
+	if !strings.Contains(err.Error(), "400") {
+		t.Errorf("expected 400 in error, got %v", err)
+	}
+}
+
+// TestDeleteHistoryPrompt tests POST /history with delete
+func TestDeleteHistoryPrompt(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			t.Errorf("expected POST, got %s", r.Method)
+		}
+		if r.URL.Path != "/history" {
+			t.Errorf("expected path /history, got %s", r.URL.Path)
+		}
+
+		var reqBody map[string]interface{}
+		if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
+			t.Fatalf("failed to decode request body: %v", err)
+		}
+
+		deleteList, ok := reqBody["delete"].([]interface{})
+		if !ok {
+			t.Fatalf("expected delete to be an array")
+		}
+		if len(deleteList) != 1 {
+			t.Errorf("expected 1 item to delete, got %d", len(deleteList))
+		}
+		if deleteList[0] != "history-1" {
+			t.Errorf("unexpected delete item: %v", deleteList[0])
+		}
+
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.DeleteHistoryPrompt("history-1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+// TestDeleteHistoryPrompt_HTTPError tests error handling for non-200 response
+func TestDeleteHistoryPrompt_HTTPError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		mustWriteBody(t, w, "not found")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.DeleteHistoryPrompt("nonexistent")
+	if err == nil {
+		t.Fatal("expected error for 404, got nil")
+	}
+	if !strings.Contains(err.Error(), "404") {
+		t.Errorf("expected 404 in error, got %v", err)
+	}
+}
+
+// TestDeleteQueuedPrompt_EmptyID tests that empty prompt ID is rejected
+func TestDeleteQueuedPrompt_EmptyID(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		t.Fatal("server should not be called for empty ID")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.DeleteQueuedPrompt("")
+	if err == nil {
+		t.Fatal("expected error for empty ID, got nil")
+	}
+	if !strings.Contains(err.Error(), "prompt ID cannot be empty") {
+		t.Errorf("expected 'prompt ID cannot be empty' error, got %v", err)
+	}
+}
+
+// TestDeleteHistoryPrompt_EmptyID tests that empty prompt ID is rejected
+func TestDeleteHistoryPrompt_EmptyID(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		t.Fatal("server should not be called for empty ID")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	err := c.DeleteHistoryPrompt("")
+	if err == nil {
+		t.Fatal("expected error for empty ID, got nil")
+	}
+	if !strings.Contains(err.Error(), "prompt ID cannot be empty") {
+		t.Errorf("expected 'prompt ID cannot be empty' error, got %v", err)
+	}
+}
+
+// TestListJobs_EmptyFilter tests that empty filter doesn't send query parameters
+func TestListJobs_EmptyFilter(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/api/jobs" {
+			t.Errorf("expected path /api/jobs, got %s", r.URL.Path)
+		}
+		if r.URL.RawQuery != "" {
+			t.Errorf("expected no query parameters, got %s", r.URL.RawQuery)
+		}
+		mustEncodeJSON(t, w, JobsResponse{
+			Jobs:    []Job{},
+			HasMore: false,
+		})
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	_, err := c.ListJobs(JobListFilter{})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}
+
+// TestListJobs_HTTPError tests that HTTP errors are surfaced via doGet
+func TestListJobs_HTTPError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		mustWriteBody(t, w, "internal error")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	_, err := c.ListJobs(JobListFilter{})
+	if err == nil {
+		t.Fatal("expected error for 500, got nil")
+	}
+	if !strings.Contains(err.Error(), "500") {
+		t.Errorf("expected 500 in error, got %v", err)
+	}
+}
+
+// TestListJobs_DecodeError tests error handling for malformed JSON
+func TestListJobs_DecodeError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mustWriteBody(t, w, "{malformed json")
+	}))
+	defer server.Close()
+
+	c := newTestClient(server)
+	_, err := c.ListJobs(JobListFilter{})
+	if err == nil {
+		t.Fatal("expected decode error, got nil")
+	}
+	if !strings.Contains(err.Error(), "failed to decode jobs response") {
+		t.Errorf("expected decode error message, got %v", err)
+	}
+}
+
+func intPtr(i int) *int {
+	return &i
 }

@@ -32,5 +32,21 @@ output "workflow_status" {
 ### Read-Only
 
 - `completed` (Boolean) Whether the workflow execution has completed.
+- `create_time` (Number) Unix timestamp recorded in extra_data when available.
+- `execution_end_time` (Number) Unix timestamp of the terminal execution event when available.
+- `execution_error` (Dynamic) Structured execution_error payload extracted from history messages.
+- `execution_error_json` (String) JSON representation of execution_error when present in history messages.
+- `execution_start_time` (Number) Unix timestamp of the execution_start event when available.
+- `execution_status` (Dynamic) Structured raw execution status payload from history.
+- `execution_status_json` (String) JSON representation of the raw execution status payload.
+- `extra_data` (Dynamic) Structured extra_data payload from the history entry.
+- `extra_data_json` (String) JSON representation of the stored extra_data payload.
 - `outputs` (String) JSON representation of all node outputs.
+- `outputs_count` (Number) Count of output items recorded in history.
+- `outputs_structured` (Dynamic) Structured node outputs payload.
+- `outputs_to_execute` (Dynamic) Structured outputs_to_execute payload from the history entry.
+- `outputs_to_execute_json` (String) JSON representation of the stored outputs_to_execute payload.
+- `prompt` (Dynamic) Structured prompt graph from the history entry.
+- `prompt_json` (String) JSON representation of the executed prompt graph.
 - `status` (String) Execution status (e.g., completed, error, running).
+- `workflow_id` (String) Workflow identifier embedded in extra_pnginfo when available.

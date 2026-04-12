@@ -15,6 +15,8 @@ This provider uses a node-per-resource model: generated Terraform resources desc
 - Model ComfyUI graphs as typed Terraform resources instead of hand-editing raw workflow JSON.
 - Assemble workflows from `node_ids` or submit raw ComfyUI API-format JSON directly.
 - Export workflow files, execute runs, or do both from the same `comfyui_workflow` resource.
+- Observe normalized execution state through `comfyui_workflow`, `comfyui_job`, `comfyui_jobs`, `comfyui_queue`, and `comfyui_workflow_history`.
+- Cancel queued or running executions through normal Terraform lifecycle with `cancel_on_delete`.
 - Import, translate, and validate native prompt/workspace artifacts before execution.
 - Upload input images or masks to ComfyUI and materialize remote outputs back to local disk.
 - Organize reusable workflow sets with `comfyui_workflow_collection`.
@@ -133,7 +135,8 @@ At apply time:
 
 - Terraform stores node resources in state and assembles them into ComfyUI API-format JSON.
 - `comfyui_workflow` submits the graph to ComfyUI and can wait for completion.
-- The workflow resource returns execution fields like `prompt_id`, `status`, `outputs`, `assembled_json`, and `error`.
+- The workflow resource returns execution fields like `prompt_id`, `status`, `workflow_id`, `outputs_count`, `preview_output_json`, `outputs_structured`, `assembled_json`, and `error`.
+- The job data sources let you re-read the same execution through normalized `/api/jobs` views for filtering and feedback loops.
 
 ## Core Concepts
 
@@ -148,6 +151,9 @@ Most generated `comfyui_*` node resources are virtual. They define typed node in
 - assemble a workflow from node resource IDs
 - accept raw `workflow_json`
 - write the assembled graph to `output_file`
+- preserve execution metadata via `extra_data_json` / `partial_execution_targets`
+- expose normalized execution fields like `workflow_id`, `outputs_count`, `preview_output_json`, and `execution_status_json`
+- cancel queued or running executions during destroy when `cancel_on_delete = true`
 - execute immediately, export only, or do both
 
 ### `comfyui_workspace`
@@ -165,7 +171,7 @@ Unlike `comfyui_workflow` file-only export, `comfyui_workspace` still needs a li
 
 ### Data sources
 
-Use data sources to inspect live server state, look up workflow history, resolve output files, or confirm provider metadata generated from the current ComfyUI extraction.
+Use data sources to inspect live server state, normalized job state, queue entries, workflow history, output files, or provider metadata generated from the current ComfyUI extraction.
 
 ### Artifact round-trip and file lifecycle
 
@@ -188,7 +194,7 @@ The provider also exposes dedicated artifact-management surfaces for AI harness 
 - [Workflow collections](./examples/resources/collection/main.tf): group workflows and emit an index manifest
 - [Workspace export](./examples/resources/workspace/main.tf): compose multiple workflows into one layout-aware workspace export
 - [Video generation](./examples/resources/video_gen/main.tf): partner-node video workflows for Kling and Seedance
-- [Data sources](./examples/data-sources/main.tf): inspect system stats, queue state, node metadata, history, outputs, and provider metadata
+- [Data sources](./examples/data-sources/main.tf): inspect system stats, queue state, job state, node metadata, history, outputs, and provider metadata
 
 ## Provider Configuration
 
@@ -212,9 +218,12 @@ make docs
 make hooks-install
 make workspace-e2e-browser-install
 make workspace-e2e
+make execution-e2e
 ```
 
 `make workspace-e2e` launches a disposable local ComfyUI from `third_party/ComfyUI` (auto-selecting a free local port if 8188 is busy), renders the `validation/workspace_e2e` stress fixtures through `comfyui_workspace`, and verifies the real browser canvas with Playwright. Evidence lands under `validation/workspace_e2e/artifacts/browser/` as screenshots and metrics JSON files. In this repo, "clean and usable" means each staged workspace loads in ComfyUI, every workflow group remains visible, and the captured metrics show zero cross-group overlaps, zero header overlaps, zero body containment violations, zero backward links, and correctly styled group rendering.
+
+`make execution-e2e` launches a disposable local ComfyUI, uploads a tiny fixture image, runs a model-free `LoadImage -> ImageInvert -> SaveImage` workflow, verifies the structured execution fields through `comfyui_workflow`, re-reads the same run through `comfyui_job` / `comfyui_jobs`, and downloads the saved artifact back to local disk.
 
 Generated node resources come from extracted ComfyUI metadata and are checked in under `internal/resources/generated`. For deeper project structure and development guidance, see [CLAUDE.md](./CLAUDE.md).
 

@@ -12,6 +12,19 @@ DB_FILE="$RUNTIME_DIR/comfyui.sqlite3"
 HOST="${COMFYUI_HOST:-127.0.0.1}"
 REQUIREMENTS_FILE="$ROOT_DIR/third_party/ComfyUI/requirements.txt"
 
+ensure_comfyui_checkout() {
+  if [[ -f "$REQUIREMENTS_FILE" ]]; then
+    return 0
+  fi
+
+  git -C "$ROOT_DIR" submodule update --init --recursive third_party/ComfyUI
+
+  if [[ ! -f "$REQUIREMENTS_FILE" ]]; then
+    echo "ComfyUI submodule is unavailable at $REQUIREMENTS_FILE" >&2
+    return 1
+  fi
+}
+
 # Find a free port: honor explicit COMFYUI_PORT if set, else auto-select
 find_free_port() {
   local start_port="${1:-8188}"
@@ -62,6 +75,8 @@ fi
 if [[ ! -d "$VENV_DIR" ]]; then
   python3 -m venv "$VENV_DIR"
 fi
+
+ensure_comfyui_checkout
 
 source "$VENV_DIR/bin/activate"
 

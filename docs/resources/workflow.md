@@ -13,24 +13,69 @@ Assembles ComfyUI node definitions into an executable workflow, submits it to th
 ## Example Usage
 
 ```terraform
+# Place a local input.png next to this example before applying it.
+resource "comfyui_uploaded_image" "input" {
+  file_path = "${path.module}/input.png"
+  filename  = "workflow-example-input.png"
+  overwrite = true
+  type      = "input"
+}
+
 resource "comfyui_workflow" "example" {
   workflow_json = jsonencode({
     "1" = {
-      class_type = "KSampler"
+      class_type = "LoadImage"
       inputs = {
-        seed         = 42
-        steps        = 20
-        cfg          = 7.0
-        sampler_name = "euler"
-        scheduler    = "normal"
-        denoise      = 1.0
-        model        = ["2", 0]
-        positive     = ["3", 0]
-        negative     = ["4", 0]
-        latent_image = ["5", 0]
+        image = comfyui_uploaded_image.input.filename
+      }
+    }
+    "2" = {
+      class_type = "ImageInvert"
+      inputs = {
+        image = ["1", 0]
+      }
+    }
+    "3" = {
+      class_type = "SaveImage"
+      inputs = {
+        images          = ["2", 0]
+        filename_prefix = "workflow_example"
       }
     }
   })
+
+  extra_data_json = jsonencode({
+    extra_pnginfo = {
+      workflow = {
+        id = "workflow-example"
+      }
+    }
+  })
+
+  execute             = true
+  wait_for_completion = true
+  cancel_on_delete    = true
+  timeout_seconds     = 120
+}
+
+output "workflow_prompt_id" {
+  value = comfyui_workflow.example.prompt_id
+}
+
+output "workflow_status" {
+  value = comfyui_workflow.example.status
+}
+
+output "workflow_id" {
+  value = comfyui_workflow.example.workflow_id
+}
+
+output "workflow_outputs_count" {
+  value = comfyui_workflow.example.outputs_count
+}
+
+output "workflow_preview_output_json" {
+  value = comfyui_workflow.example.preview_output_json
 }
 ```
 
@@ -39,6 +84,7 @@ resource "comfyui_workflow" "example" {
 
 ### Optional
 
+- `cancel_on_delete` (Boolean) Whether to cancel the workflow execution on resource deletion. Defaults to false.
 - `category` (String) Workflow category (e.g., 'txt2img', 'img2img', 'video', 'audio', '3d').
 - `client_id` (String) Optional ComfyUI client_id to include in the /prompt request wrapper.
 - `description` (String) Description of what this workflow does.
@@ -58,8 +104,23 @@ resource "comfyui_workflow" "example" {
 ### Read-Only
 
 - `assembled_json` (String) The assembled workflow in ComfyUI API format JSON. Populated when workflow_json is provided or node assembly is complete.
+- `create_time` (Number) Timestamp when the workflow was created (from /api/jobs).
 - `error` (String) Error message if execution failed.
+- `execution_end_time` (Number) Timestamp when execution ended (from /api/jobs).
+- `execution_error` (Dynamic) Structured execution error (from /api/jobs).
+- `execution_error_json` (String) Execution error as JSON string (from /api/jobs).
+- `execution_start_time` (Number) Timestamp when execution started (from /api/jobs).
+- `execution_status` (Dynamic) Structured execution status (from /api/jobs).
+- `execution_status_json` (String) Execution status as JSON string (from /api/jobs).
+- `execution_workflow` (Dynamic) Structured execution workflow (from /api/jobs).
+- `execution_workflow_json` (String) Execution workflow as JSON string (from /api/jobs).
 - `id` (String) Unique identifier for this workflow resource instance.
 - `outputs` (String) JSON string of execution outputs (images, audio, etc.).
+- `outputs_count` (Number) Number of outputs produced (from /api/jobs).
+- `outputs_json` (String) Full outputs as JSON string (from /api/jobs).
+- `outputs_structured` (Dynamic) Structured outputs (from /api/jobs).
+- `preview_output` (Dynamic) Structured preview output (from /api/jobs).
+- `preview_output_json` (String) Preview output as JSON string (from /api/jobs).
 - `status` (String) Execution status: pending, queued, running, completed, or error.
 - `validation_summary_json` (String) Structured JSON summary of semantic validation results when workflow preflight validation runs.
+- `workflow_id` (String) Workflow ID associated with this execution (from /api/jobs).

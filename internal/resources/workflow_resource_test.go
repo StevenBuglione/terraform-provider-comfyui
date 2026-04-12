@@ -3,9 +3,12 @@ package resources
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"math/big"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
@@ -13,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	resourceschema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
 
 func TestBuildQueuePromptRequest_PreservesExplicitMetadataAndAddsPromptPNGInfo(t *testing.T) {
@@ -56,6 +60,23 @@ func TestBuildQueuePromptRequest_PreservesExplicitMetadataAndAddsPromptPNGInfo(t
 	workflow, ok := extraPNGInfo["workflow"].(map[string]interface{})
 	if !ok || workflow["id"] != "workspace-1" {
 		t.Fatalf("expected explicit workflow metadata to be preserved, got %#v", extraPNGInfo["workflow"])
+	}
+}
+
+func TestWorkflowAttrValueFromAny_PreservesLargeInt64Precision(t *testing.T) {
+	attrVal, err := workflowAttrValueFromAny(int64(9007199254740993))
+	if err != nil {
+		t.Fatalf("workflowAttrValueFromAny failed: %v", err)
+	}
+
+	numVal, ok := attrVal.(basetypes.NumberValue)
+	if !ok {
+		t.Fatalf("expected number value, got %T", attrVal)
+	}
+
+	expected := new(big.Float).SetPrec(64).SetInt64(9007199254740993)
+	if numVal.ValueBigFloat().Cmp(expected) != 0 {
+		t.Fatalf("expected exact %s, got %s", expected.Text('f', 0), numVal.ValueBigFloat().Text('f', 0))
 	}
 }
 
@@ -352,4 +373,1009 @@ func TestExecuteWorkflow_ObjectInfoFailureReturnsDiagnostic(t *testing.T) {
 	if promptHits != 0 {
 		t.Fatalf("expected /prompt not to be called after metadata fetch failure, got %d", promptHits)
 	}
+}
+
+func TestExecuteWorkflow_InvalidExtraDataAddsDiagnostic(t *testing.T) {
+	r := &WorkflowResource{client: &client.Client{}}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(false),
+		ExtraDataJSON:         types.StringValue("{not-json}"),
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), map[string]interface{}{}, &data, &diags)
+	if !diags.HasError() {
+		t.Fatal("expected invalid extra_data_json to add diagnostics")
+	}
+	if data.Status.ValueString() != "error" {
+		t.Fatalf("expected error status, got %q", data.Status.ValueString())
+	}
+}
+
+func TestExecuteWorkflow_QueueFailureAddsDiagnostic(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/prompt" {
+			http.NotFound(w, r)
+			return
+		}
+		http.Error(w, "queue unavailable", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(false),
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), map[string]interface{}{}, &data, &diags)
+	if !diags.HasError() {
+		t.Fatal("expected queue failure to add diagnostics")
+	}
+	if data.PromptID.ValueString() != "" {
+		t.Fatalf("expected prompt_id to stay empty on queue failure, got %q", data.PromptID.ValueString())
+	}
+}
+
+func TestExecuteWorkflow_WaitForCompletionEnrichesFromJobs(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/prompt":
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "prompt-123",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		case "/history/prompt-123":
+			mustEncodeResourceJSON(t, w, client.HistoryResponse{
+				"prompt-123": {
+					Outputs: map[string]interface{}{
+						"5": map[string]interface{}{
+							"images": []interface{}{
+								map[string]interface{}{"filename": "image.png", "type": "output"},
+							},
+						},
+					},
+					Status: client.ExecutionStatus{StatusStr: "completed", Completed: true},
+				},
+			})
+		case "/api/jobs/prompt-123":
+			mustEncodeResourceJSON(t, w, client.Job{
+				ID:                 "prompt-123",
+				Status:             "completed",
+				CreateTime:         int64Ptr(100),
+				ExecutionStartTime: int64Ptr(110),
+				ExecutionEndTime:   int64Ptr(120),
+				OutputsCount:       intPtr(1),
+				WorkflowID:         "workflow-123",
+				PreviewOutput: map[string]interface{}{
+					"node_id": "5",
+				},
+				Outputs: map[string]interface{}{
+					"5": map[string]interface{}{
+						"images": []interface{}{
+							map[string]interface{}{"filename": "image.png", "type": "output"},
+						},
+					},
+				},
+				ExecutionStatus: map[string]interface{}{
+					"status_str": "completed",
+					"completed":  true,
+				},
+				Workflow: &client.JobWorkflow{
+					Prompt: map[string]interface{}{
+						"5": map[string]interface{}{"class_type": "SaveImage"},
+					},
+					ExtraData: map[string]interface{}{
+						"client_id": "client-1",
+					},
+				},
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(true),
+		TimeoutSeconds:        types.Int64Value(3),
+		ValidateBeforeExecute: types.BoolValue(false),
+	}
+	prompt := map[string]interface{}{
+		"5": map[string]interface{}{
+			"class_type": "SaveImage",
+			"inputs":     map[string]interface{}{},
+		},
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), prompt, &data, &diags)
+	if diags.HasError() {
+		t.Fatalf("expected completion path to succeed, got diagnostics %v", diags)
+	}
+	if data.Status.ValueString() != "completed" {
+		t.Fatalf("expected completed status, got %q", data.Status.ValueString())
+	}
+	if data.OutputsJSON.IsNull() || data.OutputsJSON.ValueString() == "" {
+		t.Fatal("expected outputs_json to be populated")
+	}
+	if data.OutputsStructured.IsNull() {
+		t.Fatal("expected outputs_structured to be populated")
+	}
+	if data.ExecutionWorkflowJSON.IsNull() || data.ExecutionWorkflowJSON.ValueString() == "" {
+		t.Fatal("expected execution_workflow_json to be populated from /api/jobs")
+	}
+	if data.ExecutionWorkflow.IsNull() {
+		t.Fatal("expected execution_workflow to be populated from /api/jobs")
+	}
+	if data.WorkflowID.IsNull() || data.WorkflowID.ValueString() != "workflow-123" {
+		t.Fatalf("expected workflow_id from /api/jobs enrichment, got %q", data.WorkflowID.ValueString())
+	}
+}
+
+func TestExecuteWorkflow_WaitFailureAddsDiagnostic(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/prompt":
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "prompt-timeout",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		case "/history/prompt-timeout":
+			http.NotFound(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(true),
+		TimeoutSeconds:        types.Int64Value(1),
+		ValidateBeforeExecute: types.BoolValue(false),
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), map[string]interface{}{}, &data, &diags)
+	if !diags.HasError() {
+		t.Fatal("expected wait failure to add diagnostics")
+	}
+	if data.Status.ValueString() != "error" {
+		t.Fatalf("expected error status after wait failure, got %q", data.Status.ValueString())
+	}
+}
+
+func TestExecuteWorkflow_WaitForCompletionKeepsHistoryStateWhenJobsLookupFails(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/prompt":
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "prompt-456",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		case "/history/prompt-456":
+			mustEncodeResourceJSON(t, w, client.HistoryResponse{
+				"prompt-456": {
+					Outputs: map[string]interface{}{
+						"7": map[string]interface{}{
+							"images": []interface{}{
+								map[string]interface{}{"filename": "fallback.png", "type": "output"},
+							},
+						},
+					},
+					Status: client.ExecutionStatus{StatusStr: "completed", Completed: true},
+				},
+			})
+		case "/api/jobs/prompt-456":
+			http.Error(w, "jobs unavailable", http.StatusInternalServerError)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(true),
+		TimeoutSeconds:        types.Int64Value(3),
+		ValidateBeforeExecute: types.BoolValue(false),
+	}
+	prompt := map[string]interface{}{
+		"7": map[string]interface{}{
+			"class_type": "SaveImage",
+			"inputs":     map[string]interface{}{},
+		},
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), prompt, &data, &diags)
+	if diags.HasError() {
+		t.Fatalf("expected history fallback to stay non-fatal when /api/jobs fails, got diagnostics %v", diags)
+	}
+	if data.Status.ValueString() != "completed" {
+		t.Fatalf("expected completed status from history fallback, got %q", data.Status.ValueString())
+	}
+	if data.OutputsJSON.IsNull() || data.OutputsJSON.ValueString() == "" {
+		t.Fatal("expected outputs_json from history fallback")
+	}
+	if data.OutputsStructured.IsNull() {
+		t.Fatal("expected outputs_structured from history fallback")
+	}
+	if data.ExecutionStatusJSON.IsNull() || data.ExecutionStatusJSON.ValueString() == "" {
+		t.Fatal("expected execution_status_json from history fallback")
+	}
+	if !data.ExecutionWorkflowJSON.IsNull() {
+		t.Fatal("expected execution_workflow_json to remain null when /api/jobs enrichment fails")
+	}
+}
+
+func TestRefreshWorkflowExecutionState_PreservesHistoryWhenJobIsSparse(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/history/prompt-789":
+			mustEncodeResourceJSON(t, w, client.HistoryResponse{
+				"prompt-789": {
+					Prompt: []interface{}{
+						float64(7),
+						"prompt-789",
+						map[string]interface{}{
+							"1": map[string]interface{}{"class_type": "KSampler"},
+						},
+						map[string]interface{}{
+							"create_time": float64(1712345600),
+							"extra_pnginfo": map[string]interface{}{
+								"workflow": map[string]interface{}{"id": "wf-sparse"},
+							},
+						},
+						[]interface{}{"5"},
+					},
+					Outputs: map[string]interface{}{
+						"5": map[string]interface{}{
+							"text": []interface{}{"hello world"},
+						},
+					},
+					Status: client.ExecutionStatus{
+						StatusStr: "completed",
+						Completed: true,
+						Messages: [][]interface{}{
+							{"execution_start", map[string]interface{}{"timestamp": float64(100)}},
+							{"execution_success", map[string]interface{}{"timestamp": float64(105)}},
+						},
+					},
+				},
+			})
+		case "/api/jobs/prompt-789":
+			mustEncodeResourceJSON(t, w, client.Job{
+				ID:     "prompt-789",
+				Status: "completed",
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		PromptID: types.StringValue("prompt-789"),
+	}
+
+	if err := r.refreshWorkflowExecutionState(context.Background(), &data); err != nil {
+		t.Fatalf("refreshWorkflowExecutionState failed: %v", err)
+	}
+
+	if data.CreateTime.IsNull() || data.CreateTime.ValueInt64() != 1712345600 {
+		t.Fatalf("expected create_time from history to survive sparse job overlay, got %v", data.CreateTime)
+	}
+	if data.WorkflowID.IsNull() || data.WorkflowID.ValueString() != "wf-sparse" {
+		t.Fatalf("expected workflow_id from history to survive sparse job overlay, got %q", data.WorkflowID.ValueString())
+	}
+	if data.OutputsStructured.IsNull() {
+		t.Fatal("expected outputs_structured from history to survive sparse job overlay")
+	}
+	if data.ExecutionWorkflowJSON.IsNull() || data.ExecutionWorkflowJSON.ValueString() == "" {
+		t.Fatal("expected execution_workflow_json from history to survive sparse job overlay")
+	}
+}
+
+// Chunk 3 Tests: Workflow structured outputs + cancel_on_delete
+
+func TestWorkflowSchema_Chunk3FieldsPresent(t *testing.T) {
+	r := NewWorkflowResource().(*WorkflowResource)
+	var resp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &resp)
+
+	// Test cancel_on_delete
+	cancelAttr, ok := resp.Schema.Attributes["cancel_on_delete"].(resourceschema.BoolAttribute)
+	if !ok {
+		t.Fatalf("expected cancel_on_delete to be a bool attribute, got %#v", resp.Schema.Attributes["cancel_on_delete"])
+	}
+	if !cancelAttr.Optional || !cancelAttr.Computed {
+		t.Fatalf("expected cancel_on_delete to be optional+computed, got optional=%v computed=%v", cancelAttr.Optional, cancelAttr.Computed)
+	}
+
+	expectedComputedStrings := []string{
+		"workflow_id",
+		"preview_output_json",
+		"outputs_json",
+		"execution_status_json",
+		"execution_error_json",
+		"execution_workflow_json",
+	}
+	for _, field := range expectedComputedStrings {
+		attr, ok := resp.Schema.Attributes[field].(resourceschema.StringAttribute)
+		if !ok {
+			t.Errorf("expected %s to be a string attribute, got %#v", field, resp.Schema.Attributes[field])
+		}
+		if !attr.Computed {
+			t.Errorf("expected %s to be computed, got %#v", field, attr)
+		}
+	}
+
+	expectedComputedInts := []string{
+		"create_time",
+		"execution_start_time",
+		"execution_end_time",
+		"outputs_count",
+	}
+	for _, field := range expectedComputedInts {
+		attr, ok := resp.Schema.Attributes[field].(resourceschema.Int64Attribute)
+		if !ok {
+			t.Errorf("expected %s to be an int64 attribute, got %#v", field, resp.Schema.Attributes[field])
+		}
+		if !attr.Computed {
+			t.Errorf("expected %s to be computed, got %#v", field, attr)
+		}
+	}
+
+	// Test structured outputs (collision-free name)
+	expectedListFields := []string{
+		"preview_output",
+		"outputs_structured",
+		"execution_status",
+		"execution_error",
+		"execution_workflow",
+	}
+	for _, field := range expectedListFields {
+		attr, ok := resp.Schema.Attributes[field].(resourceschema.DynamicAttribute)
+		if !ok {
+			t.Errorf("expected %s to be a dynamic attribute, got %#v", field, resp.Schema.Attributes[field])
+			continue
+		}
+		if !attr.Computed {
+			t.Errorf("expected %s to be computed, got %#v", field, attr)
+		}
+	}
+}
+
+func TestApplyJobStateToWorkflowModel_PreservesLegacyFields(t *testing.T) {
+	job := &client.Job{
+		ID:                 "test-prompt-123",
+		Status:             "completed",
+		CreateTime:         int64Ptr(1704067200),
+		ExecutionStartTime: int64Ptr(1704067230),
+		ExecutionEndTime:   int64Ptr(1704067260),
+		OutputsCount:       intPtr(3),
+		WorkflowID:         "wf-456",
+		Outputs: map[string]interface{}{
+			"5": map[string]interface{}{
+				"images": []interface{}{
+					map[string]interface{}{
+						"filename":  "output_00001.png",
+						"subfolder": "",
+						"type":      "output",
+					},
+				},
+			},
+		},
+		ExecutionStatus: map[string]interface{}{
+			"status_str": "success",
+			"completed":  true,
+		},
+		ExecutionError: map[string]interface{}{
+			"exception_type": "",
+		},
+	}
+
+	data := WorkflowModel{
+		PromptID: types.StringValue("test-prompt-123"),
+	}
+
+	err := applyJobStateToWorkflowModel(&data, job)
+	if err != nil {
+		t.Fatalf("applyJobStateToWorkflowModel failed: %v", err)
+	}
+
+	// Legacy status should still be meaningful
+	if data.Status.ValueString() != "completed" {
+		t.Errorf("expected legacy status 'completed', got %q", data.Status.ValueString())
+	}
+
+	// Legacy outputs should still contain raw JSON string
+	if data.Outputs.IsNull() || data.Outputs.ValueString() == "" {
+		t.Error("expected legacy outputs field to be populated")
+	}
+
+	var outputs map[string]interface{}
+	if err := json.Unmarshal([]byte(data.Outputs.ValueString()), &outputs); err != nil {
+		t.Errorf("legacy outputs should be valid JSON: %v", err)
+	}
+
+	// Legacy error should be empty string for success
+	if data.Error.ValueString() != "" {
+		t.Errorf("expected legacy error to be empty for completed job, got %q", data.Error.ValueString())
+	}
+
+	// New fields should be populated
+	if data.WorkflowID.ValueString() != "wf-456" {
+		t.Errorf("expected workflow_id 'wf-456', got %q", data.WorkflowID.ValueString())
+	}
+
+	if data.OutputsCount.ValueInt64() != 3 {
+		t.Errorf("expected outputs_count 3, got %d", data.OutputsCount.ValueInt64())
+	}
+	if data.ExecutionStatus.IsNull() {
+		t.Error("expected execution_status to be populated")
+	}
+	if data.OutputsStructured.IsNull() {
+		t.Error("expected outputs_structured to be populated")
+	}
+}
+
+func TestApplyJobStateToWorkflowModel_ErrorCase(t *testing.T) {
+	job := &client.Job{
+		ID:     "test-prompt-error",
+		Status: "error",
+		ExecutionError: map[string]interface{}{
+			"exception_type":    "ValueError",
+			"exception_message": "Invalid input dimension",
+			"node_id":           "3",
+			"node_type":         "KSampler",
+		},
+	}
+
+	data := WorkflowModel{
+		PromptID: types.StringValue("test-prompt-error"),
+	}
+
+	err := applyJobStateToWorkflowModel(&data, job)
+	if err != nil {
+		t.Fatalf("applyJobStateToWorkflowModel failed: %v", err)
+	}
+
+	// Legacy status should reflect error
+	if data.Status.ValueString() != "error" {
+		t.Errorf("expected legacy status 'error', got %q", data.Status.ValueString())
+	}
+
+	// Legacy error should contain a useful summary
+	if data.Error.IsNull() || data.Error.ValueString() == "" {
+		t.Error("expected legacy error field to contain error summary")
+	}
+
+	// Should mention the exception type
+	if !strings.Contains(data.Error.ValueString(), "ValueError") {
+		t.Errorf("expected error to mention exception type, got %q", data.Error.ValueString())
+	}
+
+	// New execution_error_json should be populated
+	if data.ExecutionErrorJSON.IsNull() || data.ExecutionErrorJSON.ValueString() == "" {
+		t.Error("expected execution_error_json to be populated")
+	}
+	if data.ExecutionError.IsNull() {
+		t.Error("expected execution_error to be populated")
+	}
+}
+
+func TestApplyJobStateToWorkflowModel_FailedStatusNormalizesLegacyCompatibility(t *testing.T) {
+	job := &client.Job{
+		ID:     "test-prompt-failed",
+		Status: "failed",
+		ExecutionError: map[string]interface{}{
+			"exception_message": "Backend rejected request",
+		},
+	}
+
+	data := WorkflowModel{
+		PromptID: types.StringValue("test-prompt-failed"),
+	}
+
+	if err := applyJobStateToWorkflowModel(&data, job); err != nil {
+		t.Fatalf("applyJobStateToWorkflowModel failed: %v", err)
+	}
+
+	if data.Status.ValueString() != "error" {
+		t.Fatalf("expected failed job to normalize legacy status to error, got %q", data.Status.ValueString())
+	}
+	if data.Error.ValueString() == "" {
+		t.Fatal("expected failed job to preserve a legacy error summary")
+	}
+}
+
+func TestApplyJobStateToWorkflowModel_PreservesHistoryOutputsWhenJobOutputsMissing(t *testing.T) {
+	var jobOutputs map[string]interface{}
+
+	data := WorkflowModel{
+		Outputs:           types.StringValue(`{"5":{"images":[{"filename":"history.png"}]}}`),
+		OutputsJSON:       types.StringValue(`{"5":{"images":[{"filename":"history.png"}]}}`),
+		OutputsStructured: types.DynamicValue(types.StringValue("keep-outputs")),
+	}
+
+	job := &client.Job{
+		ID:      "prompt-keep",
+		Status:  "completed",
+		Outputs: jobOutputs,
+	}
+
+	if err := applyJobStateToWorkflowModel(&data, job); err != nil {
+		t.Fatalf("applyJobStateToWorkflowModel failed: %v", err)
+	}
+
+	if data.Outputs.ValueString() != `{"5":{"images":[{"filename":"history.png"}]}}` {
+		t.Fatalf("expected legacy outputs to remain preserved, got %q", data.Outputs.ValueString())
+	}
+	if data.OutputsJSON.ValueString() != `{"5":{"images":[{"filename":"history.png"}]}}` {
+		t.Fatalf("expected outputs_json to remain preserved, got %q", data.OutputsJSON.ValueString())
+	}
+	if data.OutputsStructured.IsNull() {
+		t.Fatal("expected outputs_structured to remain preserved")
+	}
+}
+
+func TestApplyJobStateToWorkflowModel_PreservesHistoryMetadataWhenJobFieldsMissing(t *testing.T) {
+	data := WorkflowModel{
+		CreateTime:            types.Int64Value(10),
+		ExecutionStartTime:    types.Int64Value(20),
+		ExecutionEndTime:      types.Int64Value(30),
+		OutputsCount:          types.Int64Value(2),
+		WorkflowID:            types.StringValue("wf-history"),
+		ExecutionStatusJSON:   types.StringValue(`{"status_str":"success","messages":[["execution_start",{"timestamp":20}]]}`),
+		ExecutionStatus:       types.DynamicValue(types.StringValue("keep-status")),
+		ExecutionErrorJSON:    types.StringValue(`{"exception_message":"keep-error"}`),
+		ExecutionError:        types.DynamicValue(types.StringValue("keep-error")),
+		ExecutionWorkflowJSON: types.StringValue(`{"prompt":{"1":{"class_type":"KSampler"}},"extra_data":{"create_time":10}}`),
+		ExecutionWorkflow:     types.DynamicValue(types.StringValue("keep-workflow")),
+	}
+
+	job := &client.Job{
+		ID:     "prompt-sparse",
+		Status: "completed",
+	}
+
+	if err := applyJobStateToWorkflowModel(&data, job); err != nil {
+		t.Fatalf("applyJobStateToWorkflowModel failed: %v", err)
+	}
+
+	if data.CreateTime.ValueInt64() != 10 {
+		t.Fatalf("expected create_time to remain preserved, got %d", data.CreateTime.ValueInt64())
+	}
+	if data.ExecutionStartTime.ValueInt64() != 20 {
+		t.Fatalf("expected execution_start_time to remain preserved, got %d", data.ExecutionStartTime.ValueInt64())
+	}
+	if data.ExecutionEndTime.ValueInt64() != 30 {
+		t.Fatalf("expected execution_end_time to remain preserved, got %d", data.ExecutionEndTime.ValueInt64())
+	}
+	if data.OutputsCount.ValueInt64() != 2 {
+		t.Fatalf("expected outputs_count to remain preserved, got %d", data.OutputsCount.ValueInt64())
+	}
+	if data.WorkflowID.ValueString() != "wf-history" {
+		t.Fatalf("expected workflow_id to remain preserved, got %q", data.WorkflowID.ValueString())
+	}
+	if data.ExecutionStatusJSON.ValueString() == "" {
+		t.Fatal("expected execution_status_json to remain preserved")
+	}
+	if data.ExecutionStatus.IsNull() {
+		t.Fatal("expected execution_status to remain preserved")
+	}
+	if data.ExecutionErrorJSON.ValueString() == "" {
+		t.Fatal("expected execution_error_json to remain preserved")
+	}
+	if data.ExecutionError.IsNull() {
+		t.Fatal("expected execution_error to remain preserved")
+	}
+	if data.ExecutionWorkflowJSON.ValueString() == "" {
+		t.Fatal("expected execution_workflow_json to remain preserved")
+	}
+	if data.ExecutionWorkflow.IsNull() {
+		t.Fatal("expected execution_workflow to remain preserved")
+	}
+}
+
+func TestUpdateFromHistoryEntry_PreservesExistingRichJobFields(t *testing.T) {
+	data := WorkflowModel{
+		WorkflowID:         types.StringValue("wf-existing"),
+		CreateTime:         types.Int64Value(10),
+		ExecutionStartTime: types.Int64Value(20),
+		ExecutionEndTime:   types.Int64Value(30),
+		OutputsCount:       types.Int64Value(4),
+		PreviewOutputJSON:  types.StringValue(`{"node_id":"9"}`),
+		PreviewOutput:      types.DynamicValue(types.StringValue("keep-preview")),
+		ExecutionErrorJSON: types.StringValue(`{"message":"keep"}`),
+		ExecutionError:     types.DynamicValue(types.StringValue("keep-error")),
+	}
+
+	entry := &client.HistoryEntry{
+		Outputs: map[string]interface{}{
+			"5": map[string]interface{}{
+				"images": []interface{}{
+					map[string]interface{}{"filename": "image.png", "type": "output"},
+				},
+			},
+		},
+		Status: client.ExecutionStatus{StatusStr: "completed", Completed: true},
+	}
+
+	r := &WorkflowResource{}
+	r.updateFromHistoryEntry(&data, entry)
+
+	if data.WorkflowID.ValueString() != "wf-existing" {
+		t.Fatalf("expected workflow_id to remain unchanged, got %q", data.WorkflowID.ValueString())
+	}
+	if data.PreviewOutputJSON.ValueString() != `{"node_id":"9"}` {
+		t.Fatalf("expected preview_output_json to be preserved, got %q", data.PreviewOutputJSON.ValueString())
+	}
+	if data.ExecutionErrorJSON.ValueString() != `{"message":"keep"}` {
+		t.Fatalf("expected execution_error_json to be preserved, got %q", data.ExecutionErrorJSON.ValueString())
+	}
+	if data.OutputsJSON.IsNull() || data.OutputsJSON.ValueString() == "" {
+		t.Fatal("expected history fallback to refresh outputs_json")
+	}
+	if data.OutputsStructured.IsNull() {
+		t.Fatal("expected history fallback to refresh outputs_structured")
+	}
+	if data.ExecutionStatusJSON.IsNull() || data.ExecutionStatusJSON.ValueString() == "" {
+		t.Fatal("expected history fallback to refresh execution_status_json")
+	}
+}
+
+func TestUpdateFromHistoryEntry_TypedNilOutputsKeepLegacyEmptyObject(t *testing.T) {
+	var outputs map[string]interface{}
+
+	data := WorkflowModel{}
+	entry := &client.HistoryEntry{
+		Outputs: outputs,
+		Status:  client.ExecutionStatus{StatusStr: "completed", Completed: true},
+	}
+
+	r := &WorkflowResource{}
+	r.updateFromHistoryEntry(&data, entry)
+
+	if data.Outputs.ValueString() != "{}" {
+		t.Fatalf("expected typed nil history outputs to normalize to {}, got %q", data.Outputs.ValueString())
+	}
+	if !data.OutputsJSON.IsNull() {
+		t.Fatalf("expected outputs_json to remain null when history outputs are absent, got %q", data.OutputsJSON.ValueString())
+	}
+}
+
+func TestUpdateFromHistoryEntry_TypedNilOutputsPreserveExistingRichOutputs(t *testing.T) {
+	var outputs map[string]interface{}
+
+	data := WorkflowModel{
+		OutputsJSON:       types.StringValue(`{"5":{"text":["hello"]}}`),
+		OutputsStructured: types.DynamicValue(types.StringValue("keep-outputs")),
+		OutputsCount:      types.Int64Value(1),
+	}
+	entry := &client.HistoryEntry{
+		Outputs: outputs,
+		Status:  client.ExecutionStatus{StatusStr: "completed", Completed: true},
+	}
+
+	r := &WorkflowResource{}
+	r.updateFromHistoryEntry(&data, entry)
+
+	if data.Outputs.ValueString() != "{}" {
+		t.Fatalf("expected legacy outputs to normalize to {}, got %q", data.Outputs.ValueString())
+	}
+	if data.OutputsJSON.ValueString() != `{"5":{"text":["hello"]}}` {
+		t.Fatalf("expected outputs_json to remain preserved, got %q", data.OutputsJSON.ValueString())
+	}
+	if data.OutputsStructured.IsNull() {
+		t.Fatal("expected outputs_structured to remain preserved")
+	}
+	if data.OutputsCount.ValueInt64() != 1 {
+		t.Fatalf("expected outputs_count to remain preserved, got %d", data.OutputsCount.ValueInt64())
+	}
+}
+
+func TestUpdateFromHistoryEntry_EnrichesExecutionMetadataFromHistory(t *testing.T) {
+	data := WorkflowModel{}
+	entry := &client.HistoryEntry{
+		Prompt: []interface{}{
+			float64(7),
+			"prompt-history-rich",
+			map[string]interface{}{
+				"1": map[string]interface{}{"class_type": "KSampler"},
+			},
+			map[string]interface{}{
+				"create_time": float64(1712345600),
+				"extra_pnginfo": map[string]interface{}{
+					"workflow": map[string]interface{}{"id": "wf-history-rich"},
+				},
+			},
+			[]interface{}{"5"},
+		},
+		Outputs: map[string]interface{}{
+			"5": map[string]interface{}{
+				"text": []interface{}{"hello world"},
+			},
+		},
+		Status: client.ExecutionStatus{
+			StatusStr: "error",
+			Completed: true,
+			Messages: [][]interface{}{
+				{"execution_start", map[string]interface{}{"timestamp": float64(100)}},
+				{"execution_error", map[string]interface{}{
+					"timestamp":         float64(105),
+					"exception_type":    "ValueError",
+					"exception_message": "broken graph",
+				}},
+			},
+		},
+	}
+
+	r := &WorkflowResource{}
+	r.updateFromHistoryEntry(&data, entry)
+
+	if data.CreateTime.IsNull() || data.CreateTime.ValueInt64() != 1712345600 {
+		t.Fatalf("expected create_time from history metadata, got %v", data.CreateTime)
+	}
+	if data.WorkflowID.IsNull() || data.WorkflowID.ValueString() != "wf-history-rich" {
+		t.Fatalf("expected workflow_id from history metadata, got %q", data.WorkflowID.ValueString())
+	}
+	if data.ExecutionStartTime.IsNull() || data.ExecutionStartTime.ValueInt64() != 100 {
+		t.Fatalf("expected execution_start_time 100, got %v", data.ExecutionStartTime)
+	}
+	if data.ExecutionEndTime.IsNull() || data.ExecutionEndTime.ValueInt64() != 105 {
+		t.Fatalf("expected execution_end_time 105, got %v", data.ExecutionEndTime)
+	}
+	if data.OutputsCount.ValueInt64() != 1 {
+		t.Fatalf("expected outputs_count 1, got %d", data.OutputsCount.ValueInt64())
+	}
+	if data.ExecutionErrorJSON.IsNull() || data.ExecutionErrorJSON.ValueString() == "" {
+		t.Fatal("expected execution_error_json to be populated from history messages")
+	}
+	if data.ExecutionError.IsNull() {
+		t.Fatal("expected execution_error to be populated from history messages")
+	}
+	if data.ExecutionWorkflowJSON.IsNull() || data.ExecutionWorkflowJSON.ValueString() == "" {
+		t.Fatal("expected execution_workflow_json to be populated from history prompt tuple")
+	}
+	if data.ExecutionWorkflow.IsNull() {
+		t.Fatal("expected execution_workflow to be populated from history prompt tuple")
+	}
+	if !strings.Contains(data.ExecutionStatusJSON.ValueString(), "messages") {
+		t.Fatalf("expected full execution_status_json to preserve messages, got %q", data.ExecutionStatusJSON.ValueString())
+	}
+}
+
+func TestUpdateFromHistoryEntry_FailedStatusPreservesLegacyFailureCompatibility(t *testing.T) {
+	data := WorkflowModel{
+		Error: types.StringValue("Backend rejected request"),
+	}
+
+	entry := &client.HistoryEntry{
+		Outputs: map[string]interface{}{},
+		Status: client.ExecutionStatus{
+			StatusStr: "failed",
+			Completed: true,
+		},
+	}
+
+	r := &WorkflowResource{}
+	r.updateFromHistoryEntry(&data, entry)
+
+	if data.Status.ValueString() != "error" {
+		t.Fatalf("expected failed history status to normalize to error, got %q", data.Status.ValueString())
+	}
+	if data.Error.ValueString() != "Backend rejected request" {
+		t.Fatalf("expected legacy error summary to be preserved, got %q", data.Error.ValueString())
+	}
+}
+
+func TestUpdateFromHistoryEntry_CancelledStatusDoesNotLookCompleted(t *testing.T) {
+	data := WorkflowModel{
+		Error: types.StringValue("stale"),
+	}
+
+	entry := &client.HistoryEntry{
+		Outputs: map[string]interface{}{},
+		Status: client.ExecutionStatus{
+			StatusStr: "cancelled",
+			Completed: true,
+		},
+	}
+
+	r := &WorkflowResource{}
+	r.updateFromHistoryEntry(&data, entry)
+
+	if data.Status.ValueString() != "cancelled" {
+		t.Fatalf("expected cancelled history status to remain cancelled, got %q", data.Status.ValueString())
+	}
+	if data.Error.ValueString() != "" {
+		t.Fatalf("expected cancelled history fallback to clear legacy error, got %q", data.Error.ValueString())
+	}
+}
+
+func TestDetermineDeleteAction_CancelOnDeleteFalse(t *testing.T) {
+	data := WorkflowModel{
+		CancelOnDelete: types.BoolValue(false),
+		PromptID:       types.StringValue("test-123"),
+	}
+
+	action := determineDeleteAction(&data, &client.Job{Status: "running"}, false)
+	if action != deleteActionNoop {
+		t.Errorf("expected noop when cancel_on_delete=false, got %v", action)
+	}
+}
+
+func TestDetermineDeleteAction_NoPromptID(t *testing.T) {
+	data := WorkflowModel{
+		CancelOnDelete: types.BoolValue(true),
+		PromptID:       types.StringValue(""),
+	}
+
+	action := determineDeleteAction(&data, nil, false)
+	if action != deleteActionNoop {
+		t.Errorf("expected noop when prompt_id is empty, got %v", action)
+	}
+}
+
+func TestDetermineDeleteAction_FallsBackToStoredStatusWhenJobLookupFails(t *testing.T) {
+	queued := WorkflowModel{
+		CancelOnDelete: types.BoolValue(true),
+		PromptID:       types.StringValue("queued-123"),
+		Status:         types.StringValue("queued"),
+	}
+	if action := determineDeleteAction(&queued, nil, true); action != deleteActionRemoveFromQueue {
+		t.Fatalf("expected queued fallback action, got %v", action)
+	}
+
+	running := WorkflowModel{
+		CancelOnDelete: types.BoolValue(true),
+		PromptID:       types.StringValue("running-123"),
+		Status:         types.StringValue("running"),
+	}
+	if action := determineDeleteAction(&running, nil, true); action != deleteActionInterrupt {
+		t.Fatalf("expected running fallback action, got %v", action)
+	}
+}
+
+func TestDetermineDeleteAction_QueuedStatus(t *testing.T) {
+	data := WorkflowModel{
+		CancelOnDelete: types.BoolValue(true),
+		PromptID:       types.StringValue("test-123"),
+	}
+
+	action := determineDeleteAction(&data, &client.Job{Status: "pending"}, false)
+	if action != deleteActionRemoveFromQueue {
+		t.Errorf("expected deleteActionRemoveFromQueue for pending job, got %v", action)
+	}
+
+	action = determineDeleteAction(&data, &client.Job{Status: "queued"}, false)
+	if action != deleteActionRemoveFromQueue {
+		t.Errorf("expected deleteActionRemoveFromQueue for queued job, got %v", action)
+	}
+}
+
+func TestDetermineDeleteAction_RunningStatus(t *testing.T) {
+	data := WorkflowModel{
+		CancelOnDelete: types.BoolValue(true),
+		PromptID:       types.StringValue("test-123"),
+	}
+
+	action := determineDeleteAction(&data, &client.Job{Status: "running"}, false)
+	if action != deleteActionInterrupt {
+		t.Errorf("expected deleteActionInterrupt for running job, got %v", action)
+	}
+
+	action = determineDeleteAction(&data, &client.Job{Status: "executing"}, false)
+	if action != deleteActionInterrupt {
+		t.Errorf("expected deleteActionInterrupt for executing job, got %v", action)
+	}
+}
+
+func TestDetermineDeleteAction_CompletedStatus(t *testing.T) {
+	data := WorkflowModel{
+		CancelOnDelete: types.BoolValue(true),
+		PromptID:       types.StringValue("test-123"),
+	}
+
+	action := determineDeleteAction(&data, &client.Job{Status: "completed"}, false)
+	if action != deleteActionNoop {
+		t.Errorf("expected noop for completed job, got %v", action)
+	}
+
+	action = determineDeleteAction(&data, &client.Job{Status: "error"}, false)
+	if action != deleteActionNoop {
+		t.Errorf("expected noop for error job, got %v", action)
+	}
+
+	action = determineDeleteAction(&data, &client.Job{Status: "cancelled"}, false)
+	if action != deleteActionNoop {
+		t.Errorf("expected noop for cancelled job, got %v", action)
+	}
+
+	action = determineDeleteAction(&data, &client.Job{Status: "failed"}, false)
+	if action != deleteActionNoop {
+		t.Errorf("expected noop for failed job, got %v", action)
+	}
+}
+
+func TestDetermineDeleteAction_JobNotFound(t *testing.T) {
+	data := WorkflowModel{
+		CancelOnDelete: types.BoolValue(true),
+		PromptID:       types.StringValue("test-123"),
+	}
+
+	// nil job means not found
+	action := determineDeleteAction(&data, nil, false)
+	if action != deleteActionNoop {
+		t.Errorf("expected noop when job not found, got %v", action)
+	}
+}
+
+func TestShouldUseStoredStatusFallbackOnDelete(t *testing.T) {
+	if !shouldUseStoredStatusFallbackOnDelete(fmt.Errorf("unexpected status 500: boom")) {
+		t.Fatal("expected non-404 lookup failures to fall back to stored status")
+	}
+
+	if !shouldUseStoredStatusFallbackOnDelete(fmt.Errorf("unexpected status 404: 404 page not found")) {
+		t.Fatal("expected endpoint-missing 404 to fall back to stored status")
+	}
+
+	if shouldUseStoredStatusFallbackOnDelete(fmt.Errorf("unexpected status 404: job not found")) {
+		t.Fatal("expected missing-job 404 to remain a no-op")
+	}
+}
+
+func TestCancelWorkflowOnDelete_ReturnsErrorWhenInterruptFails(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/api/jobs/prompt-123":
+			mustEncodeResourceJSON(t, w, client.Job{ID: "prompt-123", Status: "running"})
+		case "/interrupt":
+			http.Error(w, "interrupt failed", http.StatusInternalServerError)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		CancelOnDelete: types.BoolValue(true),
+		PromptID:       types.StringValue("prompt-123"),
+		Status:         types.StringValue("running"),
+	}
+
+	err := r.cancelWorkflowOnDelete(context.Background(), &data)
+	if err == nil {
+		t.Fatal("expected interrupt failure to be returned")
+	}
+	if !strings.Contains(err.Error(), "interrupt workflow") {
+		t.Fatalf("expected wrapped interrupt error, got %v", err)
+	}
+}
+
+func intPtr(v int) *int {
+	return &v
+}
+
+func int64Ptr(v int64) *int64 {
+	return &v
 }

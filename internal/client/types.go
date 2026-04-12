@@ -26,9 +26,9 @@ type HistoryResponse map[string]HistoryEntry
 
 // HistoryEntry represents a single execution history entry
 type HistoryEntry struct {
-	Prompt  []interface{}         `json:"prompt"`
-	Outputs map[string]NodeOutput `json:"outputs"`
-	Status  ExecutionStatus       `json:"status"`
+	Prompt  []interface{}          `json:"prompt"`
+	Outputs map[string]interface{} `json:"outputs"`
+	Status  ExecutionStatus        `json:"status"`
 }
 
 // NodeOutput represents the output of a single node execution
@@ -53,8 +53,9 @@ type AudioOutput struct {
 
 // ExecutionStatus represents execution state
 type ExecutionStatus struct {
-	StatusStr string `json:"status_str"`
-	Completed bool   `json:"completed"`
+	StatusStr string          `json:"status_str"`
+	Completed bool            `json:"completed"`
+	Messages  [][]interface{} `json:"messages,omitempty"`
 }
 
 // SystemStats is returned by GET /system_stats
@@ -183,4 +184,43 @@ type GlobalSubgraphDefinition struct {
 	Name   string             `json:"name"`
 	Info   GlobalSubgraphInfo `json:"info"`
 	Data   string             `json:"data"`
+}
+
+// Job represents a unified job structure from /api/jobs endpoints
+type Job struct {
+	ID                 string                 `json:"id"`
+	Status             string                 `json:"status"`
+	Priority           int                    `json:"priority"`
+	CreateTime         *int64                 `json:"create_time,omitempty"`
+	ExecutionStartTime *int64                 `json:"execution_start_time,omitempty"`
+	ExecutionEndTime   *int64                 `json:"execution_end_time,omitempty"`
+	ExecutionError     map[string]interface{} `json:"execution_error,omitempty"`
+	OutputsCount       *int                   `json:"outputs_count,omitempty"`
+	PreviewOutput      map[string]interface{} `json:"preview_output,omitempty"`
+	WorkflowID         string                 `json:"workflow_id,omitempty"`
+	Outputs            map[string]interface{} `json:"outputs,omitempty"`
+	ExecutionStatus    map[string]interface{} `json:"execution_status,omitempty"`
+	Workflow           *JobWorkflow           `json:"workflow,omitempty"`
+}
+
+// JobWorkflow contains workflow details in a job
+type JobWorkflow struct {
+	Prompt    map[string]interface{} `json:"prompt"`
+	ExtraData map[string]interface{} `json:"extra_data"`
+}
+
+// JobsResponse is returned by GET /api/jobs
+type JobsResponse struct {
+	Jobs    []Job `json:"jobs"`
+	HasMore bool  `json:"has_more"`
+}
+
+// JobListFilter contains query parameters for GET /api/jobs
+type JobListFilter struct {
+	Status     []string
+	WorkflowID string
+	SortBy     string
+	SortOrder  string
+	Limit      *int
+	Offset     *int
 }

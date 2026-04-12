@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -379,4 +380,181 @@ func (c *Client) uploadFile(endpoint string, filePath string, filename string, s
 		return nil, fmt.Errorf("failed to decode upload response: %w", err)
 	}
 	return &result, nil
+}
+
+// GetJob retrieves a single job by ID from GET /api/jobs/{id}
+func (c *Client) GetJob(jobID string) (*Job, error) {
+	if jobID == "" {
+		return nil, fmt.Errorf("job ID cannot be empty")
+	}
+
+	resp, err := c.doGet(fmt.Sprintf("/api/jobs/%s", url.PathEscape(jobID)))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var result Job
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("failed to decode job response for job %q: %w", jobID, err)
+	}
+	return &result, nil
+}
+
+// ListJobs retrieves a list of jobs from GET /api/jobs with optional filters
+func (c *Client) ListJobs(filter JobListFilter) (*JobsResponse, error) {
+	values := url.Values{}
+
+	if len(filter.Status) > 0 {
+		values.Set("status", strings.Join(filter.Status, ","))
+	}
+
+	if filter.WorkflowID != "" {
+		values.Set("workflow_id", filter.WorkflowID)
+	}
+
+	if filter.SortBy != "" {
+		values.Set("sort_by", filter.SortBy)
+	}
+
+	if filter.SortOrder != "" {
+		values.Set("sort_order", filter.SortOrder)
+	}
+
+	if filter.Limit != nil {
+		values.Set("limit", fmt.Sprintf("%d", *filter.Limit))
+	}
+
+	if filter.Offset != nil {
+		values.Set("offset", fmt.Sprintf("%d", *filter.Offset))
+	}
+
+	path := "/api/jobs"
+	if len(values) > 0 {
+		path += "?" + values.Encode()
+	}
+
+	resp, err := c.doGet(path)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var result JobsResponse
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("failed to decode jobs response: %w", err)
+	}
+	return &result, nil
+}
+
+// InterruptPrompt sends POST /interrupt to stop a specific prompt's execution.
+// If promptID is empty, sends a global interrupt (no prompt_id in request body).
+func (c *Client) InterruptPrompt(promptID string) error {
+	bodyMap := map[string]interface{}{}
+	if promptID != "" {
+		bodyMap["prompt_id"] = promptID
+	}
+
+	body, err := json.Marshal(bodyMap)
+	if err != nil {
+		return fmt.Errorf("failed to marshal interrupt request: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", c.BaseURL+"/interrupt", bytes.NewReader(body))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	if c.APIKey != "" {
+		req.Header.Set("Authorization", "Bearer "+c.APIKey)
+	}
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		errBody, _ := io.ReadAll(io.LimitReader(resp.Body, 1024))
+		return fmt.Errorf("unexpected status %d: %s", resp.StatusCode, string(errBody))
+	}
+
+	return nil
+}
+
+// DeleteQueuedPrompt removes a single prompt from the queue
+func (c *Client) DeleteQueuedPrompt(promptID string) error {
+	if promptID == "" {
+		return fmt.Errorf("prompt ID cannot be empty")
+	}
+
+	bodyMap := map[string]interface{}{
+		"delete": []string{promptID},
+	}
+
+	body, err := json.Marshal(bodyMap)
+	if err != nil {
+		return fmt.Errorf("failed to marshal queue delete request: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", c.BaseURL+"/queue", bytes.NewReader(body))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	if c.APIKey != "" {
+		req.Header.Set("Authorization", "Bearer "+c.APIKey)
+	}
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		errBody, _ := io.ReadAll(io.LimitReader(resp.Body, 1024))
+		return fmt.Errorf("unexpected status %d: %s", resp.StatusCode, string(errBody))
+	}
+
+	return nil
+}
+
+// DeleteHistoryPrompt removes a single prompt from history
+func (c *Client) DeleteHistoryPrompt(promptID string) error {
+	if promptID == "" {
+		return fmt.Errorf("prompt ID cannot be empty")
+	}
+
+	bodyMap := map[string]interface{}{
+		"delete": []string{promptID},
+	}
+
+	body, err := json.Marshal(bodyMap)
+	if err != nil {
+		return fmt.Errorf("failed to marshal history delete request: %w", err)
+	}
+
+	req, err := http.NewRequest("POST", c.BaseURL+"/history", bytes.NewReader(body))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	if c.APIKey != "" {
+		req.Header.Set("Authorization", "Bearer "+c.APIKey)
+	}
+
+	resp, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("request failed: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		errBody, _ := io.ReadAll(io.LimitReader(resp.Body, 1024))
+		return fmt.Errorf("unexpected status %d: %s", resp.StatusCode, string(errBody))
+	}
+
+	return nil
 }

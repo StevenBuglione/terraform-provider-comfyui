@@ -4,8 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/big"
+	"net/http"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"time"
 
@@ -13,6 +16,7 @@ import (
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/validation"
 	"github.com/google/uuid"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -21,6 +25,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
@@ -61,6 +66,26 @@ type WorkflowModel struct {
 
 	// Computed
 	AssembledJSON types.String `tfsdk:"assembled_json"`
+
+	// Chunk 3: Cancel behavior
+	CancelOnDelete types.Bool `tfsdk:"cancel_on_delete"`
+
+	// Chunk 3: Execution fields from /api/jobs
+	CreateTime            types.Int64   `tfsdk:"create_time"`
+	ExecutionStartTime    types.Int64   `tfsdk:"execution_start_time"`
+	ExecutionEndTime      types.Int64   `tfsdk:"execution_end_time"`
+	OutputsCount          types.Int64   `tfsdk:"outputs_count"`
+	WorkflowID            types.String  `tfsdk:"workflow_id"`
+	PreviewOutputJSON     types.String  `tfsdk:"preview_output_json"`
+	PreviewOutput         types.Dynamic `tfsdk:"preview_output"`
+	OutputsJSON           types.String  `tfsdk:"outputs_json"`
+	OutputsStructured     types.Dynamic `tfsdk:"outputs_structured"`
+	ExecutionStatusJSON   types.String  `tfsdk:"execution_status_json"`
+	ExecutionStatus       types.Dynamic `tfsdk:"execution_status"`
+	ExecutionErrorJSON    types.String  `tfsdk:"execution_error_json"`
+	ExecutionError        types.Dynamic `tfsdk:"execution_error"`
+	ExecutionWorkflowJSON types.String  `tfsdk:"execution_workflow_json"`
+	ExecutionWorkflow     types.Dynamic `tfsdk:"execution_workflow"`
 }
 
 type workflowExecutionRequestConfig struct {
@@ -184,6 +209,72 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Computed:    true,
 				Description: "The assembled workflow in ComfyUI API format JSON. Populated when workflow_json is provided or node assembly is complete.",
 			},
+			"cancel_on_delete": schema.BoolAttribute{
+				Optional:    true,
+				Computed:    true,
+				Default:     booldefault.StaticBool(false),
+				Description: "Whether to cancel the workflow execution on resource deletion. Defaults to false.",
+			},
+			"create_time": schema.Int64Attribute{
+				Computed:    true,
+				Description: "Timestamp when the workflow was created (from /api/jobs).",
+			},
+			"execution_start_time": schema.Int64Attribute{
+				Computed:    true,
+				Description: "Timestamp when execution started (from /api/jobs).",
+			},
+			"execution_end_time": schema.Int64Attribute{
+				Computed:    true,
+				Description: "Timestamp when execution ended (from /api/jobs).",
+			},
+			"outputs_count": schema.Int64Attribute{
+				Computed:    true,
+				Description: "Number of outputs produced (from /api/jobs).",
+			},
+			"workflow_id": schema.StringAttribute{
+				Computed:    true,
+				Description: "Workflow ID associated with this execution (from /api/jobs).",
+			},
+			"preview_output_json": schema.StringAttribute{
+				Computed:    true,
+				Description: "Preview output as JSON string (from /api/jobs).",
+			},
+			"preview_output": schema.DynamicAttribute{
+				Computed:    true,
+				Description: "Structured preview output (from /api/jobs).",
+			},
+			"outputs_json": schema.StringAttribute{
+				Computed:    true,
+				Description: "Full outputs as JSON string (from /api/jobs).",
+			},
+			"outputs_structured": schema.DynamicAttribute{
+				Computed:    true,
+				Description: "Structured outputs (from /api/jobs).",
+			},
+			"execution_status_json": schema.StringAttribute{
+				Computed:    true,
+				Description: "Execution status as JSON string (from /api/jobs).",
+			},
+			"execution_status": schema.DynamicAttribute{
+				Computed:    true,
+				Description: "Structured execution status (from /api/jobs).",
+			},
+			"execution_error_json": schema.StringAttribute{
+				Computed:    true,
+				Description: "Execution error as JSON string (from /api/jobs).",
+			},
+			"execution_error": schema.DynamicAttribute{
+				Computed:    true,
+				Description: "Structured execution error (from /api/jobs).",
+			},
+			"execution_workflow_json": schema.StringAttribute{
+				Computed:    true,
+				Description: "Execution workflow as JSON string (from /api/jobs).",
+			},
+			"execution_workflow": schema.DynamicAttribute{
+				Computed:    true,
+				Description: "Structured execution workflow (from /api/jobs).",
+			},
 		},
 	}
 }
@@ -237,6 +328,7 @@ func (r *WorkflowResource) Create(ctx context.Context, req resource.CreateReques
 	if !data.Execute.ValueBool() {
 		data.PromptID = types.StringValue("")
 		data.ValidationSummaryJSON = types.StringValue("")
+		clearWorkflowExecutionFields(&data)
 		if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
 			data.Status = types.StringValue("file_only")
 		} else {
@@ -265,14 +357,11 @@ func (r *WorkflowResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 	// If we have a prompt_id, refresh status from the server
 	if data.PromptID.ValueString() != "" && r.client != nil {
-		history, err := r.client.GetHistory(data.PromptID.ValueString())
-		if err != nil {
+		if err := r.refreshWorkflowExecutionState(ctx, &data); err != nil {
 			tflog.Warn(ctx, "Failed to refresh workflow status", map[string]interface{}{
 				"prompt_id": data.PromptID.ValueString(),
 				"error":     err.Error(),
 			})
-		} else if entry, ok := (*history)[data.PromptID.ValueString()]; ok {
-			r.updateFromHistoryEntry(&data, &entry)
 		}
 	}
 
@@ -309,6 +398,7 @@ func (r *WorkflowResource) Update(ctx context.Context, req resource.UpdateReques
 	if !data.Execute.ValueBool() {
 		data.PromptID = types.StringValue("")
 		data.ValidationSummaryJSON = types.StringValue("")
+		clearWorkflowExecutionFields(&data)
 		if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
 			data.Status = types.StringValue("file_only")
 		} else {
@@ -328,9 +418,17 @@ func (r *WorkflowResource) Update(ctx context.Context, req resource.UpdateReques
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
-func (r *WorkflowResource) Delete(ctx context.Context, req resource.DeleteRequest, _ *resource.DeleteResponse) {
+func (r *WorkflowResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
 	var data WorkflowModel
-	req.State.Get(ctx, &data)
+	resp.Diagnostics.Append(req.State.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	if err := r.cancelWorkflowOnDelete(ctx, &data); err != nil {
+		resp.Diagnostics.AddError("Failed to cancel workflow on delete", err.Error())
+		return
+	}
 
 	// Clean up output file if it was written
 	if !data.OutputFile.IsNull() && data.OutputFile.ValueString() != "" {
@@ -382,6 +480,7 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 	if validationEnabled(data.ValidateBeforeExecute) {
 		report, err := r.validatePromptForExecution(prompt)
 		if err != nil {
+			clearWorkflowExecutionFields(data)
 			data.PromptID = types.StringValue("")
 			data.Status = types.StringValue("error")
 			data.Outputs = types.StringValue("{}")
@@ -392,6 +491,7 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 
 		summaryJSON, err := report.JSON()
 		if err != nil {
+			clearWorkflowExecutionFields(data)
 			data.PromptID = types.StringValue("")
 			data.Status = types.StringValue("error")
 			data.Outputs = types.StringValue("{}")
@@ -402,6 +502,7 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		data.ValidationSummaryJSON = types.StringValue(summaryJSON)
 
 		if !report.Valid {
+			clearWorkflowExecutionFields(data)
 			data.PromptID = types.StringValue("")
 			data.Status = types.StringValue("error")
 			data.Outputs = types.StringValue("{}")
@@ -435,23 +536,28 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		PartialExecutionTargets: partialTargets,
 	})
 	if err != nil {
+		clearWorkflowExecutionFields(data)
 		data.PromptID = types.StringValue("")
 		data.Status = types.StringValue("error")
 		data.Outputs = types.StringValue("{}")
 		data.Error = types.StringValue(fmt.Sprintf("Failed to prepare prompt request: %s", err.Error()))
+		diags.AddError("Failed to prepare prompt request", err.Error())
 		return
 	}
 
 	queueResp, err := r.client.QueuePrompt(queueReq)
 	if err != nil {
+		clearWorkflowExecutionFields(data)
 		data.PromptID = types.StringValue("")
 		data.Status = types.StringValue("error")
 		data.Outputs = types.StringValue("{}")
 		data.Error = types.StringValue(fmt.Sprintf("Failed to queue prompt: %s", err.Error()))
+		diags.AddError("Failed to queue workflow", err.Error())
 		return
 	}
 
 	data.PromptID = types.StringValue(queueResp.PromptID)
+	clearWorkflowExecutionFields(data)
 	data.Status = types.StringValue("queued")
 	data.Outputs = types.StringValue("{}")
 	data.Error = types.StringValue("")
@@ -472,12 +578,24 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 
 	entry, err := r.client.WaitForCompletion(queueResp.PromptID, timeout)
 	if err != nil {
+		clearWorkflowExecutionFields(data)
 		data.Status = types.StringValue("error")
 		data.Error = types.StringValue(err.Error())
+		diags.AddError("Failed to wait for workflow completion", err.Error())
 		return
 	}
 
 	r.updateFromHistoryEntry(data, entry)
+
+	// Chunk 3: Also try to fetch job data for richer fields
+	if job, err := r.client.GetJob(queueResp.PromptID); err == nil && job != nil {
+		if err := applyJobStateToWorkflowModel(data, job); err != nil {
+			tflog.Warn(ctx, "Failed to apply job state after completion", map[string]interface{}{
+				"prompt_id": queueResp.PromptID,
+				"error":     err.Error(),
+			})
+		}
+	}
 }
 
 func (r *WorkflowResource) validatePromptForExecution(prompt map[string]interface{}) (validation.Report, error) {
@@ -534,20 +652,101 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 }
 
 func (r *WorkflowResource) updateFromHistoryEntry(data *WorkflowModel, entry *client.HistoryEntry) {
-	if entry.Status.Completed {
-		data.Status = types.StringValue("completed")
-	} else {
-		data.Status = types.StringValue(entry.Status.StatusStr)
-	}
+	legacyStatus := legacyWorkflowStatusFromHistory(entry.Status)
+	data.Status = types.StringValue(legacyStatus)
 
-	outputsJSON, err := json.Marshal(entry.Outputs)
+	outputsValue, err := jsonCompatibleValue(entry.Outputs)
 	if err != nil {
 		data.Outputs = types.StringValue("{}")
+		data.OutputsJSON = types.StringNull()
+		data.OutputsStructured = types.DynamicNull()
+	} else if outputsValue == nil {
+		data.Outputs = types.StringValue("{}")
 	} else {
-		data.Outputs = types.StringValue(string(outputsJSON))
+		outputsJSON, err := json.Marshal(outputsValue)
+		if err != nil {
+			data.Outputs = types.StringValue("{}")
+			data.OutputsJSON = types.StringNull()
+			data.OutputsStructured = types.DynamicNull()
+		} else {
+			encoded := string(outputsJSON)
+			data.Outputs = types.StringValue(encoded)
+			data.OutputsJSON = types.StringValue(encoded)
+			if dynamicOutputs, dynamicErr := workflowDynamicFromAny(outputsValue); dynamicErr == nil {
+				data.OutputsStructured = dynamicOutputs
+			} else {
+				data.OutputsStructured = types.DynamicNull()
+			}
+
+			if outputsCount, countErr := historyOutputsCount(outputsValue); countErr == nil {
+				data.OutputsCount = types.Int64Value(outputsCount)
+			}
+		}
 	}
 
-	data.Error = types.StringValue("")
+	if len(entry.Prompt) >= 4 {
+		if extraData, ok := entry.Prompt[3].(map[string]interface{}); ok {
+			if createTime, ok := historyInt64FromAny(extraData["create_time"]); ok {
+				data.CreateTime = types.Int64Value(createTime)
+			}
+			if extraPNGInfo, ok := extraData["extra_pnginfo"].(map[string]interface{}); ok {
+				if workflow, ok := extraPNGInfo["workflow"].(map[string]interface{}); ok {
+					if workflowID, ok := workflow["id"].(string); ok && workflowID != "" {
+						data.WorkflowID = types.StringValue(workflowID)
+					}
+				}
+			}
+			workflowPayload := map[string]interface{}{
+				"prompt":     entry.Prompt[2],
+				"extra_data": extraData,
+			}
+			if workflowJSON := marshalExecutionJSON(workflowPayload, ""); !workflowJSON.IsNull() {
+				data.ExecutionWorkflowJSON = workflowJSON
+				if workflowValue, workflowErr := workflowDynamicFromAny(workflowPayload); workflowErr == nil {
+					data.ExecutionWorkflow = workflowValue
+				}
+			}
+		}
+	}
+
+	startTime, endTime, executionError := historyExecutionEvents(entry.Status.Messages)
+	if startTime != 0 {
+		data.ExecutionStartTime = types.Int64Value(startTime)
+	}
+	if endTime != 0 {
+		data.ExecutionEndTime = types.Int64Value(endTime)
+	}
+	if len(executionError) > 0 {
+		data.ExecutionErrorJSON = marshalExecutionJSON(executionError, "")
+		if executionErrorValue, executionErrorErr := workflowDynamicFromAny(executionError); executionErrorErr == nil {
+			data.ExecutionError = executionErrorValue
+		}
+	}
+
+	if statusValue, statusValueErr := jsonCompatibleValue(entry.Status); statusValueErr == nil {
+		if dynamicStatus, dynamicErr := workflowDynamicFromAny(statusValue); dynamicErr == nil {
+			data.ExecutionStatus = dynamicStatus
+		} else {
+			data.ExecutionStatus = types.DynamicNull()
+		}
+	}
+
+	statusJSON, statusErr := json.Marshal(entry.Status)
+	if statusErr == nil {
+		data.ExecutionStatusJSON = types.StringValue(string(statusJSON))
+	} else {
+		data.ExecutionStatusJSON = types.StringNull()
+		data.ExecutionStatus = types.DynamicNull()
+	}
+	if legacyStatus == "error" {
+		if len(executionError) > 0 {
+			data.Error = summarizeExecutionError(executionError)
+		} else if data.Error.IsNull() || data.Error.IsUnknown() || data.Error.ValueString() == "" {
+			data.Error = types.StringValue("Workflow execution failed")
+		}
+	} else {
+		data.Error = types.StringValue("")
+	}
 }
 
 // writeWorkflowFile creates parent directories and writes the prompt as JSON.
@@ -568,4 +767,501 @@ func (r *WorkflowResource) writeWorkflowFile(ctx context.Context, filePath strin
 
 	tflog.Info(ctx, "Wrote workflow JSON file", map[string]interface{}{"path": filePath})
 	return nil
+}
+
+func (r *WorkflowResource) refreshWorkflowExecutionState(ctx context.Context, data *WorkflowModel) error {
+	if r.client == nil || data.PromptID.IsNull() || data.PromptID.ValueString() == "" {
+		return nil
+	}
+
+	promptID := data.PromptID.ValueString()
+	var historyErr error
+	historyApplied := false
+
+	history, err := r.client.GetHistory(promptID)
+	if err != nil {
+		historyErr = err
+	} else if entry, ok := (*history)[promptID]; ok {
+		r.updateFromHistoryEntry(data, &entry)
+		historyApplied = true
+	}
+
+	job, err := r.client.GetJob(promptID)
+	if err == nil && job != nil {
+		if err := applyJobStateToWorkflowModel(data, job); err != nil {
+			return fmt.Errorf("apply job state: %w", err)
+		}
+		return nil
+	}
+
+	if historyApplied {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	return historyErr
+}
+
+func (r *WorkflowResource) cancelWorkflowOnDelete(ctx context.Context, data *WorkflowModel) error {
+	if r.client == nil || data.PromptID.IsNull() || data.PromptID.ValueString() == "" {
+		return nil
+	}
+
+	var job *client.Job
+	useStoredStatusFallback := false
+	if j, err := r.client.GetJob(data.PromptID.ValueString()); err == nil {
+		job = j
+	} else if shouldUseStoredStatusFallbackOnDelete(err) {
+		useStoredStatusFallback = true
+		tflog.Warn(ctx, "Failed to refresh workflow state before delete; falling back to stored status", map[string]interface{}{
+			"prompt_id": data.PromptID.ValueString(),
+			"error":     err.Error(),
+		})
+	}
+
+	action := determineDeleteAction(data, job, useStoredStatusFallback)
+	switch action {
+	case deleteActionRemoveFromQueue:
+		tflog.Info(ctx, "Removing queued workflow from queue", map[string]interface{}{
+			"prompt_id": data.PromptID.ValueString(),
+		})
+		if err := r.client.DeleteQueuedPrompt(data.PromptID.ValueString()); err != nil {
+			return fmt.Errorf("remove queued workflow %q: %w", data.PromptID.ValueString(), err)
+		}
+	case deleteActionInterrupt:
+		tflog.Info(ctx, "Interrupting running workflow", map[string]interface{}{
+			"prompt_id": data.PromptID.ValueString(),
+		})
+		if err := r.client.InterruptPrompt(data.PromptID.ValueString()); err != nil {
+			return fmt.Errorf("interrupt workflow %q: %w", data.PromptID.ValueString(), err)
+		}
+	}
+
+	return nil
+}
+
+// Chunk 3: Delete actions
+type deleteAction int
+
+const (
+	deleteActionNoop deleteAction = iota
+	deleteActionRemoveFromQueue
+	deleteActionInterrupt
+)
+
+// determineDeleteAction decides what cancellation action to take on delete
+func determineDeleteAction(data *WorkflowModel, job *client.Job, useStoredStatusFallback bool) deleteAction {
+	// Only cancel if explicitly requested
+	if data.CancelOnDelete.IsNull() || !data.CancelOnDelete.ValueBool() {
+		return deleteActionNoop
+	}
+
+	// Need a prompt ID to cancel
+	if data.PromptID.IsNull() || data.PromptID.ValueString() == "" {
+		return deleteActionNoop
+	}
+
+	status := ""
+	if job != nil {
+		status = job.Status
+	} else if useStoredStatusFallback && !data.Status.IsNull() && !data.Status.IsUnknown() {
+		status = data.Status.ValueString()
+	}
+
+	if status == "" {
+		return deleteActionNoop
+	}
+
+	switch status {
+	case "pending", "queued":
+		return deleteActionRemoveFromQueue
+	case "running", "executing":
+		return deleteActionInterrupt
+	case "completed", "error", "failed", "cancelled":
+		return deleteActionNoop
+	default:
+		return deleteActionNoop
+	}
+}
+
+func legacyWorkflowStatusFromHistory(status client.ExecutionStatus) string {
+	switch status.StatusStr {
+	case "failed", "error":
+		return "error"
+	case "cancelled":
+		return "cancelled"
+	case "completed":
+		return "completed"
+	}
+
+	if status.Completed {
+		return "completed"
+	}
+
+	return status.StatusStr
+}
+
+func jsonCompatibleValue(value interface{}) (interface{}, error) {
+	if isNilLikeValue(value) {
+		return nil, nil
+	}
+
+	data, err := json.Marshal(value)
+	if err != nil {
+		return nil, err
+	}
+
+	var normalized interface{}
+	if err := json.Unmarshal(data, &normalized); err != nil {
+		return nil, err
+	}
+
+	return normalized, nil
+}
+
+func isUnexpectedHTTPStatus(err error, statusCode int) bool {
+	if err == nil {
+		return false
+	}
+
+	return strings.Contains(err.Error(), fmt.Sprintf("unexpected status %d", statusCode))
+}
+
+func shouldUseStoredStatusFallbackOnDelete(err error) bool {
+	if err == nil {
+		return false
+	}
+
+	if !isUnexpectedHTTPStatus(err, http.StatusNotFound) {
+		return true
+	}
+
+	return strings.Contains(strings.ToLower(err.Error()), "page not found")
+}
+
+func historyInt64FromAny(value interface{}) (int64, bool) {
+	switch v := value.(type) {
+	case int:
+		return int64(v), true
+	case int64:
+		return v, true
+	case float64:
+		return int64(v), true
+	default:
+		return 0, false
+	}
+}
+
+func historyExecutionEvents(messages [][]interface{}) (int64, int64, map[string]interface{}) {
+	var startTime int64
+	var endTime int64
+	var executionError map[string]interface{}
+
+	for _, message := range messages {
+		if len(message) < 2 {
+			continue
+		}
+
+		eventName, _ := message[0].(string)
+		eventData, _ := message[1].(map[string]interface{})
+		if eventData == nil {
+			continue
+		}
+
+		switch eventName {
+		case "execution_start":
+			startTime, _ = historyInt64FromAny(eventData["timestamp"])
+		case "execution_success", "execution_error", "execution_interrupted":
+			endTime, _ = historyInt64FromAny(eventData["timestamp"])
+			if eventName == "execution_error" {
+				executionError = eventData
+			}
+		}
+	}
+
+	return startTime, endTime, executionError
+}
+
+func historyOutputsCount(outputs interface{}) (int64, error) {
+	if outputs == nil {
+		return 0, nil
+	}
+
+	raw, err := json.Marshal(outputs)
+	if err != nil {
+		return 0, err
+	}
+
+	var decoded map[string]map[string]interface{}
+	if err := json.Unmarshal(raw, &decoded); err != nil {
+		return 0, err
+	}
+
+	var count int64
+	for _, nodeOutputs := range decoded {
+		for mediaType, items := range nodeOutputs {
+			if mediaType == "animated" {
+				continue
+			}
+			list, ok := items.([]interface{})
+			if !ok {
+				continue
+			}
+			count += int64(len(list))
+		}
+	}
+
+	return count, nil
+}
+
+func isNilLikeValue(value interface{}) bool {
+	if value == nil {
+		return true
+	}
+
+	rv := reflect.ValueOf(value)
+	switch rv.Kind() {
+	case reflect.Map, reflect.Slice, reflect.Pointer, reflect.Interface:
+		return rv.IsNil()
+	default:
+		return false
+	}
+}
+
+// applyJobStateToWorkflowModel updates the workflow model from a Job
+// while preserving backward compatibility with legacy fields
+func applyJobStateToWorkflowModel(data *WorkflowModel, job *client.Job) error {
+	if job == nil {
+		return nil
+	}
+
+	switch job.Status {
+	case "failed":
+		data.Status = types.StringValue("error")
+	default:
+		data.Status = types.StringValue(job.Status)
+	}
+	if len(job.ExecutionError) > 0 {
+		data.Error = summarizeExecutionError(job.ExecutionError)
+	}
+	if isNilLikeValue(job.Outputs) {
+		if data.Outputs.IsNull() || data.Outputs.IsUnknown() || data.Outputs.ValueString() == "" {
+			data.Outputs = types.StringValue("{}")
+		}
+	} else {
+		data.Outputs = marshalExecutionJSON(job.Outputs, "{}")
+	}
+
+	if job.CreateTime != nil {
+		data.CreateTime = int64ValueOrNull(*job.CreateTime)
+	}
+	if job.ExecutionStartTime != nil {
+		data.ExecutionStartTime = int64ValueOrNull(*job.ExecutionStartTime)
+	}
+	if job.ExecutionEndTime != nil {
+		data.ExecutionEndTime = int64ValueOrNull(*job.ExecutionEndTime)
+	}
+	if job.OutputsCount != nil {
+		data.OutputsCount = types.Int64Value(int64(*job.OutputsCount))
+	}
+	if job.WorkflowID != "" {
+		data.WorkflowID = stringValueOrNull(job.WorkflowID)
+	}
+
+	var err error
+	if !isNilLikeValue(job.PreviewOutput) {
+		if data.PreviewOutputJSON = marshalExecutionJSON(job.PreviewOutput, ""); !data.PreviewOutputJSON.IsNull() {
+			data.PreviewOutput, err = workflowDynamicFromAny(job.PreviewOutput)
+			if err != nil {
+				return fmt.Errorf("preview_output: %w", err)
+			}
+		}
+	}
+
+	if !isNilLikeValue(job.Outputs) {
+		if data.OutputsJSON = marshalExecutionJSON(job.Outputs, ""); !data.OutputsJSON.IsNull() {
+			data.OutputsStructured, err = workflowDynamicFromAny(job.Outputs)
+			if err != nil {
+				return fmt.Errorf("outputs: %w", err)
+			}
+		} else {
+			data.OutputsStructured = types.DynamicNull()
+		}
+	}
+
+	if !isNilLikeValue(job.ExecutionStatus) {
+		if data.ExecutionStatusJSON = marshalExecutionJSON(job.ExecutionStatus, ""); !data.ExecutionStatusJSON.IsNull() {
+			data.ExecutionStatus, err = workflowDynamicFromAny(job.ExecutionStatus)
+			if err != nil {
+				return fmt.Errorf("execution_status: %w", err)
+			}
+		}
+	}
+
+	if len(job.ExecutionError) > 0 {
+		if data.ExecutionErrorJSON = marshalExecutionJSON(job.ExecutionError, ""); !data.ExecutionErrorJSON.IsNull() {
+			data.ExecutionError, err = workflowDynamicFromAny(job.ExecutionError)
+			if err != nil {
+				return fmt.Errorf("execution_error: %w", err)
+			}
+		}
+	}
+
+	if job.Workflow != nil {
+		workflowPayload := map[string]interface{}{
+			"prompt":     job.Workflow.Prompt,
+			"extra_data": job.Workflow.ExtraData,
+		}
+		data.ExecutionWorkflowJSON = marshalExecutionJSON(workflowPayload, "")
+		data.ExecutionWorkflow, err = workflowDynamicFromAny(workflowPayload)
+		if err != nil {
+			return fmt.Errorf("execution_workflow: %w", err)
+		}
+	}
+
+	return nil
+}
+
+func clearWorkflowExecutionFields(data *WorkflowModel) {
+	data.CreateTime = types.Int64Null()
+	data.ExecutionStartTime = types.Int64Null()
+	data.ExecutionEndTime = types.Int64Null()
+	data.OutputsCount = types.Int64Value(0)
+	data.WorkflowID = types.StringNull()
+	data.PreviewOutputJSON = types.StringNull()
+	data.PreviewOutput = types.DynamicNull()
+	data.OutputsJSON = types.StringNull()
+	data.OutputsStructured = types.DynamicNull()
+	data.ExecutionStatusJSON = types.StringNull()
+	data.ExecutionStatus = types.DynamicNull()
+	data.ExecutionErrorJSON = types.StringNull()
+	data.ExecutionError = types.DynamicNull()
+	data.ExecutionWorkflowJSON = types.StringNull()
+	data.ExecutionWorkflow = types.DynamicNull()
+}
+
+func int64ValueOrNull(value int64) types.Int64 {
+	if value == 0 {
+		return types.Int64Null()
+	}
+	return types.Int64Value(value)
+}
+
+func stringValueOrNull(value string) types.String {
+	if value == "" {
+		return types.StringNull()
+	}
+	return types.StringValue(value)
+}
+
+func marshalExecutionJSON(value interface{}, emptyFallback string) types.String {
+	if isNilLikeValue(value) {
+		if emptyFallback == "" {
+			return types.StringNull()
+		}
+		return types.StringValue(emptyFallback)
+	}
+
+	data, err := json.Marshal(value)
+	if err != nil {
+		if emptyFallback == "" {
+			return types.StringNull()
+		}
+		return types.StringValue(emptyFallback)
+	}
+
+	return types.StringValue(string(data))
+}
+
+func summarizeExecutionError(execErr map[string]interface{}) types.String {
+	if len(execErr) == 0 {
+		return types.StringValue("")
+	}
+
+	errMsg := ""
+	if exType, ok := execErr["exception_type"].(string); ok && exType != "" {
+		errMsg = exType
+		if exMsg, ok := execErr["exception_message"].(string); ok && exMsg != "" {
+			errMsg += ": " + exMsg
+		}
+	} else if exMsg, ok := execErr["exception_message"].(string); ok && exMsg != "" {
+		errMsg = exMsg
+	} else if errJSON, err := json.Marshal(execErr); err == nil {
+		errMsg = string(errJSON)
+	}
+
+	if errMsg == "{}" || errMsg == `{"exception_type":""}` {
+		errMsg = ""
+	}
+
+	return types.StringValue(errMsg)
+}
+
+func workflowDynamicFromAny(data interface{}) (types.Dynamic, error) {
+	if data == nil {
+		return types.DynamicNull(), nil
+	}
+
+	attrValue, err := workflowAttrValueFromAny(data)
+	if err != nil {
+		return types.DynamicNull(), err
+	}
+
+	return types.DynamicValue(attrValue), nil
+}
+
+func workflowAttrValueFromAny(data interface{}) (attr.Value, error) {
+	if data == nil {
+		return types.DynamicNull(), nil
+	}
+
+	switch v := data.(type) {
+	case map[string]interface{}:
+		if v == nil {
+			return types.DynamicNull(), nil
+		}
+
+		attrTypes := make(map[string]attr.Type, len(v))
+		attrValues := make(map[string]attr.Value, len(v))
+		for key, item := range v {
+			itemValue, err := workflowAttrValueFromAny(item)
+			if err != nil {
+				return nil, fmt.Errorf("key %q: %w", key, err)
+			}
+			attrTypes[key] = itemValue.Type(context.Background())
+			attrValues[key] = itemValue
+		}
+
+		return types.ObjectValueMust(attrTypes, attrValues), nil
+	case []interface{}:
+		if v == nil {
+			return types.DynamicNull(), nil
+		}
+
+		attrTypes := make([]attr.Type, 0, len(v))
+		attrValues := make([]attr.Value, 0, len(v))
+		for idx, item := range v {
+			itemValue, err := workflowAttrValueFromAny(item)
+			if err != nil {
+				return nil, fmt.Errorf("index %d: %w", idx, err)
+			}
+			attrTypes = append(attrTypes, itemValue.Type(context.Background()))
+			attrValues = append(attrValues, itemValue)
+		}
+
+		return types.TupleValueMust(attrTypes, attrValues), nil
+	case string:
+		return types.StringValue(v), nil
+	case bool:
+		return types.BoolValue(v), nil
+	case float64:
+		return basetypes.NewNumberValue(big.NewFloat(v)), nil
+	case int:
+		return basetypes.NewNumberValue(new(big.Float).SetInt64(int64(v))), nil
+	case int64:
+		return basetypes.NewNumberValue(new(big.Float).SetInt64(v)), nil
+	default:
+		return nil, fmt.Errorf("unsupported type %T", v)
+	}
 }

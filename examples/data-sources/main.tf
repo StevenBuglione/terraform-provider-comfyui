@@ -1,6 +1,6 @@
 # Data Sources Example
 #
-# Demonstrates all five ComfyUI data sources for querying server state.
+# Demonstrates common ComfyUI data sources for querying server state.
 # These are read-only — they fetch live information from the ComfyUI API.
 
 terraform {
@@ -116,7 +116,52 @@ output "history_outputs" {
 }
 
 # ---------------------------------------------------------------------------
-# 5. Output — get download URL for a specific output file
+# 5. Job — inspect the richer /api/jobs view for one execution
+# ---------------------------------------------------------------------------
+
+data "comfyui_job" "execution" {
+  count = var.prompt_id != "" ? 1 : 0
+  id    = var.prompt_id
+}
+
+output "job_status" {
+  description = "Normalized execution status from /api/jobs"
+  value       = var.prompt_id != "" ? data.comfyui_job.execution[0].status : "no prompt_id provided"
+}
+
+output "job_workflow_id" {
+  description = "Workflow ID preserved in the execution metadata"
+  value       = var.prompt_id != "" ? data.comfyui_job.execution[0].workflow_id : "no prompt_id provided"
+}
+
+output "job_outputs_count" {
+  description = "Number of outputs reported by the job endpoint"
+  value       = var.prompt_id != "" ? data.comfyui_job.execution[0].outputs_count : 0
+}
+
+# ---------------------------------------------------------------------------
+# 6. Jobs — filter the /api/jobs list by workflow ID
+# ---------------------------------------------------------------------------
+
+variable "workflow_id" {
+  description = "Workflow ID to filter the job list by"
+  type        = string
+  default     = ""
+}
+
+data "comfyui_jobs" "workflow_runs" {
+  count       = var.workflow_id != "" ? 1 : 0
+  workflow_id = var.workflow_id
+  statuses    = ["completed"]
+}
+
+output "workflow_job_ids" {
+  description = "Completed job IDs for the selected workflow_id"
+  value       = var.workflow_id != "" ? [for job in data.comfyui_jobs.workflow_runs[0].jobs : job.id] : []
+}
+
+# ---------------------------------------------------------------------------
+# 7. Output — get download URL for a specific output file
 # ---------------------------------------------------------------------------
 
 variable "output_filename" {
