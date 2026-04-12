@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ConditioningSetAreaPercentageVideoResource{}
+var _ resource.ResourceWithConfigure = &ConditioningSetAreaPercentageVideoResource{}
+var _ resource.ResourceWithModifyPlan = &ConditioningSetAreaPercentageVideoResource{}
 
-type ConditioningSetAreaPercentageVideoResource struct{}
+type ConditioningSetAreaPercentageVideoResource struct {
+	client *client.Client
+}
 
 type ConditioningSetAreaPercentageVideoModel struct {
 	ID                 types.String  `tfsdk:"id"`
@@ -37,6 +42,23 @@ type ConditioningSetAreaPercentageVideoModel struct {
 
 func NewConditioningSetAreaPercentageVideoResource() resource.Resource {
 	return &ConditioningSetAreaPercentageVideoResource{}
+}
+
+func (r *ConditioningSetAreaPercentageVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ConditioningSetAreaPercentageVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -123,6 +145,20 @@ func (r *ConditioningSetAreaPercentageVideoResource) Schema(_ context.Context, _
 			},
 		},
 	}
+}
+
+func (r *ConditioningSetAreaPercentageVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ConditioningSetAreaPercentageVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ConditioningSetAreaPercentageVideo", data, &resp.Diagnostics)
 }
 
 func (r *ConditioningSetAreaPercentageVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

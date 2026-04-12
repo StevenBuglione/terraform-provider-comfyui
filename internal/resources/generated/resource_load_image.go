@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &LoadImageResource{}
+var _ resource.ResourceWithConfigure = &LoadImageResource{}
+var _ resource.ResourceWithModifyPlan = &LoadImageResource{}
 
-type LoadImageResource struct{}
+type LoadImageResource struct {
+	client *client.Client
+}
 
 type LoadImageModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type LoadImageModel struct {
 
 func NewLoadImageResource() resource.Resource {
 	return &LoadImageResource{}
+}
+
+func (r *LoadImageResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LoadImageResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -73,6 +95,20 @@ func (r *LoadImageResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 			},
 		},
 	}
+}
+
+func (r *LoadImageResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LoadImageModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LoadImage", data, &resp.Diagnostics)
 }
 
 func (r *LoadImageResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

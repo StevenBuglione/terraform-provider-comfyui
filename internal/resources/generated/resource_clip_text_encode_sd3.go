@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &CLIPTextEncodeSd3Resource{}
+var _ resource.ResourceWithConfigure = &CLIPTextEncodeSd3Resource{}
+var _ resource.ResourceWithModifyPlan = &CLIPTextEncodeSd3Resource{}
 
-type CLIPTextEncodeSd3Resource struct{}
+type CLIPTextEncodeSd3Resource struct {
+	client *client.Client
+}
 
 type CLIPTextEncodeSd3Model struct {
 	ID                 types.String `tfsdk:"id"`
@@ -34,6 +39,23 @@ type CLIPTextEncodeSd3Model struct {
 
 func NewCLIPTextEncodeSd3Resource() resource.Resource {
 	return &CLIPTextEncodeSd3Resource{}
+}
+
+func (r *CLIPTextEncodeSd3Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CLIPTextEncodeSd3Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -93,6 +115,20 @@ func (r *CLIPTextEncodeSd3Resource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *CLIPTextEncodeSd3Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CLIPTextEncodeSd3Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CLIPTextEncodeSD3", data, &resp.Diagnostics)
 }
 
 func (r *CLIPTextEncodeSd3Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -20,8 +21,12 @@ import (
 )
 
 var _ resource.Resource = &TrainLoraNodeResource{}
+var _ resource.ResourceWithConfigure = &TrainLoraNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TrainLoraNodeResource{}
 
-type TrainLoraNodeResource struct{}
+type TrainLoraNodeResource struct {
+	client *client.Client
+}
 
 type TrainLoraNodeModel struct {
 	ID                    types.String  `tfsdk:"id"`
@@ -53,6 +58,23 @@ type TrainLoraNodeModel struct {
 
 func NewTrainLoraNodeResource() resource.Resource {
 	return &TrainLoraNodeResource{}
+}
+
+func (r *TrainLoraNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TrainLoraNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -230,6 +252,20 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *TrainLoraNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TrainLoraNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TrainLoraNode", data, &resp.Diagnostics)
 }
 
 func (r *TrainLoraNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

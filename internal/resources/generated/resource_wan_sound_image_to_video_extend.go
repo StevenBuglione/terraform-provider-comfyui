@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &WanSoundImageToVideoExtendResource{}
+var _ resource.ResourceWithConfigure = &WanSoundImageToVideoExtendResource{}
+var _ resource.ResourceWithModifyPlan = &WanSoundImageToVideoExtendResource{}
 
-type WanSoundImageToVideoExtendResource struct{}
+type WanSoundImageToVideoExtendResource struct {
+	client *client.Client
+}
 
 type WanSoundImageToVideoExtendModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -37,6 +42,23 @@ type WanSoundImageToVideoExtendModel struct {
 
 func NewWanSoundImageToVideoExtendResource() resource.Resource {
 	return &WanSoundImageToVideoExtendResource{}
+}
+
+func (r *WanSoundImageToVideoExtendResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *WanSoundImageToVideoExtendResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -116,6 +138,20 @@ func (r *WanSoundImageToVideoExtendResource) Schema(_ context.Context, _ resourc
 			},
 		},
 	}
+}
+
+func (r *WanSoundImageToVideoExtendResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data WanSoundImageToVideoExtendModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "WanSoundImageToVideoExtend", data, &resp.Diagnostics)
 }
 
 func (r *WanSoundImageToVideoExtendResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

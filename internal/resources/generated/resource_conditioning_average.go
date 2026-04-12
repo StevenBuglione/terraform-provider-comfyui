@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ConditioningAverageResource{}
+var _ resource.ResourceWithConfigure = &ConditioningAverageResource{}
+var _ resource.ResourceWithModifyPlan = &ConditioningAverageResource{}
 
-type ConditioningAverageResource struct{}
+type ConditioningAverageResource struct {
+	client *client.Client
+}
 
 type ConditioningAverageModel struct {
 	ID                     types.String  `tfsdk:"id"`
@@ -32,6 +37,23 @@ type ConditioningAverageModel struct {
 
 func NewConditioningAverageResource() resource.Resource {
 	return &ConditioningAverageResource{}
+}
+
+func (r *ConditioningAverageResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ConditioningAverageResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *ConditioningAverageResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *ConditioningAverageResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ConditioningAverageModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ConditioningAverage", data, &resp.Diagnostics)
 }
 
 func (r *ConditioningAverageResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

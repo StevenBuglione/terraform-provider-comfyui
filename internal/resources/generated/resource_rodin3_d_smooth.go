@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &Rodin3DSmoothResource{}
+var _ resource.ResourceWithConfigure = &Rodin3DSmoothResource{}
+var _ resource.ResourceWithModifyPlan = &Rodin3DSmoothResource{}
 
-type Rodin3DSmoothResource struct{}
+type Rodin3DSmoothResource struct {
+	client *client.Client
+}
 
 type Rodin3DSmoothModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type Rodin3DSmoothModel struct {
 
 func NewRodin3DSmoothResource() resource.Resource {
 	return &Rodin3DSmoothResource{}
+}
+
+func (r *Rodin3DSmoothResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Rodin3DSmoothResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -73,6 +95,20 @@ func (r *Rodin3DSmoothResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *Rodin3DSmoothResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Rodin3DSmoothModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Rodin3D_Smooth", data, &resp.Diagnostics)
 }
 
 func (r *Rodin3DSmoothResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ModelMergeAddResource{}
+var _ resource.ResourceWithConfigure = &ModelMergeAddResource{}
+var _ resource.ResourceWithModifyPlan = &ModelMergeAddResource{}
 
-type ModelMergeAddResource struct{}
+type ModelMergeAddResource struct {
+	client *client.Client
+}
 
 type ModelMergeAddModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type ModelMergeAddModel struct {
 
 func NewModelMergeAddResource() resource.Resource {
 	return &ModelMergeAddResource{}
+}
+
+func (r *ModelMergeAddResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ModelMergeAddResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,6 +92,20 @@ func (r *ModelMergeAddResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *ModelMergeAddResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ModelMergeAddModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ModelAdd", data, &resp.Diagnostics)
 }
 
 func (r *ModelMergeAddResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

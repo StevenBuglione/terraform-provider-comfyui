@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &WanPhantomSubjectToVideoResource{}
+var _ resource.ResourceWithConfigure = &WanPhantomSubjectToVideoResource{}
+var _ resource.ResourceWithModifyPlan = &WanPhantomSubjectToVideoResource{}
 
-type WanPhantomSubjectToVideoResource struct{}
+type WanPhantomSubjectToVideoResource struct {
+	client *client.Client
+}
 
 type WanPhantomSubjectToVideoModel struct {
 	ID                    types.String `tfsdk:"id"`
@@ -40,6 +45,23 @@ type WanPhantomSubjectToVideoModel struct {
 
 func NewWanPhantomSubjectToVideoResource() resource.Resource {
 	return &WanPhantomSubjectToVideoResource{}
+}
+
+func (r *WanPhantomSubjectToVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *WanPhantomSubjectToVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -129,6 +151,20 @@ func (r *WanPhantomSubjectToVideoResource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *WanPhantomSubjectToVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data WanPhantomSubjectToVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "WanPhantomSubjectToVideo", data, &resp.Diagnostics)
 }
 
 func (r *WanPhantomSubjectToVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

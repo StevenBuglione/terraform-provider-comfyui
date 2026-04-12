@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &Flux2SchedulerResource{}
+var _ resource.ResourceWithConfigure = &Flux2SchedulerResource{}
+var _ resource.ResourceWithModifyPlan = &Flux2SchedulerResource{}
 
-type Flux2SchedulerResource struct{}
+type Flux2SchedulerResource struct {
+	client *client.Client
+}
 
 type Flux2SchedulerModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type Flux2SchedulerModel struct {
 
 func NewFlux2SchedulerResource() resource.Resource {
 	return &Flux2SchedulerResource{}
+}
+
+func (r *Flux2SchedulerResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Flux2SchedulerResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *Flux2SchedulerResource) Schema(_ context.Context, _ resource.SchemaRequ
 			},
 		},
 	}
+}
+
+func (r *Flux2SchedulerResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Flux2SchedulerModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Flux2Scheduler", data, &resp.Diagnostics)
 }
 
 func (r *Flux2SchedulerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

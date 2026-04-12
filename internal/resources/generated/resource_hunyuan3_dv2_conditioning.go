@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &Hunyuan3Dv2ConditioningResource{}
+var _ resource.ResourceWithConfigure = &Hunyuan3Dv2ConditioningResource{}
+var _ resource.ResourceWithModifyPlan = &Hunyuan3Dv2ConditioningResource{}
 
-type Hunyuan3Dv2ConditioningResource struct{}
+type Hunyuan3Dv2ConditioningResource struct {
+	client *client.Client
+}
 
 type Hunyuan3Dv2ConditioningModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type Hunyuan3Dv2ConditioningModel struct {
 
 func NewHunyuan3Dv2ConditioningResource() resource.Resource {
 	return &Hunyuan3Dv2ConditioningResource{}
+}
+
+func (r *Hunyuan3Dv2ConditioningResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Hunyuan3Dv2ConditioningResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -73,6 +95,20 @@ func (r *Hunyuan3Dv2ConditioningResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *Hunyuan3Dv2ConditioningResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Hunyuan3Dv2ConditioningModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Hunyuan3Dv2Conditioning", data, &resp.Diagnostics)
 }
 
 func (r *Hunyuan3Dv2ConditioningResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

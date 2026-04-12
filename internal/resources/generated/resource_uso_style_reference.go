@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &UsoStyleReferenceResource{}
+var _ resource.ResourceWithConfigure = &UsoStyleReferenceResource{}
+var _ resource.ResourceWithModifyPlan = &UsoStyleReferenceResource{}
 
-type UsoStyleReferenceResource struct{}
+type UsoStyleReferenceResource struct {
+	client *client.Client
+}
 
 type UsoStyleReferenceModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type UsoStyleReferenceModel struct {
 
 func NewUsoStyleReferenceResource() resource.Resource {
 	return &UsoStyleReferenceResource{}
+}
+
+func (r *UsoStyleReferenceResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *UsoStyleReferenceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *UsoStyleReferenceResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *UsoStyleReferenceResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data UsoStyleReferenceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "USOStyleReference", data, &resp.Diagnostics)
 }
 
 func (r *UsoStyleReferenceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

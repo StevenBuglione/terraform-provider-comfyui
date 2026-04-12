@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ReplaceVideoLatentFramesResource{}
+var _ resource.ResourceWithConfigure = &ReplaceVideoLatentFramesResource{}
+var _ resource.ResourceWithModifyPlan = &ReplaceVideoLatentFramesResource{}
 
-type ReplaceVideoLatentFramesResource struct{}
+type ReplaceVideoLatentFramesResource struct {
+	client *client.Client
+}
 
 type ReplaceVideoLatentFramesModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type ReplaceVideoLatentFramesModel struct {
 
 func NewReplaceVideoLatentFramesResource() resource.Resource {
 	return &ReplaceVideoLatentFramesResource{}
+}
+
+func (r *ReplaceVideoLatentFramesResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ReplaceVideoLatentFramesResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *ReplaceVideoLatentFramesResource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *ReplaceVideoLatentFramesResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ReplaceVideoLatentFramesModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ReplaceVideoLatentFrames", data, &resp.Diagnostics)
 }
 
 func (r *ReplaceVideoLatentFramesResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

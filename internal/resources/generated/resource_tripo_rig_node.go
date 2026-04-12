@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &TripoRigNodeResource{}
+var _ resource.ResourceWithConfigure = &TripoRigNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TripoRigNodeResource{}
 
-type TripoRigNodeResource struct{}
+type TripoRigNodeResource struct {
+	client *client.Client
+}
 
 type TripoRigNodeModel struct {
 	ID                  types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type TripoRigNodeModel struct {
 
 func NewTripoRigNodeResource() resource.Resource {
 	return &TripoRigNodeResource{}
+}
+
+func (r *TripoRigNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TripoRigNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -81,6 +103,20 @@ func (r *TripoRigNodeResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 		},
 	}
+}
+
+func (r *TripoRigNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TripoRigNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TripoRigNode", data, &resp.Diagnostics)
 }
 
 func (r *TripoRigNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

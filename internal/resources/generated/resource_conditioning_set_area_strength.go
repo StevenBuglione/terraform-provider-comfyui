@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ConditioningSetAreaStrengthResource{}
+var _ resource.ResourceWithConfigure = &ConditioningSetAreaStrengthResource{}
+var _ resource.ResourceWithModifyPlan = &ConditioningSetAreaStrengthResource{}
 
-type ConditioningSetAreaStrengthResource struct{}
+type ConditioningSetAreaStrengthResource struct {
+	client *client.Client
+}
 
 type ConditioningSetAreaStrengthModel struct {
 	ID                 types.String  `tfsdk:"id"`
@@ -31,6 +36,23 @@ type ConditioningSetAreaStrengthModel struct {
 
 func NewConditioningSetAreaStrengthResource() resource.Resource {
 	return &ConditioningSetAreaStrengthResource{}
+}
+
+func (r *ConditioningSetAreaStrengthResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ConditioningSetAreaStrengthResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *ConditioningSetAreaStrengthResource) Schema(_ context.Context, _ resour
 			},
 		},
 	}
+}
+
+func (r *ConditioningSetAreaStrengthResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ConditioningSetAreaStrengthModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ConditioningSetAreaStrength", data, &resp.Diagnostics)
 }
 
 func (r *ConditioningSetAreaStrengthResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

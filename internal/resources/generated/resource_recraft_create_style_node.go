@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RecraftCreateStyleNodeResource{}
+var _ resource.ResourceWithConfigure = &RecraftCreateStyleNodeResource{}
+var _ resource.ResourceWithModifyPlan = &RecraftCreateStyleNodeResource{}
 
-type RecraftCreateStyleNodeResource struct{}
+type RecraftCreateStyleNodeResource struct {
+	client *client.Client
+}
 
 type RecraftCreateStyleNodeModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type RecraftCreateStyleNodeModel struct {
 
 func NewRecraftCreateStyleNodeResource() resource.Resource {
 	return &RecraftCreateStyleNodeResource{}
+}
+
+func (r *RecraftCreateStyleNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RecraftCreateStyleNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,6 +100,20 @@ func (r *RecraftCreateStyleNodeResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *RecraftCreateStyleNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RecraftCreateStyleNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RecraftCreateStyleNode", data, &resp.Diagnostics)
 }
 
 func (r *RecraftCreateStyleNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

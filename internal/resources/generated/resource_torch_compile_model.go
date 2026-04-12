@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &TorchCompileModelResource{}
+var _ resource.ResourceWithConfigure = &TorchCompileModelResource{}
+var _ resource.ResourceWithModifyPlan = &TorchCompileModelResource{}
 
-type TorchCompileModelResource struct{}
+type TorchCompileModelResource struct {
+	client *client.Client
+}
 
 type TorchCompileModelModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type TorchCompileModelModel struct {
 
 func NewTorchCompileModelResource() resource.Resource {
 	return &TorchCompileModelResource{}
+}
+
+func (r *TorchCompileModelResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TorchCompileModelResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,6 +100,20 @@ func (r *TorchCompileModelResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *TorchCompileModelResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TorchCompileModelModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TorchCompileModel", data, &resp.Diagnostics)
 }
 
 func (r *TorchCompileModelResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

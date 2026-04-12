@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &TrimAudioDurationResource{}
+var _ resource.ResourceWithConfigure = &TrimAudioDurationResource{}
+var _ resource.ResourceWithModifyPlan = &TrimAudioDurationResource{}
 
-type TrimAudioDurationResource struct{}
+type TrimAudioDurationResource struct {
+	client *client.Client
+}
 
 type TrimAudioDurationModel struct {
 	ID          types.String  `tfsdk:"id"`
@@ -32,6 +37,23 @@ type TrimAudioDurationModel struct {
 
 func NewTrimAudioDurationResource() resource.Resource {
 	return &TrimAudioDurationResource{}
+}
+
+func (r *TrimAudioDurationResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TrimAudioDurationResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *TrimAudioDurationResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *TrimAudioDurationResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TrimAudioDurationModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TrimAudioDuration", data, &resp.Diagnostics)
 }
 
 func (r *TrimAudioDurationResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

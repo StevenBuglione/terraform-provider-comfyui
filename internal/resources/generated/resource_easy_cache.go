@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &EasyCacheResource{}
+var _ resource.ResourceWithConfigure = &EasyCacheResource{}
+var _ resource.ResourceWithModifyPlan = &EasyCacheResource{}
 
-type EasyCacheResource struct{}
+type EasyCacheResource struct {
+	client *client.Client
+}
 
 type EasyCacheModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type EasyCacheModel struct {
 
 func NewEasyCacheResource() resource.Resource {
 	return &EasyCacheResource{}
+}
+
+func (r *EasyCacheResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *EasyCacheResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -96,6 +118,20 @@ func (r *EasyCacheResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 			},
 		},
 	}
+}
+
+func (r *EasyCacheResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data EasyCacheModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "EasyCacheNode", data, &resp.Diagnostics)
 }
 
 func (r *EasyCacheResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

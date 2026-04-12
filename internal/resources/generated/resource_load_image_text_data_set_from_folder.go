@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &LoadImageTextDataSetFromFolderResource{}
+var _ resource.ResourceWithConfigure = &LoadImageTextDataSetFromFolderResource{}
+var _ resource.ResourceWithModifyPlan = &LoadImageTextDataSetFromFolderResource{}
 
-type LoadImageTextDataSetFromFolderResource struct{}
+type LoadImageTextDataSetFromFolderResource struct {
+	client *client.Client
+}
 
 type LoadImageTextDataSetFromFolderModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type LoadImageTextDataSetFromFolderModel struct {
 
 func NewLoadImageTextDataSetFromFolderResource() resource.Resource {
 	return &LoadImageTextDataSetFromFolderResource{}
+}
+
+func (r *LoadImageTextDataSetFromFolderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LoadImageTextDataSetFromFolderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -73,6 +95,20 @@ func (r *LoadImageTextDataSetFromFolderResource) Schema(_ context.Context, _ res
 			},
 		},
 	}
+}
+
+func (r *LoadImageTextDataSetFromFolderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LoadImageTextDataSetFromFolderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LoadImageTextDataSetFromFolderNode", data, &resp.Diagnostics)
 }
 
 func (r *LoadImageTextDataSetFromFolderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

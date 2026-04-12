@@ -1,6 +1,7 @@
 package validation
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"slices"
@@ -9,11 +10,18 @@ import (
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/artifacts"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/inventory"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/nodeschema"
 )
 
 type Options struct {
 	Mode              ValidationMode
 	RequireOutputNode bool
+	InventoryService  InventoryService
+}
+
+type InventoryService interface {
+	GetInventory(context.Context, inventory.Kind) ([]string, error)
 }
 
 type ValidationMode string
@@ -78,6 +86,7 @@ func ValidatePrompt(prompt *artifacts.Prompt, nodeInfo map[string]client.NodeInf
 		for inputName, value := range node.Inputs {
 			sourceNodeID, sourceSlot, linked := promptLinkValue(value)
 			if !linked {
+				validateDynamicInputValue(&report, nodeID, node.ClassType, inputName, value, opts)
 				continue
 			}
 
@@ -114,6 +123,59 @@ func ValidatePrompt(prompt *artifacts.Prompt, nodeInfo map[string]client.NodeInf
 		report.AddError("prompt does not include any node marked output_node=true")
 	}
 	return report
+}
+
+func validateDynamicInputValue(report *Report, nodeID, classType, inputName string, value interface{}, opts Options) {
+	input, ok := lookupGeneratedInput(classType, inputName)
+	if !ok {
+		return
+	}
+
+	switch input.ValidationKind {
+	case InputValidationKindDynamicExpression:
+		report.AddError(fmt.Sprintf(`node %q (%s) input %q uses unsupported dynamic options that cannot be strictly validated`, nodeID, classType, inputName))
+	case InputValidationKindDynamicInventory:
+		if opts.InventoryService == nil {
+			report.AddError(fmt.Sprintf(`node %q (%s) input %q requires live inventory validation but no inventory service is configured`, nodeID, classType, inputName))
+			return
+		}
+		valueString, ok := value.(string)
+		if !ok || valueString == "" {
+			report.AddError(fmt.Sprintf(`node %q (%s) input %q must be a non-empty string for live inventory validation`, nodeID, classType, inputName))
+			return
+		}
+		kind, ok := inventory.ParseKind(input.InventoryKind)
+		if !ok {
+			report.AddError(fmt.Sprintf(`node %q (%s) input %q uses unsupported inventory kind %q`, nodeID, classType, inputName, input.InventoryKind))
+			return
+		}
+		values, err := opts.InventoryService.GetInventory(context.Background(), kind)
+		if err != nil {
+			report.AddError(fmt.Sprintf(`node %q (%s) input %q failed live inventory validation: %s`, nodeID, classType, inputName, err.Error()))
+			return
+		}
+		if !slices.Contains(values, valueString) {
+			report.AddError(fmt.Sprintf(`node %q (%s) input %q references unavailable %s value %q`, nodeID, classType, inputName, input.InventoryKind, valueString))
+		}
+	}
+}
+
+func lookupGeneratedInput(classType, inputName string) (nodeschema.GeneratedNodeSchemaInput, bool) {
+	schema, ok := nodeschema.LookupGeneratedNodeSchema(classType)
+	if !ok {
+		return nodeschema.GeneratedNodeSchemaInput{}, false
+	}
+	for _, input := range schema.RequiredInputs {
+		if input.Name == inputName {
+			return input, true
+		}
+	}
+	for _, input := range schema.OptionalInputs {
+		if input.Name == inputName {
+			return input, true
+		}
+	}
+	return nodeschema.GeneratedNodeSchemaInput{}, false
 }
 
 func sortedNodeIDs(nodes map[string]artifacts.PromptNode) []string {

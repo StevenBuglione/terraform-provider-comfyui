@@ -23,6 +23,15 @@ func TestNodeSchemaDataSourceSchema_ExposesStructuredContracts(t *testing.T) {
 	if _, ok := requiredAttr.NestedObject.Attributes["enum_values"].(datasourceschema.ListAttribute); !ok {
 		t.Fatalf("expected required_inputs.enum_values to be a list attribute, got %T", requiredAttr.NestedObject.Attributes["enum_values"])
 	}
+	if _, ok := requiredAttr.NestedObject.Attributes["validation_kind"].(datasourceschema.StringAttribute); !ok {
+		t.Fatalf("expected required_inputs.validation_kind to be a string attribute, got %T", requiredAttr.NestedObject.Attributes["validation_kind"])
+	}
+	if _, ok := requiredAttr.NestedObject.Attributes["inventory_kind"].(datasourceschema.StringAttribute); !ok {
+		t.Fatalf("expected required_inputs.inventory_kind to be a string attribute, got %T", requiredAttr.NestedObject.Attributes["inventory_kind"])
+	}
+	if _, ok := requiredAttr.NestedObject.Attributes["supports_strict_plan_validation"].(datasourceschema.BoolAttribute); !ok {
+		t.Fatalf("expected required_inputs.supports_strict_plan_validation to be a bool attribute, got %T", requiredAttr.NestedObject.Attributes["supports_strict_plan_validation"])
+	}
 
 	optionalAttr, ok := resp.Schema.Attributes["optional_inputs"].(datasourceschema.ListNestedAttribute)
 	if !ok {
@@ -56,6 +65,9 @@ func TestNodeSchemaLookupGeneratedContract_ReturnsStructuredContract(t *testing.
 	if clip.RequiredInputs[0].Name != "text" || !clip.RequiredInputs[0].Multiline {
 		t.Fatalf("expected first required input to be multiline text, got %#v", clip.RequiredInputs[0])
 	}
+	if clip.RequiredInputs[0].ValidationKind != "freeform" || clip.RequiredInputs[0].SupportsStrictPlanValidation != true {
+		t.Fatalf("unexpected text validation metadata: %#v", clip.RequiredInputs[0])
+	}
 	if clip.RequiredInputs[1].IsLinkType != true {
 		t.Fatalf("expected second required input to be a link type, got %#v", clip.RequiredInputs[1])
 	}
@@ -82,8 +94,12 @@ func TestNodeSchemaLookupGeneratedContract_ReturnsStructuredContract(t *testing.
 			}
 		case "sampler_name":
 			foundSampler = true
-			if !input.DynamicOptions || input.DynamicOptionsSource != "comfy.samplers.KSampler.SAMPLERS" {
+			if !input.DynamicOptions || input.DynamicOptionsSource != "comfy.samplers.KSampler.SAMPLERS" || input.ValidationKind != "dynamic_expression" || input.SupportsStrictPlanValidation {
 				t.Fatalf("unexpected sampler_name metadata: %#v", input)
+			}
+		case "model":
+			if input.ValidationKind != "freeform" || input.InventoryKind != "" {
+				t.Fatalf("unexpected model validation metadata: %#v", input)
 			}
 		}
 	}
@@ -92,5 +108,16 @@ func TestNodeSchemaLookupGeneratedContract_ReturnsStructuredContract(t *testing.
 	}
 	if !foundSampler {
 		t.Fatal("expected sampler_name input in KSampler schema")
+	}
+
+	checkpoint, ok := lookupGeneratedNodeSchema("CheckpointLoaderSimple")
+	if !ok {
+		t.Fatal("expected generated schema for CheckpointLoaderSimple")
+	}
+	if len(checkpoint.RequiredInputs) != 1 {
+		t.Fatalf("expected CheckpointLoaderSimple to have one required input, got %#v", checkpoint.RequiredInputs)
+	}
+	if checkpoint.RequiredInputs[0].ValidationKind != "dynamic_inventory" || checkpoint.RequiredInputs[0].InventoryKind != "checkpoints" || !checkpoint.RequiredInputs[0].SupportsStrictPlanValidation {
+		t.Fatalf("unexpected checkpoint validation metadata: %#v", checkpoint.RequiredInputs[0])
 	}
 }

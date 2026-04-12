@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &KlingCameraControlT2VNodeResource{}
+var _ resource.ResourceWithConfigure = &KlingCameraControlT2VNodeResource{}
+var _ resource.ResourceWithModifyPlan = &KlingCameraControlT2VNodeResource{}
 
-type KlingCameraControlT2VNodeResource struct{}
+type KlingCameraControlT2VNodeResource struct {
+	client *client.Client
+}
 
 type KlingCameraControlT2VNodeModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -36,6 +41,23 @@ type KlingCameraControlT2VNodeModel struct {
 
 func NewKlingCameraControlT2VNodeResource() resource.Resource {
 	return &KlingCameraControlT2VNodeResource{}
+}
+
+func (r *KlingCameraControlT2VNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *KlingCameraControlT2VNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -106,6 +128,20 @@ func (r *KlingCameraControlT2VNodeResource) Schema(_ context.Context, _ resource
 			},
 		},
 	}
+}
+
+func (r *KlingCameraControlT2VNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data KlingCameraControlT2VNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "KlingCameraControlT2VNode", data, &resp.Diagnostics)
 }
 
 func (r *KlingCameraControlT2VNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

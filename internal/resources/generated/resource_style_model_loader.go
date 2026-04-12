@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &StyleModelLoaderResource{}
+var _ resource.ResourceWithConfigure = &StyleModelLoaderResource{}
+var _ resource.ResourceWithModifyPlan = &StyleModelLoaderResource{}
 
-type StyleModelLoaderResource struct{}
+type StyleModelLoaderResource struct {
+	client *client.Client
+}
 
 type StyleModelLoaderModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type StyleModelLoaderModel struct {
 
 func NewStyleModelLoaderResource() resource.Resource {
 	return &StyleModelLoaderResource{}
+}
+
+func (r *StyleModelLoaderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *StyleModelLoaderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *StyleModelLoaderResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *StyleModelLoaderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data StyleModelLoaderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "StyleModelLoader", data, &resp.Diagnostics)
 }
 
 func (r *StyleModelLoaderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

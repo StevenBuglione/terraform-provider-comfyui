@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &TextGenerateResource{}
+var _ resource.ResourceWithConfigure = &TextGenerateResource{}
+var _ resource.ResourceWithModifyPlan = &TextGenerateResource{}
 
-type TextGenerateResource struct{}
+type TextGenerateResource struct {
+	client *client.Client
+}
 
 type TextGenerateModel struct {
 	ID                  types.String `tfsdk:"id"`
@@ -34,6 +39,23 @@ type TextGenerateModel struct {
 
 func NewTextGenerateResource() resource.Resource {
 	return &TextGenerateResource{}
+}
+
+func (r *TextGenerateResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TextGenerateResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *TextGenerateResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 		},
 	}
+}
+
+func (r *TextGenerateResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TextGenerateModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TextGenerate", data, &resp.Diagnostics)
 }
 
 func (r *TextGenerateResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

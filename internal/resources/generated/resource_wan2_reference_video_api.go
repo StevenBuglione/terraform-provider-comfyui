@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &Wan2ReferenceVideoAPIResource{}
+var _ resource.ResourceWithConfigure = &Wan2ReferenceVideoAPIResource{}
+var _ resource.ResourceWithModifyPlan = &Wan2ReferenceVideoAPIResource{}
 
-type Wan2ReferenceVideoAPIResource struct{}
+type Wan2ReferenceVideoAPIResource struct {
+	client *client.Client
+}
 
 type Wan2ReferenceVideoAPIModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type Wan2ReferenceVideoAPIModel struct {
 
 func NewWan2ReferenceVideoAPIResource() resource.Resource {
 	return &Wan2ReferenceVideoAPIResource{}
+}
+
+func (r *Wan2ReferenceVideoAPIResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Wan2ReferenceVideoAPIResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *Wan2ReferenceVideoAPIResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *Wan2ReferenceVideoAPIResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Wan2ReferenceVideoAPIModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Wan2ReferenceVideoApi", data, &resp.Diagnostics)
 }
 
 func (r *Wan2ReferenceVideoAPIResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

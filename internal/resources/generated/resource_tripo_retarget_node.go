@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &TripoRetargetNodeResource{}
+var _ resource.ResourceWithConfigure = &TripoRetargetNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TripoRetargetNodeResource{}
 
-type TripoRetargetNodeResource struct{}
+type TripoRetargetNodeResource struct {
+	client *client.Client
+}
 
 type TripoRetargetNodeModel struct {
 	ID                   types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type TripoRetargetNodeModel struct {
 
 func NewTripoRetargetNodeResource() resource.Resource {
 	return &TripoRetargetNodeResource{}
+}
+
+func (r *TripoRetargetNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TripoRetargetNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -108,6 +130,20 @@ func (r *TripoRetargetNodeResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *TripoRetargetNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TripoRetargetNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TripoRetargetNode", data, &resp.Diagnostics)
 }
 
 func (r *TripoRetargetNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

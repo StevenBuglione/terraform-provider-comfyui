@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RecraftV4TextToImageNodeResource{}
+var _ resource.ResourceWithConfigure = &RecraftV4TextToImageNodeResource{}
+var _ resource.ResourceWithModifyPlan = &RecraftV4TextToImageNodeResource{}
 
-type RecraftV4TextToImageNodeResource struct{}
+type RecraftV4TextToImageNodeResource struct {
+	client *client.Client
+}
 
 type RecraftV4TextToImageNodeModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type RecraftV4TextToImageNodeModel struct {
 
 func NewRecraftV4TextToImageNodeResource() resource.Resource {
 	return &RecraftV4TextToImageNodeResource{}
+}
+
+func (r *RecraftV4TextToImageNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RecraftV4TextToImageNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -98,6 +120,20 @@ func (r *RecraftV4TextToImageNodeResource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *RecraftV4TextToImageNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RecraftV4TextToImageNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RecraftV4TextToImageNode", data, &resp.Diagnostics)
 }
 
 func (r *RecraftV4TextToImageNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

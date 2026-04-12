@@ -4,7 +4,9 @@ package generated
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -15,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &PreviewAudioResource{}
+var _ resource.ResourceWithConfigure = &PreviewAudioResource{}
+var _ resource.ResourceWithModifyPlan = &PreviewAudioResource{}
 
-type PreviewAudioResource struct{}
+type PreviewAudioResource struct {
+	client *client.Client
+}
 
 type PreviewAudioModel struct {
 	ID     types.String `tfsdk:"id"`
@@ -26,6 +32,23 @@ type PreviewAudioModel struct {
 
 func NewPreviewAudioResource() resource.Resource {
 	return &PreviewAudioResource{}
+}
+
+func (r *PreviewAudioResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *PreviewAudioResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -56,6 +79,20 @@ func (r *PreviewAudioResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 		},
 	}
+}
+
+func (r *PreviewAudioResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data PreviewAudioModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "PreviewAudio", data, &resp.Diagnostics)
 }
 
 func (r *PreviewAudioResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &FluxDisableGuidanceResource{}
+var _ resource.ResourceWithConfigure = &FluxDisableGuidanceResource{}
+var _ resource.ResourceWithModifyPlan = &FluxDisableGuidanceResource{}
 
-type FluxDisableGuidanceResource struct{}
+type FluxDisableGuidanceResource struct {
+	client *client.Client
+}
 
 type FluxDisableGuidanceModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type FluxDisableGuidanceModel struct {
 
 func NewFluxDisableGuidanceResource() resource.Resource {
 	return &FluxDisableGuidanceResource{}
+}
+
+func (r *FluxDisableGuidanceResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *FluxDisableGuidanceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *FluxDisableGuidanceResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *FluxDisableGuidanceResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data FluxDisableGuidanceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "FluxDisableGuidance", data, &resp.Diagnostics)
 }
 
 func (r *FluxDisableGuidanceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ModelMergeCosmosPredict214BResource{}
+var _ resource.ResourceWithConfigure = &ModelMergeCosmosPredict214BResource{}
+var _ resource.ResourceWithModifyPlan = &ModelMergeCosmosPredict214BResource{}
 
-type ModelMergeCosmosPredict214BResource struct{}
+type ModelMergeCosmosPredict214BResource struct {
+	client *client.Client
+}
 
 type ModelMergeCosmosPredict214BModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -70,6 +75,23 @@ type ModelMergeCosmosPredict214BModel struct {
 
 func NewModelMergeCosmosPredict214BResource() resource.Resource {
 	return &ModelMergeCosmosPredict214BResource{}
+}
+
+func (r *ModelMergeCosmosPredict214BResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ModelMergeCosmosPredict214BResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -275,6 +297,20 @@ func (r *ModelMergeCosmosPredict214BResource) Schema(_ context.Context, _ resour
 			},
 		},
 	}
+}
+
+func (r *ModelMergeCosmosPredict214BResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ModelMergeCosmosPredict214BModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ModelMergeCosmosPredict2_14B", data, &resp.Diagnostics)
 }
 
 func (r *ModelMergeCosmosPredict214BResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

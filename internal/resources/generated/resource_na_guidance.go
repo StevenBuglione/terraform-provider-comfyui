@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &NaGuidanceResource{}
+var _ resource.ResourceWithConfigure = &NaGuidanceResource{}
+var _ resource.ResourceWithModifyPlan = &NaGuidanceResource{}
 
-type NaGuidanceResource struct{}
+type NaGuidanceResource struct {
+	client *client.Client
+}
 
 type NaGuidanceModel struct {
 	ID          types.String  `tfsdk:"id"`
@@ -33,6 +38,23 @@ type NaGuidanceModel struct {
 
 func NewNaGuidanceResource() resource.Resource {
 	return &NaGuidanceResource{}
+}
+
+func (r *NaGuidanceResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *NaGuidanceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,6 +113,20 @@ func (r *NaGuidanceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			},
 		},
 	}
+}
+
+func (r *NaGuidanceResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data NaGuidanceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "NAGuidance", data, &resp.Diagnostics)
 }
 
 func (r *NaGuidanceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

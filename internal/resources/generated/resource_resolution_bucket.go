@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ResolutionBucketResource{}
+var _ resource.ResourceWithConfigure = &ResolutionBucketResource{}
+var _ resource.ResourceWithModifyPlan = &ResolutionBucketResource{}
 
-type ResolutionBucketResource struct{}
+type ResolutionBucketResource struct {
+	client *client.Client
+}
 
 type ResolutionBucketModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type ResolutionBucketModel struct {
 
 func NewResolutionBucketResource() resource.Resource {
 	return &ResolutionBucketResource{}
+}
+
+func (r *ResolutionBucketResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ResolutionBucketResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,6 +100,20 @@ func (r *ResolutionBucketResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *ResolutionBucketResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ResolutionBucketModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ResolutionBucket", data, &resp.Diagnostics)
 }
 
 func (r *ResolutionBucketResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

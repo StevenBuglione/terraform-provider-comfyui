@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &HunyuanVideo15ImageToVideoResource{}
+var _ resource.ResourceWithConfigure = &HunyuanVideo15ImageToVideoResource{}
+var _ resource.ResourceWithModifyPlan = &HunyuanVideo15ImageToVideoResource{}
 
-type HunyuanVideo15ImageToVideoResource struct{}
+type HunyuanVideo15ImageToVideoResource struct {
+	client *client.Client
+}
 
 type HunyuanVideo15ImageToVideoModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -40,6 +45,23 @@ type HunyuanVideo15ImageToVideoModel struct {
 
 func NewHunyuanVideo15ImageToVideoResource() resource.Resource {
 	return &HunyuanVideo15ImageToVideoResource{}
+}
+
+func (r *HunyuanVideo15ImageToVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *HunyuanVideo15ImageToVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -126,6 +148,20 @@ func (r *HunyuanVideo15ImageToVideoResource) Schema(_ context.Context, _ resourc
 			},
 		},
 	}
+}
+
+func (r *HunyuanVideo15ImageToVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data HunyuanVideo15ImageToVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "HunyuanVideo15ImageToVideo", data, &resp.Diagnostics)
 }
 
 func (r *HunyuanVideo15ImageToVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

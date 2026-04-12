@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &KlingVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &KlingVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &KlingVideoNodeResource{}
 
-type KlingVideoNodeResource struct{}
+type KlingVideoNodeResource struct {
+	client *client.Client
+}
 
 type KlingVideoNodeModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -34,6 +39,23 @@ type KlingVideoNodeModel struct {
 
 func NewKlingVideoNodeResource() resource.Resource {
 	return &KlingVideoNodeResource{}
+}
+
+func (r *KlingVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *KlingVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *KlingVideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequ
 			},
 		},
 	}
+}
+
+func (r *KlingVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data KlingVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "KlingVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *KlingVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

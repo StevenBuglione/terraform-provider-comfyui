@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RandomNoiseResource{}
+var _ resource.ResourceWithConfigure = &RandomNoiseResource{}
+var _ resource.ResourceWithModifyPlan = &RandomNoiseResource{}
 
-type RandomNoiseResource struct{}
+type RandomNoiseResource struct {
+	client *client.Client
+}
 
 type RandomNoiseModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type RandomNoiseModel struct {
 
 func NewRandomNoiseResource() resource.Resource {
 	return &RandomNoiseResource{}
+}
+
+func (r *RandomNoiseResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RandomNoiseResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,6 +92,20 @@ func (r *RandomNoiseResource) Schema(_ context.Context, _ resource.SchemaRequest
 			},
 		},
 	}
+}
+
+func (r *RandomNoiseResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RandomNoiseModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RandomNoise", data, &resp.Diagnostics)
 }
 
 func (r *RandomNoiseResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &CombineHooks2Resource{}
+var _ resource.ResourceWithConfigure = &CombineHooks2Resource{}
+var _ resource.ResourceWithModifyPlan = &CombineHooks2Resource{}
 
-type CombineHooks2Resource struct{}
+type CombineHooks2Resource struct {
+	client *client.Client
+}
 
 type CombineHooks2Model struct {
 	ID          types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type CombineHooks2Model struct {
 
 func NewCombineHooks2Resource() resource.Resource {
 	return &CombineHooks2Resource{}
+}
+
+func (r *CombineHooks2Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CombineHooks2Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,6 +92,20 @@ func (r *CombineHooks2Resource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *CombineHooks2Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CombineHooks2Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CombineHooks", data, &resp.Diagnostics)
 }
 
 func (r *CombineHooks2Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

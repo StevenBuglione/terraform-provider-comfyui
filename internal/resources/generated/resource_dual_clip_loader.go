@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &DualCLIPLoaderResource{}
+var _ resource.ResourceWithConfigure = &DualCLIPLoaderResource{}
+var _ resource.ResourceWithModifyPlan = &DualCLIPLoaderResource{}
 
-type DualCLIPLoaderResource struct{}
+type DualCLIPLoaderResource struct {
+	client *client.Client
+}
 
 type DualCLIPLoaderModel struct {
 	ID         types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type DualCLIPLoaderModel struct {
 
 func NewDualCLIPLoaderResource() resource.Resource {
 	return &DualCLIPLoaderResource{}
+}
+
+func (r *DualCLIPLoaderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *DualCLIPLoaderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -104,6 +126,20 @@ func (r *DualCLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRequ
 			},
 		},
 	}
+}
+
+func (r *DualCLIPLoaderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data DualCLIPLoaderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "DualCLIPLoader", data, &resp.Diagnostics)
 }
 
 func (r *DualCLIPLoaderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

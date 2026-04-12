@@ -4,7 +4,9 @@ package generated
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &SaveAnimatedPngResource{}
+var _ resource.ResourceWithConfigure = &SaveAnimatedPngResource{}
+var _ resource.ResourceWithModifyPlan = &SaveAnimatedPngResource{}
 
-type SaveAnimatedPngResource struct{}
+type SaveAnimatedPngResource struct {
+	client *client.Client
+}
 
 type SaveAnimatedPngModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -32,6 +38,23 @@ type SaveAnimatedPngModel struct {
 
 func NewSaveAnimatedPngResource() resource.Resource {
 	return &SaveAnimatedPngResource{}
+}
+
+func (r *SaveAnimatedPngResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SaveAnimatedPngResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +103,20 @@ func (r *SaveAnimatedPngResource) Schema(_ context.Context, _ resource.SchemaReq
 			},
 		},
 	}
+}
+
+func (r *SaveAnimatedPngResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SaveAnimatedPngModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SaveAnimatedPNG", data, &resp.Diagnostics)
 }
 
 func (r *SaveAnimatedPngResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

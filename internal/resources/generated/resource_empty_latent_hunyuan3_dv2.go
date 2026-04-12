@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &EmptyLatentHunyuan3Dv2Resource{}
+var _ resource.ResourceWithConfigure = &EmptyLatentHunyuan3Dv2Resource{}
+var _ resource.ResourceWithModifyPlan = &EmptyLatentHunyuan3Dv2Resource{}
 
-type EmptyLatentHunyuan3Dv2Resource struct{}
+type EmptyLatentHunyuan3Dv2Resource struct {
+	client *client.Client
+}
 
 type EmptyLatentHunyuan3Dv2Model struct {
 	ID           types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type EmptyLatentHunyuan3Dv2Model struct {
 
 func NewEmptyLatentHunyuan3Dv2Resource() resource.Resource {
 	return &EmptyLatentHunyuan3Dv2Resource{}
+}
+
+func (r *EmptyLatentHunyuan3Dv2Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *EmptyLatentHunyuan3Dv2Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,6 +100,20 @@ func (r *EmptyLatentHunyuan3Dv2Resource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *EmptyLatentHunyuan3Dv2Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data EmptyLatentHunyuan3Dv2Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "EmptyLatentHunyuan3Dv2", data, &resp.Diagnostics)
 }
 
 func (r *EmptyLatentHunyuan3Dv2Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -93,23 +93,26 @@ type GeneratedNodeSchema struct {
 }
 
 type GeneratedNodeSchemaInput struct {
-	Name                 string
-	Type                 string
-	IsLinkType           bool
-	DefaultValue         string
-	HasDefaultValue      bool
-	MinValue             string
-	HasMinValue          bool
-	MaxValue             string
-	HasMaxValue          bool
-	StepValue            string
-	HasStepValue         bool
-	EnumValues           []string
-	Multiline            bool
-	DynamicOptions       bool
-	DynamicOptionsSource string
-	Tooltip              string
-	DisplayName          string
+	Name                         string
+	Type                         string
+	IsLinkType                   bool
+	ValidationKind               string
+	InventoryKind                string
+	SupportsStrictPlanValidation bool
+	DefaultValue                 string
+	HasDefaultValue              bool
+	MinValue                     string
+	HasMinValue                  bool
+	MaxValue                     string
+	HasMaxValue                  bool
+	StepValue                    string
+	HasStepValue                 bool
+	EnumValues                   []string
+	Multiline                    bool
+	DynamicOptions               bool
+	DynamicOptionsSource         string
+	Tooltip                      string
+	DisplayName                  string
 }
 
 type GeneratedNodeSchemaHiddenInput struct {

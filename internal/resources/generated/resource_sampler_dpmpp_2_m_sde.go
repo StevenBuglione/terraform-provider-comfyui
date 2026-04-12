@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &SamplerDpmpp2MSdeResource{}
+var _ resource.ResourceWithConfigure = &SamplerDpmpp2MSdeResource{}
+var _ resource.ResourceWithModifyPlan = &SamplerDpmpp2MSdeResource{}
 
-type SamplerDpmpp2MSdeResource struct{}
+type SamplerDpmpp2MSdeResource struct {
+	client *client.Client
+}
 
 type SamplerDpmpp2MSdeModel struct {
 	ID            types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type SamplerDpmpp2MSdeModel struct {
 
 func NewSamplerDpmpp2MSdeResource() resource.Resource {
 	return &SamplerDpmpp2MSdeResource{}
+}
+
+func (r *SamplerDpmpp2MSdeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SamplerDpmpp2MSdeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -101,6 +123,20 @@ func (r *SamplerDpmpp2MSdeResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *SamplerDpmpp2MSdeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SamplerDpmpp2MSdeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SamplerDPMPP_2M_SDE", data, &resp.Diagnostics)
 }
 
 func (r *SamplerDpmpp2MSdeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

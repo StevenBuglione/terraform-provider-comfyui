@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &TencentImageToModelNodeResource{}
+var _ resource.ResourceWithConfigure = &TencentImageToModelNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TencentImageToModelNodeResource{}
 
-type TencentImageToModelNodeResource struct{}
+type TencentImageToModelNodeResource struct {
+	client *client.Client
+}
 
 type TencentImageToModelNodeModel struct {
 	ID                      types.String `tfsdk:"id"`
@@ -44,6 +49,23 @@ type TencentImageToModelNodeModel struct {
 
 func NewTencentImageToModelNodeResource() resource.Resource {
 	return &TencentImageToModelNodeResource{}
+}
+
+func (r *TencentImageToModelNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TencentImageToModelNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -163,6 +185,20 @@ func (r *TencentImageToModelNodeResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *TencentImageToModelNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TencentImageToModelNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TencentImageToModelNode", data, &resp.Diagnostics)
 }
 
 func (r *TencentImageToModelNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

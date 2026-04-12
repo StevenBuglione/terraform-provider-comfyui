@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -20,8 +21,12 @@ import (
 )
 
 var _ resource.Resource = &BriaImageEditNodeResource{}
+var _ resource.ResourceWithConfigure = &BriaImageEditNodeResource{}
+var _ resource.ResourceWithModifyPlan = &BriaImageEditNodeResource{}
 
-type BriaImageEditNodeResource struct{}
+type BriaImageEditNodeResource struct {
+	client *client.Client
+}
 
 type BriaImageEditNodeModel struct {
 	ID                     types.String  `tfsdk:"id"`
@@ -42,6 +47,23 @@ type BriaImageEditNodeModel struct {
 
 func NewBriaImageEditNodeResource() resource.Resource {
 	return &BriaImageEditNodeResource{}
+}
+
+func (r *BriaImageEditNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *BriaImageEditNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -136,6 +158,20 @@ func (r *BriaImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *BriaImageEditNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data BriaImageEditNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "BriaImageEditNode", data, &resp.Diagnostics)
 }
 
 func (r *BriaImageEditNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

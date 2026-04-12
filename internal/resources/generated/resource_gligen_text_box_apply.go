@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &GligenTextBoxApplyResource{}
+var _ resource.ResourceWithConfigure = &GligenTextBoxApplyResource{}
+var _ resource.ResourceWithModifyPlan = &GligenTextBoxApplyResource{}
 
-type GligenTextBoxApplyResource struct{}
+type GligenTextBoxApplyResource struct {
+	client *client.Client
+}
 
 type GligenTextBoxApplyModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type GligenTextBoxApplyModel struct {
 
 func NewGligenTextBoxApplyResource() resource.Resource {
 	return &GligenTextBoxApplyResource{}
+}
+
+func (r *GligenTextBoxApplyResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *GligenTextBoxApplyResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -100,6 +122,20 @@ func (r *GligenTextBoxApplyResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *GligenTextBoxApplyResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data GligenTextBoxApplyModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "GLIGENTextBoxApply", data, &resp.Diagnostics)
 }
 
 func (r *GligenTextBoxApplyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &Vidu3ImageToVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &Vidu3ImageToVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &Vidu3ImageToVideoNodeResource{}
 
-type Vidu3ImageToVideoNodeResource struct{}
+type Vidu3ImageToVideoNodeResource struct {
+	client *client.Client
+}
 
 type Vidu3ImageToVideoNodeModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type Vidu3ImageToVideoNodeModel struct {
 
 func NewVidu3ImageToVideoNodeResource() resource.Resource {
 	return &Vidu3ImageToVideoNodeResource{}
+}
+
+func (r *Vidu3ImageToVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Vidu3ImageToVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *Vidu3ImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *Vidu3ImageToVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Vidu3ImageToVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Vidu3ImageToVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *Vidu3ImageToVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

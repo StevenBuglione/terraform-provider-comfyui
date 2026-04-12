@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RebatchImagesResource{}
+var _ resource.ResourceWithConfigure = &RebatchImagesResource{}
+var _ resource.ResourceWithModifyPlan = &RebatchImagesResource{}
 
-type RebatchImagesResource struct{}
+type RebatchImagesResource struct {
+	client *client.Client
+}
 
 type RebatchImagesModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type RebatchImagesModel struct {
 
 func NewRebatchImagesResource() resource.Resource {
 	return &RebatchImagesResource{}
+}
+
+func (r *RebatchImagesResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RebatchImagesResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *RebatchImagesResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *RebatchImagesResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RebatchImagesModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageRebatch", data, &resp.Diagnostics)
 }
 
 func (r *RebatchImagesResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

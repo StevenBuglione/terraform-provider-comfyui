@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ImageRotateResource{}
+var _ resource.ResourceWithConfigure = &ImageRotateResource{}
+var _ resource.ResourceWithModifyPlan = &ImageRotateResource{}
 
-type ImageRotateResource struct{}
+type ImageRotateResource struct {
+	client *client.Client
+}
 
 type ImageRotateModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type ImageRotateModel struct {
 
 func NewImageRotateResource() resource.Resource {
 	return &ImageRotateResource{}
+}
+
+func (r *ImageRotateResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ImageRotateResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *ImageRotateResource) Schema(_ context.Context, _ resource.SchemaRequest
 			},
 		},
 	}
+}
+
+func (r *ImageRotateResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ImageRotateModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageRotate", data, &resp.Diagnostics)
 }
 
 func (r *ImageRotateResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

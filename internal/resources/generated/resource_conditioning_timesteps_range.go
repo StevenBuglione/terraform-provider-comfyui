@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ConditioningTimestepsRangeResource{}
+var _ resource.ResourceWithConfigure = &ConditioningTimestepsRangeResource{}
+var _ resource.ResourceWithModifyPlan = &ConditioningTimestepsRangeResource{}
 
-type ConditioningTimestepsRangeResource struct{}
+type ConditioningTimestepsRangeResource struct {
+	client *client.Client
+}
 
 type ConditioningTimestepsRangeModel struct {
 	ID                   types.String  `tfsdk:"id"`
@@ -33,6 +38,23 @@ type ConditioningTimestepsRangeModel struct {
 
 func NewConditioningTimestepsRangeResource() resource.Resource {
 	return &ConditioningTimestepsRangeResource{}
+}
+
+func (r *ConditioningTimestepsRangeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ConditioningTimestepsRangeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -94,6 +116,20 @@ func (r *ConditioningTimestepsRangeResource) Schema(_ context.Context, _ resourc
 			},
 		},
 	}
+}
+
+func (r *ConditioningTimestepsRangeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ConditioningTimestepsRangeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ConditioningTimestepsRange", data, &resp.Diagnostics)
 }
 
 func (r *ConditioningTimestepsRangeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

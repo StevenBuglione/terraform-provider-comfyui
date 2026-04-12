@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &ViduTextToVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &ViduTextToVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &ViduTextToVideoNodeResource{}
 
-type ViduTextToVideoNodeResource struct{}
+type ViduTextToVideoNodeResource struct {
+	client *client.Client
+}
 
 type ViduTextToVideoNodeModel struct {
 	ID                types.String `tfsdk:"id"`
@@ -37,6 +42,23 @@ type ViduTextToVideoNodeModel struct {
 
 func NewViduTextToVideoNodeResource() resource.Resource {
 	return &ViduTextToVideoNodeResource{}
+}
+
+func (r *ViduTextToVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ViduTextToVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -129,6 +151,20 @@ func (r *ViduTextToVideoNodeResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *ViduTextToVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ViduTextToVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ViduTextToVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *ViduTextToVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

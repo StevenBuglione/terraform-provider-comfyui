@@ -218,6 +218,47 @@ class TestSpecValidation(unittest.TestCase):
         tf_names = [n['terraform_resource_name'] for n in spec['nodes']]
         self.assertEqual(len(tf_names), len(set(tf_names)), "Duplicate terraform names in spec")
 
+    @unittest.skipUnless(os.path.exists(SPEC_PATH), "node_specs.json not found")
+    def test_validation_kind_classification_for_static_enum(self):
+        with open(SPEC_PATH) as f:
+            spec = json.load(f)
+
+        node = next(n for n in spec['nodes'] if n['node_id'] == 'ByteDanceTextToVideoNode')
+        model_input = next(i for i in node['inputs'] if i['name'] == 'model')
+
+        self.assertEqual(model_input['validation_kind'], 'static_enum')
+        self.assertEqual(model_input['inventory_kind'], '')
+        self.assertTrue(model_input['supports_strict_plan_validation'])
+
+    @unittest.skipUnless(os.path.exists(SPEC_PATH), "node_specs.json not found")
+    def test_validation_kind_classification_for_dynamic_inventory(self):
+        with open(SPEC_PATH) as f:
+            spec = json.load(f)
+
+        checkpoint = next(n for n in spec['nodes'] if n['node_id'] == 'CheckpointLoaderSimple')
+        ckpt_name = next(i for i in checkpoint['inputs'] if i['name'] == 'ckpt_name')
+        self.assertEqual(ckpt_name['validation_kind'], 'dynamic_inventory')
+        self.assertEqual(ckpt_name['inventory_kind'], 'checkpoints')
+        self.assertTrue(ckpt_name['supports_strict_plan_validation'])
+
+        lora = next(n for n in spec['nodes'] if n['node_id'] == 'LoraLoader')
+        lora_name = next(i for i in lora['inputs'] if i['name'] == 'lora_name')
+        self.assertEqual(lora_name['validation_kind'], 'dynamic_inventory')
+        self.assertEqual(lora_name['inventory_kind'], 'loras')
+        self.assertTrue(lora_name['supports_strict_plan_validation'])
+
+    @unittest.skipUnless(os.path.exists(SPEC_PATH), "node_specs.json not found")
+    def test_validation_kind_classification_for_unsupported_dynamic_expression(self):
+        with open(SPEC_PATH) as f:
+            spec = json.load(f)
+
+        node = next(n for n in spec['nodes'] if n['node_id'] == 'BasicScheduler')
+        moderation = next(i for i in node['inputs'] if i['name'] == 'scheduler')
+
+        self.assertEqual(moderation['validation_kind'], 'dynamic_expression')
+        self.assertEqual(moderation['inventory_kind'], '')
+        self.assertFalse(moderation['supports_strict_plan_validation'])
+
 
 class TestUIHintsValidation(unittest.TestCase):
     """Validate extracted frontend UI sizing hints."""

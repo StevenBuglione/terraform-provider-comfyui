@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LoraLoaderBypassResource{}
+var _ resource.ResourceWithConfigure = &LoraLoaderBypassResource{}
+var _ resource.ResourceWithModifyPlan = &LoraLoaderBypassResource{}
 
-type LoraLoaderBypassResource struct{}
+type LoraLoaderBypassResource struct {
+	client *client.Client
+}
 
 type LoraLoaderBypassModel struct {
 	ID            types.String  `tfsdk:"id"`
@@ -35,6 +40,23 @@ type LoraLoaderBypassModel struct {
 
 func NewLoraLoaderBypassResource() resource.Resource {
 	return &LoraLoaderBypassResource{}
+}
+
+func (r *LoraLoaderBypassResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LoraLoaderBypassResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -101,6 +123,20 @@ func (r *LoraLoaderBypassResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *LoraLoaderBypassResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LoraLoaderBypassModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LoraLoaderBypass", data, &resp.Diagnostics)
 }
 
 func (r *LoraLoaderBypassResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

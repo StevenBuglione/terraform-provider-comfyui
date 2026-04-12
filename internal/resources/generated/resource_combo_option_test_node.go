@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ComboOptionTestNodeResource{}
+var _ resource.ResourceWithConfigure = &ComboOptionTestNodeResource{}
+var _ resource.ResourceWithModifyPlan = &ComboOptionTestNodeResource{}
 
-type ComboOptionTestNodeResource struct{}
+type ComboOptionTestNodeResource struct {
+	client *client.Client
+}
 
 type ComboOptionTestNodeModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type ComboOptionTestNodeModel struct {
 
 func NewComboOptionTestNodeResource() resource.Resource {
 	return &ComboOptionTestNodeResource{}
+}
+
+func (r *ComboOptionTestNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ComboOptionTestNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -94,6 +116,20 @@ func (r *ComboOptionTestNodeResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *ComboOptionTestNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ComboOptionTestNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ComboOutputTestNode", data, &resp.Diagnostics)
 }
 
 func (r *ComboOptionTestNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

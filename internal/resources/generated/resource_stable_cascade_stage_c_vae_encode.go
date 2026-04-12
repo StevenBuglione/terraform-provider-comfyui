@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &StableCascadeStageCVAEEncodeResource{}
+var _ resource.ResourceWithConfigure = &StableCascadeStageCVAEEncodeResource{}
+var _ resource.ResourceWithModifyPlan = &StableCascadeStageCVAEEncodeResource{}
 
-type StableCascadeStageCVAEEncodeResource struct{}
+type StableCascadeStageCVAEEncodeResource struct {
+	client *client.Client
+}
 
 type StableCascadeStageCVAEEncodeModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type StableCascadeStageCVAEEncodeModel struct {
 
 func NewStableCascadeStageCVAEEncodeResource() resource.Resource {
 	return &StableCascadeStageCVAEEncodeResource{}
+}
+
+func (r *StableCascadeStageCVAEEncodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *StableCascadeStageCVAEEncodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -88,6 +110,20 @@ func (r *StableCascadeStageCVAEEncodeResource) Schema(_ context.Context, _ resou
 			},
 		},
 	}
+}
+
+func (r *StableCascadeStageCVAEEncodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data StableCascadeStageCVAEEncodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "StableCascade_StageC_VAEEncode", data, &resp.Diagnostics)
 }
 
 func (r *StableCascadeStageCVAEEncodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

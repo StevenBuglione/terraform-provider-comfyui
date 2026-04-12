@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ComfyMathExpressionResource{}
+var _ resource.ResourceWithConfigure = &ComfyMathExpressionResource{}
+var _ resource.ResourceWithModifyPlan = &ComfyMathExpressionResource{}
 
-type ComfyMathExpressionResource struct{}
+type ComfyMathExpressionResource struct {
+	client *client.Client
+}
 
 type ComfyMathExpressionModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type ComfyMathExpressionModel struct {
 
 func NewComfyMathExpressionResource() resource.Resource {
 	return &ComfyMathExpressionResource{}
+}
+
+func (r *ComfyMathExpressionResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ComfyMathExpressionResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,6 +100,20 @@ func (r *ComfyMathExpressionResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *ComfyMathExpressionResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ComfyMathExpressionModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "MathExpressionNode", data, &resp.Diagnostics)
 }
 
 func (r *ComfyMathExpressionResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &LatentAddResource{}
+var _ resource.ResourceWithConfigure = &LatentAddResource{}
+var _ resource.ResourceWithModifyPlan = &LatentAddResource{}
 
-type LatentAddResource struct{}
+type LatentAddResource struct {
+	client *client.Client
+}
 
 type LatentAddModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type LatentAddModel struct {
 
 func NewLatentAddResource() resource.Resource {
 	return &LatentAddResource{}
+}
+
+func (r *LatentAddResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LatentAddResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,6 +92,20 @@ func (r *LatentAddResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 			},
 		},
 	}
+}
+
+func (r *LatentAddResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LatentAddModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LatentAdd", data, &resp.Diagnostics)
 }
 
 func (r *LatentAddResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

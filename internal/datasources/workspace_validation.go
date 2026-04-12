@@ -6,6 +6,7 @@ import (
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/artifacts"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/inventory"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/validation"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -176,7 +177,7 @@ func (d *WorkspaceValidationDataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	state, err := workspaceValidationStateFromInput(stringValue(config.Path), stringValue(config.JSON), nodeInfo, mode)
+	state, err := workspaceValidationStateFromInput(stringValue(config.Path), stringValue(config.JSON), nodeInfo, inventory.NewService(d.client), mode)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to validate workspace JSON", err.Error())
 		return
@@ -185,7 +186,7 @@ func (d *WorkspaceValidationDataSource) Read(ctx context.Context, req datasource
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func workspaceValidationStateFromInput(path string, raw string, nodeInfo map[string]client.NodeInfo, mode validationMode) (WorkspaceValidationModel, error) {
+func workspaceValidationStateFromInput(path string, raw string, nodeInfo map[string]client.NodeInfo, inventoryService validation.InventoryService, mode validationMode) (WorkspaceValidationModel, error) {
 	rawJSON, err := loadJSONInput(path, raw)
 	if err != nil {
 		return WorkspaceValidationModel{}, err
@@ -211,7 +212,7 @@ func workspaceValidationStateFromInput(path string, raw string, nodeInfo map[str
 		return WorkspaceValidationModel{}, err
 	}
 
-	validationReport := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{Mode: mode.toValidationMode()})
+	validationReport := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{Mode: mode.toValidationMode(), InventoryService: inventoryService})
 	return WorkspaceValidationModel{
 		Path:                         stringValueOrNull(path),
 		JSON:                         stringValueOrNull(raw),

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &WanVaceToVideoResource{}
+var _ resource.ResourceWithConfigure = &WanVaceToVideoResource{}
+var _ resource.ResourceWithModifyPlan = &WanVaceToVideoResource{}
 
-type WanVaceToVideoResource struct{}
+type WanVaceToVideoResource struct {
+	client *client.Client
+}
 
 type WanVaceToVideoModel struct {
 	ID               types.String  `tfsdk:"id"`
@@ -44,6 +49,23 @@ type WanVaceToVideoModel struct {
 
 func NewWanVaceToVideoResource() resource.Resource {
 	return &WanVaceToVideoResource{}
+}
+
+func (r *WanVaceToVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *WanVaceToVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -148,6 +170,20 @@ func (r *WanVaceToVideoResource) Schema(_ context.Context, _ resource.SchemaRequ
 			},
 		},
 	}
+}
+
+func (r *WanVaceToVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data WanVaceToVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "WanVaceToVideo", data, &resp.Diagnostics)
 }
 
 func (r *WanVaceToVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

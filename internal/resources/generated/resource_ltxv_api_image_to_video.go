@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LtxvAPIImageToVideoResource{}
+var _ resource.ResourceWithConfigure = &LtxvAPIImageToVideoResource{}
+var _ resource.ResourceWithModifyPlan = &LtxvAPIImageToVideoResource{}
 
-type LtxvAPIImageToVideoResource struct{}
+type LtxvAPIImageToVideoResource struct {
+	client *client.Client
+}
 
 type LtxvAPIImageToVideoModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -36,6 +41,23 @@ type LtxvAPIImageToVideoModel struct {
 
 func NewLtxvAPIImageToVideoResource() resource.Resource {
 	return &LtxvAPIImageToVideoResource{}
+}
+
+func (r *LtxvAPIImageToVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LtxvAPIImageToVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -122,6 +144,20 @@ func (r *LtxvAPIImageToVideoResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *LtxvAPIImageToVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LtxvAPIImageToVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageToVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *LtxvAPIImageToVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

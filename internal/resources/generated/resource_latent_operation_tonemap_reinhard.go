@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LatentOperationTonemapReinhardResource{}
+var _ resource.ResourceWithConfigure = &LatentOperationTonemapReinhardResource{}
+var _ resource.ResourceWithModifyPlan = &LatentOperationTonemapReinhardResource{}
 
-type LatentOperationTonemapReinhardResource struct{}
+type LatentOperationTonemapReinhardResource struct {
+	client *client.Client
+}
 
 type LatentOperationTonemapReinhardModel struct {
 	ID                    types.String  `tfsdk:"id"`
@@ -30,6 +35,23 @@ type LatentOperationTonemapReinhardModel struct {
 
 func NewLatentOperationTonemapReinhardResource() resource.Resource {
 	return &LatentOperationTonemapReinhardResource{}
+}
+
+func (r *LatentOperationTonemapReinhardResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LatentOperationTonemapReinhardResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,6 +92,20 @@ func (r *LatentOperationTonemapReinhardResource) Schema(_ context.Context, _ res
 			},
 		},
 	}
+}
+
+func (r *LatentOperationTonemapReinhardResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LatentOperationTonemapReinhardModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LatentOperationTonemapReinhard", data, &resp.Diagnostics)
 }
 
 func (r *LatentOperationTonemapReinhardResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

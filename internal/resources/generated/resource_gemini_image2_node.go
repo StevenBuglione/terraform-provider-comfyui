@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &GeminiImage2NodeResource{}
+var _ resource.ResourceWithConfigure = &GeminiImage2NodeResource{}
+var _ resource.ResourceWithModifyPlan = &GeminiImage2NodeResource{}
 
-type GeminiImage2NodeResource struct{}
+type GeminiImage2NodeResource struct {
+	client *client.Client
+}
 
 type GeminiImage2NodeModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -40,6 +45,23 @@ type GeminiImage2NodeModel struct {
 
 func NewGeminiImage2NodeResource() resource.Resource {
 	return &GeminiImage2NodeResource{}
+}
+
+func (r *GeminiImage2NodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *GeminiImage2NodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -153,6 +175,20 @@ func (r *GeminiImage2NodeResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *GeminiImage2NodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data GeminiImage2NodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "GeminiImage2", data, &resp.Diagnostics)
 }
 
 func (r *GeminiImage2NodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

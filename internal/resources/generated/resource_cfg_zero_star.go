@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &CfgZeroStarResource{}
+var _ resource.ResourceWithConfigure = &CfgZeroStarResource{}
+var _ resource.ResourceWithModifyPlan = &CfgZeroStarResource{}
 
-type CfgZeroStarResource struct{}
+type CfgZeroStarResource struct {
+	client *client.Client
+}
 
 type CfgZeroStarModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type CfgZeroStarModel struct {
 
 func NewCfgZeroStarResource() resource.Resource {
 	return &CfgZeroStarResource{}
+}
+
+func (r *CfgZeroStarResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CfgZeroStarResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *CfgZeroStarResource) Schema(_ context.Context, _ resource.SchemaRequest
 			},
 		},
 	}
+}
+
+func (r *CfgZeroStarResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CfgZeroStarModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CFGZeroStar", data, &resp.Diagnostics)
 }
 
 func (r *CfgZeroStarResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

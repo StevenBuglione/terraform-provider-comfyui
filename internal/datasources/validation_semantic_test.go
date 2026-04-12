@@ -5,12 +5,25 @@ import (
 	"testing"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/inventory"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	datasourceschema "github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 )
 
 func validationTestNodeInfo() map[string]client.NodeInfo {
 	return map[string]client.NodeInfo{
+		"StaticImageInput": {
+			Input: client.NodeInputInfo{
+				Required: map[string]interface{}{
+					"image": []interface{}{"STRING"},
+				},
+			},
+			InputOrder: map[string][]string{
+				"required": {"image"},
+			},
+			Output:     []string{"IMAGE"},
+			OutputName: []string{"IMAGE"},
+		},
 		"LoadImage": {
 			Input: client.NodeInputInfo{
 				Required: map[string]interface{}{
@@ -43,7 +56,27 @@ func validationTestNodeInfo() map[string]client.NodeInfo {
 			},
 			OutputNode: true,
 		},
+		"CheckpointLoaderSimple": {
+			Input: client.NodeInputInfo{
+				Required: map[string]interface{}{
+					"ckpt_name": []interface{}{"COMBO"},
+				},
+			},
+			InputOrder: map[string][]string{
+				"required": {"ckpt_name"},
+			},
+			Output:     []string{"MODEL", "CLIP", "VAE"},
+			OutputName: []string{"MODEL", "CLIP", "VAE"},
+		},
 	}
+}
+
+type validationInventoryService struct {
+	values map[inventory.Kind][]string
+}
+
+func (v validationInventoryService) GetInventory(_ context.Context, kind inventory.Kind) ([]string, error) {
+	return append([]string(nil), v.values[kind]...), nil
 }
 
 func TestPromptValidationStateFromInput_ReturnsValidationContract(t *testing.T) {
@@ -54,7 +87,7 @@ func TestPromptValidationStateFromInput_ReturnsValidationContract(t *testing.T) 
 	      "filename_prefix": "ComfyUI"
 	    }
 	  }
-	}`, validationTestNodeInfo(), validationModeExecutableWorkflow)
+	}`, validationTestNodeInfo(), nil, validationModeExecutableWorkflow)
 	if err != nil {
 		t.Fatalf("promptValidationStateFromInput returned error: %v", err)
 	}
@@ -92,7 +125,7 @@ func TestWorkspaceValidationStateFromInput_ReturnsTranslationAndValidation(t *te
 	  "nodes": [
 	    {
 	      "id": 1,
-	      "type": "LoadImage",
+	      "type": "StaticImageInput",
 	      "inputs": [
 	        {
 	          "name": "image",
@@ -132,7 +165,7 @@ func TestWorkspaceValidationStateFromInput_ReturnsTranslationAndValidation(t *te
 	  "links": [
 	    [1, 1, 0, 2, 0, "IMAGE"]
 	  ]
-	}`, validationTestNodeInfo(), validationModeExecutableWorkspace)
+	}`, validationTestNodeInfo(), nil, validationModeExecutableWorkspace)
 	if err != nil {
 		t.Fatalf("workspaceValidationStateFromInput returned error: %v", err)
 	}
@@ -155,12 +188,12 @@ func TestWorkspaceValidationStateFromInput_ReturnsTranslationAndValidation(t *te
 func TestPromptValidationStateFromInput_DefaultsToExecutableValidation(t *testing.T) {
 	state, err := promptValidationStateFromInput("", `{
 	  "1": {
-	    "class_type": "LoadImage",
+	    "class_type": "StaticImageInput",
 	    "inputs": {
 	      "image": "input.png"
 	    }
 	  }
-	}`, validationTestNodeInfo(), validationModeExecutableWorkflow)
+	}`, validationTestNodeInfo(), nil, validationModeExecutableWorkflow)
 	if err != nil {
 		t.Fatalf("promptValidationStateFromInput returned error: %v", err)
 	}
@@ -173,12 +206,12 @@ func TestPromptValidationStateFromInput_DefaultsToExecutableValidation(t *testin
 func TestPromptValidationStateFromInput_FragmentModeAllowsMissingOutputNode(t *testing.T) {
 	state, err := promptValidationStateFromInput("", `{
 	  "1": {
-	    "class_type": "LoadImage",
+	    "class_type": "StaticImageInput",
 	    "inputs": {
 	      "image": "input.png"
 	    }
 	  }
-	}`, validationTestNodeInfo(), validationModeFragment)
+	}`, validationTestNodeInfo(), nil, validationModeFragment)
 	if err != nil {
 		t.Fatalf("promptValidationStateFromInput returned error: %v", err)
 	}
@@ -193,7 +226,7 @@ func TestWorkspaceValidationStateFromInput_ExecutableModeRejectsMissingOutputNod
 	  "nodes": [
 	    {
 	      "id": 1,
-	      "type": "LoadImage",
+	      "type": "StaticImageInput",
 	      "inputs": [
 	        {
 	          "name": "image",
@@ -213,13 +246,35 @@ func TestWorkspaceValidationStateFromInput_ExecutableModeRejectsMissingOutputNod
 	    }
 	  ],
 	  "links": []
-	}`, validationTestNodeInfo(), validationModeExecutableWorkspace)
+	}`, validationTestNodeInfo(), nil, validationModeExecutableWorkspace)
 	if err != nil {
 		t.Fatalf("workspaceValidationStateFromInput returned error: %v", err)
 	}
 
 	if state.Valid.ValueBool() {
 		t.Fatalf("expected executable workspace validation to reject missing output node")
+	}
+}
+
+func TestPromptValidationStateFromInput_RejectsMissingDynamicInventoryValue(t *testing.T) {
+	state, err := promptValidationStateFromInput("", `{
+	  "1": {
+	    "class_type": "CheckpointLoaderSimple",
+	    "inputs": {
+	      "ckpt_name": "missing.safetensors"
+	    }
+	  }
+	}`, validationTestNodeInfo(), validationInventoryService{
+		values: map[inventory.Kind][]string{
+			inventory.KindCheckpoints: {"realistic.safetensors"},
+		},
+	}, validationModeExecutableWorkflow)
+	if err != nil {
+		t.Fatalf("promptValidationStateFromInput returned error: %v", err)
+	}
+
+	if state.Valid.ValueBool() {
+		t.Fatal("expected prompt validation to fail for missing checkpoint")
 	}
 }
 

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ImageOnlyCheckpointLoaderResource{}
+var _ resource.ResourceWithConfigure = &ImageOnlyCheckpointLoaderResource{}
+var _ resource.ResourceWithModifyPlan = &ImageOnlyCheckpointLoaderResource{}
 
-type ImageOnlyCheckpointLoaderResource struct{}
+type ImageOnlyCheckpointLoaderResource struct {
+	client *client.Client
+}
 
 type ImageOnlyCheckpointLoaderModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type ImageOnlyCheckpointLoaderModel struct {
 
 func NewImageOnlyCheckpointLoaderResource() resource.Resource {
 	return &ImageOnlyCheckpointLoaderResource{}
+}
+
+func (r *ImageOnlyCheckpointLoaderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ImageOnlyCheckpointLoaderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -81,6 +103,20 @@ func (r *ImageOnlyCheckpointLoaderResource) Schema(_ context.Context, _ resource
 			},
 		},
 	}
+}
+
+func (r *ImageOnlyCheckpointLoaderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ImageOnlyCheckpointLoaderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageOnlyCheckpointLoader", data, &resp.Diagnostics)
 }
 
 func (r *ImageOnlyCheckpointLoaderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

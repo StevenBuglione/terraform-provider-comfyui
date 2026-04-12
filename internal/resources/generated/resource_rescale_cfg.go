@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RescaleCfgResource{}
+var _ resource.ResourceWithConfigure = &RescaleCfgResource{}
+var _ resource.ResourceWithModifyPlan = &RescaleCfgResource{}
 
-type RescaleCfgResource struct{}
+type RescaleCfgResource struct {
+	client *client.Client
+}
 
 type RescaleCfgModel struct {
 	ID          types.String  `tfsdk:"id"`
@@ -31,6 +36,23 @@ type RescaleCfgModel struct {
 
 func NewRescaleCfgResource() resource.Resource {
 	return &RescaleCfgResource{}
+}
+
+func (r *RescaleCfgResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RescaleCfgResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *RescaleCfgResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			},
 		},
 	}
+}
+
+func (r *RescaleCfgResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RescaleCfgModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RescaleCFG", data, &resp.Diagnostics)
 }
 
 func (r *RescaleCfgResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

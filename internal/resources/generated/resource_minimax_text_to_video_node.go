@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &MinimaxTextToVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &MinimaxTextToVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &MinimaxTextToVideoNodeResource{}
 
-type MinimaxTextToVideoNodeResource struct{}
+type MinimaxTextToVideoNodeResource struct {
+	client *client.Client
+}
 
 type MinimaxTextToVideoNodeModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type MinimaxTextToVideoNodeModel struct {
 
 func NewMinimaxTextToVideoNodeResource() resource.Resource {
 	return &MinimaxTextToVideoNodeResource{}
+}
+
+func (r *MinimaxTextToVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *MinimaxTextToVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -87,6 +109,20 @@ func (r *MinimaxTextToVideoNodeResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *MinimaxTextToVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data MinimaxTextToVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "MinimaxTextToVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *MinimaxTextToVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

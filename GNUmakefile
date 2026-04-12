@@ -91,6 +91,9 @@ release-e2e:
 synthesis-e2e:
 	./scripts/synthesis-e2e/run.sh
 
+inventory-plan-e2e:
+	./scripts/inventory-plan-e2e/run.sh
+
 execution-e2e:
 	./scripts/execution-e2e/run.sh
 
@@ -99,4 +102,4 @@ verify: fmt-check generate vet lint test
 clean:
 	rm -f $(BINARY)
 
-.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs tools hooks-install hooks-run-pre-commit hooks-run-pre-push workspace-e2e-browser-install workspace-e2e release-e2e-browser-install release-e2e synthesis-e2e execution-e2e verify clean
+.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs tools hooks-install hooks-run-pre-commit hooks-run-pre-push workspace-e2e-browser-install workspace-e2e release-e2e-browser-install release-e2e synthesis-e2e inventory-plan-e2e execution-e2e verify clean

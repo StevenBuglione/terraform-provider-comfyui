@@ -6,6 +6,7 @@ import (
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/artifacts"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/inventory"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/validation"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
@@ -142,7 +143,7 @@ func (d *PromptValidationDataSource) Read(ctx context.Context, req datasource.Re
 		return
 	}
 
-	state, err := promptValidationStateFromInput(stringValue(config.Path), stringValue(config.JSON), nodeInfo, mode)
+	state, err := promptValidationStateFromInput(stringValue(config.Path), stringValue(config.JSON), nodeInfo, inventory.NewService(d.client), mode)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to validate prompt JSON", err.Error())
 		return
@@ -151,7 +152,7 @@ func (d *PromptValidationDataSource) Read(ctx context.Context, req datasource.Re
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func promptValidationStateFromInput(path string, raw string, nodeInfo map[string]client.NodeInfo, mode validationMode) (PromptValidationModel, error) {
+func promptValidationStateFromInput(path string, raw string, nodeInfo map[string]client.NodeInfo, inventoryService validation.InventoryService, mode validationMode) (PromptValidationModel, error) {
 	rawJSON, err := loadJSONInput(path, raw)
 	if err != nil {
 		return PromptValidationModel{}, err
@@ -167,7 +168,7 @@ func promptValidationStateFromInput(path string, raw string, nodeInfo map[string
 		return PromptValidationModel{}, err
 	}
 
-	report := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{Mode: mode.toValidationMode()})
+	report := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{Mode: mode.toValidationMode(), InventoryService: inventoryService})
 	return PromptValidationModel{
 		Path:               stringValueOrNull(path),
 		JSON:               stringValueOrNull(raw),

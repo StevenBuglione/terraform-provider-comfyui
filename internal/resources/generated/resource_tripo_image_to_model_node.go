@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &TripoImageToModelNodeResource{}
+var _ resource.ResourceWithConfigure = &TripoImageToModelNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TripoImageToModelNodeResource{}
 
-type TripoImageToModelNodeResource struct{}
+type TripoImageToModelNodeResource struct {
+	client *client.Client
+}
 
 type TripoImageToModelNodeModel struct {
 	ID                types.String `tfsdk:"id"`
@@ -45,6 +50,23 @@ type TripoImageToModelNodeModel struct {
 
 func NewTripoImageToModelNodeResource() resource.Resource {
 	return &TripoImageToModelNodeResource{}
+}
+
+func (r *TripoImageToModelNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TripoImageToModelNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -165,6 +187,20 @@ func (r *TripoImageToModelNodeResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *TripoImageToModelNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TripoImageToModelNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TripoImageToModelNode", data, &resp.Diagnostics)
 }
 
 func (r *TripoImageToModelNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &FreeUResource{}
+var _ resource.ResourceWithConfigure = &FreeUResource{}
+var _ resource.ResourceWithModifyPlan = &FreeUResource{}
 
-type FreeUResource struct{}
+type FreeUResource struct {
+	client *client.Client
+}
 
 type FreeUModel struct {
 	ID          types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type FreeUModel struct {
 
 func NewFreeUResource() resource.Resource {
 	return &FreeUResource{}
+}
+
+func (r *FreeUResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *FreeUResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -99,6 +121,20 @@ func (r *FreeUResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			},
 		},
 	}
+}
+
+func (r *FreeUResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data FreeUModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "FreeU", data, &resp.Diagnostics)
 }
 
 func (r *FreeUResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

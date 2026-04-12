@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &UNetCrossAttentionMultiplyResource{}
+var _ resource.ResourceWithConfigure = &UNetCrossAttentionMultiplyResource{}
+var _ resource.ResourceWithModifyPlan = &UNetCrossAttentionMultiplyResource{}
 
-type UNetCrossAttentionMultiplyResource struct{}
+type UNetCrossAttentionMultiplyResource struct {
+	client *client.Client
+}
 
 type UNetCrossAttentionMultiplyModel struct {
 	ID          types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type UNetCrossAttentionMultiplyModel struct {
 
 func NewUNetCrossAttentionMultiplyResource() resource.Resource {
 	return &UNetCrossAttentionMultiplyResource{}
+}
+
+func (r *UNetCrossAttentionMultiplyResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *UNetCrossAttentionMultiplyResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -99,6 +121,20 @@ func (r *UNetCrossAttentionMultiplyResource) Schema(_ context.Context, _ resourc
 			},
 		},
 	}
+}
+
+func (r *UNetCrossAttentionMultiplyResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data UNetCrossAttentionMultiplyModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "UNetCrossAttentionMultiply", data, &resp.Diagnostics)
 }
 
 func (r *UNetCrossAttentionMultiplyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

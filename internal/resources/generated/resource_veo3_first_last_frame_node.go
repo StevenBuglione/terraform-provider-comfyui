@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &Veo3FirstLastFrameNodeResource{}
+var _ resource.ResourceWithConfigure = &Veo3FirstLastFrameNodeResource{}
+var _ resource.ResourceWithModifyPlan = &Veo3FirstLastFrameNodeResource{}
 
-type Veo3FirstLastFrameNodeResource struct{}
+type Veo3FirstLastFrameNodeResource struct {
+	client *client.Client
+}
 
 type Veo3FirstLastFrameNodeModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -40,6 +45,23 @@ type Veo3FirstLastFrameNodeModel struct {
 
 func NewVeo3FirstLastFrameNodeResource() resource.Resource {
 	return &Veo3FirstLastFrameNodeResource{}
+}
+
+func (r *Veo3FirstLastFrameNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Veo3FirstLastFrameNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -137,6 +159,20 @@ func (r *Veo3FirstLastFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *Veo3FirstLastFrameNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Veo3FirstLastFrameNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Veo3FirstLastFrameNode", data, &resp.Diagnostics)
 }
 
 func (r *Veo3FirstLastFrameNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

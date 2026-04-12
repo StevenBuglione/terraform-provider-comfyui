@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ReveImageEditNodeResource{}
+var _ resource.ResourceWithConfigure = &ReveImageEditNodeResource{}
+var _ resource.ResourceWithModifyPlan = &ReveImageEditNodeResource{}
 
-type ReveImageEditNodeResource struct{}
+type ReveImageEditNodeResource struct {
+	client *client.Client
+}
 
 type ReveImageEditNodeModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type ReveImageEditNodeModel struct {
 
 func NewReveImageEditNodeResource() resource.Resource {
 	return &ReveImageEditNodeResource{}
+}
+
+func (r *ReveImageEditNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ReveImageEditNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *ReveImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *ReveImageEditNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ReveImageEditNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ReveImageEditNode", data, &resp.Diagnostics)
 }
 
 func (r *ReveImageEditNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

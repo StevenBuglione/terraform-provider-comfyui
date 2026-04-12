@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &SamplerSeeds2Resource{}
+var _ resource.ResourceWithConfigure = &SamplerSeeds2Resource{}
+var _ resource.ResourceWithModifyPlan = &SamplerSeeds2Resource{}
 
-type SamplerSeeds2Resource struct{}
+type SamplerSeeds2Resource struct {
+	client *client.Client
+}
 
 type SamplerSeeds2Model struct {
 	ID            types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type SamplerSeeds2Model struct {
 
 func NewSamplerSeeds2Resource() resource.Resource {
 	return &SamplerSeeds2Resource{}
+}
+
+func (r *SamplerSeeds2Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SamplerSeeds2Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -98,6 +120,20 @@ func (r *SamplerSeeds2Resource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *SamplerSeeds2Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SamplerSeeds2Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SamplerSEEDS2", data, &resp.Diagnostics)
 }
 
 func (r *SamplerSeeds2Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

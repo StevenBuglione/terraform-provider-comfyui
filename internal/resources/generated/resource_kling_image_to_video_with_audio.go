@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &KlingImageToVideoWithAudioResource{}
+var _ resource.ResourceWithConfigure = &KlingImageToVideoWithAudioResource{}
+var _ resource.ResourceWithModifyPlan = &KlingImageToVideoWithAudioResource{}
 
-type KlingImageToVideoWithAudioResource struct{}
+type KlingImageToVideoWithAudioResource struct {
+	client *client.Client
+}
 
 type KlingImageToVideoWithAudioModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type KlingImageToVideoWithAudioModel struct {
 
 func NewKlingImageToVideoWithAudioResource() resource.Resource {
 	return &KlingImageToVideoWithAudioResource{}
+}
+
+func (r *KlingImageToVideoWithAudioResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *KlingImageToVideoWithAudioResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -108,6 +130,20 @@ func (r *KlingImageToVideoWithAudioResource) Schema(_ context.Context, _ resourc
 			},
 		},
 	}
+}
+
+func (r *KlingImageToVideoWithAudioResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data KlingImageToVideoWithAudioModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageToVideoWithAudio", data, &resp.Diagnostics)
 }
 
 func (r *KlingImageToVideoWithAudioResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

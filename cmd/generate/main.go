@@ -43,20 +43,23 @@ type Node struct {
 }
 
 type Input struct {
-	Name                 string        `json:"name"`
-	Type                 string        `json:"type"`
-	Required             bool          `json:"required"`
-	IsLinkType           bool          `json:"is_link_type"`
-	Default              interface{}   `json:"default"`
-	Min                  *NumberValue  `json:"min"`
-	Max                  *NumberValue  `json:"max"`
-	Step                 *NumberValue  `json:"step"`
-	RawOptions           []interface{} `json:"options"`
-	Multiline            *bool         `json:"multiline"`
-	DynamicOptions       *bool         `json:"dynamic_options"`
-	DynamicOptionsSource *string       `json:"dynamic_options_source"`
-	Tooltip              *string       `json:"tooltip"`
-	DisplayName          *string       `json:"display_name"`
+	Name                         string        `json:"name"`
+	Type                         string        `json:"type"`
+	Required                     bool          `json:"required"`
+	IsLinkType                   bool          `json:"is_link_type"`
+	ValidationKind               string        `json:"validation_kind"`
+	InventoryKind                string        `json:"inventory_kind"`
+	SupportsStrictPlanValidation bool          `json:"supports_strict_plan_validation"`
+	Default                      interface{}   `json:"default"`
+	Min                          *NumberValue  `json:"min"`
+	Max                          *NumberValue  `json:"max"`
+	Step                         *NumberValue  `json:"step"`
+	RawOptions                   []interface{} `json:"options"`
+	Multiline                    *bool         `json:"multiline"`
+	DynamicOptions               *bool         `json:"dynamic_options"`
+	DynamicOptionsSource         *string       `json:"dynamic_options_source"`
+	Tooltip                      *string       `json:"tooltip"`
+	DisplayName                  *string       `json:"display_name"`
 }
 
 type NumberValue struct {
@@ -405,23 +408,26 @@ func buildGeneratedNodeSchemaInputs(inputs []Input, required bool) []GeneratedNo
 			continue
 		}
 		filtered = append(filtered, GeneratedNodeSchemaInput{
-			Name:                 input.Name,
-			Type:                 input.Type,
-			IsLinkType:           input.IsLinkType,
-			DefaultValue:         formatOptionalValue(input.Default),
-			HasDefaultValue:      input.Default != nil,
-			MinValue:             formatOptionalNumber(input.Min),
-			HasMinValue:          input.Min != nil,
-			MaxValue:             formatOptionalNumber(input.Max),
-			HasMaxValue:          input.Max != nil,
-			StepValue:            formatOptionalNumber(input.Step),
-			HasStepValue:         input.Step != nil,
-			EnumValues:           input.StringOptions(),
-			Multiline:            boolValue(input.Multiline),
-			DynamicOptions:       boolValue(input.DynamicOptions),
-			DynamicOptionsSource: stringValue(input.DynamicOptionsSource),
-			Tooltip:              stringValue(input.Tooltip),
-			DisplayName:          stringValue(input.DisplayName),
+			Name:                         input.Name,
+			Type:                         input.Type,
+			IsLinkType:                   input.IsLinkType,
+			ValidationKind:               input.ValidationKind,
+			InventoryKind:                input.InventoryKind,
+			SupportsStrictPlanValidation: input.SupportsStrictPlanValidation,
+			DefaultValue:                 formatOptionalValue(input.Default),
+			HasDefaultValue:              input.Default != nil,
+			MinValue:                     formatOptionalNumber(input.Min),
+			HasMinValue:                  input.Min != nil,
+			MaxValue:                     formatOptionalNumber(input.Max),
+			HasMaxValue:                  input.Max != nil,
+			StepValue:                    formatOptionalNumber(input.Step),
+			HasStepValue:                 input.Step != nil,
+			EnumValues:                   input.StringOptions(),
+			Multiline:                    boolValue(input.Multiline),
+			DynamicOptions:               boolValue(input.DynamicOptions),
+			DynamicOptionsSource:         stringValue(input.DynamicOptionsSource),
+			Tooltip:                      stringValue(input.Tooltip),
+			DisplayName:                  stringValue(input.DisplayName),
 		})
 	}
 	return filtered

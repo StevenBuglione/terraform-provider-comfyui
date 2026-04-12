@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ImageScaleResource{}
+var _ resource.ResourceWithConfigure = &ImageScaleResource{}
+var _ resource.ResourceWithModifyPlan = &ImageScaleResource{}
 
-type ImageScaleResource struct{}
+type ImageScaleResource struct {
+	client *client.Client
+}
 
 type ImageScaleModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type ImageScaleModel struct {
 
 func NewImageScaleResource() resource.Resource {
 	return &ImageScaleResource{}
+}
+
+func (r *ImageScaleResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ImageScaleResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *ImageScaleResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			},
 		},
 	}
+}
+
+func (r *ImageScaleResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ImageScaleModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageScale", data, &resp.Diagnostics)
 }
 
 func (r *ImageScaleResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

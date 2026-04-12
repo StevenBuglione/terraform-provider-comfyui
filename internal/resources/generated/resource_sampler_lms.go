@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &SamplerLmsResource{}
+var _ resource.ResourceWithConfigure = &SamplerLmsResource{}
+var _ resource.ResourceWithModifyPlan = &SamplerLmsResource{}
 
-type SamplerLmsResource struct{}
+type SamplerLmsResource struct {
+	client *client.Client
+}
 
 type SamplerLmsModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type SamplerLmsModel struct {
 
 func NewSamplerLmsResource() resource.Resource {
 	return &SamplerLmsResource{}
+}
+
+func (r *SamplerLmsResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SamplerLmsResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,6 +92,20 @@ func (r *SamplerLmsResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			},
 		},
 	}
+}
+
+func (r *SamplerLmsResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SamplerLmsModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SamplerLMS", data, &resp.Diagnostics)
 }
 
 func (r *SamplerLmsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

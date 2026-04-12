@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &CreateHookLoraResource{}
+var _ resource.ResourceWithConfigure = &CreateHookLoraResource{}
+var _ resource.ResourceWithModifyPlan = &CreateHookLoraResource{}
 
-type CreateHookLoraResource struct{}
+type CreateHookLoraResource struct {
+	client *client.Client
+}
 
 type CreateHookLoraModel struct {
 	ID            types.String  `tfsdk:"id"`
@@ -33,6 +38,23 @@ type CreateHookLoraModel struct {
 
 func NewCreateHookLoraResource() resource.Resource {
 	return &CreateHookLoraResource{}
+}
+
+func (r *CreateHookLoraResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CreateHookLoraResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -88,6 +110,20 @@ func (r *CreateHookLoraResource) Schema(_ context.Context, _ resource.SchemaRequ
 			},
 		},
 	}
+}
+
+func (r *CreateHookLoraResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CreateHookLoraModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CreateHookLora", data, &resp.Diagnostics)
 }
 
 func (r *CreateHookLoraResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

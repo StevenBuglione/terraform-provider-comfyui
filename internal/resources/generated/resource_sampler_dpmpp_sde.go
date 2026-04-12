@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &SamplerDpmppSdeResource{}
+var _ resource.ResourceWithConfigure = &SamplerDpmppSdeResource{}
+var _ resource.ResourceWithModifyPlan = &SamplerDpmppSdeResource{}
 
-type SamplerDpmppSdeResource struct{}
+type SamplerDpmppSdeResource struct {
+	client *client.Client
+}
 
 type SamplerDpmppSdeModel struct {
 	ID            types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type SamplerDpmppSdeModel struct {
 
 func NewSamplerDpmppSdeResource() resource.Resource {
 	return &SamplerDpmppSdeResource{}
+}
+
+func (r *SamplerDpmppSdeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SamplerDpmppSdeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -98,6 +120,20 @@ func (r *SamplerDpmppSdeResource) Schema(_ context.Context, _ resource.SchemaReq
 			},
 		},
 	}
+}
+
+func (r *SamplerDpmppSdeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SamplerDpmppSdeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SamplerDPMPP_SDE", data, &resp.Diagnostics)
 }
 
 func (r *SamplerDpmppSdeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

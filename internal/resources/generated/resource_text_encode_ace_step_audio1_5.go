@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -20,8 +21,12 @@ import (
 )
 
 var _ resource.Resource = &TextEncodeAceStepAudio15Resource{}
+var _ resource.ResourceWithConfigure = &TextEncodeAceStepAudio15Resource{}
+var _ resource.ResourceWithModifyPlan = &TextEncodeAceStepAudio15Resource{}
 
-type TextEncodeAceStepAudio15Resource struct{}
+type TextEncodeAceStepAudio15Resource struct {
+	client *client.Client
+}
 
 type TextEncodeAceStepAudio15Model struct {
 	ID                 types.String  `tfsdk:"id"`
@@ -46,6 +51,23 @@ type TextEncodeAceStepAudio15Model struct {
 
 func NewTextEncodeAceStepAudio15Resource() resource.Resource {
 	return &TextEncodeAceStepAudio15Resource{}
+}
+
+func (r *TextEncodeAceStepAudio15Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TextEncodeAceStepAudio15Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -198,6 +220,20 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *TextEncodeAceStepAudio15Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TextEncodeAceStepAudio15Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TextEncodeAceStepAudio15", data, &resp.Diagnostics)
 }
 
 func (r *TextEncodeAceStepAudio15Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

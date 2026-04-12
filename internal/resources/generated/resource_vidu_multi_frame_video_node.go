@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &ViduMultiFrameVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &ViduMultiFrameVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &ViduMultiFrameVideoNodeResource{}
 
-type ViduMultiFrameVideoNodeResource struct{}
+type ViduMultiFrameVideoNodeResource struct {
+	client *client.Client
+}
 
 type ViduMultiFrameVideoNodeModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type ViduMultiFrameVideoNodeModel struct {
 
 func NewViduMultiFrameVideoNodeResource() resource.Resource {
 	return &ViduMultiFrameVideoNodeResource{}
+}
+
+func (r *ViduMultiFrameVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ViduMultiFrameVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -103,6 +125,20 @@ func (r *ViduMultiFrameVideoNodeResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *ViduMultiFrameVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ViduMultiFrameVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ViduMultiFrameVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *ViduMultiFrameVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

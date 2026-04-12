@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &GeminiNanoBanana2Resource{}
+var _ resource.ResourceWithConfigure = &GeminiNanoBanana2Resource{}
+var _ resource.ResourceWithModifyPlan = &GeminiNanoBanana2Resource{}
 
-type GeminiNanoBanana2Resource struct{}
+type GeminiNanoBanana2Resource struct {
+	client *client.Client
+}
 
 type GeminiNanoBanana2Model struct {
 	ID                 types.String `tfsdk:"id"`
@@ -42,6 +47,23 @@ type GeminiNanoBanana2Model struct {
 
 func NewGeminiNanoBanana2Resource() resource.Resource {
 	return &GeminiNanoBanana2Resource{}
+}
+
+func (r *GeminiNanoBanana2Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *GeminiNanoBanana2Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -171,6 +193,20 @@ func (r *GeminiNanoBanana2Resource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *GeminiNanoBanana2Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data GeminiNanoBanana2Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "GeminiNanoBanana2", data, &resp.Diagnostics)
 }
 
 func (r *GeminiNanoBanana2Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

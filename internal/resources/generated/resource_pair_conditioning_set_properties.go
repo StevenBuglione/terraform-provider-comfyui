@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &PairConditioningSetPropertiesResource{}
+var _ resource.ResourceWithConfigure = &PairConditioningSetPropertiesResource{}
+var _ resource.ResourceWithModifyPlan = &PairConditioningSetPropertiesResource{}
 
-type PairConditioningSetPropertiesResource struct{}
+type PairConditioningSetPropertiesResource struct {
+	client *client.Client
+}
 
 type PairConditioningSetPropertiesModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -38,6 +43,23 @@ type PairConditioningSetPropertiesModel struct {
 
 func NewPairConditioningSetPropertiesResource() resource.Resource {
 	return &PairConditioningSetPropertiesResource{}
+}
+
+func (r *PairConditioningSetPropertiesResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *PairConditioningSetPropertiesResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -115,6 +137,20 @@ func (r *PairConditioningSetPropertiesResource) Schema(_ context.Context, _ reso
 			},
 		},
 	}
+}
+
+func (r *PairConditioningSetPropertiesResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data PairConditioningSetPropertiesModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "PairConditioningSetProperties", data, &resp.Diagnostics)
 }
 
 func (r *PairConditioningSetPropertiesResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

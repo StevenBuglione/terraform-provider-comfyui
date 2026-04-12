@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &CreateVideoResource{}
+var _ resource.ResourceWithConfigure = &CreateVideoResource{}
+var _ resource.ResourceWithModifyPlan = &CreateVideoResource{}
 
-type CreateVideoResource struct{}
+type CreateVideoResource struct {
+	client *client.Client
+}
 
 type CreateVideoModel struct {
 	ID          types.String  `tfsdk:"id"`
@@ -32,6 +37,23 @@ type CreateVideoModel struct {
 
 func NewCreateVideoResource() resource.Resource {
 	return &CreateVideoResource{}
+}
+
+func (r *CreateVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CreateVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *CreateVideoResource) Schema(_ context.Context, _ resource.SchemaRequest
 			},
 		},
 	}
+}
+
+func (r *CreateVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CreateVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CreateVideo", data, &resp.Diagnostics)
 }
 
 func (r *CreateVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

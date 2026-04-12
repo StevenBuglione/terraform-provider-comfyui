@@ -6,10 +6,9 @@ package generated
 
 import (
 	"context"
-{{- if .HasOutputs }}
 	"fmt"
-{{- end }}
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -45,8 +44,12 @@ import (
 )
 
 var _ resource.Resource = &{{ .StructName }}Resource{}
+var _ resource.ResourceWithConfigure = &{{ .StructName }}Resource{}
+var _ resource.ResourceWithModifyPlan = &{{ .StructName }}Resource{}
 
-type {{ .StructName }}Resource struct{}
+type {{ .StructName }}Resource struct{
+	client *client.Client
+}
 
 type {{ .StructName }}Model struct {
 	ID     types.String ` + "`" + `tfsdk:"id"` + "`" + `
@@ -58,6 +61,23 @@ type {{ .StructName }}Model struct {
 
 func New{{ .StructName }}Resource() resource.Resource {
 	return &{{ .StructName }}Resource{}
+}
+
+func (r *{{ .StructName }}Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *{{ .StructName }}Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -87,6 +107,20 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 {{- end }}
 		},
 	}
+}
+
+func (r *{{ .StructName }}Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data {{ .StructName }}Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, {{ .ClassName | printf "%q" }}, data, &resp.Diagnostics)
 }
 
 func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
@@ -230,6 +264,9 @@ type GeneratedNodeSchemaInput struct {
 	Name                 string
 	Type                 string
 	IsLinkType           bool
+	ValidationKind       string
+	InventoryKind        string
+	SupportsStrictPlanValidation bool
 	DefaultValue         string
 	HasDefaultValue      bool
 	MinValue             string
@@ -295,6 +332,9 @@ var generatedNodeSchemas = map[string]GeneratedNodeSchema{
 				Name: "{{ .Name }}",
 				Type: "{{ .Type }}",
 				IsLinkType: {{ .IsLinkType }},
+				ValidationKind: {{ printf "%q" .ValidationKind }},
+				InventoryKind: {{ printf "%q" .InventoryKind }},
+				SupportsStrictPlanValidation: {{ .SupportsStrictPlanValidation }},
 				DefaultValue: {{ printf "%q" .DefaultValue }},
 				HasDefaultValue: {{ .HasDefaultValue }},
 				MinValue: {{ printf "%q" .MinValue }},
@@ -322,6 +362,9 @@ var generatedNodeSchemas = map[string]GeneratedNodeSchema{
 				Name: "{{ .Name }}",
 				Type: "{{ .Type }}",
 				IsLinkType: {{ .IsLinkType }},
+				ValidationKind: {{ printf "%q" .ValidationKind }},
+				InventoryKind: {{ printf "%q" .InventoryKind }},
+				SupportsStrictPlanValidation: {{ .SupportsStrictPlanValidation }},
 				DefaultValue: {{ printf "%q" .DefaultValue }},
 				HasDefaultValue: {{ .HasDefaultValue }},
 				MinValue: {{ printf "%q" .MinValue }},

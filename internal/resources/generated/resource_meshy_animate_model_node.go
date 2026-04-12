@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &MeshyAnimateModelNodeResource{}
+var _ resource.ResourceWithConfigure = &MeshyAnimateModelNodeResource{}
+var _ resource.ResourceWithModifyPlan = &MeshyAnimateModelNodeResource{}
 
-type MeshyAnimateModelNodeResource struct{}
+type MeshyAnimateModelNodeResource struct {
+	client *client.Client
+}
 
 type MeshyAnimateModelNodeModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type MeshyAnimateModelNodeModel struct {
 
 func NewMeshyAnimateModelNodeResource() resource.Resource {
 	return &MeshyAnimateModelNodeResource{}
+}
+
+func (r *MeshyAnimateModelNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *MeshyAnimateModelNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,6 +113,20 @@ func (r *MeshyAnimateModelNodeResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *MeshyAnimateModelNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data MeshyAnimateModelNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "MeshyAnimateModelNode", data, &resp.Diagnostics)
 }
 
 func (r *MeshyAnimateModelNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

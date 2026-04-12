@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &SkipLayerGuidanceDiTResource{}
+var _ resource.ResourceWithConfigure = &SkipLayerGuidanceDiTResource{}
+var _ resource.ResourceWithModifyPlan = &SkipLayerGuidanceDiTResource{}
 
-type SkipLayerGuidanceDiTResource struct{}
+type SkipLayerGuidanceDiTResource struct {
+	client *client.Client
+}
 
 type SkipLayerGuidanceDiTModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -36,6 +41,23 @@ type SkipLayerGuidanceDiTModel struct {
 
 func NewSkipLayerGuidanceDiTResource() resource.Resource {
 	return &SkipLayerGuidanceDiTResource{}
+}
+
+func (r *SkipLayerGuidanceDiTResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SkipLayerGuidanceDiTResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -109,6 +131,20 @@ func (r *SkipLayerGuidanceDiTResource) Schema(_ context.Context, _ resource.Sche
 			},
 		},
 	}
+}
+
+func (r *SkipLayerGuidanceDiTResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SkipLayerGuidanceDiTModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SkipLayerGuidanceDiT", data, &resp.Diagnostics)
 }
 
 func (r *SkipLayerGuidanceDiTResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &KlingTextToVideoWithAudioResource{}
+var _ resource.ResourceWithConfigure = &KlingTextToVideoWithAudioResource{}
+var _ resource.ResourceWithModifyPlan = &KlingTextToVideoWithAudioResource{}
 
-type KlingTextToVideoWithAudioResource struct{}
+type KlingTextToVideoWithAudioResource struct {
+	client *client.Client
+}
 
 type KlingTextToVideoWithAudioModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type KlingTextToVideoWithAudioModel struct {
 
 func NewKlingTextToVideoWithAudioResource() resource.Resource {
 	return &KlingTextToVideoWithAudioResource{}
+}
+
+func (r *KlingTextToVideoWithAudioResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *KlingTextToVideoWithAudioResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -115,6 +137,20 @@ func (r *KlingTextToVideoWithAudioResource) Schema(_ context.Context, _ resource
 			},
 		},
 	}
+}
+
+func (r *KlingTextToVideoWithAudioResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data KlingTextToVideoWithAudioModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TextToVideoWithAudio", data, &resp.Diagnostics)
 }
 
 func (r *KlingTextToVideoWithAudioResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

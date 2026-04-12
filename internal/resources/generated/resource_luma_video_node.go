@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LumaVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &LumaVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &LumaVideoNodeResource{}
 
-type LumaVideoNodeResource struct{}
+type LumaVideoNodeResource struct {
+	client *client.Client
+}
 
 type LumaVideoNodeModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -37,6 +42,23 @@ type LumaVideoNodeModel struct {
 
 func NewLumaVideoNodeResource() resource.Resource {
 	return &LumaVideoNodeResource{}
+}
+
+func (r *LumaVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LumaVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -105,6 +127,20 @@ func (r *LumaVideoNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *LumaVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LumaVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LumaTextToVideoGenerationNode", data, &resp.Diagnostics)
 }
 
 func (r *LumaVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

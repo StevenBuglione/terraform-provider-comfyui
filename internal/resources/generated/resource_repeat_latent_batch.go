@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RepeatLatentBatchResource{}
+var _ resource.ResourceWithConfigure = &RepeatLatentBatchResource{}
+var _ resource.ResourceWithModifyPlan = &RepeatLatentBatchResource{}
 
-type RepeatLatentBatchResource struct{}
+type RepeatLatentBatchResource struct {
+	client *client.Client
+}
 
 type RepeatLatentBatchModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type RepeatLatentBatchModel struct {
 
 func NewRepeatLatentBatchResource() resource.Resource {
 	return &RepeatLatentBatchResource{}
+}
+
+func (r *RepeatLatentBatchResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RepeatLatentBatchResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *RepeatLatentBatchResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *RepeatLatentBatchResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RepeatLatentBatchModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RepeatLatentBatch", data, &resp.Diagnostics)
 }
 
 func (r *RepeatLatentBatchResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &LatentUpscaleResource{}
+var _ resource.ResourceWithConfigure = &LatentUpscaleResource{}
+var _ resource.ResourceWithModifyPlan = &LatentUpscaleResource{}
 
-type LatentUpscaleResource struct{}
+type LatentUpscaleResource struct {
+	client *client.Client
+}
 
 type LatentUpscaleModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type LatentUpscaleModel struct {
 
 func NewLatentUpscaleResource() resource.Resource {
 	return &LatentUpscaleResource{}
+}
+
+func (r *LatentUpscaleResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LatentUpscaleResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *LatentUpscaleResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *LatentUpscaleResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LatentUpscaleModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LatentUpscale", data, &resp.Diagnostics)
 }
 
 func (r *LatentUpscaleResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

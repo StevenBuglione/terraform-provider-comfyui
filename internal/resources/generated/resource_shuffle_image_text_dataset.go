@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ShuffleImageTextDatasetResource{}
+var _ resource.ResourceWithConfigure = &ShuffleImageTextDatasetResource{}
+var _ resource.ResourceWithModifyPlan = &ShuffleImageTextDatasetResource{}
 
-type ShuffleImageTextDatasetResource struct{}
+type ShuffleImageTextDatasetResource struct {
+	client *client.Client
+}
 
 type ShuffleImageTextDatasetModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type ShuffleImageTextDatasetModel struct {
 
 func NewShuffleImageTextDatasetResource() resource.Resource {
 	return &ShuffleImageTextDatasetResource{}
+}
+
+func (r *ShuffleImageTextDatasetResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ShuffleImageTextDatasetResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -88,6 +110,20 @@ func (r *ShuffleImageTextDatasetResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *ShuffleImageTextDatasetResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ShuffleImageTextDatasetModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ShuffleImageTextDatasetNode", data, &resp.Diagnostics)
 }
 
 func (r *ShuffleImageTextDatasetResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

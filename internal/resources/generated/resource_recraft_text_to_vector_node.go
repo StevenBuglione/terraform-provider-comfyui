@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RecraftTextToVectorNodeResource{}
+var _ resource.ResourceWithConfigure = &RecraftTextToVectorNodeResource{}
+var _ resource.ResourceWithModifyPlan = &RecraftTextToVectorNodeResource{}
 
-type RecraftTextToVectorNodeResource struct{}
+type RecraftTextToVectorNodeResource struct {
+	client *client.Client
+}
 
 type RecraftTextToVectorNodeModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -36,6 +41,23 @@ type RecraftTextToVectorNodeModel struct {
 
 func NewRecraftTextToVectorNodeResource() resource.Resource {
 	return &RecraftTextToVectorNodeResource{}
+}
+
+func (r *RecraftTextToVectorNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RecraftTextToVectorNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -103,6 +125,20 @@ func (r *RecraftTextToVectorNodeResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *RecraftTextToVectorNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RecraftTextToVectorNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RecraftTextToVectorNode", data, &resp.Diagnostics)
 }
 
 func (r *RecraftTextToVectorNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

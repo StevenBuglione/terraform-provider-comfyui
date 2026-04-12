@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &WanMoveConcatTrackResource{}
+var _ resource.ResourceWithConfigure = &WanMoveConcatTrackResource{}
+var _ resource.ResourceWithModifyPlan = &WanMoveConcatTrackResource{}
 
-type WanMoveConcatTrackResource struct{}
+type WanMoveConcatTrackResource struct {
+	client *client.Client
+}
 
 type WanMoveConcatTrackModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type WanMoveConcatTrackModel struct {
 
 func NewWanMoveConcatTrackResource() resource.Resource {
 	return &WanMoveConcatTrackResource{}
+}
+
+func (r *WanMoveConcatTrackResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *WanMoveConcatTrackResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,6 +92,20 @@ func (r *WanMoveConcatTrackResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *WanMoveConcatTrackResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data WanMoveConcatTrackModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "WanMoveConcatTrack", data, &resp.Diagnostics)
 }
 
 func (r *WanMoveConcatTrackResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

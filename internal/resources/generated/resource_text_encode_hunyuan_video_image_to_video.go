@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &TextEncodeHunyuanVideoImageToVideoResource{}
+var _ resource.ResourceWithConfigure = &TextEncodeHunyuanVideoImageToVideoResource{}
+var _ resource.ResourceWithModifyPlan = &TextEncodeHunyuanVideoImageToVideoResource{}
 
-type TextEncodeHunyuanVideoImageToVideoResource struct{}
+type TextEncodeHunyuanVideoImageToVideoResource struct {
+	client *client.Client
+}
 
 type TextEncodeHunyuanVideoImageToVideoModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type TextEncodeHunyuanVideoImageToVideoModel struct {
 
 func NewTextEncodeHunyuanVideoImageToVideoResource() resource.Resource {
 	return &TextEncodeHunyuanVideoImageToVideoResource{}
+}
+
+func (r *TextEncodeHunyuanVideoImageToVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TextEncodeHunyuanVideoImageToVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *TextEncodeHunyuanVideoImageToVideoResource) Schema(_ context.Context, _
 			},
 		},
 	}
+}
+
+func (r *TextEncodeHunyuanVideoImageToVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TextEncodeHunyuanVideoImageToVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TextEncodeHunyuanVideo_ImageToVideo", data, &resp.Diagnostics)
 }
 
 func (r *TextEncodeHunyuanVideoImageToVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

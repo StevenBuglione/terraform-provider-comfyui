@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LtxvImgToVideoInplaceResource{}
+var _ resource.ResourceWithConfigure = &LtxvImgToVideoInplaceResource{}
+var _ resource.ResourceWithModifyPlan = &LtxvImgToVideoInplaceResource{}
 
-type LtxvImgToVideoInplaceResource struct{}
+type LtxvImgToVideoInplaceResource struct {
+	client *client.Client
+}
 
 type LtxvImgToVideoInplaceModel struct {
 	ID           types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type LtxvImgToVideoInplaceModel struct {
 
 func NewLtxvImgToVideoInplaceResource() resource.Resource {
 	return &LtxvImgToVideoInplaceResource{}
+}
+
+func (r *LtxvImgToVideoInplaceResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LtxvImgToVideoInplaceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *LtxvImgToVideoInplaceResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *LtxvImgToVideoInplaceResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LtxvImgToVideoInplaceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LTXVImgToVideoInplace", data, &resp.Diagnostics)
 }
 
 func (r *LtxvImgToVideoInplaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -1,15 +1,30 @@
 package validation
 
 import (
+	"context"
+	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/artifacts"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/inventory"
 )
 
 func testNodeInfo() map[string]client.NodeInfo {
 	return map[string]client.NodeInfo{
+		"StaticImageInput": {
+			Input: client.NodeInputInfo{
+				Required: map[string]interface{}{
+					"image": []interface{}{"STRING"},
+				},
+			},
+			InputOrder: map[string][]string{
+				"required": {"image"},
+			},
+			Output:     []string{"IMAGE"},
+			OutputName: []string{"IMAGE"},
+		},
 		"LoadImage": {
 			Input: client.NodeInputInfo{
 				Required: map[string]interface{}{
@@ -56,7 +71,46 @@ func testNodeInfo() map[string]client.NodeInfo {
 			},
 			OutputNode: true,
 		},
+		"CheckpointLoaderSimple": {
+			Input: client.NodeInputInfo{
+				Required: map[string]interface{}{
+					"ckpt_name": []interface{}{"COMBO"},
+				},
+			},
+			InputOrder: map[string][]string{
+				"required": {"ckpt_name"},
+			},
+			Output:     []string{"MODEL", "CLIP", "VAE"},
+			OutputName: []string{"MODEL", "CLIP", "VAE"},
+		},
+		"BasicScheduler": {
+			Input: client.NodeInputInfo{
+				Required: map[string]interface{}{
+					"model":     []interface{}{"MODEL"},
+					"scheduler": []interface{}{"COMBO"},
+					"steps":     []interface{}{"INT"},
+					"denoise":   []interface{}{"FLOAT"},
+				},
+			},
+			InputOrder: map[string][]string{
+				"required": {"model", "scheduler", "steps", "denoise"},
+			},
+			Output:     []string{"SIGMAS"},
+			OutputName: []string{"SIGMAS"},
+		},
 	}
+}
+
+type fakeInventoryService struct {
+	values map[inventory.Kind][]string
+	err    error
+}
+
+func (f fakeInventoryService) GetInventory(_ context.Context, kind inventory.Kind) ([]string, error) {
+	if f.err != nil {
+		return nil, f.err
+	}
+	return append([]string(nil), f.values[kind]...), nil
 }
 
 func mustParsePrompt(t *testing.T, raw string) *artifacts.Prompt {
@@ -82,7 +136,7 @@ func TestValidatePrompt_AllowsValidPromptAndHiddenInputs(t *testing.T) {
 	report := ValidatePrompt(
 		mustParsePrompt(t, `{
 		  "1": {
-		    "class_type": "LoadImage",
+		    "class_type": "StaticImageInput",
 		    "inputs": {
 		      "image": "input.png"
 		    }
@@ -153,7 +207,7 @@ func TestValidatePrompt_RejectsUnknownInputName(t *testing.T) {
 		    }
 		  },
 		  "2": {
-		    "class_type": "LoadImage",
+		    "class_type": "StaticImageInput",
 		    "inputs": {
 		      "image": "input.png"
 		    }
@@ -187,7 +241,7 @@ func TestValidatePrompt_RejectsBadOutputSlot(t *testing.T) {
 	report := ValidatePrompt(
 		mustParsePrompt(t, `{
 		  "1": {
-		    "class_type": "LoadImage",
+		    "class_type": "StaticImageInput",
 		    "inputs": {
 		      "image": "input.png"
 		    }
@@ -203,7 +257,7 @@ func TestValidatePrompt_RejectsBadOutputSlot(t *testing.T) {
 		Options{},
 	)
 
-	requireErrorContaining(t, report, `node "2" (SaveImage) input "images" references output slot 4 on node "1" (LoadImage), but only 1 outputs exist`)
+	requireErrorContaining(t, report, `node "2" (SaveImage) input "images" references output slot 4 on node "1" (StaticImageInput), but only 1 outputs exist`)
 }
 
 func TestValidatePrompt_RejectsTypeMismatch(t *testing.T) {
@@ -231,7 +285,7 @@ func TestValidatePrompt_AllowsWildcardTypeCompatibility(t *testing.T) {
 	report := ValidatePrompt(
 		mustParsePrompt(t, `{
 		  "1": {
-		    "class_type": "LoadImage",
+		    "class_type": "StaticImageInput",
 		    "inputs": {
 		      "image": "input.png"
 		    }
@@ -256,7 +310,7 @@ func TestValidatePrompt_RequiresNativeOutputNodeWhenRequested(t *testing.T) {
 	report := ValidatePrompt(
 		mustParsePrompt(t, `{
 		  "1": {
-		    "class_type": "LoadImage",
+		    "class_type": "StaticImageInput",
 		    "inputs": {
 		      "image": "input.png"
 		    }
@@ -269,11 +323,91 @@ func TestValidatePrompt_RequiresNativeOutputNodeWhenRequested(t *testing.T) {
 	requireErrorContaining(t, report, "prompt does not include any node marked output_node=true")
 }
 
+func TestValidatePrompt_RejectsUnavailableDynamicInventoryValue(t *testing.T) {
+	report := ValidatePrompt(
+		mustParsePrompt(t, `{
+		  "1": {
+		    "class_type": "CheckpointLoaderSimple",
+		    "inputs": {
+		      "ckpt_name": "missing.safetensors"
+		    }
+		  }
+		}`),
+		testNodeInfo(),
+		Options{
+			Mode: ValidationModeFragment,
+			InventoryService: fakeInventoryService{
+				values: map[inventory.Kind][]string{
+					inventory.KindCheckpoints: {"realistic.safetensors"},
+				},
+			},
+		},
+	)
+
+	requireErrorContaining(t, report, `references unavailable checkpoints value "missing.safetensors"`)
+}
+
+func TestValidatePrompt_RejectsUnsupportedDynamicExpressionInput(t *testing.T) {
+	report := ValidatePrompt(
+		mustParsePrompt(t, `{
+		  "1": {
+		    "class_type": "BasicScheduler",
+		    "inputs": {
+		      "scheduler": "karras",
+		      "model": ["2", 0],
+		      "steps": 20,
+		      "denoise": 1.0
+		    }
+		  },
+		  "2": {
+		    "class_type": "CheckpointLoaderSimple",
+		    "inputs": {
+		      "ckpt_name": "realistic.safetensors"
+		    }
+		  }
+		}`),
+		testNodeInfo(),
+		Options{
+			Mode: ValidationModeFragment,
+			InventoryService: fakeInventoryService{
+				values: map[inventory.Kind][]string{
+					inventory.KindCheckpoints: {"realistic.safetensors"},
+				},
+			},
+		},
+	)
+
+	if report.Valid {
+		t.Fatal("expected prompt to be invalid")
+	}
+	requireErrorContaining(t, report, `uses unsupported dynamic options`)
+}
+
+func TestValidatePrompt_ReportsInventoryLookupFailure(t *testing.T) {
+	report := ValidatePrompt(
+		mustParsePrompt(t, `{
+		  "1": {
+		    "class_type": "CheckpointLoaderSimple",
+		    "inputs": {
+		      "ckpt_name": "realistic.safetensors"
+		    }
+		  }
+		}`),
+		testNodeInfo(),
+		Options{
+			Mode:             ValidationModeFragment,
+			InventoryService: fakeInventoryService{err: fmt.Errorf("boom")},
+		},
+	)
+
+	requireErrorContaining(t, report, `failed live inventory validation: boom`)
+}
+
 func TestValidatePrompt_ExecutableModeRequiresOutputNode(t *testing.T) {
 	report := ValidatePrompt(
 		mustParsePrompt(t, `{
 		  "1": {
-		    "class_type": "LoadImage",
+		    "class_type": "StaticImageInput",
 		    "inputs": {
 		      "image": "input.png"
 		    }
@@ -290,7 +424,7 @@ func TestValidatePrompt_FragmentModeAllowsMissingOutputNode(t *testing.T) {
 	report := ValidatePrompt(
 		mustParsePrompt(t, `{
 		  "1": {
-		    "class_type": "LoadImage",
+		    "class_type": "StaticImageInput",
 		    "inputs": {
 		      "image": "input.png"
 		    }

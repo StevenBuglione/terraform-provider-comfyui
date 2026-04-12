@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LatentCutResource{}
+var _ resource.ResourceWithConfigure = &LatentCutResource{}
+var _ resource.ResourceWithModifyPlan = &LatentCutResource{}
 
-type LatentCutResource struct{}
+type LatentCutResource struct {
+	client *client.Client
+}
 
 type LatentCutModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type LatentCutModel struct {
 
 func NewLatentCutResource() resource.Resource {
 	return &LatentCutResource{}
+}
+
+func (r *LatentCutResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LatentCutResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -89,6 +111,20 @@ func (r *LatentCutResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 			},
 		},
 	}
+}
+
+func (r *LatentCutResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LatentCutModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LatentCut", data, &resp.Diagnostics)
 }
 
 func (r *LatentCutResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &CannyResource{}
+var _ resource.ResourceWithConfigure = &CannyResource{}
+var _ resource.ResourceWithModifyPlan = &CannyResource{}
 
-type CannyResource struct{}
+type CannyResource struct {
+	client *client.Client
+}
 
 type CannyModel struct {
 	ID            types.String  `tfsdk:"id"`
@@ -32,6 +37,23 @@ type CannyModel struct {
 
 func NewCannyResource() resource.Resource {
 	return &CannyResource{}
+}
+
+func (r *CannyResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CannyResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -83,6 +105,20 @@ func (r *CannyResource) Schema(_ context.Context, _ resource.SchemaRequest, resp
 			},
 		},
 	}
+}
+
+func (r *CannyResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CannyModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Canny", data, &resp.Diagnostics)
 }
 
 func (r *CannyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
