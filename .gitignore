@@ -30,6 +30,7 @@ __pycache__/
 .bin/
 generate
 validation/workspace_e2e/.runtime/
+validation/comfyui_dev/.runtime/
 validation/workspace_e2e/artifacts/generated/
 validation/workspace_e2e/artifacts/browser/
 validation/workspace_e2e/browser/node_modules/

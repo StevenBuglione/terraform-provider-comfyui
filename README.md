@@ -282,6 +282,9 @@ Generated API references live under:
 Core contributor commands:
 
 ```bash
+make comfyui-start                     # start local ComfyUI in the background
+make comfyui-status                    # print pid, base URL, and log path
+make comfyui-stop                      # stop the background ComfyUI process
 make generate
 make docs
 make docs-validate
@@ -293,6 +296,13 @@ make inventory-plan-e2e
 make execution-e2e
 make workspace-e2e
 make release-e2e
+```
+
+The ComfyUI helper targets reuse the existing workspace lifecycle scripts but default to a dedicated runtime directory at `validation/comfyui_dev/.runtime`. Override the port or runtime location when needed:
+
+```bash
+make comfyui-start COMFYUI_PORT=8190
+make comfyui-start COMFYUI_RUNTIME_DIR=$PWD/.runtime/comfyui
 ```
 
 For deeper development context and repo conventions, see [Contributing](./docs/guides/contributing.md) and [CLAUDE.md](./CLAUDE.md).

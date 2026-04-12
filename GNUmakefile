@@ -11,6 +11,7 @@ LEFTHOOK=$(TOOLS_BIN)/lefthook
 LEFTHOOK_VERSION=v2.1.5
 GOLANGCI_LINT=$(TOOLS_BIN)/golangci-lint
 GOLANGCI_LINT_VERSION=v2.11.4
+COMFYUI_RUNTIME_DIR=$(CURDIR)/validation/comfyui_dev/.runtime
 
 $(TOOLS_BIN):
 	mkdir -p $(TOOLS_BIN)
@@ -90,6 +91,29 @@ hooks-run-pre-commit: $(LEFTHOOK)
 hooks-run-pre-push: $(LEFTHOOK)
 	$(LEFTHOOK) run pre-push
 
+comfyui-start:
+	@WORKSPACE_E2E_RUNTIME_DIR="$(COMFYUI_RUNTIME_DIR)" COMFYUI_HOST="$(COMFYUI_HOST)" COMFYUI_PORT="$(COMFYUI_PORT)" ./scripts/workspace-e2e/start-comfyui.sh
+
+comfyui-stop:
+	@WORKSPACE_E2E_RUNTIME_DIR="$(COMFYUI_RUNTIME_DIR)" COMFYUI_HOST="$(COMFYUI_HOST)" COMFYUI_PORT="$(COMFYUI_PORT)" ./scripts/workspace-e2e/stop-comfyui.sh
+
+comfyui-status:
+	@RUNTIME_DIR="$(COMFYUI_RUNTIME_DIR)"; \
+	PID_FILE="$$RUNTIME_DIR/comfyui.pid"; \
+	ENV_FILE="$$RUNTIME_DIR/runtime.env"; \
+	if [ -f "$$PID_FILE" ] && kill -0 "$$(cat "$$PID_FILE")" 2>/dev/null; then \
+		echo "ComfyUI running (pid=$$(cat "$$PID_FILE"))"; \
+		echo "runtime_dir=$$RUNTIME_DIR"; \
+		if [ -f "$$ENV_FILE" ]; then \
+			. "$$ENV_FILE"; \
+			echo "base_url=$$WORKSPACE_E2E_BASE_URL"; \
+			echo "log_file=$$WORKSPACE_E2E_LOG_FILE"; \
+		fi; \
+	else \
+		echo "ComfyUI not running"; \
+		echo "runtime_dir=$$RUNTIME_DIR"; \
+	fi
+
 workspace-e2e-browser-install:
 	cd validation/workspace_e2e/browser && npm install && npx playwright install chromium
 
@@ -138,4 +162,4 @@ release-preflight:
 clean:
 	rm -f $(BINARY)
 
-.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs docs-validate docs-check tools hooks-install hooks-run-pre-commit hooks-run-pre-push workspace-e2e-browser-install workspace-e2e release-e2e-browser-install release-e2e synthesis-e2e inventory-plan-e2e execution-e2e validate-release-version verify release-preflight clean
+.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs docs-validate docs-check tools hooks-install hooks-run-pre-commit hooks-run-pre-push comfyui-start comfyui-stop comfyui-status workspace-e2e-browser-install workspace-e2e release-e2e-browser-install release-e2e synthesis-e2e inventory-plan-e2e execution-e2e validate-release-version verify release-preflight clean
