@@ -20,7 +20,7 @@ description: |-
 - `freq_cutoff` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000. Step: 1. Tooltip: Number of frequency indices around center to consider as low-frequency.
 - `model` (String) Input: MODEL. Link input.
 - `scale_high` (Number) Input: FLOAT. Default: 1.25. Allowed range: 0 to 10. Step: 0.01. Tooltip: Scaling factor for high-frequency components.
-- `scale_low` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01. Tooltip: Scaling factor for low-frequency components.
+- `scale_low` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0 to 10. Step: 0.01. Tooltip: Scaling factor for low-frequency components.
 
 ### Read-Only
 

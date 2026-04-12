@@ -18,12 +18,12 @@ ComfyUI SamplerSASolver node [sampling/custom_sampling/samplers] Source: comfy_e
 ### Required
 
 - `corrector_order` (Number) Input: INT. Default: 4. Allowed range: 0 to 6.
-- `eta` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `eta` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 - `model` (String) Input: MODEL. Link input.
 - `predictor_order` (Number) Input: INT. Default: 3. Allowed range: 1 to 6.
-- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
-- `sde_end_percent` (Number) Input: FLOAT. Default: 0.8. Allowed range: 0 to 1. Step: 0.001.
-- `sde_start_percent` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0 to 1. Step: 0.001.
+- `s_noise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `sde_end_percent` (Number) Input: FLOAT. Default: 0.8. Allowed range: 0.0 to 1.0. Step: 0.001.
+- `sde_start_percent` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `simple_order_2` (Boolean) Input: BOOLEAN.
 - `use_pece` (Boolean) Input: BOOLEAN.
 

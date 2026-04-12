@@ -20,7 +20,7 @@ Moonvalley Marey Image to Video Node [api node/video/Moonvalley Marey] Hidden ru
 - `image` (String) Input: IMAGE. Link input. Tooltip: The reference image used to generate the video.
 - `negative_prompt` (String) Input: STRING. Default: "<synthetic> <scene cut> gopro, bright, contrast, static, overexposed, vignette, artifacts, still, noise, texture, scanlines, videogame, 360 camera, VR, transition, flare, saturation, distorted, warped, wide angle, saturated, vibrant, glowing, cross dissolve, cheesy, ugly hands, mutated hands, mutant, disfigured, extra fingers, blown out, horrible, blurry, worst quality, bad, dissolve, melt, fade in, fade out, wobbly, weird, low quality, plastic, stock footage, video camera, boring". Supports multiline text. Tooltip: Negative prompt text.
 - `prompt` (String) Input: STRING. Supports multiline text.
-- `prompt_adherence` (Number) Input: FLOAT. Default: 4.5. Allowed range: 1 to 20. Step: 1. Tooltip: Guidance scale for generation control.
+- `prompt_adherence` (Number) Input: FLOAT. Default: 4.5. Allowed range: 1.0 to 20.0. Step: 1.0. Tooltip: Guidance scale for generation control.
 - `resolution` (String) Input: COMBO. Default: "16:9 (1920 x 1080)". Tooltip: Resolution of the output video.
 - `seed` (Number) Input: INT. Default: 9. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Random seed value.
 - `steps` (Number) Input: INT. Default: 80. Allowed range: 75 to 100. Step: 1. Tooltip: Number of denoising steps.

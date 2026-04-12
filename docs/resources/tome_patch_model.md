@@ -18,7 +18,7 @@ ComfyUI TomePatchModel node [model_patches/unet] Source: comfy_extras/nodes_tome
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `ratio` (Number) Input: FLOAT. Default: 0.3. Allowed range: 0 to 1. Step: 0.01.
+- `ratio` (Number) Input: FLOAT. Default: 0.3. Allowed range: 0.0 to 1.0. Step: 0.01.
 
 ### Read-Only
 

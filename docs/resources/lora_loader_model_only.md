@@ -19,7 +19,7 @@ LoRAs are used to modify diffusion and CLIP models, altering the way in which la
 
 - `lora_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('loras').
 - `model` (String) Input: MODEL. Link input.
-- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Step: 0.01.
+- `strength_model` (Number) Input: FLOAT. Default: 1.0. Allowed range: -100.0 to 100.0. Step: 0.01.
 
 ### Read-Only
 

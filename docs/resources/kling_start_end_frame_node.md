@@ -18,7 +18,7 @@ Generate a video sequence that transitions between your provided start and end i
 ### Required
 
 - `aspect_ratio` (String) Input: COMBO.
-- `cfg_scale` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1.
+- `cfg_scale` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0.
 - `end_frame` (String) Input: IMAGE. Link input. Tooltip: Reference Image - End frame control. URL or Base64 encoded string, cannot exceed 10MB, resolution not less than 300*300px. Base64 should not include data:image prefix.
 - `mode` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: modes. Tooltip: The configuration to use for the video generation following the format: mode / duration / model_name.
 - `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Negative text prompt.

@@ -18,7 +18,7 @@ ComfyUI StabilityStableImageSD_3_5Node node — Stability AI Stable Diffusion 3.
 ### Required
 
 - `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: StabilityAspectRatio. Tooltip: Aspect ratio of generated image.
-- `cfg_scale` (Number) Input: FLOAT. Default: 4. Allowed range: 1 to 10. Step: 0.1. Tooltip: How strictly the diffusion process adheres to the prompt text (higher values keep your image closer to your prompt).
+- `cfg_scale` (Number) Input: FLOAT. Default: 4.0. Allowed range: 1.0 to 10.0. Step: 0.1. Tooltip: How strictly the diffusion process adheres to the prompt text (higher values keep your image closer to your prompt).
 - `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: Stability_SD3_5_Model.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: What you wish to see in the output image. A strong, descriptive prompt that clearly defines elements, colors, and subjects will lead to better results.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967294. Step: 1. Tooltip: The random seed used for creating the noise.
@@ -27,7 +27,7 @@ ComfyUI StabilityStableImageSD_3_5Node node — Stability AI Stable Diffusion 3.
 ### Optional
 
 - `image` (String) Input: IMAGE. Link input.
-- `image_denoise` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.
+- `image_denoise` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.
 - `negative_prompt` (String) Input: STRING. Default: "". Tooltip: Keywords of what you do not wish to see in the output image. This is an advanced feature.
 
 ### Read-Only

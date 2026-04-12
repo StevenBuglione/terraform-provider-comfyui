@@ -18,7 +18,7 @@ ComfyUI EmptyAudio node — Empty Audio [audio] Source: comfy_extras/nodes_audio
 ### Required
 
 - `channels` (Number) Input: INT. Default: 2. Allowed range: 1 to 2. Tooltip: Number of audio channels (1 for mono, 2 for stereo).
-- `duration` (Number) Input: FLOAT. Default: 60. Allowed range: 0 to 18446744073709552000. Step: 0.01. Tooltip: Duration of the empty audio clip in seconds.
+- `duration` (Number) Input: FLOAT. Default: 60.0. Allowed range: 0.0 to 18446744073709551615. Step: 0.01. Tooltip: Duration of the empty audio clip in seconds.
 - `sample_rate` (Number) Input: INT. Default: 44100. Allowed range: 1 to 192000. Tooltip: Sample rate of the empty audio clip.
 
 ### Read-Only

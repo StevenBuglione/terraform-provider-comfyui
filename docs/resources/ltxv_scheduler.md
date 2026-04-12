@@ -17,8 +17,8 @@ ComfyUI LTXVScheduler node [sampling/custom_sampling/schedulers] Source: comfy_e
 
 ### Required
 
-- `base_shift` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0 to 100. Step: 0.01.
-- `max_shift` (Number) Input: FLOAT. Default: 2.05. Allowed range: 0 to 100. Step: 0.01.
+- `base_shift` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `max_shift` (Number) Input: FLOAT. Default: 2.05. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Optional

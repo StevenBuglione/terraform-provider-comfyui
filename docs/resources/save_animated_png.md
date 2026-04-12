@@ -19,7 +19,7 @@ ComfyUI SaveAnimatedPNG node [image/animation] Hidden runtime inputs: prompt (PR
 
 - `compress_level` (Number) Input: INT. Default: 4. Allowed range: 0 to 9.
 - `filename_prefix` (String) Input: STRING. Default: "ComfyUI".
-- `fps` (Number) Input: FLOAT. Default: 6. Allowed range: 0.01 to 1000. Step: 0.01.
+- `fps` (Number) Input: FLOAT. Default: 6.0. Allowed range: 0.01 to 1000.0. Step: 0.01.
 - `images` (String) Input: IMAGE. Link input.
 
 ### Read-Only

@@ -17,8 +17,8 @@ description: |-
 
 ### Required
 
-- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
-- `strength_mult` (Number) Input: FLOAT. Default: 1. Allowed range: -20 to 20. Step: 0.01.
+- `start_percent` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.001.
+- `strength_mult` (Number) Input: FLOAT. Default: 1.0. Allowed range: -20.0 to 20.0. Step: 0.01.
 
 ### Optional
 

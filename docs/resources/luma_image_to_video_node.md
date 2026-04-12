@@ -22,7 +22,7 @@ Generates videos synchronously based on prompt, input images, and output_size. [
 - `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaVideoModel.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the video generation.
 - `resolution` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaVideoOutputResolution.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 

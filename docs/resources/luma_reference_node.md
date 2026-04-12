@@ -18,7 +18,7 @@ Holds an image and weight for use with Luma Generate Image node. [api node/image
 ### Required
 
 - `image` (String) Input: IMAGE. Link input. Tooltip: Image to use as reference.
-- `weight` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Weight of image reference.
+- `weight` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Weight of image reference.
 
 ### Optional
 

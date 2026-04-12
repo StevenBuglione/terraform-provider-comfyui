@@ -17,7 +17,7 @@ ComfyUI LatentMultiply node [latent/advanced] Source: comfy_extras/nodes_latent.
 
 ### Required
 
-- `multiplier` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `multiplier` (Number) Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01.
 - `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only

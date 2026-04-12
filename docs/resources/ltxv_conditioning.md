@@ -17,7 +17,7 @@ ComfyUI LTXVConditioning node [conditioning/video_models] Source: comfy_extras/n
 
 ### Required
 
-- `frame_rate` (Number) Input: FLOAT. Default: 25. Allowed range: 0 to 1000. Step: 0.01.
+- `frame_rate` (Number) Input: FLOAT. Default: 25.0. Allowed range: 0.0 to 1000.0. Step: 0.01.
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
 

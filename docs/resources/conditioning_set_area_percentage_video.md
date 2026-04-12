@@ -18,13 +18,13 @@ ComfyUI ConditioningSetAreaPercentageVideo node — ConditioningSetAreaPercentag
 ### Required
 
 - `conditioning` (String) Input: CONDITIONING. Link input.
-- `height` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
-- `temporal` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
-- `width` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
-- `x` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
-- `y` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
-- `z` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01.
+- `height` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0 to 1.0. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
+- `temporal` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0 to 1.0. Step: 0.01.
+- `width` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0 to 1.0. Step: 0.01.
+- `x` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1.0. Step: 0.01.
+- `y` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1.0. Step: 0.01.
+- `z` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1.0. Step: 0.01.
 
 ### Read-Only
 

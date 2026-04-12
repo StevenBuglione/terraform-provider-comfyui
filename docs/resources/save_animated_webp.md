@@ -18,7 +18,7 @@ ComfyUI SaveAnimatedWEBP node [image/animation] Hidden runtime inputs: prompt (P
 ### Required
 
 - `filename_prefix` (String) Input: STRING. Default: "ComfyUI".
-- `fps` (Number) Input: FLOAT. Default: 6. Allowed range: 0.01 to 1000. Step: 0.01.
+- `fps` (Number) Input: FLOAT. Default: 6.0. Allowed range: 0.01 to 1000.0. Step: 0.01.
 - `images` (String) Input: IMAGE. Link input.
 - `lossless` (Boolean) Input: BOOLEAN. Default: true.
 - `method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(cls.COMPRESS_METHODS.keys()).

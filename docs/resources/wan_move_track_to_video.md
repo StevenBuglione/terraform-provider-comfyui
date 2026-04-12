@@ -23,7 +23,7 @@ ComfyUI WanMoveTrackToVideo node [conditioning/video_models] Source: comfy_extra
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
 - `start_image` (String) Input: IMAGE. Link input.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: Strength of the track conditioning.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01. Tooltip: Strength of the track conditioning.
 - `vae` (String) Input: VAE. Link input.
 - `width` (Number) Input: INT. Default: 832. Minimum value: 16. Step: 16.
 

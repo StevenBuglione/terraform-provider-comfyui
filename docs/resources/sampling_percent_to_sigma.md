@@ -20,7 +20,7 @@ ComfyUI SamplingPercentToSigma node [sampling/custom_sampling/sigmas] Source: co
 - `model` (String) Input: MODEL. Link input.
 - `return_actual_sigma` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Return the actual sigma value instead of the value used for interval checks.
 This only affects results at 0.0 and 1.0.
-- `sampling_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.0001.
+- `sampling_percent` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.0001.
 
 ### Read-Only
 

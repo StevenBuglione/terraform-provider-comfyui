@@ -18,12 +18,12 @@ description: |-
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `scale_t` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.
-- `scale_x` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.
-- `scale_y` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.
-- `shift_t` (Number) Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.
-- `shift_x` (Number) Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.
-- `shift_y` (Number) Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.
+- `scale_t` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.1.
+- `scale_x` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.1.
+- `scale_y` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.1.
+- `shift_t` (Number) Input: FLOAT. Default: 0.0. Allowed range: -256.0 to 256.0. Step: 0.1.
+- `shift_x` (Number) Input: FLOAT. Default: 0.0. Allowed range: -256.0 to 256.0. Step: 0.1.
+- `shift_y` (Number) Input: FLOAT. Default: 0.0. Allowed range: -256.0 to 256.0. Step: 0.1.
 
 ### Read-Only
 

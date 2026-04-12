@@ -19,7 +19,7 @@ ComfyUI HypernetworkLoader node [loaders] Source: comfy_extras/nodes_hypernetwor
 
 - `hypernetwork_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('hypernetworks').
 - `model` (String) Input: MODEL. Link input.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01.
 
 ### Read-Only
 

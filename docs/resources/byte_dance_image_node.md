@@ -25,7 +25,7 @@ description: |-
 
 ### Optional
 
-- `guidance_scale` (Number) Input: FLOAT. Default: 2.5. Allowed range: 1 to 10. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.
+- `guidance_scale` (Number) Input: FLOAT. Default: 2.5. Allowed range: 1.0 to 10.0. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
 - `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an "AI generated" watermark to the image.
 

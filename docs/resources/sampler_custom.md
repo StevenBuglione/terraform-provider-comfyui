@@ -18,11 +18,11 @@ ComfyUI SamplerCustom node [sampling/custom_sampling] Source: comfy_extras/nodes
 ### Required
 
 - `add_noise` (Boolean) Input: BOOLEAN. Default: true.
-- `cfg` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `cfg` (Number) Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1.
 - `latent_image` (String) Input: LATENT. Link input.
 - `model` (String) Input: MODEL. Link input.
 - `negative` (String) Input: CONDITIONING. Link input.
-- `noise_seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.
+- `noise_seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.
 - `positive` (String) Input: CONDITIONING. Link input.
 - `sampler` (String) Input: SAMPLER. Link input.
 - `sigmas` (String) Input: SIGMAS. Link input.

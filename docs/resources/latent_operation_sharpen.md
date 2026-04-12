@@ -17,9 +17,9 @@ description: |-
 
 ### Required
 
-- `alpha` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0 to 5. Step: 0.01.
+- `alpha` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0.0 to 5.0. Step: 0.01.
 - `sharpen_radius` (Number) Input: INT. Default: 9. Allowed range: 1 to 31. Step: 1.
-- `sigma` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 10. Step: 0.1.
+- `sigma` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.1 to 10.0. Step: 0.1.
 
 ### Read-Only
 

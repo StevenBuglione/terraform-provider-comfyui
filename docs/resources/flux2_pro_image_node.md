@@ -20,7 +20,7 @@ Generates images synchronously based on prompt and resolution. [api node/image/B
 - `height` (Number) Input: INT. Default: 768. Allowed range: 256 to 2048. Step: 32.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation or edit.
 - `prompt_upsampling` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: The random seed used for creating the noise.
 - `width` (Number) Input: INT. Default: 1024. Allowed range: 256 to 2048. Step: 32.
 
 ### Optional

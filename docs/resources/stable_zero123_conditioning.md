@@ -17,10 +17,10 @@ ComfyUI StableZero123_Conditioning node [conditioning/3d_models] Source: comfy_e
 
 ### Required
 
-- `azimuth` (Number) Input: FLOAT. Default: 0. Allowed range: -180 to 180. Step: 0.1.
+- `azimuth` (Number) Input: FLOAT. Default: 0.0. Allowed range: -180.0 to 180.0. Step: 0.1.
 - `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
 - `clip_vision` (String) Input: CLIP_VISION. Link input.
-- `elevation` (Number) Input: FLOAT. Default: 0. Allowed range: -180 to 180. Step: 0.1.
+- `elevation` (Number) Input: FLOAT. Default: 0.0. Allowed range: -180.0 to 180.0. Step: 0.1.
 - `height` (Number) Input: INT. Default: 256. Minimum value: 16. Step: 8.
 - `init_image` (String) Input: IMAGE. Link input.
 - `vae` (String) Input: VAE. Link input.

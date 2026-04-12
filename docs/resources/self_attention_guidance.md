@@ -17,9 +17,9 @@ description: |-
 
 ### Required
 
-- `blur_sigma` (Number) Input: FLOAT. Default: 2. Allowed range: 0 to 10. Step: 0.1.
+- `blur_sigma` (Number) Input: FLOAT. Default: 2.0. Allowed range: 0.0 to 10.0. Step: 0.1.
 - `model` (String) Input: MODEL. Link input.
-- `scale` (Number) Input: FLOAT. Default: 0.5. Allowed range: -2 to 5. Step: 0.01.
+- `scale` (Number) Input: FLOAT. Default: 0.5. Allowed range: -2.0 to 5.0. Step: 0.01.
 
 ### Read-Only
 

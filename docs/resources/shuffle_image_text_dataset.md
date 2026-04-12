@@ -18,7 +18,7 @@ description: |-
 ### Required
 
 - `images` (String) Input: IMAGE. Link input. Tooltip: List of images to shuffle.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Random seed.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: Random seed.
 - `texts` (String) Input: STRING. Tooltip: List of texts to shuffle.
 
 ### Read-Only

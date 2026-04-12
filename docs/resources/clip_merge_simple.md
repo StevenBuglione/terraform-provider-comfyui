@@ -19,7 +19,7 @@ ComfyUI CLIPMergeSimple node — CLIPMergeSimple [advanced/model_merging] Source
 
 - `clip1` (String) Input: CLIP. Link input.
 - `clip2` (String) Input: CLIP. Link input.
-- `ratio` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `ratio` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 
 ### Read-Only
 

@@ -18,7 +18,7 @@ ComfyUI ImageScaleToTotalPixels node [image/upscaling] Source: comfy_extras/node
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `megapixels` (Number) Input: FLOAT. Default: 1. Allowed range: 0.01 to 16. Step: 0.01.
+- `megapixels` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.01 to 16.0. Step: 0.01.
 - `resolution_steps` (Number) Input: INT. Default: 1. Allowed range: 1 to 256.
 - `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.upscale_methods.
 

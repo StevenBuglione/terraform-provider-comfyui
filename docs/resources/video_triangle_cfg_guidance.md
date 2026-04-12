@@ -17,7 +17,7 @@ ComfyUI VideoTriangleCFGGuidance node — VideoTriangleCFGGuidance [sampling/vid
 
 ### Required
 
-- `min_cfg` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.5.
+- `min_cfg` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.5.
 - `model` (String) Input: MODEL. Link input.
 
 ### Read-Only

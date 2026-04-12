@@ -18,7 +18,7 @@ ComfyUI EmptyAceStepLatentAudio node — Empty Ace Step 1.0 Latent Audio [latent
 ### Required
 
 - `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096. Tooltip: The number of latent images in the batch.
-- `seconds` (Number) Input: FLOAT. Default: 120. Allowed range: 1 to 1000. Step: 0.1.
+- `seconds` (Number) Input: FLOAT. Default: 120.0. Allowed range: 1.0 to 1000.0. Step: 0.1.
 
 ### Read-Only
 

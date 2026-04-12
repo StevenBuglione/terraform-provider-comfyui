@@ -19,7 +19,7 @@ ComfyUI ConditioningSetArea node — Conditioning (Set Area) [conditioning] Sour
 
 - `conditioning` (String) Input: CONDITIONING. Link input.
 - `height` (Number) Input: INT. Default: 64. Minimum value: 64. Step: 8.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 - `width` (Number) Input: INT. Default: 64. Minimum value: 64. Step: 8.
 - `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.
 - `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 8.

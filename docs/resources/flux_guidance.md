@@ -18,7 +18,7 @@ ComfyUI FluxGuidance node [advanced/conditioning/flux] Source: comfy_extras/node
 ### Required
 
 - `conditioning` (String) Input: CONDITIONING. Link input.
-- `guidance` (Number) Input: FLOAT. Default: 3.5. Allowed range: 0 to 100. Step: 0.1.
+- `guidance` (Number) Input: FLOAT. Default: 3.5. Allowed range: 0.0 to 100.0. Step: 0.1.
 
 ### Read-Only
 

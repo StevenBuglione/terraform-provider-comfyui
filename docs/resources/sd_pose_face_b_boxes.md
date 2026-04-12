@@ -19,7 +19,7 @@ ComfyUI SDPoseFaceBBoxes node [image/preprocessors] Source: comfy_extras/nodes_s
 
 - `force_square` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Expand the shorter bbox axis so the crop region is always square.
 - `keypoints` (String) Input: POSE_KEYPOINT. Link input.
-- `scale` (Number) Input: FLOAT. Default: 1.5. Allowed range: 1 to 10. Step: 0.1. Tooltip: Multiplier for the bounding box area around each detected face.
+- `scale` (Number) Input: FLOAT. Default: 1.5. Allowed range: 1.0 to 10.0. Step: 0.1. Tooltip: Multiplier for the bounding box area around each detected face.
 
 ### Read-Only
 

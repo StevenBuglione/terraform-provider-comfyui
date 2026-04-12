@@ -17,7 +17,7 @@ ComfyUI OptimalStepsScheduler node [sampling/custom_sampling/schedulers] Source:
 
 ### Required
 
-- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `denoise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `model_type` (String) Input: COMBO.
 - `steps` (Number) Input: INT. Default: 20. Allowed range: 3 to 1000.
 

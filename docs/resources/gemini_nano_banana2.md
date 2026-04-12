@@ -22,7 +22,7 @@ Generate or edit images synchronously via Google Vertex API. [api node/image/Gem
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt describing the image to generate or the edits to apply. Include any constraints, styles, or details the model should follow.
 - `resolution` (String) Input: COMBO. Tooltip: Target output resolution. For 2K/4K the native Gemini upscaler is used.
 - `response_modalities` (String) Input: COMBO.
-- `seed` (Number) Input: INT. Default: 42. Allowed range: 0 to 18446744073709552000. Tooltip: When the seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.
+- `seed` (Number) Input: INT. Default: 42. Allowed range: 0 to 18446744073709551615. Tooltip: When the seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.
 - `thinking_level` (String) Input: COMBO.
 
 ### Optional

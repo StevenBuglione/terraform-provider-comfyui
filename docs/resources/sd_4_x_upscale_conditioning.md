@@ -19,9 +19,9 @@ ComfyUI SD_4XUpscale_Conditioning node [conditioning/upscale_diffusion] Source: 
 
 - `images` (String) Input: IMAGE. Link input.
 - `negative` (String) Input: CONDITIONING. Link input.
-- `noise_augmentation` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `noise_augmentation` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `positive` (String) Input: CONDITIONING. Link input.
-- `scale_ratio` (Number) Input: FLOAT. Default: 4. Allowed range: 0 to 10. Step: 0.01.
+- `scale_ratio` (Number) Input: FLOAT. Default: 4.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 
 ### Read-Only
 

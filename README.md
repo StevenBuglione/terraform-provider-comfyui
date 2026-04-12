@@ -179,6 +179,7 @@ The provider also exposes dedicated artifact-management surfaces for AI harness 
 
 - `comfyui_prompt_json` / `comfyui_workspace_json` import and normalize native ComfyUI artifacts.
 - `comfyui_prompt_to_workspace` / `comfyui_workspace_to_prompt` translate between API prompt JSON and workspace JSON with explicit fidelity reporting.
+- `comfyui_prompt_to_terraform` / `comfyui_workspace_to_terraform` synthesize canonical Terraform IR and rendered HCL from native artifacts using the generated node contract.
 - `comfyui_prompt_validation` / `comfyui_workspace_validation` validate artifacts against live `/object_info` metadata, defaulting to executable modes that require output nodes. Fragment-only modes remain available when an AI harness is editing incomplete graphs.
 - `comfyui_uploaded_image` and `comfyui_uploaded_mask` manage ComfyUI-backed uploads.
 - `comfyui_output_artifact` downloads a remote ComfyUI file from `/view` into a Terraform-managed local artifact.
@@ -220,12 +221,15 @@ make workspace-e2e-browser-install
 make workspace-e2e
 make release-e2e-browser-install
 make release-e2e
+make synthesis-e2e
 make execution-e2e
 ```
 
 `make workspace-e2e` launches a disposable local ComfyUI from `third_party/ComfyUI` (auto-selecting a free local port if 8188 is busy), renders the `validation/workspace_e2e` stress fixtures through `comfyui_workspace`, and verifies the real browser canvas with Playwright. Evidence lands under `validation/workspace_e2e/artifacts/browser/` as screenshots and metrics JSON files. In this repo, "clean and usable" means each staged workspace loads in ComfyUI, every workflow group remains visible, and the captured metrics show zero cross-group overlaps, zero header overlaps, zero body containment violations, zero backward links, and correctly styled group rendering.
 
 `make release-e2e` stages four canonical release scenarios into a live ComfyUI canvas and verifies them with Playwright: an assembled-resource workflow, a raw `workflow_json` import, a workspace->prompt->workspace round trip, and a `comfyui_workspace` gallery export. It is aimed squarely at the provider-owned logic that is hardest to trust by inspection alone: assembly, translation, staging, and graph connectivity.
+
+`make synthesis-e2e` exercises the AI-facing synthesis surfaces with real Terraform. It feeds native prompt and workspace artifacts into `comfyui_prompt_to_terraform` and `comfyui_workspace_to_terraform`, then asserts that both return non-empty Terraform IR, rendered HCL, and the expected workflow/resource blocks without needing a live ComfyUI server.
 
 `make execution-e2e` launches a disposable local ComfyUI, uploads a tiny fixture image, runs a model-free `LoadImage -> ImageInvert -> SaveImage` workflow, verifies the structured execution fields through `comfyui_workflow`, re-reads the same run through `comfyui_job` / `comfyui_jobs`, and downloads the saved artifact back to local disk.
 

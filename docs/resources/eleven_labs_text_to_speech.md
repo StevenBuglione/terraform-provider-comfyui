@@ -22,7 +22,7 @@ Convert text to speech. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_
 - `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for text-to-speech.
 - `output_format` (String) Input: COMBO. Tooltip: Audio output format.
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Tooltip: Seed for reproducibility (determinism not guaranteed).
-- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
+- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
 - `text` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: The text to convert to speech.
 - `voice` (String) Input: ELEVENLABS_VOICE. Link input. Tooltip: Voice to use for speech synthesis. Connect from Voice Selector or Instant Voice Clone.
 

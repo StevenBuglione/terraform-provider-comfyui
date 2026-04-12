@@ -26,7 +26,7 @@ ComfyUI StabilityAudioToAudio node — Stability AI Audio To Audio [api node/aud
 - `duration` (Number) Input: INT. Default: 190. Allowed range: 1 to 190. Step: 1. Tooltip: Controls the duration in seconds of the generated audio.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967294. Step: 1. Tooltip: The random seed used for generation.
 - `steps` (Number) Input: INT. Default: 8. Allowed range: 4 to 8. Step: 1. Tooltip: Controls the number of sampling steps.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0.01 to 1. Step: 0.01. Tooltip: Parameter controls how much influence the audio parameter has on the generated audio.
+- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0.01 to 1.0. Step: 0.01. Tooltip: Parameter controls how much influence the audio parameter has on the generated audio.
 
 ### Read-Only
 

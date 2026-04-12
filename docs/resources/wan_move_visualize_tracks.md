@@ -21,7 +21,7 @@ ComfyUI WanMoveVisualizeTracks node [conditioning/video_models] Source: comfy_ex
 - `images` (String) Input: IMAGE. Link input.
 - `line_resolution` (Number) Input: INT. Default: 24. Allowed range: 1 to 1024.
 - `line_width` (Number) Input: INT. Default: 16. Allowed range: 1 to 128.
-- `opacity` (Number) Input: FLOAT. Default: 0.75. Allowed range: 0 to 1. Step: 0.01.
+- `opacity` (Number) Input: FLOAT. Default: 0.75. Allowed range: 0.0 to 1.0. Step: 0.01.
 
 ### Optional
 

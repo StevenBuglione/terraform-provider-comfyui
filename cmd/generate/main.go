@@ -430,10 +430,7 @@ func buildGeneratedNodeSchemaInputs(inputs []Input, required bool) []GeneratedNo
 func buildGeneratedNodeSchemaHiddenInputs(inputs []HiddenInput) []GeneratedNodeSchemaHiddenInput {
 	filtered := make([]GeneratedNodeSchemaHiddenInput, 0, len(inputs))
 	for _, input := range inputs {
-		filtered = append(filtered, GeneratedNodeSchemaHiddenInput{
-			Name: input.Name,
-			Type: input.Type,
-		})
+		filtered = append(filtered, GeneratedNodeSchemaHiddenInput(input))
 	}
 	return filtered
 }
@@ -441,12 +438,7 @@ func buildGeneratedNodeSchemaHiddenInputs(inputs []HiddenInput) []GeneratedNodeS
 func buildGeneratedNodeSchemaOutputs(outputs []Output) []GeneratedNodeSchemaOutput {
 	filtered := make([]GeneratedNodeSchemaOutput, 0, len(outputs))
 	for _, output := range outputs {
-		filtered = append(filtered, GeneratedNodeSchemaOutput{
-			Name:      output.Name,
-			Type:      output.Type,
-			SlotIndex: output.SlotIndex,
-			IsList:    output.IsList,
-		})
+		filtered = append(filtered, GeneratedNodeSchemaOutput(output))
 	}
 	return filtered
 }

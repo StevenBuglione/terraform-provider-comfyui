@@ -19,7 +19,7 @@ Edit images synchronously via Google API. [api node/image/Gemini] Hidden runtime
 
 - `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: GeminiImageModel. Tooltip: The Gemini model to use for generating responses.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt for generation.
-- `seed` (Number) Input: INT. Default: 42. Allowed range: 0 to 18446744073709552000. Tooltip: When seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.
+- `seed` (Number) Input: INT. Default: 42. Allowed range: 0 to 18446744073709551615. Tooltip: When seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.
 
 ### Optional
 

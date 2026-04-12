@@ -17,8 +17,8 @@ ComfyUI BetaSamplingScheduler node [sampling/custom_sampling/schedulers] Source:
 
 ### Required
 
-- `alpha` (Number) Input: FLOAT. Default: 0.6. Allowed range: 0 to 50. Step: 0.01.
-- `beta` (Number) Input: FLOAT. Default: 0.6. Allowed range: 0 to 50. Step: 0.01.
+- `alpha` (Number) Input: FLOAT. Default: 0.6. Allowed range: 0.0 to 50.0. Step: 0.01.
+- `beta` (Number) Input: FLOAT. Default: 0.6. Allowed range: 0.0 to 50.0. Step: 0.01.
 - `model` (String) Input: MODEL. Link input.
 - `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 

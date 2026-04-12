@@ -70,6 +70,25 @@ jobs:
       - run: go mod download
       - run: go test ./... -v -timeout 120s
 
+  synthesis:
+    name: Synthesis E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - run: go mod download
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+      - run: chmod +x scripts/synthesis-e2e/run.sh
+      - run: make synthesis-e2e
+
   lint:
     name: Lint
     runs-on: ubuntu-latest

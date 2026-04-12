@@ -17,7 +17,7 @@ ComfyUI CFGGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/n
 
 ### Required
 
-- `cfg` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `cfg` (Number) Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1.
 - `model` (String) Input: MODEL. Link input.
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.

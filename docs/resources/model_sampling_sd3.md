@@ -18,7 +18,7 @@ ComfyUI ModelSamplingSD3 node — ModelSamplingSD3 [advanced/model] Source: comf
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `shift` (Number) Input: FLOAT. Default: 3. Allowed range: 0 to 100. Step: 0.01.
+- `shift` (Number) Input: FLOAT. Default: 3.0. Allowed range: 0.0 to 100.0. Step: 0.01.
 
 ### Read-Only
 

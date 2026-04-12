@@ -18,8 +18,8 @@ Trim audio tensor into chosen time range. [audio] Source: comfy_extras/nodes_aud
 ### Required
 
 - `audio` (String) Input: AUDIO. Link input.
-- `duration` (Number) Input: FLOAT. Default: 60. Minimum value: 0. Step: 0.01. Tooltip: Duration in seconds.
-- `start_index` (Number) Input: FLOAT. Default: 0. Allowed range: -18446744073709552000 to 18446744073709552000. Step: 0.01. Tooltip: Start time in seconds, can be negative to count from the end (supports sub-seconds).
+- `duration` (Number) Input: FLOAT. Default: 60.0. Minimum value: 0.0. Step: 0.01. Tooltip: Duration in seconds.
+- `start_index` (Number) Input: FLOAT. Default: 0.0. Allowed range: -18446744073709551615 to 18446744073709551615. Step: 0.01. Tooltip: Start time in seconds, can be negative to count from the end (supports sub-seconds).
 
 ### Read-Only
 

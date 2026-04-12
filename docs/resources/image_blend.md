@@ -17,7 +17,7 @@ ComfyUI Blend node — Image Blend [image/postprocessing] Source: comfy_extras/n
 
 ### Required
 
-- `blend_factor` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
+- `blend_factor` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `blend_mode` (String) Input: COMBO.
 - `image1` (String) Input: IMAGE. Link input.
 - `image2` (String) Input: IMAGE. Link input.

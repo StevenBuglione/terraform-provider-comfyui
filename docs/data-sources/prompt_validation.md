@@ -18,6 +18,7 @@ Validates native ComfyUI prompt JSON against live /object_info metadata.
 ### Optional
 
 - `json` (String) Optional raw ComfyUI prompt JSON string.
+- `mode` (String) Validation mode. Defaults to executable_workflow. Use fragment to validate incomplete prompt fragments without requiring an output node.
 - `path` (String) Optional file path to load prompt JSON from.
 
 ### Read-Only

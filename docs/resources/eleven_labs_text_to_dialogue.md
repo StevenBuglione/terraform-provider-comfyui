@@ -23,7 +23,7 @@ Generate multi-speaker dialogue from text. Each dialogue entry has its own text 
 - `model` (String) Input: COMBO. Tooltip: Model to use for dialogue generation.
 - `output_format` (String) Input: COMBO. Tooltip: Audio output format.
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 4294967295. Tooltip: Seed for reproducibility.
-- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.5. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
+- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.5. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
 
 ### Read-Only
 

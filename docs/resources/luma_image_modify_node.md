@@ -18,10 +18,10 @@ Modifies images synchronously based on prompt and aspect ratio. [api node/image/
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `image_weight` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0 to 0.98. Step: 0.01. Tooltip: Weight of the image; the closer to 1.0, the less the image will be modified.
+- `image_weight` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0.0 to 0.98. Step: 0.01. Tooltip: Weight of the image; the closer to 1.0, the less the image will be modified.
 - `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaImageModel.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Read-Only
 

@@ -18,7 +18,7 @@ ComfyUI ModelSamplingAuraFlow node — ModelSamplingAuraFlow [advanced/model] So
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `shift` (Number) Input: FLOAT. Default: 1.73. Allowed range: 0 to 100. Step: 0.01.
+- `shift` (Number) Input: FLOAT. Default: 1.73. Allowed range: 0.0 to 100.0. Step: 0.01.
 
 ### Read-Only
 

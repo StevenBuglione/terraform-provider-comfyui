@@ -18,7 +18,7 @@ Kling Text to Video Node [api node/video/Kling] Hidden runtime inputs: auth_toke
 ### Required
 
 - `aspect_ratio` (String) Input: COMBO. Default: "16:9". Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenAspectRatio.
-- `cfg_scale` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1.
+- `cfg_scale` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0.
 - `mode` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: modes. Tooltip: The configuration to use for the video generation following the format: mode / duration / model_name.
 - `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Negative text prompt.
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.

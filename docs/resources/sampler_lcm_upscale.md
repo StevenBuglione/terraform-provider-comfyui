@@ -17,7 +17,7 @@ ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers] Source: comfy
 
 ### Required
 
-- `scale_ratio` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 20. Step: 0.01.
+- `scale_ratio` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.1 to 20.0. Step: 0.01.
 - `scale_steps` (Number) Input: INT. Default: -1. Allowed range: -1 to 1000. Step: 1.
 - `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.
 

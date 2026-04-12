@@ -20,7 +20,7 @@ description: |-
 - `bypass` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When enabled, applies LoRA in bypass mode without modifying base model weights. Useful for training and when model weights are offloaded.
 - `lora` (String) Input: LORA_MODEL. Link input. Tooltip: The LoRA model to apply to the diffusion model.
 - `model` (String) Input: MODEL. Link input. Tooltip: The diffusion model the LoRA will be applied to.
-- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -100 to 100. Tooltip: How strongly to modify the diffusion model. This value can be negative.
+- `strength_model` (Number) Input: FLOAT. Default: 1.0. Allowed range: -100.0 to 100.0. Tooltip: How strongly to modify the diffusion model. This value can be negative.
 
 ### Read-Only
 

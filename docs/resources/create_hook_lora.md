@@ -18,8 +18,8 @@ description: |-
 ### Required
 
 - `lora_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('loras').
-- `strength_clip` (Number) Input: FLOAT. Default: 1. Allowed range: -20 to 20. Step: 0.01.
-- `strength_model` (Number) Input: FLOAT. Default: 1. Allowed range: -20 to 20. Step: 0.01.
+- `strength_clip` (Number) Input: FLOAT. Default: 1.0. Allowed range: -20.0 to 20.0. Step: 0.01.
+- `strength_model` (Number) Input: FLOAT. Default: 1.0. Allowed range: -20.0 to 20.0. Step: 0.01.
 
 ### Optional
 

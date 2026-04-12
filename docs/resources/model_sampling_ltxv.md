@@ -17,8 +17,8 @@ ComfyUI ModelSamplingLTXV node [advanced/model] Source: comfy_extras/nodes_lt.py
 
 ### Required
 
-- `base_shift` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0 to 100. Step: 0.01.
-- `max_shift` (Number) Input: FLOAT. Default: 2.05. Allowed range: 0 to 100. Step: 0.01.
+- `base_shift` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `max_shift` (Number) Input: FLOAT. Default: 2.05. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `model` (String) Input: MODEL. Link input.
 
 ### Optional

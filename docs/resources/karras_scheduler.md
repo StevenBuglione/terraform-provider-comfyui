@@ -17,9 +17,9 @@ ComfyUI KarrasScheduler node [sampling/custom_sampling/schedulers] Source: comfy
 
 ### Required
 
-- `rho` (Number) Input: FLOAT. Default: 7. Allowed range: 0 to 100. Step: 0.01.
-- `sigma_max` (Number) Input: FLOAT. Default: 14.614642. Allowed range: 0 to 5000. Step: 0.01.
-- `sigma_min` (Number) Input: FLOAT. Default: 0.0291675. Allowed range: 0 to 5000. Step: 0.01.
+- `rho` (Number) Input: FLOAT. Default: 7.0. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `sigma_max` (Number) Input: FLOAT. Default: 14.614642. Allowed range: 0.0 to 5000.0. Step: 0.01.
+- `sigma_min` (Number) Input: FLOAT. Default: 0.0291675. Allowed range: 0.0 to 5000.0. Step: 0.01.
 - `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Read-Only

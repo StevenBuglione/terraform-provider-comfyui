@@ -19,7 +19,7 @@ ComfyUI Blur node — Image Blur [image/postprocessing] Source: comfy_extras/nod
 
 - `blur_radius` (Number) Input: INT. Default: 1. Allowed range: 1 to 31. Step: 1.
 - `image` (String) Input: IMAGE. Link input.
-- `sigma` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 10. Step: 0.1.
+- `sigma` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.1 to 10.0. Step: 0.1.
 
 ### Read-Only
 

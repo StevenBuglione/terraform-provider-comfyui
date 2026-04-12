@@ -17,7 +17,7 @@ ComfyUI LatentInterpolate node [latent/advanced] Source: comfy_extras/nodes_late
 
 ### Required
 
-- `ratio` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `ratio` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `samples1` (String) Input: LATENT. Link input.
 - `samples2` (String) Input: LATENT. Link input.
 

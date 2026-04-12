@@ -26,9 +26,9 @@ ComfyUI WanCameraEmbedding node [camera] Source: comfy_extras/nodes_camera_traje
 
 - `cx` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
 - `cy` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
-- `fx` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.000000001.
-- `fy` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.000000001.
-- `speed` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.1.
+- `fx` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 1e-09.
+- `fy` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 1e-09.
+- `speed` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0 to 10.0. Step: 0.1.
 
 ### Read-Only
 

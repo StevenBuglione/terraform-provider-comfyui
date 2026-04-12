@@ -17,15 +17,15 @@ Uses the provided model, positive and negative conditioning to denoise the laten
 
 ### Required
 
-- `cfg` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1. Tooltip: The Classifier-Free Guidance scale balances creativity and adherence to the prompt. Higher values result in images more closely matching the prompt however too high values will negatively impact quality.
-- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: The amount of denoising applied, lower values will maintain the structure of the initial image allowing for image to image sampling.
+- `cfg` (Number) Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1. Tooltip: The Classifier-Free Guidance scale balances creativity and adherence to the prompt. Higher values result in images more closely matching the prompt however too high values will negatively impact quality.
+- `denoise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: The amount of denoising applied, lower values will maintain the structure of the initial image allowing for image to image sampling.
 - `latent_image` (String) Input: LATENT. Link input. Tooltip: The latent image to denoise.
 - `model` (String) Input: MODEL. Link input. Tooltip: The model used for denoising the input latent.
 - `negative` (String) Input: CONDITIONING. Link input. Tooltip: The conditioning describing the attributes you want to exclude from the image.
 - `positive` (String) Input: CONDITIONING. Link input. Tooltip: The conditioning describing the attributes you want to include in the image.
 - `sampler_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.KSampler.SAMPLERS. Tooltip: The algorithm used when sampling, this can affect the quality, speed, and style of the generated output.
 - `scheduler` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.KSampler.SCHEDULERS. Tooltip: The scheduler controls how noise is gradually removed to form the image.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: The random seed used for creating the noise.
 - `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000. Tooltip: The number of steps used in the denoising process.
 
 ### Read-Only

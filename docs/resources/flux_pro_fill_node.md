@@ -22,7 +22,7 @@ Inpaints image based on mask and prompt. [api node/image/BFL] Hidden runtime inp
 - `mask` (String) Input: MASK. Link input.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
 - `prompt_upsampling` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation, but results are nondeterministic (same seed will not produce exactly the same result).
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: The random seed used for creating the noise.
 - `steps` (Number) Input: INT. Default: 50. Allowed range: 15 to 50. Tooltip: Number of steps for the image generation process.
 
 ### Read-Only

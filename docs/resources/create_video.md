@@ -17,7 +17,7 @@ Create a video from images. [image/video] Source: comfy_extras/nodes_video.py:11
 
 ### Required
 
-- `fps` (Number) Input: FLOAT. Default: 30. Allowed range: 1 to 120. Step: 1.
+- `fps` (Number) Input: FLOAT. Default: 30.0. Allowed range: 1.0 to 120.0. Step: 1.0.
 - `images` (String) Input: IMAGE. Link input. Tooltip: The images to create a video from.
 
 ### Optional

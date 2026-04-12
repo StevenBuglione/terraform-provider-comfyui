@@ -20,7 +20,7 @@ ComfyUI LTXVImgToVideoInplace node [conditioning/video_models] Source: comfy_ext
 - `bypass` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Bypass the conditioning.
 - `image` (String) Input: IMAGE. Link input.
 - `latent` (String) Input: LATENT. Link input.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0.
 - `vae` (String) Input: VAE. Link input.
 
 ### Read-Only

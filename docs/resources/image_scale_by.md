@@ -18,7 +18,7 @@ ComfyUI ImageScaleBy node — Upscale Image By [image/upscaling] Source: nodes.p
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `scale_by` (Number) Input: FLOAT. Default: 1. Allowed range: 0.01 to 8. Step: 0.01.
+- `scale_by` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.01 to 8.0. Step: 0.01.
 - `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.upscale_methods.
 
 ### Read-Only
