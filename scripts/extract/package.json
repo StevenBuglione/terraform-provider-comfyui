@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "extract-ui-hints": "node ./extract_ui_hints.mjs",
+    "test": "node --test ./extract_ui_hints.test.mjs",
     "install:browsers": "playwright install chromium"
   },
   "devDependencies": {

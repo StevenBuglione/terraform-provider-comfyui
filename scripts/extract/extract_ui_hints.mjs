@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { chromium } from 'playwright';
 
@@ -12,7 +13,7 @@ function toFiniteNumber(value) {
   return Number.isFinite(value) ? Number(value) : null;
 }
 
-function stableArtifactShape(output) {
+export function stableArtifactShape(output) {
   return {
     version: output.version,
     comfyui_commit_sha: output.comfyui_commit_sha,
@@ -23,7 +24,22 @@ function stableArtifactShape(output) {
   };
 }
 
-async function extractNodeUIHints() {
+export function mergeExistingMetadata(existing, output) {
+  if (
+    existing?.comfyui_commit_sha === output.comfyui_commit_sha &&
+    output.comfyui_version === 'unknown' &&
+    existing?.comfyui_version &&
+    existing.comfyui_version !== 'unknown'
+  ) {
+    output.comfyui_version = existing.comfyui_version;
+  }
+
+  if (JSON.stringify(stableArtifactShape(existing)) === JSON.stringify(stableArtifactShape(output))) {
+    output.extracted_at = existing.extracted_at;
+  }
+}
+
+export async function extractNodeUIHints() {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
@@ -139,9 +155,7 @@ async function extractNodeUIHints() {
 
     if (fs.existsSync(outputPath)) {
       const existing = JSON.parse(fs.readFileSync(outputPath, 'utf-8'));
-      if (JSON.stringify(stableArtifactShape(existing)) === JSON.stringify(stableArtifactShape(output))) {
-        output.extracted_at = existing.extracted_at;
-      }
+      mergeExistingMetadata(existing, output);
     }
 
     fs.writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`, 'utf-8');
@@ -150,4 +164,8 @@ async function extractNodeUIHints() {
   }
 }
 
-await extractNodeUIHints();
+const isEntrypoint = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isEntrypoint) {
+  await extractNodeUIHints();
+}
