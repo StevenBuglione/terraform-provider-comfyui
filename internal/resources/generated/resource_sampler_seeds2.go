@@ -69,21 +69,21 @@ func (r *SamplerSeeds2Resource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"eta": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: Stochastic strength.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01. Tooltip: Stochastic strength.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"s_noise": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: SDE noise multiplier.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01. Tooltip: SDE noise multiplier.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"r": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.01 to 1. Step: 0.01. Tooltip: Relative step size for the intermediate stage (c2 node).",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.01 to 1.0. Step: 0.01. Tooltip: Relative step size for the intermediate stage (c2 node).",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 1),

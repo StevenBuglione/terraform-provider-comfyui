@@ -71,7 +71,7 @@ func (r *LtxvImgToVideoInplaceResource) Schema(_ context.Context, _ resource.Sch
 				Required:            true,
 			},
 			"strength": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

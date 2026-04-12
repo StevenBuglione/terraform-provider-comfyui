@@ -83,7 +83,7 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.",
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
@@ -97,7 +97,7 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"duration": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 120. Allowed range: 0 to 2000. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 120.0. Allowed range: 0.0 to 2000.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 2000),
@@ -155,21 +155,21 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 				Required:            true,
 			},
 			"cfg_scale": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 2. Allowed range: 0 to 100. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 2.0. Allowed range: 0.0 to 100.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"temperature": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.85. Allowed range: 0 to 2. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.85. Allowed range: 0.0 to 2.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 2),
 				},
 			},
 			"top_p": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.9. Allowed range: 0 to 2000. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.9. Allowed range: 0.0 to 2000.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 2000),
@@ -183,7 +183,7 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"min_p": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.001.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

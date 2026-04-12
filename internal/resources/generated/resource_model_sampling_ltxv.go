@@ -62,14 +62,14 @@ func (r *ModelSamplingLtxvResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"max_shift": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 2.05. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 2.05. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"base_shift": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),

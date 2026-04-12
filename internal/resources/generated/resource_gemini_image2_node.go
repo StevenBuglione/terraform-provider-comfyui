@@ -79,7 +79,7 @@ func (r *GeminiImage2NodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 42. Allowed range: 0 to 18446744073709552000. Tooltip: When the seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.",
+				MarkdownDescription: "Input: INT. Default: 42. Allowed range: 0 to 18446744073709551615. Tooltip: When the seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),

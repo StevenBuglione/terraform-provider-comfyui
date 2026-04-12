@@ -61,7 +61,7 @@ func (r *CreateHookLoraModelOnlyResource) Schema(_ context.Context, _ resource.S
 				Required:            true,
 			},
 			"strength_model": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: -20 to 20. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: -20.0 to 20.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-20, 20),

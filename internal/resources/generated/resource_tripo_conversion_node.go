@@ -134,7 +134,7 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				Optional:            true,
 			},
 			"flatten_bottom_threshold": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0.",
 				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
@@ -145,7 +145,7 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				Optional:            true,
 			},
 			"scale_factor": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Minimum value: 0.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Minimum value: 0.0.",
 				Optional:            true,
 			},
 			"with_animation": schema.BoolAttribute{

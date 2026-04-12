@@ -61,14 +61,14 @@ func (r *TemporalScoreRescalingResource) Schema(_ context.Context, _ resource.Sc
 				Required:            true,
 			},
 			"tsr_k": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0.01 to 100. Step: 0.001. Tooltip: Controls the rescaling strength.\nLower k produces more detailed results; higher k produces smoother results in image generation. Setting k = 1 disables rescaling.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0.01 to 100.0. Step: 0.001. Tooltip: Controls the rescaling strength.\nLower k produces more detailed results; higher k produces smoother results in image generation. Setting k = 1 disables rescaling.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 100),
 				},
 			},
 			"tsr_sigma": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.01 to 100. Step: 0.001. Tooltip: Controls how early rescaling takes effect.\nLarger values take effect earlier.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.01 to 100.0. Step: 0.001. Tooltip: Controls how early rescaling takes effect.\nLarger values take effect earlier.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 100),

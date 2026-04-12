@@ -83,7 +83,7 @@ func (r *KsamplerAdvancedResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"noise_seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.",
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
@@ -97,7 +97,7 @@ func (r *KsamplerAdvancedResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"cfg": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),

@@ -102,7 +102,7 @@ func (r *ByteDanceImageNodeResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"guidance_scale": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 2.5. Allowed range: 1 to 10. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.",
+				MarkdownDescription: "Input: FLOAT. Default: 2.5. Allowed range: 1.0 to 10.0. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.",
 				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 10),

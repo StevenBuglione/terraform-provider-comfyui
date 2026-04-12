@@ -61,7 +61,7 @@ func (r *SdPoseFaceBBoxesResource) Schema(_ context.Context, _ resource.SchemaRe
 				Required:            true,
 			},
 			"scale": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1.5. Allowed range: 1 to 10. Step: 0.1. Tooltip: Multiplier for the bounding box area around each detected face.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.5. Allowed range: 1.0 to 10.0. Step: 0.1. Tooltip: Multiplier for the bounding box area around each detected face.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 10),

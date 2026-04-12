@@ -80,7 +80,7 @@ func (r *KlingImage2VideoNodeResource) Schema(_ context.Context, _ resource.Sche
 				Required:            true,
 			},
 			"cfg_scale": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.8. Allowed range: 0 to 1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.8. Allowed range: 0.0 to 1.0.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

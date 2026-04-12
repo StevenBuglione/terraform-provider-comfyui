@@ -88,7 +88,7 @@ func (r *MoonvalleyImg2VideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"prompt_adherence": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 4.5. Allowed range: 1 to 20. Step: 1. Tooltip: Guidance scale for generation control.",
+				MarkdownDescription: "Input: FLOAT. Default: 4.5. Allowed range: 1.0 to 20.0. Step: 1.0. Tooltip: Guidance scale for generation control.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 20),

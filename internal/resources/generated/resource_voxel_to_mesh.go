@@ -72,7 +72,7 @@ func (r *VoxelToMeshResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"threshold": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.6. Allowed range: -1 to 1. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.6. Allowed range: -1.0 to 1.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-1, 1),

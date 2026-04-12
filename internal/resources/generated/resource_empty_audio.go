@@ -58,7 +58,7 @@ func (r *EmptyAudioResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"duration": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 60. Allowed range: 0 to 18446744073709552000. Step: 0.01. Tooltip: Duration of the empty audio clip in seconds.",
+				MarkdownDescription: "Input: FLOAT. Default: 60.0. Allowed range: 0.0 to 18446744073709551615. Step: 0.01. Tooltip: Duration of the empty audio clip in seconds.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1.8446744073709552e+19),

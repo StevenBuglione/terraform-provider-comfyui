@@ -64,7 +64,7 @@ func (r *MeshyRigModelNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"height_meters": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1.7. Allowed range: 0.1 to 15. Tooltip: The approximate height of the character model in meters. This aids in scaling and rigging accuracy.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.7. Allowed range: 0.1 to 15.0. Tooltip: The approximate height of the character model in meters. This aids in scaling and rigging accuracy.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 15),

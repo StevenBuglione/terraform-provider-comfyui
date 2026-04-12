@@ -72,7 +72,7 @@ func (r *KlingLipSyncTextToVideoNodeResource) Schema(_ context.Context, _ resour
 				Required:            true,
 			},
 			"voice_speed": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.8 to 2. Tooltip: Speech Rate. Valid range: 0.8~2.0, accurate to one decimal place.",
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.8 to 2.0. Tooltip: Speech Rate. Valid range: 0.8~2.0, accurate to one decimal place.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.8, 2),

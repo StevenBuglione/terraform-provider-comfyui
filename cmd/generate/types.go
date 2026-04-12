@@ -69,6 +69,60 @@ type WidgetUIHintTemplateNode struct {
 	MinNodeHeight  float64
 }
 
+type NodeSchemaTemplateData struct {
+	Version        string
+	ExtractedAt    string
+	ComfyUIVersion string
+	TotalNodes     int
+	Nodes          []GeneratedNodeSchema
+}
+
+type GeneratedNodeSchema struct {
+	NodeType       string
+	DisplayName    string
+	Description    string
+	Category       string
+	OutputNode     bool
+	Deprecated     bool
+	Experimental   bool
+	RequiredInputs []GeneratedNodeSchemaInput
+	OptionalInputs []GeneratedNodeSchemaInput
+	HiddenInputs   []GeneratedNodeSchemaHiddenInput
+	Outputs        []GeneratedNodeSchemaOutput
+}
+
+type GeneratedNodeSchemaInput struct {
+	Name                 string
+	Type                 string
+	IsLinkType           bool
+	DefaultValue         string
+	HasDefaultValue      bool
+	MinValue             string
+	HasMinValue          bool
+	MaxValue             string
+	HasMaxValue          bool
+	StepValue            string
+	HasStepValue         bool
+	EnumValues           []string
+	Multiline            bool
+	DynamicOptions       bool
+	DynamicOptionsSource string
+	Tooltip              string
+	DisplayName          string
+}
+
+type GeneratedNodeSchemaHiddenInput struct {
+	Name string
+	Type string
+}
+
+type GeneratedNodeSchemaOutput struct {
+	Name      string
+	Type      string
+	SlotIndex int
+	IsList    bool
+}
+
 // Primitive ComfyUI types that map to specific Terraform attribute types.
 var primitiveTypes = map[string]string{
 	"INT":     "int64",

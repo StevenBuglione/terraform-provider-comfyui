@@ -101,7 +101,7 @@ func (r *StabilityAudioToAudioResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"strength": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.01 to 1. Step: 0.01. Tooltip: Parameter controls how much influence the audio parameter has on the generated audio.",
+				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0.01 to 1.0. Step: 0.01. Tooltip: Parameter controls how much influence the audio parameter has on the generated audio.",
 				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 1),

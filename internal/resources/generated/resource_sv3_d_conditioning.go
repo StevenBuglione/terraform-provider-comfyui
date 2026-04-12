@@ -91,7 +91,7 @@ func (r *Sv3DConditioningResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"elevation": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -90 to 90. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -90.0 to 90.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-90, 90),

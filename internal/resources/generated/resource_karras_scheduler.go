@@ -66,21 +66,21 @@ func (r *KarrasSchedulerResource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"sigma_max": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 14.614642. Allowed range: 0 to 5000. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 14.614642. Allowed range: 0.0 to 5000.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 5000),
 				},
 			},
 			"sigma_min": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.0291675. Allowed range: 0 to 5000. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0291675. Allowed range: 0.0 to 5000.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 5000),
 				},
 			},
 			"rho": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 7. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 7.0. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),

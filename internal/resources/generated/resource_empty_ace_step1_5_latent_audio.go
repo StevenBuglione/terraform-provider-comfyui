@@ -57,7 +57,7 @@ func (r *EmptyAceStep15LatentAudioResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"seconds": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 120. Allowed range: 1 to 1000. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 120.0. Allowed range: 1.0 to 1000.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 1000),

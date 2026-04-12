@@ -76,14 +76,14 @@ func (r *SaveWebmResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				},
 			},
 			"fps": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 24. Allowed range: 0.01 to 1000. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 24.0. Allowed range: 0.01 to 1000.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.01, 1000),
 				},
 			},
 			"crf": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 32. Allowed range: 0 to 63. Step: 1. Tooltip: Higher crf means lower quality with a smaller file size, lower crf means higher quality higher filesize.",
+				MarkdownDescription: "Input: FLOAT. Default: 32.0. Allowed range: 0 to 63.0. Step: 1. Tooltip: Higher crf means lower quality with a smaller file size, lower crf means higher quality higher filesize.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 63),

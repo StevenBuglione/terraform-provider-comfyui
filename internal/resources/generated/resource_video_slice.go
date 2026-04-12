@@ -62,14 +62,14 @@ func (r *VideoSliceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"start_time": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -100000 to 100000. Step: 0.001. Tooltip: Start time in seconds.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -100000.0 to 100000.0. Step: 0.001. Tooltip: Start time in seconds.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-100000, 100000),
 				},
 			},
 			"duration": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Minimum value: 0. Step: 0.001. Tooltip: Duration in seconds, or 0 for unlimited duration.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Minimum value: 0.0. Step: 0.001. Tooltip: Duration in seconds, or 0 for unlimited duration.",
 				Required:            true,
 			},
 			"strict_duration": schema.BoolAttribute{

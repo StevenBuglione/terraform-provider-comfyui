@@ -69,6 +69,30 @@ def validate_node(node: dict, index: int) -> list:
         if 'pattern' not in node['source']:
             warnings.append(f"Node '{node.get('node_id', '?')}' missing source.pattern")
 
+    for input_index, input_spec in enumerate(node.get('inputs', [])):
+        if 'name' not in input_spec or 'type' not in input_spec:
+            warnings.append(
+                f"Node '{node.get('node_id', '?')}' input #{input_index} missing required normalized fields"
+            )
+        if 'required' not in input_spec:
+            warnings.append(
+                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing required flag"
+            )
+        if 'is_link_type' not in input_spec:
+            warnings.append(
+                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing is_link_type flag"
+            )
+
+    for output_index, output_spec in enumerate(node.get('outputs', [])):
+        if 'name' not in output_spec or 'type' not in output_spec or 'slot_index' not in output_spec:
+            warnings.append(
+                f"Node '{node.get('node_id', '?')}' output #{output_index} missing required normalized fields"
+            )
+        if 'is_list' not in output_spec:
+            warnings.append(
+                f"Node '{node.get('node_id', '?')}' output '{output_spec.get('name', output_index)}' missing is_list flag"
+            )
+
     # Ensure terraform_resource_name is set
     if 'terraform_resource_name' not in node or not node.get('terraform_resource_name'):
         node['terraform_resource_name'] = terraform_resource_name(node.get('node_id', ''))

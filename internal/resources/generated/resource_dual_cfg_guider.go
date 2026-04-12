@@ -78,14 +78,14 @@ func (r *DualCfgGuiderResource) Schema(_ context.Context, _ resource.SchemaReque
 				Required:            true,
 			},
 			"cfg_conds": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"cfg_cond2_negative": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),

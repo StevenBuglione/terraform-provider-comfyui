@@ -67,7 +67,7 @@ func (r *AudioEqualizer3BandResource) Schema(_ context.Context, _ resource.Schem
 				Required:            true,
 			},
 			"low_gain_db": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for Low frequencies (Bass).",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -24.0 to 24.0. Step: 0.1. Tooltip: Gain for Low frequencies (Bass).",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-24, 24),
@@ -81,7 +81,7 @@ func (r *AudioEqualizer3BandResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"mid_gain_db": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for Mid frequencies.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -24.0 to 24.0. Step: 0.1. Tooltip: Gain for Mid frequencies.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-24, 24),
@@ -95,14 +95,14 @@ func (r *AudioEqualizer3BandResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"mid_q": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.707. Allowed range: 0.1 to 10. Step: 0.1. Tooltip: Q factor (bandwidth) for Mids.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.707. Allowed range: 0.1 to 10.0. Step: 0.1. Tooltip: Q factor (bandwidth) for Mids.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 10),
 				},
 			},
 			"high_gain_db": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -24 to 24. Step: 0.1. Tooltip: Gain for High frequencies (Treble).",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -24.0 to 24.0. Step: 0.1. Tooltip: Gain for High frequencies (Treble).",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-24, 24),

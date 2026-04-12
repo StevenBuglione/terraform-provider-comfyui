@@ -63,7 +63,7 @@ func (r *ElevenLabsTextToDialogueResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"stability": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.5. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.5. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

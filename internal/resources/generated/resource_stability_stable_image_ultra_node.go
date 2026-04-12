@@ -89,7 +89,7 @@ func (r *StabilityStableImageUltraNodeResource) Schema(_ context.Context, _ reso
 				Optional:            true,
 			},
 			"image_denoise": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.",
 				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

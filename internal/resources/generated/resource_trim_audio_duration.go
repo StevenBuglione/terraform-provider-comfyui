@@ -61,14 +61,14 @@ func (r *TrimAudioDurationResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"start_index": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -18446744073709552000 to 18446744073709552000. Step: 0.01. Tooltip: Start time in seconds, can be negative to count from the end (supports sub-seconds).",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -18446744073709551615 to 18446744073709551615. Step: 0.01. Tooltip: Start time in seconds, can be negative to count from the end (supports sub-seconds).",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-1.8446744073709552e+19, 1.8446744073709552e+19),
 				},
 			},
 			"duration": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 60. Minimum value: 0. Step: 0.01. Tooltip: Duration in seconds.",
+				MarkdownDescription: "Input: FLOAT. Default: 60.0. Minimum value: 0.0. Step: 0.01. Tooltip: Duration in seconds.",
 				Required:            true,
 			},
 			"audio_output": schema.StringAttribute{

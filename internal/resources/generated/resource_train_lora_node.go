@@ -111,7 +111,7 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"learning_rate": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.0005. Allowed range: 0.0000001 to 1. Step: 0.0000001. Tooltip: The learning rate to use for training.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0005. Allowed range: 1e-07 to 1.0. Step: 1e-07. Tooltip: The learning rate to use for training.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1e-07, 1),
@@ -149,7 +149,7 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The seed to use for training (used in generator for LoRA weight initialization and noise sampling).",
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: The seed to use for training (used in generator for LoRA weight initialization and noise sampling).",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),

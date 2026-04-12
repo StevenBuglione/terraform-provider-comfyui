@@ -66,21 +66,21 @@ func (r *VpSchedulerResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"beta_d": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 19.9. Allowed range: 0 to 5000. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 19.9. Allowed range: 0.0 to 5000.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 5000),
 				},
 			},
 			"beta_min": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.1. Allowed range: 0 to 5000. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.1. Allowed range: 0.0 to 5000.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 5000),
 				},
 			},
 			"eps_s": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.001. Allowed range: 0 to 1. Step: 0.0001.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.001. Allowed range: 0.0 to 1.0. Step: 0.0001.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

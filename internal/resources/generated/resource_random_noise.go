@@ -55,7 +55,7 @@ func (r *RandomNoiseResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"noise_seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.",
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),

@@ -85,28 +85,28 @@ func (r *GenerateTracksResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"start_x": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for start position.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for start position.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"start_y": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for start position.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for start position.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"end_x": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for end position.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for end position.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"end_y": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for end position.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for end position.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
@@ -127,7 +127,7 @@ func (r *GenerateTracksResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"track_spread": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.025. Allowed range: 0 to 1. Step: 0.001. Tooltip: Normalized distance between tracks. Tracks are spread perpendicular to the motion direction.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.025. Allowed range: 0.0 to 1.0. Step: 0.001. Tooltip: Normalized distance between tracks. Tracks are spread perpendicular to the motion direction.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
@@ -138,14 +138,14 @@ func (r *GenerateTracksResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:            true,
 			},
 			"mid_x": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X control point for Bezier curve. Only used when 'bezier' is enabled.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized X control point for Bezier curve. Only used when 'bezier' is enabled.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"mid_y": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y control point for Bezier curve. Only used when 'bezier' is enabled.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized Y control point for Bezier curve. Only used when 'bezier' is enabled.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
