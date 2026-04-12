@@ -54,7 +54,7 @@ func TestPromptValidationStateFromInput_ReturnsValidationContract(t *testing.T) 
 	      "filename_prefix": "ComfyUI"
 	    }
 	  }
-	}`, validationTestNodeInfo())
+	}`, validationTestNodeInfo(), validationModeExecutableWorkflow)
 	if err != nil {
 		t.Fatalf("promptValidationStateFromInput returned error: %v", err)
 	}
@@ -132,7 +132,7 @@ func TestWorkspaceValidationStateFromInput_ReturnsTranslationAndValidation(t *te
 	  "links": [
 	    [1, 1, 0, 2, 0, "IMAGE"]
 	  ]
-	}`, validationTestNodeInfo())
+	}`, validationTestNodeInfo(), validationModeExecutableWorkspace)
 	if err != nil {
 		t.Fatalf("workspaceValidationStateFromInput returned error: %v", err)
 	}
@@ -152,7 +152,7 @@ func TestWorkspaceValidationStateFromInput_ReturnsTranslationAndValidation(t *te
 	}
 }
 
-func TestPromptValidationStateFromInput_AllowsPartialPromptWithoutOutputNode(t *testing.T) {
+func TestPromptValidationStateFromInput_DefaultsToExecutableValidation(t *testing.T) {
 	state, err := promptValidationStateFromInput("", `{
 	  "1": {
 	    "class_type": "LoadImage",
@@ -160,13 +160,66 @@ func TestPromptValidationStateFromInput_AllowsPartialPromptWithoutOutputNode(t *
 	      "image": "input.png"
 	    }
 	  }
-	}`, validationTestNodeInfo())
+	}`, validationTestNodeInfo(), validationModeExecutableWorkflow)
+	if err != nil {
+		t.Fatalf("promptValidationStateFromInput returned error: %v", err)
+	}
+
+	if state.Valid.ValueBool() {
+		t.Fatalf("expected executable validation to reject missing output node")
+	}
+}
+
+func TestPromptValidationStateFromInput_FragmentModeAllowsMissingOutputNode(t *testing.T) {
+	state, err := promptValidationStateFromInput("", `{
+	  "1": {
+	    "class_type": "LoadImage",
+	    "inputs": {
+	      "image": "input.png"
+	    }
+	  }
+	}`, validationTestNodeInfo(), validationModeFragment)
 	if err != nil {
 		t.Fatalf("promptValidationStateFromInput returned error: %v", err)
 	}
 
 	if !state.Valid.ValueBool() {
-		t.Fatalf("expected partial prompt without output node to remain valid, got %v", state.Errors)
+		t.Fatalf("expected fragment validation to allow missing output node, got %v", state.Errors)
+	}
+}
+
+func TestWorkspaceValidationStateFromInput_ExecutableModeRejectsMissingOutputNode(t *testing.T) {
+	state, err := workspaceValidationStateFromInput("", `{
+	  "nodes": [
+	    {
+	      "id": 1,
+	      "type": "LoadImage",
+	      "inputs": [
+	        {
+	          "name": "image",
+	          "type": "STRING",
+	          "widget": {"name": "image"},
+	          "link": null
+	        }
+	      ],
+	      "outputs": [
+	        {
+	          "name": "IMAGE",
+	          "type": "IMAGE",
+	          "links": []
+	        }
+	      ],
+	      "widgets_values": ["input.png"]
+	    }
+	  ],
+	  "links": []
+	}`, validationTestNodeInfo(), validationModeExecutableWorkspace)
+	if err != nil {
+		t.Fatalf("workspaceValidationStateFromInput returned error: %v", err)
+	}
+
+	if state.Valid.ValueBool() {
+		t.Fatalf("expected executable workspace validation to reject missing output node")
 	}
 }
 
@@ -190,6 +243,14 @@ func TestPromptValidationDataSourceSchema_ValidatesPathAndJSONSelection(t *testi
 	if len(jsonAttr.Validators) != 2 {
 		t.Fatalf("expected json to have 2 validators, got %d", len(jsonAttr.Validators))
 	}
+
+	modeAttr, ok := resp.Schema.Attributes["mode"].(datasourceschema.StringAttribute)
+	if !ok {
+		t.Fatalf("expected mode to be a string attribute, got %#v", resp.Schema.Attributes["mode"])
+	}
+	if !modeAttr.Optional {
+		t.Fatal("expected mode to be optional")
+	}
 }
 
 func TestWorkspaceValidationDataSourceSchema_ValidatesPathAndJSONSelection(t *testing.T) {
@@ -211,5 +272,13 @@ func TestWorkspaceValidationDataSourceSchema_ValidatesPathAndJSONSelection(t *te
 	}
 	if len(jsonAttr.Validators) != 2 {
 		t.Fatalf("expected json to have 2 validators, got %d", len(jsonAttr.Validators))
+	}
+
+	modeAttr, ok := resp.Schema.Attributes["mode"].(datasourceschema.StringAttribute)
+	if !ok {
+		t.Fatalf("expected mode to be a string attribute, got %#v", resp.Schema.Attributes["mode"])
+	}
+	if !modeAttr.Optional {
+		t.Fatal("expected mode to be optional")
 	}
 }

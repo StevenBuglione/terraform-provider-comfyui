@@ -179,7 +179,7 @@ The provider also exposes dedicated artifact-management surfaces for AI harness 
 
 - `comfyui_prompt_json` / `comfyui_workspace_json` import and normalize native ComfyUI artifacts.
 - `comfyui_prompt_to_workspace` / `comfyui_workspace_to_prompt` translate between API prompt JSON and workspace JSON with explicit fidelity reporting.
-- `comfyui_prompt_validation` / `comfyui_workspace_validation` validate artifacts against live `/object_info` metadata before execution.
+- `comfyui_prompt_validation` / `comfyui_workspace_validation` validate artifacts against live `/object_info` metadata, defaulting to executable modes that require output nodes. Fragment-only modes remain available when an AI harness is editing incomplete graphs.
 - `comfyui_uploaded_image` and `comfyui_uploaded_mask` manage ComfyUI-backed uploads.
 - `comfyui_output_artifact` downloads a remote ComfyUI file from `/view` into a Terraform-managed local artifact.
 

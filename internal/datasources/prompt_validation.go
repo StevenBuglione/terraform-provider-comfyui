@@ -25,6 +25,7 @@ type PromptValidationDataSource struct {
 type PromptValidationModel struct {
 	Path               types.String `tfsdk:"path"`
 	JSON               types.String `tfsdk:"json"`
+	Mode               types.String `tfsdk:"mode"`
 	Valid              types.Bool   `tfsdk:"valid"`
 	ErrorCount         types.Int64  `tfsdk:"error_count"`
 	WarningCount       types.Int64  `tfsdk:"warning_count"`
@@ -75,6 +76,13 @@ func (d *PromptValidationDataSource) Schema(_ context.Context, _ datasource.Sche
 				Validators: []validator.String{
 					stringvalidator.AtLeastOneOf(path.MatchRelative().AtParent().AtName("path")),
 					stringvalidator.ConflictsWith(path.MatchRelative().AtParent().AtName("path")),
+				},
+			},
+			"mode": schema.StringAttribute{
+				Optional:    true,
+				Description: "Validation mode. Defaults to executable_workflow. Use fragment to validate incomplete prompt fragments without requiring an output node.",
+				Validators: []validator.String{
+					stringvalidator.OneOf(string(validationModeFragment), string(validationModeExecutableWorkflow)),
 				},
 			},
 			"valid": schema.BoolAttribute{
@@ -128,7 +136,13 @@ func (d *PromptValidationDataSource) Read(ctx context.Context, req datasource.Re
 		return
 	}
 
-	state, err := promptValidationStateFromInput(stringValue(config.Path), stringValue(config.JSON), nodeInfo)
+	mode, err := parsePromptValidationMode(config.Mode)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid validation mode", err.Error())
+		return
+	}
+
+	state, err := promptValidationStateFromInput(stringValue(config.Path), stringValue(config.JSON), nodeInfo, mode)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to validate prompt JSON", err.Error())
 		return
@@ -137,7 +151,7 @@ func (d *PromptValidationDataSource) Read(ctx context.Context, req datasource.Re
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func promptValidationStateFromInput(path string, raw string, nodeInfo map[string]client.NodeInfo) (PromptValidationModel, error) {
+func promptValidationStateFromInput(path string, raw string, nodeInfo map[string]client.NodeInfo, mode validationMode) (PromptValidationModel, error) {
 	rawJSON, err := loadJSONInput(path, raw)
 	if err != nil {
 		return PromptValidationModel{}, err
@@ -153,10 +167,11 @@ func promptValidationStateFromInput(path string, raw string, nodeInfo map[string
 		return PromptValidationModel{}, err
 	}
 
-	report := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{RequireOutputNode: false})
+	report := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{Mode: mode.toValidationMode()})
 	return PromptValidationModel{
 		Path:               stringValueOrNull(path),
 		JSON:               stringValueOrNull(raw),
+		Mode:               types.StringValue(string(mode)),
 		Valid:              types.BoolValue(report.Valid),
 		ErrorCount:         types.Int64Value(int64(report.ErrorCount)),
 		WarningCount:       types.Int64Value(int64(report.WarningCount)),

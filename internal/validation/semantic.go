@@ -12,7 +12,28 @@ import (
 )
 
 type Options struct {
+	Mode              ValidationMode
 	RequireOutputNode bool
+}
+
+type ValidationMode string
+
+const (
+	ValidationModeFragment            ValidationMode = "fragment"
+	ValidationModeWorkspaceFragment   ValidationMode = "workspace_fragment"
+	ValidationModeExecutableWorkflow  ValidationMode = "executable_workflow"
+	ValidationModeExecutableWorkspace ValidationMode = "executable_workspace"
+)
+
+func (o Options) requireOutputNode() bool {
+	switch o.Mode {
+	case ValidationModeFragment, ValidationModeWorkspaceFragment:
+		return false
+	case ValidationModeExecutableWorkflow, ValidationModeExecutableWorkspace:
+		return true
+	default:
+		return o.RequireOutputNode
+	}
 }
 
 func ValidatePrompt(prompt *artifacts.Prompt, nodeInfo map[string]client.NodeInfo, opts Options) Report {
@@ -89,7 +110,7 @@ func ValidatePrompt(prompt *artifacts.Prompt, nodeInfo map[string]client.NodeInf
 		}
 	}
 
-	if opts.RequireOutputNode && !hasOutputNode {
+	if opts.requireOutputNode() && !hasOutputNode {
 		report.AddError("prompt does not include any node marked output_node=true")
 	}
 	return report
