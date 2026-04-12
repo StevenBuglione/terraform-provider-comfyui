@@ -8,6 +8,11 @@ RUNTIME_DIR="$ROOT_DIR/validation/workspace_e2e/.runtime-generate"
 COMFYUI_ROOT="$ROOT_DIR/third_party/ComfyUI"
 OUTPUT_PATH="$EXTRACT_DIR/node_ui_hints.json"
 
+git_in_comfyui() {
+  env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE -u GIT_PREFIX \
+    git -C "$COMFYUI_ROOT" "$@"
+}
+
 if [[ ! -e "$COMFYUI_ROOT/.git" ]]; then
   git -C "$ROOT_DIR" submodule update --init --recursive third_party/ComfyUI
 fi
@@ -26,8 +31,8 @@ fi
 
 (cd "$EXTRACT_DIR" && npx playwright install chromium >/dev/null)
 
-COMFYUI_COMMIT_SHA="$(git -C "$COMFYUI_ROOT" rev-parse HEAD)"
-COMFYUI_VERSION="$(git -C "$COMFYUI_ROOT" describe --tags --always --dirty 2>/dev/null || echo unknown)"
+COMFYUI_COMMIT_SHA="$(git_in_comfyui rev-parse HEAD)"
+COMFYUI_VERSION="$(git_in_comfyui describe --tags --always --dirty 2>/dev/null || echo unknown)"
 
 (
   cd "$EXTRACT_DIR"

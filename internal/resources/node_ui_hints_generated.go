@@ -20,9 +20,9 @@ type generatedNodeUIHint struct {
 }
 
 const GeneratedNodeUIHintsVersion = "1.0.0"
-const GeneratedNodeUIHintsExtractedAt = "2026-04-12T03:44:02.708Z"
+const GeneratedNodeUIHintsExtractedAt = "2026-04-12T03:44:39.826Z"
 const GeneratedNodeUIHintsComfyUICommit = "7782171a272bca4bfb8586a5bb801c5c04b5ee6a"
-const GeneratedNodeUIHintsComfyUIVersion = "unknown"
+const GeneratedNodeUIHintsComfyUIVersion = "v0.18.5"
 const GeneratedNodeUIHintsCount = 662
 
 var generatedNodeUIHints = map[string]generatedNodeUIHint{
