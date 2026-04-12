@@ -1,3 +1,10 @@
+---
+page_title: "AI Maintainability - ComfyUI Provider"
+subcategory: ""
+description: |-
+  Why the provider is maintainable for AI-authored Terraform workflows through generated contracts, bounded handwritten logic, and runtime verification.
+---
+
 # AI Maintainability
 
 This note explains why the provider is maintainable for AI-authored Terraform workflows without pretending the repo is fully generated end to end.

@@ -5,12 +5,10 @@ on:
     branches: [ main ]
     paths-ignore:
       - 'doc/**'
-      - '*.md'
   pull_request:
     branches: [ main ]
     paths-ignore:
       - 'doc/**'
-      - '*.md'
 
 permissions:
   contents: read
@@ -50,6 +48,20 @@ jobs:
         run: |
           git diff --compact-summary --exit-code || \
             (echo "::error::Generated code is out of date. Run 'go generate ./...' and commit the changes." && exit 1)
+
+  docs:
+    name: Verify Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - run: go mod download
+      - run: make docs-check
 
   test:
     name: Unit Tests

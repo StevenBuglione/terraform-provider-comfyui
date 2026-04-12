@@ -1,3 +1,10 @@
+---
+page_title: "AI Harness Guide - ComfyUI Provider"
+subcategory: ""
+description: |-
+  Use generated node contracts, live inventory, validation, and synthesis surfaces to author ComfyUI workflows safely with AI tooling.
+---
+
 # AI Harness Guide
 
 This guide is for AI coding harnesses and the humans shaping them.
@@ -17,7 +24,7 @@ That is the path this guide describes.
 
 ## 1. Inspect the Node Contract
 
-Use [comfyui_node_schema](./data-sources/node_schema.md) as the machine-readable contract for built-in nodes.
+Use [comfyui_node_schema](../data-sources/node_schema.md) as the machine-readable contract for built-in nodes.
 
 It exposes:
 
@@ -35,7 +42,7 @@ That means an AI harness can reason about node capabilities without parsing raw 
 
 ## 2. Use Inventory-Aware Planning
 
-For built-in inputs backed by live runtime inventory, use [comfyui_inventory](./data-sources/inventory.md).
+For built-in inputs backed by live runtime inventory, use [comfyui_inventory](../data-sources/inventory.md).
 
 The provider normalizes recognized inventory-backed inputs into kinds such as:
 
@@ -58,8 +65,8 @@ The provider distinguishes fragment-oriented editing from executable workflows.
 
 Use these validation surfaces:
 
-- [comfyui_prompt_validation](./data-sources/prompt_validation.md)
-- [comfyui_workspace_validation](./data-sources/workspace_validation.md)
+- [comfyui_prompt_validation](../data-sources/prompt_validation.md)
+- [comfyui_workspace_validation](../data-sources/workspace_validation.md)
 
 Default guidance:
 
@@ -74,8 +81,8 @@ If the starting point is a native ComfyUI artifact, do not invent Terraform stru
 
 Use:
 
-- [comfyui_prompt_to_terraform](./data-sources/prompt_to_terraform.md)
-- [comfyui_workspace_to_terraform](./data-sources/workspace_to_terraform.md)
+- [comfyui_prompt_to_terraform](../data-sources/prompt_to_terraform.md)
+- [comfyui_workspace_to_terraform](../data-sources/workspace_to_terraform.md)
 
 These return:
 

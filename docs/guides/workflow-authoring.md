@@ -1,3 +1,10 @@
+---
+page_title: "Workflow Authoring - ComfyUI Provider"
+subcategory: ""
+description: |-
+  Build Terraform-native ComfyUI workflows, choose between node_ids and raw prompt JSON, and use workspace, validation, and synthesis surfaces effectively.
+---
+
 # Workflow Authoring
 
 This guide explains the current preferred authoring model for building ComfyUI workflows with Terraform.
@@ -88,10 +95,10 @@ The provider supports two native ComfyUI artifact forms:
 
 Use these data sources when starting from native artifacts:
 
-- [comfyui_prompt_json](./data-sources/prompt_json.md)
-- [comfyui_workspace_json](./data-sources/workspace_json.md)
-- [comfyui_prompt_to_workspace](./data-sources/prompt_to_workspace.md)
-- [comfyui_workspace_to_prompt](./data-sources/workspace_to_prompt.md)
+- [comfyui_prompt_json](../data-sources/prompt_json.md)
+- [comfyui_workspace_json](../data-sources/workspace_json.md)
+- [comfyui_prompt_to_workspace](../data-sources/prompt_to_workspace.md)
+- [comfyui_workspace_to_prompt](../data-sources/workspace_to_prompt.md)
 
 These surfaces are useful when you need to normalize or translate artifacts before execution or before synthesis into Terraform.
 
@@ -99,8 +106,8 @@ These surfaces are useful when you need to normalize or translate artifacts befo
 
 Use these when you want the provider to own the mapping from native ComfyUI artifacts into canonical Terraform:
 
-- [comfyui_prompt_to_terraform](./data-sources/prompt_to_terraform.md)
-- [comfyui_workspace_to_terraform](./data-sources/workspace_to_terraform.md)
+- [comfyui_prompt_to_terraform](../data-sources/prompt_to_terraform.md)
+- [comfyui_workspace_to_terraform](../data-sources/workspace_to_terraform.md)
 
 They return:
 
@@ -121,8 +128,8 @@ Use:
 
 The relevant surfaces are:
 
-- [comfyui_prompt_validation](./data-sources/prompt_validation.md)
-- [comfyui_workspace_validation](./data-sources/workspace_validation.md)
+- [comfyui_prompt_validation](../data-sources/prompt_validation.md)
+- [comfyui_workspace_validation](../data-sources/workspace_validation.md)
 
 For most authoring flows, executable validation should be the default.
 
@@ -141,7 +148,7 @@ For recognized built-in inventory-backed inputs:
 
 - the provider exposes the normalized inventory kind through `comfyui_node_schema`
 - `terraform plan` validates chosen values against the live ComfyUI inventory
-- [comfyui_inventory](./data-sources/inventory.md) lets you inspect available values directly
+- [comfyui_inventory](../data-sources/inventory.md) lets you inspect available values directly
 
 This is the preferred way to keep authored workflows aligned with the real server state.
 
@@ -166,5 +173,5 @@ This is the preferred way to keep authored workflows aligned with the real serve
 
 - [Getting Started](./getting-started.md)
 - [AI Harness Guide](./ai-harness-guide.md)
-- [comfyui_workflow resource reference](./resources/workflow.md)
-- [comfyui_workspace resource reference](./resources/workspace.md)
+- [comfyui_workflow resource reference](../resources/workflow.md)
+- [comfyui_workspace resource reference](../resources/workspace.md)

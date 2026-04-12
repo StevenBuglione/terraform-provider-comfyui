@@ -8,17 +8,32 @@
 
 Manage [ComfyUI](https://github.com/comfyanonymous/ComfyUI) workflows with Terraform by modeling nodes, assembling executable graphs, validating runtime-backed inputs during `terraform plan`, and translating native ComfyUI artifacts into canonical Terraform.
 
-This provider is generated from the ComfyUI version pinned in this repo and currently includes `645` built-in node resources generated from ComfyUI `v0.18.5`.
+This provider is generated from the ComfyUI version pinned in this repo and currently exposes:
+
+- `645` generated node resources from ComfyUI `v0.18.5`
+- `9` hand-written resources for workflow orchestration, artifact management, and workspace export
+- `20` data sources for runtime inspection, validation, translation, and Terraform synthesis
 
 ## What This Provider Does
 
 - Model built-in ComfyUI nodes as typed Terraform resources instead of hand-editing prompt JSON.
 - Assemble and optionally execute workflows with `comfyui_workflow`.
+- Group workflows with `comfyui_workflow_collection`.
 - Compose multiple workflows into one UI-oriented canvas export with `comfyui_workspace`.
 - Import, translate, validate, and synthesize native prompt and workspace artifacts.
 - Fail `terraform plan` when recognized runtime-backed inventory selections such as checkpoints or LoRAs do not exist on the target ComfyUI server.
 - Expose normalized execution state through `comfyui_workflow`, `comfyui_job`, `comfyui_jobs`, `comfyui_queue`, and `comfyui_workflow_history`.
-- Manage uploaded inputs and downloaded output artifacts through Terraform-managed resources.
+- Manage uploaded inputs, local prompt/workspace/subgraph artifacts, and downloaded outputs through Terraform-managed resources.
+
+## Provider Surface at a Glance
+
+| Surface | What it covers |
+|---|---|
+| Generated node resources | `645` typed `comfyui_*` node resources generated from pinned ComfyUI metadata. These resources are virtual and participate in workflow assembly. |
+| Orchestration resources | `comfyui_workflow`, `comfyui_workflow_collection`, and `comfyui_workspace`. |
+| Artifact resources | `comfyui_prompt_artifact`, `comfyui_workspace_artifact`, `comfyui_subgraph`, `comfyui_uploaded_image`, `comfyui_uploaded_mask`, and `comfyui_output_artifact`. |
+| Runtime and schema data sources | `comfyui_inventory`, `comfyui_job`, `comfyui_jobs`, `comfyui_output`, `comfyui_queue`, `comfyui_subgraph_catalog`, `comfyui_subgraph_definition`, `comfyui_system_stats`, `comfyui_workflow_history`, `comfyui_node_info`, `comfyui_node_schema`, and `comfyui_provider_info`. |
+| Translation and validation data sources | `comfyui_prompt_json`, `comfyui_workspace_json`, `comfyui_prompt_to_workspace`, `comfyui_workspace_to_prompt`, `comfyui_prompt_to_terraform`, `comfyui_workspace_to_terraform`, `comfyui_prompt_validation`, and `comfyui_workspace_validation`. |
 
 ## Intended Audiences
 
@@ -213,14 +228,14 @@ The provider’s strongest guarantees come from combining generated contracts wi
 
 Start here based on what you are doing:
 
-- Provider user: [Getting Started](./docs/getting-started.md)
-- Workflow authoring: [Workflow Authoring](./docs/workflow-authoring.md)
-- AI harness authoring: [AI Harness Guide](./docs/ai-harness-guide.md)
-- Contributor workflow: [Contributing](./docs/contributing.md)
-- Generation internals: [Generation Architecture](./docs/generation-architecture.md)
-- Release confidence: [Release Validation](./docs/release-validation.md)
-- Maintainability boundary: [AI Maintainability](./docs/ai-maintainability.md)
-- Scope and boundaries: [Known Boundaries](./docs/known-boundaries.md)
+- Provider user: [Getting Started](./docs/guides/getting-started.md)
+- Workflow authoring: [Workflow Authoring](./docs/guides/workflow-authoring.md)
+- AI harness authoring: [AI Harness Guide](./docs/guides/ai-harness-guide.md)
+- Contributor workflow: [Contributing](./docs/guides/contributing.md)
+- Generation internals: [Generation Architecture](./docs/guides/generation-architecture.md)
+- Release confidence: [Release Validation](./docs/guides/release-validation.md)
+- Maintainability boundary: [AI Maintainability](./docs/guides/ai-maintainability.md)
+- Scope and boundaries: [Known Boundaries](./docs/guides/known-boundaries.md)
 - Full docs map: [docs/index.md](./docs/index.md)
 
 Generated API references live under:
@@ -248,6 +263,7 @@ Core contributor commands:
 ```bash
 make generate
 make docs
+make docs-validate
 make lint
 make test
 make vet
@@ -258,7 +274,7 @@ make workspace-e2e
 make release-e2e
 ```
 
-For deeper development context and repo conventions, see [Contributing](./docs/contributing.md) and [CLAUDE.md](./CLAUDE.md).
+For deeper development context and repo conventions, see [Contributing](./docs/guides/contributing.md) and [CLAUDE.md](./CLAUDE.md).
 
 ## License
 

@@ -1,3 +1,10 @@
+---
+page_title: "Known Boundaries - ComfyUI Provider"
+subcategory: ""
+description: |-
+  Explicit scope, guarantees, and non-goals for the supported ComfyUI and Terraform authoring path.
+---
+
 # Known Boundaries
 
 This page states the intended support boundary clearly so users, AI harnesses, and contributors do not have to infer it from examples or commit history.

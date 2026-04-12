@@ -1,3 +1,10 @@
+---
+page_title: "Generation Architecture - ComfyUI Provider"
+subcategory: ""
+description: |-
+  Understand how pinned ComfyUI source, live frontend behavior, and generated metadata drive the provider's node contracts, validation, and workspace layout.
+---
+
 # Generation Architecture
 
 This repo is built around a generated-first architecture. The provider tries to extract as much contract surface as possible from the pinned ComfyUI source and live frontend behavior, then keeps the handwritten layer focused on orchestration.

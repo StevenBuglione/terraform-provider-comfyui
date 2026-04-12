@@ -1,0 +1,27 @@
+---
+page_title: "{{ .Name }} Resource - comfyui"
+subcategory: ""
+description: |-
+  {{ .Description | trimspace }}
+---
+
+# {{ .Name }} (Resource)
+
+{{ .Description | trimspace }}
+
+`comfyui_workspace` is for editor-facing canvas exports. It does not execute workflows directly; instead it composes one or more API-format workflows into deterministic workspace JSON that can be opened in ComfyUI.
+
+{{ if .HasExample -}}
+## Example Usage
+
+{{ tffile .ExampleFile }}
+{{- end }}
+
+## Key Behavior
+
+- `workflows[*].workflow_json` usually comes from `comfyui_workflow.<name>.assembled_json` or another API-format prompt JSON source.
+- `layout` controls workflow-island placement on the canvas.
+- `node_layout` improves readability within each workflow before the workspace builder applies overall placement.
+- `output_file` writes the workspace JSON to disk for import into the ComfyUI editor.
+
+{{ .SchemaMarkdown | trimspace }}

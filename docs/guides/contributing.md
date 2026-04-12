@@ -1,3 +1,10 @@
+---
+page_title: "Contributing - ComfyUI Provider"
+subcategory: ""
+description: |-
+  Contributor workflow, regeneration steps, documentation expectations, and verification guidance for the ComfyUI Terraform provider.
+---
+
 # Contributing
 
 This guide covers the practical contributor workflow for this repo.
@@ -28,6 +35,7 @@ The main commands are:
 ```bash
 make generate
 make docs
+make docs-validate
 make lint
 make test
 make vet
@@ -76,13 +84,14 @@ After generation, run:
 
 ```bash
 make docs
+make docs-validate
 ```
 
 if the schema or generated docs may have changed.
 
 ## Documentation Expectations
 
-Narrative docs live under `docs/` and should be kept aligned with the current provider behavior.
+Narrative docs live under `docs/guides/` and should be kept aligned with the current provider behavior.
 
 Generated reference docs live under:
 
@@ -117,6 +126,7 @@ Before merge, the broad confidence set is usually:
 ```bash
 make generate
 make docs
+make docs-validate
 go test ./... -timeout 120s
 make lint
 make vet

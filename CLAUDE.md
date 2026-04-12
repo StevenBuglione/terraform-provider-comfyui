@@ -5,7 +5,7 @@
 Terraform provider for [ComfyUI](https://github.com/comfyanonymous/ComfyUI), a node-based Stable Diffusion GUI.
 Built with the **Terraform Plugin Framework** (not SDKv2). Language: Go + Python. License: MIT.
 
-Fully implemented with **645 generated node resources** (one per ComfyUI node), **1 hand-written workflow resource**, and **5 data sources**.
+Fully implemented with **645 generated node resources** (one per ComfyUI node), **9 hand-written resources**, and **20 data sources**.
 
 ## Tech Stack
 
@@ -45,17 +45,40 @@ Fully implemented with **645 generated node resources** (one per ComfyUI node), 
 │   ├── client.go                     # Client implementation (all API methods)
 │   ├── client_test.go                # Client unit tests (httptest-based)
 │   └── types.go                      # API response types
-├── internal/resources/               # Hand-written resources
-│   └── workflow_resource.go          # comfyui_workflow: queue & execute workflows
+├── internal/resources/               # Hand-written resources and orchestration helpers
+│   ├── workflow_resource.go          # comfyui_workflow: queue & execute workflows
+│   ├── workflow_collection.go        # comfyui_workflow_collection: group workflows into manifests
+│   ├── workspace_resource.go         # comfyui_workspace: compose editor-oriented workspace exports
+│   ├── prompt_artifact_resource.go   # comfyui_prompt_artifact: write prompt JSON to disk
+│   ├── workspace_artifact_resource.go # comfyui_workspace_artifact: write workspace JSON to disk
+│   ├── subgraph_resource.go          # comfyui_subgraph: manage local subgraph/workspace JSON
+│   ├── uploaded_image_resource.go    # comfyui_uploaded_image: upload local images
+│   ├── uploaded_mask_resource.go     # comfyui_uploaded_mask: upload typed masks
+│   └── output_artifact_resource.go   # comfyui_output_artifact: download ComfyUI output files
 ├── internal/resources/generated/     # 645 generated node resources + registry
 │   ├── registry.go                   # AllResources() — lists all generated constructors
 │   └── resource_*.go                 # One file per ComfyUI node (e.g., resource_ksampler.go)
-├── internal/datasources/             # 5 data sources
+├── internal/datasources/             # 20 data sources
 │   ├── system_stats.go               # comfyui_system_stats
 │   ├── queue.go                      # comfyui_queue
 │   ├── node_info.go                  # comfyui_node_info
+│   ├── node_schema.go                # comfyui_node_schema
+│   ├── inventory.go                  # comfyui_inventory
 │   ├── workflow_history.go           # comfyui_workflow_history
-│   └── output.go                     # comfyui_output
+│   ├── output.go                     # comfyui_output
+│   ├── prompt_json.go                # comfyui_prompt_json
+│   ├── prompt_validation.go          # comfyui_prompt_validation
+│   ├── prompt_to_workspace.go        # comfyui_prompt_to_workspace
+│   ├── prompt_to_terraform.go        # comfyui_prompt_to_terraform
+│   ├── workspace_json.go             # comfyui_workspace_json
+│   ├── workspace_validation.go       # comfyui_workspace_validation
+│   ├── workspace_to_prompt.go        # comfyui_workspace_to_prompt
+│   ├── workspace_to_terraform.go     # comfyui_workspace_to_terraform
+│   ├── subgraph_catalog.go           # comfyui_subgraph_catalog
+│   ├── subgraph_definition.go        # comfyui_subgraph_definition
+│   ├── provider_info.go              # comfyui_provider_info
+│   ├── job.go                        # comfyui_job
+│   └── jobs.go                       # comfyui_jobs
 ├── third_party/ComfyUI/              # ComfyUI source (git submodule, pinned to tag)
 ├── doc/terraform/provider/research/  # 27 comprehensive research docs (00–26)
 ├── .claude/skills/                   # Claude Code skills for this project
@@ -137,8 +160,8 @@ Extensive research lives in `doc/terraform/provider/research/`. **27 files** cov
 2. **Single API focus** — Provider wraps the ComfyUI REST API exclusively.
 3. **Virtual node resources** — The 645 generated node resources are virtual/plan-only (no API calls in CRUD). They represent ComfyUI nodes in Terraform state for workflow composition; the actual execution happens through `comfyui_workflow`. Of these, **180 are partner/API nodes** that call third-party AI services (see Partner Nodes section below).
 4. **Code generation pipeline** — Python AST extractors parse ComfyUI source → `node_specs.json` → Go generator produces one resource file per node + registry. This allows automated updates when ComfyUI adds/changes nodes.
-5. **Resources**: `comfyui_workflow` (hand-written, queues & executes workflows) + 645 generated node resources (one per ComfyUI node type, e.g., `comfyui_ksampler`, `comfyui_clip_text_encode`).
-6. **Data sources** (6): `comfyui_system_stats`, `comfyui_queue`, `comfyui_node_info`, `comfyui_workflow_history`, `comfyui_output`, `comfyui_provider_info`.
+5. **Resources**: `comfyui_workflow`, `comfyui_workflow_collection`, `comfyui_workspace`, `comfyui_prompt_artifact`, `comfyui_workspace_artifact`, `comfyui_subgraph`, `comfyui_uploaded_image`, `comfyui_uploaded_mask`, `comfyui_output_artifact`, plus 645 generated node resources.
+6. **Data sources** (20): runtime inspection (`system_stats`, `queue`, `job`, `jobs`, `workflow_history`, `output`), schema and inventory (`node_info`, `node_schema`, `inventory`, `provider_info`, `subgraph_catalog`, `subgraph_definition`), and prompt/workspace translation and validation surfaces.
 7. **Multi-modal capabilities** — Through partner nodes, the provider supports image generation/editing, video generation, audio synthesis/processing, text/LLM chat, and 3D model generation — all orchestrated via `comfyui_workflow`.
 8. **Version alignment** — The provider version is tightly coupled to the ComfyUI version it was generated from. The ComfyUI version (`v0.18.5`) is embedded in `generated.ComfyUIVersion`, exposed via the `comfyui_provider_info` data source, and logged at provider startup. The `node_specs.json` records the exact ComfyUI version and extraction timestamp. See "Versioning" section below.
 
@@ -160,6 +183,8 @@ python3 -m pytest scripts/extract/test_extractors.py -v
 # Regenerate node resources from node_specs.json
 make generate               # or: go run ./cmd/generate
 make docs                   # or: go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name comfyui
+make docs-validate          # validate generated provider docs
+make docs-check             # fail on docs drift or untracked generated docs files
 
 # Install locally for development
 make install
@@ -170,7 +195,7 @@ make fmt                    # gofmt -s -w .
 make fmt-check              # fail if tracked Go files are unformatted
 make tidy                   # go mod tidy
 make vet                    # go vet ./...
-make verify                 # fmt-check + generate + vet + lint + test
+make verify                 # fmt-check + generate + docs-check + vet + lint + test
 make hooks-install          # install pinned lefthook hooks locally
 
 # Clean build artifacts

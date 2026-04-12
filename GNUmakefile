@@ -65,6 +65,20 @@ vet:
 docs:
 	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name comfyui
 
+docs-validate:
+	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs validate --provider-name comfyui
+
+docs-check: docs docs-validate
+	@if ! git diff --compact-summary --exit-code -- docs; then \
+		echo "::error::Documentation is out of date. Run 'make docs' and commit the changes."; \
+		exit 1; \
+	fi
+	@if [ -n "$$(git ls-files --others --exclude-standard -- docs)" ]; then \
+		echo "::error::Documentation is out of date. Commit the newly generated files under docs/."; \
+		git ls-files --others --exclude-standard -- docs; \
+		exit 1; \
+	fi
+
 tools: $(LEFTHOOK) $(GOLANGCI_LINT)
 
 hooks-install: $(LEFTHOOK)
@@ -97,9 +111,9 @@ inventory-plan-e2e:
 execution-e2e:
 	./scripts/execution-e2e/run.sh
 
-verify: fmt-check generate vet lint test
+verify: fmt-check generate docs-check vet lint test
 
 clean:
 	rm -f $(BINARY)
 
-.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs tools hooks-install hooks-run-pre-commit hooks-run-pre-push workspace-e2e-browser-install workspace-e2e release-e2e-browser-install release-e2e synthesis-e2e inventory-plan-e2e execution-e2e verify clean
+.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs docs-validate docs-check tools hooks-install hooks-run-pre-commit hooks-run-pre-push workspace-e2e-browser-install workspace-e2e release-e2e-browser-install release-e2e synthesis-e2e inventory-plan-e2e execution-e2e verify clean

@@ -1,3 +1,10 @@
+---
+page_title: "Getting Started - ComfyUI Provider"
+subcategory: ""
+description: |-
+  Install the provider, connect to a ComfyUI server, run a minimal workflow, and inspect the resulting execution state.
+---
+
 # Getting Started
 
 This guide is the fastest path from an empty Terraform module to a runnable ComfyUI workflow.
@@ -118,7 +125,7 @@ It validates:
 
 That last point matters for loader-style resources. If a built-in dynamic input maps to a live inventory kind such as `checkpoints`, `loras`, or `text_encoders`, a missing value should fail during `terraform plan`, not later during workflow execution.
 
-Use [comfyui_inventory](./data-sources/inventory.md) to inspect those live values directly.
+Use [comfyui_inventory](../data-sources/inventory.md) to inspect those live values directly.
 
 ## What `terraform apply` Does
 
@@ -147,10 +154,10 @@ The most useful starting points are:
 
 For richer state inspection after execution, use:
 
-- [comfyui_job](./data-sources/job.md)
-- [comfyui_jobs](./data-sources/jobs.md)
-- [comfyui_queue](./data-sources/queue.md)
-- [comfyui_workflow_history](./data-sources/workflow_history.md)
+- [comfyui_job](../data-sources/job.md)
+- [comfyui_jobs](../data-sources/jobs.md)
+- [comfyui_queue](../data-sources/queue.md)
+- [comfyui_workflow_history](../data-sources/workflow_history.md)
 
 ## Next Steps
 

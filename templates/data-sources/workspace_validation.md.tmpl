@@ -1,0 +1,20 @@
+---
+page_title: "{{ .Name }} Data Source - comfyui"
+subcategory: ""
+description: |-
+  {{ .Description | trimspace }}
+---
+
+# {{ .Name }} (Data Source)
+
+{{ .Description | trimspace }}
+
+Use executable validation for workspace JSON that should translate into a runnable workflow now, and `mode = "fragment"` when validating incomplete editor artifacts or subgraph fragments during authoring.
+
+{{ if .HasExample -}}
+## Example Usage
+
+{{ tffile .ExampleFile }}
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}

@@ -1,3 +1,10 @@
+---
+page_title: "Release Validation - ComfyUI Provider"
+subcategory: ""
+description: |-
+  Understand what each validation lane proves, where evidence is written, and how to interpret failures before release.
+---
+
 # Release Validation
 
 This guide explains what the repo’s validation lanes prove and how to interpret failures before a release.
@@ -98,6 +105,7 @@ For broad release confidence, the most useful sequence is:
 ```bash
 make generate
 make docs
+make docs-validate
 go test ./... -timeout 120s
 make synthesis-e2e
 make inventory-plan-e2e

@@ -1,0 +1,27 @@
+---
+page_title: "{{ .Name }} Resource - comfyui"
+subcategory: ""
+description: |-
+  {{ .Description | trimspace }}
+---
+
+# {{ .Name }} (Resource)
+
+{{ .Description | trimspace }}
+
+`comfyui_workflow` is the execution boundary for Terraform-authored ComfyUI graphs. Use `node_ids` when the workflow is modeled from generated node resources, or use `workflow_json` when you are importing an existing prompt artifact.
+
+{{ if .HasExample -}}
+## Example Usage
+
+{{ tffile .ExampleFile }}
+{{- end }}
+
+## Key Behavior
+
+- `execute = true` submits the assembled prompt to ComfyUI.
+- `wait_for_completion = true` keeps the resource blocked until execution reaches a terminal state or the timeout expires.
+- `validate_before_execute = true` uses live `/object_info` metadata to catch provider-known issues before queueing.
+- `output_file` writes the assembled prompt JSON to disk for debugging, sharing, or downstream artifact flows.
+
+{{ .SchemaMarkdown | trimspace }}

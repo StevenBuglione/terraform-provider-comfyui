@@ -1,0 +1,20 @@
+---
+page_title: "{{ .Name }} Data Source - comfyui"
+subcategory: ""
+description: |-
+  {{ .Description | trimspace }}
+---
+
+# {{ .Name }} (Data Source)
+
+{{ .Description | trimspace }}
+
+`comfyui_node_schema` is the provider's machine-readable contract for generated nodes. It exposes link-typed inputs, output slots, validation metadata, and dynamic inventory hints without requiring callers to reverse-engineer raw ComfyUI JSON.
+
+{{ if .HasExample -}}
+## Example Usage
+
+{{ tffile .ExampleFile }}
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}

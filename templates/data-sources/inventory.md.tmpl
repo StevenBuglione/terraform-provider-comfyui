@@ -1,0 +1,20 @@
+---
+page_title: "{{ .Name }} Data Source - comfyui"
+subcategory: ""
+description: |-
+  {{ .Description | trimspace }}
+---
+
+# {{ .Name }} (Data Source)
+
+{{ .Description | trimspace }}
+
+Use `comfyui_inventory` when generated node schema reports a dynamic inventory-backed input such as checkpoints or LoRAs. It lets you inspect the live values on the target ComfyUI server before authoring or applying a workflow.
+
+{{ if .HasExample -}}
+## Example Usage
+
+{{ tffile .ExampleFile }}
+{{- end }}
+
+{{ .SchemaMarkdown | trimspace }}

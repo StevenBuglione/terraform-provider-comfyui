@@ -17,6 +17,8 @@ pre-push:
       run: bash scripts/hooks/verify_format_clean.sh
     verify-generated:
       run: bash scripts/hooks/verify_generated_clean.sh
+    docs:
+      run: make docs-check
     test:
       run: make test
     vet:

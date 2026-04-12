@@ -1,45 +1,75 @@
 ---
 page_title: "ComfyUI Provider"
-subcategory: ""
 description: |-
-  Documentation map for the Terraform provider for ComfyUI.
+  Overview, configuration, guides, and generated reference documentation for the Terraform provider for ComfyUI.
 ---
 
-# ComfyUI Provider Docs
+# ComfyUI Provider
 
-Use this page as the navigation map for the hand-maintained and generated docs in this repo.
+The ComfyUI provider combines generated node contracts with hand-written orchestration, artifact, validation, and translation surfaces.
 
-## Audience Guides
+Use it to:
 
-- [Getting Started](./getting-started.md)
-  Install the provider, connect to a ComfyUI server, and run the smallest useful workflow.
-- [Workflow Authoring](./workflow-authoring.md)
-  Build workflows with generated node resources, `comfyui_workflow`, and `comfyui_workspace`.
-- [AI Harness Guide](./ai-harness-guide.md)
-  Use generated node contracts, synthesis surfaces, validation modes, and live inventory checks.
-- [Contributing](./contributing.md)
-  Local workflow, generation expectations, and verification commands.
+- model ComfyUI nodes as typed Terraform resources instead of hand-editing prompt JSON
+- assemble and optionally execute workflows through `comfyui_workflow`
+- compose prompt workflows into editor-oriented canvases with `comfyui_workspace`
+- materialize prompt, workspace, and subgraph artifacts on disk
+- inspect live runtime inventory, queue state, jobs, and history
+- translate prompt and workspace artifacts into canonical Terraform IR and rendered HCL
+
+## Capability Model
+
+| Surface | What it covers |
+|---|---|
+| Generated node resources | `645` generated `comfyui_*` node resources derived from pinned ComfyUI metadata. These resources are virtual modeling surfaces used for workflow assembly. |
+| Orchestration resources | `comfyui_workflow`, `comfyui_workflow_collection`, and `comfyui_workspace` assemble, group, export, and optionally execute workflows. |
+| Artifact resources | `comfyui_prompt_artifact`, `comfyui_workspace_artifact`, `comfyui_subgraph`, `comfyui_uploaded_image`, `comfyui_uploaded_mask`, and `comfyui_output_artifact` manage local and remote artifacts. |
+| Runtime and schema data sources | `comfyui_inventory`, `comfyui_job`, `comfyui_jobs`, `comfyui_output`, `comfyui_queue`, `comfyui_subgraph_catalog`, `comfyui_subgraph_definition`, `comfyui_system_stats`, `comfyui_workflow_history`, `comfyui_node_info`, `comfyui_node_schema`, and `comfyui_provider_info`. |
+| Translation and validation data sources | `comfyui_prompt_json`, `comfyui_workspace_json`, `comfyui_prompt_to_workspace`, `comfyui_workspace_to_prompt`, `comfyui_prompt_to_terraform`, `comfyui_workspace_to_terraform`, `comfyui_prompt_validation`, and `comfyui_workspace_validation`. |
+
+## Provider Configuration
+
+{{ tffile "examples/provider/provider.tf" }}
+
+## Start Here
+
+- [Getting Started](./guides/getting-started.md)
+  Install the provider, connect to ComfyUI, run a minimal workflow, and inspect execution results.
+- [Workflow Authoring](./guides/workflow-authoring.md)
+  Build workflows with generated node resources, `comfyui_workflow`, `comfyui_workspace`, and the artifact translation surfaces.
+- [AI Harness Guide](./guides/ai-harness-guide.md)
+  Use generated node contracts, live inventory, synthesis, and validation to author Terraform safely with AI tooling.
 
 ## Architecture and Boundaries
 
-- [Generation Architecture](./generation-architecture.md)
+- [Known Boundaries](./guides/known-boundaries.md)
+  Explicit support boundary for built-in ComfyUI workflows, dynamic inventory validation, and AI-facing guarantees.
+- [Generation Architecture](./guides/generation-architecture.md)
   How metadata is extracted from the pinned ComfyUI server and live frontend behavior.
-- [AI Maintainability](./ai-maintainability.md)
+- [AI Maintainability](./guides/ai-maintainability.md)
   Why the generated-first boundary is maintainable for AI-authored Terraform workflows.
-- [Known Boundaries](./known-boundaries.md)
-  Current scope, guarantees, and explicit non-goals.
 
-## Validation and Release Confidence
+## Contributor and Release Guides
 
-- [Release Validation](./release-validation.md)
+- [Contributing](./guides/contributing.md)
+  Local workflow, regeneration steps, documentation expectations, and verification guidance.
+- [Release Validation](./guides/release-validation.md)
   What each verification lane proves and how to localize failures.
 
 ## Generated Reference Docs
 
-Use the generated references when you need exact schema details:
+Use the generated references when you need exact schema details and runnable examples:
 
 - [Data Sources](./data-sources/)
 - [Resources](./resources/)
+
+## Key Boundaries to Know
+
+- Generated node resources are mostly virtual. They model ComfyUI nodes in Terraform state and are assembled later by `comfyui_workflow`.
+- The main supported path is the built-in ComfyUI surface pinned in this repository, not every arbitrary custom-node ecosystem.
+- Strict plan-time validation is strongest where generated metadata and live ComfyUI inventory make correctness provable.
+
+For the full support statement, see [Known Boundaries](./guides/known-boundaries.md).
 
 ## Related Repo Material
 
