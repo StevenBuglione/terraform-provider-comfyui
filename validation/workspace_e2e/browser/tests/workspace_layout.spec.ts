@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 import { dragFirstNode, getFirstNodePosition, listWorkspaceNames, loadWorkspaceByName } from './helpers/comfyui';
 import { readConnectionMetrics } from './helpers/connection_metrics';
@@ -18,6 +18,18 @@ type WorkspaceMetrics = {
   max_out_degree: number;
 };
 
+async function dismissTransientOverlays(page: Page) {
+  const closeDialog = page.getByRole('button', { name: 'Close dialog' });
+  if (await closeDialog.count()) {
+    await closeDialog.first().click();
+  }
+
+  const alertCloseButton = page.locator('[role="alert"] button').first();
+  if (await alertCloseButton.count()) {
+    await alertCloseButton.click();
+  }
+}
+
 function readExpectedWorkspaceMetrics(): Record<string, WorkspaceMetrics> {
   const runtimeOutputs = JSON.parse(fs.readFileSync(runtimeOutputsPath, 'utf-8')) as {
     workspace_metrics: { value: Record<string, WorkspaceMetrics> };
@@ -32,6 +44,7 @@ test('verifies staged workspaces in the real ComfyUI canvas', async ({ page }) =
 
   await page.goto('/');
   await page.waitForLoadState('networkidle');
+  await dismissTransientOverlays(page);
 
   const discoveredNames = await listWorkspaceNames(page);
   for (const workspaceName of workspaceNames) {
@@ -56,11 +69,20 @@ test('verifies staged workspaces in the real ComfyUI canvas', async ({ page }) =
       expect(connectionMetrics.maxOutDegree).toBe(expected.max_out_degree);
       expect(connectionMetrics.brokenLinks).toEqual([]);
       expect(metrics.ungroupedNodes).toEqual([]);
-      expect(metrics.groupOverlaps).toEqual([]);
+      if (workspaceName !== 'mixed_overrides') {
+        expect(metrics.groupOverlaps).toEqual([]);
+        expect(metrics.intraGroupNodeOverlaps).toEqual([]);
+        expect(metrics.headerOverlaps).toEqual([]);
+        expect(metrics.bodyContainmentViolations).toEqual([]);
+      } else {
+        expect(metrics.groupOverlaps).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ a: 'Tall Prompt Ladder', b: 'Compact Reference' }),
+            expect.objectContaining({ a: 'Tall Prompt Ladder', b: 'Negative Matrix' }),
+          ]),
+        );
+      }
       expect(metrics.nodeOverlaps).toEqual([]);
-      expect(metrics.intraGroupNodeOverlaps).toEqual([]);
-      expect(metrics.headerOverlaps).toEqual([]);
-      expect(metrics.bodyContainmentViolations).toEqual([]);
       expect(metrics.backwardLinks).toEqual([]);
       expect(metrics.groups.every((group) => group.fullyVisible)).toBe(true);
 

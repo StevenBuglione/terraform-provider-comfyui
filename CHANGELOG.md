@@ -62,6 +62,7 @@ Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5
 * **Plan-Time Validation:** Runtime-backed inventory validation during `terraform plan` for checkpoints, LoRAs, and other dynamic assets - fail early if required models are missing
 * **Terraform Synthesis:** AI-harness-oriented data sources for translating native ComfyUI artifacts (prompt JSON, workspace JSON) into canonical Terraform HCL
 * **Multi-Modal Support:** Support for image generation/editing, video generation, audio synthesis, text/LLM chat, and 3D model generation through partner API nodes
+* **Validation Harness Reliability:** Hardened local E2E harnesses for ComfyUI startup, executable workflow validation, and workspace browser verification during release validation
 * **Documentation:** Comprehensive provider documentation with 27 research documents covering all aspects of Terraform provider development
 * **Testing:** Unit test coverage for code generator, HTTP client, and data sources; Python test suite for extraction pipeline
 * **CI/CD:** GitHub Actions workflows for automated testing and GoReleaser-based releases with GPG signing

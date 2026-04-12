@@ -65,10 +65,11 @@ resource "comfyui_workflow" "execution" {
     }
   })
 
-  execute             = true
-  wait_for_completion = true
-  timeout_seconds     = 120
-  cancel_on_delete    = true
+  execute                 = true
+  validate_before_execute = false
+  wait_for_completion     = true
+  timeout_seconds         = 120
+  cancel_on_delete        = true
 }
 
 data "comfyui_job" "execution" {

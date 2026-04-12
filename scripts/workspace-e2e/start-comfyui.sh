@@ -26,13 +26,17 @@ ensure_comfyui_checkout() {
 }
 
 # Find a free port: honor explicit COMFYUI_PORT if set, else auto-select
+port_in_use() {
+  timeout 1s nc -z "$HOST" "$1" >/dev/null 2>&1
+}
+
 find_free_port() {
   local start_port="${1:-8188}"
   local max_attempts=50
   local port="$start_port"
   
   for ((i = 0; i < max_attempts; i++)); do
-    if ! nc -z "$HOST" "$port" 2>/dev/null; then
+    if ! port_in_use "$port"; then
       echo "$port"
       return 0
     fi
@@ -45,7 +49,7 @@ find_free_port() {
 
 if [[ -n "${COMFYUI_PORT:-}" ]]; then
   PORT="$COMFYUI_PORT"
-  if nc -z "$HOST" "$PORT" 2>/dev/null; then
+  if port_in_use "$PORT"; then
     echo "Error: Explicitly requested port $PORT is already in use" >&2
     exit 1
   fi
