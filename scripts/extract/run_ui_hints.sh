@@ -8,7 +8,7 @@ RUNTIME_DIR="$ROOT_DIR/validation/workspace_e2e/.runtime-generate"
 COMFYUI_ROOT="$ROOT_DIR/third_party/ComfyUI"
 OUTPUT_PATH="$EXTRACT_DIR/node_ui_hints.json"
 
-if [[ ! -d "$COMFYUI_ROOT/.git" ]]; then
+if [[ ! -e "$COMFYUI_ROOT/.git" ]]; then
   git -C "$ROOT_DIR" submodule update --init --recursive third_party/ComfyUI
 fi
 

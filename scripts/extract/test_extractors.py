@@ -249,6 +249,19 @@ class TestUIHintsValidation(unittest.TestCase):
         self.assertGreaterEqual(text_widget['min_node_width'], 400)
         self.assertGreaterEqual(text_widget['min_node_height'], 200)
 
+    @unittest.skipUnless(comfyui_available(), "ComfyUI submodule not initialized")
+    def test_ui_hints_capture_comfyui_version_metadata(self):
+        with open(UI_HINTS_PATH) as f:
+            hints = json.load(f)
+        result = subprocess.run(
+            ['git', '-C', COMFYUI_ROOT, 'describe', '--tags', '--always', '--dirty'],
+            capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, f"git describe failed: {result.stderr}")
+        expected_version = result.stdout.strip()
+        self.assertNotEqual(hints['comfyui_version'], 'unknown')
+        self.assertEqual(hints['comfyui_version'], expected_version)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
