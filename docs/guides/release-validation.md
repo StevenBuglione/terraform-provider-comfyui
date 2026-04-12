@@ -246,9 +246,10 @@ The initial release in the `0.18.x` line requires comprehensive validation since
    ```
 
 7. **Monitor GitHub Actions:**
-   - The `release.yml` workflow triggers on tag push
-   - GoReleaser builds binaries for all platforms
-   - Artifacts are GPG-signed and published to GitHub Releases
+    - The `release.yml` workflow triggers on tag push
+    - GoReleaser builds binaries for all platforms
+    - Artifacts are GPG-signed and published to GitHub Releases
+    - Verify `terraform-provider-comfyui_<version>_SHA256SUMS` includes every zip asset **and** `terraform-provider-comfyui_<version>_manifest.json`; Terraform Registry rejects the release if the manifest is uploaded but not represented in the checksum file
 
 8. **Publish to Terraform Registry:**
    - After successful GitHub release, submit to Terraform Registry
@@ -334,11 +335,12 @@ Provider-only patches increment the patch version while maintaining the same Com
    ```
 
 6. **Monitor and publish:**
-   - Monitor GitHub Actions `release.yml` workflow
-   - After successful GitHub release, publish to Terraform Registry
-   - Release notes should clarify:
-     - This is a provider-only patch for the `0.18.x` line
-     - Still targets ComfyUI `v0.18.5`
+    - Monitor GitHub Actions `release.yml` workflow
+    - After successful GitHub release, publish to Terraform Registry
+    - Do not mutate an already-published GitHub release to fix missing required assets; cut the next patch release in the same compatibility line instead
+    - Release notes should clarify:
+      - This is a provider-only patch for the `0.18.x` line
+      - Still targets ComfyUI `v0.18.5`
      - Safe upgrade for users on `version = "~> 0.18"`
 
 ### When to Start a New Compatibility Line

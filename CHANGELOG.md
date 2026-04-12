@@ -18,6 +18,20 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
+## [0.18.6] - 2026-04-12
+
+Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
+
+### BUG FIXES
+
+* **Terraform Registry Packaging:** Include `terraform-provider-comfyui_<version>_manifest.json` in the generated `SHA256SUMS` bundle so Terraform Registry can ingest published releases successfully
+* **Release Signing Reliability:** Preserve the GitHub Actions GPG import flow used by GoReleaser after correcting the private-key secret formatting
+
+### NOTES
+
+* Maintains ComfyUI `v0.18.5` compatibility
+* No provider schema changes - safe upgrade within `version = "~> 0.18"`
+
 ## [0.18.5] - 2026-04-12
 
 Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5`.
@@ -75,5 +89,6 @@ Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5
 * Built with Terraform Plugin Framework (not SDKv2)
 * Generated node resources are virtual/plan-only - execution happens through `comfyui_workflow`
 
-[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.5...HEAD
+[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.6...HEAD
+[0.18.6]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.6
 [0.18.5]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.5
