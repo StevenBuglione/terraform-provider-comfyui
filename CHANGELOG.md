@@ -18,7 +18,7 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
-## [0.18.5] - YYYY-MM-DD
+## [0.18.5] - 2026-04-12
 
 Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5`.
 
