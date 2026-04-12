@@ -42,7 +42,7 @@ terraform {
   required_providers {
     comfyui = {
       source  = "StevenBuglione/comfyui"
-      version = "~> 0.1"
+      version = "~> 0.18"
     }
   }
 }
@@ -74,6 +74,27 @@ variable "comfyui_api_key" {
   type        = string
   default     = ""
   sensitive   = true
+}
+```
+
+## Versioning Policy
+
+Provider versions follow the **ComfyUI compatibility line** model:
+
+- Provider `0.18.x` is the compatibility line for ComfyUI `v0.18.5`
+- The first release in this line is `v0.18.5`
+- Later provider-only fixes are `v0.18.6`, `v0.18.7`, etc.
+- The exact upstream pin remains authoritative in generated metadata and `comfyui_provider_info`
+- Users should constrain the provider with `~> 0.18` for this line
+- If the pinned upstream ComfyUI version changes materially, a new provider line is started rather than silently continuing `0.18.x`
+
+Query the exact ComfyUI version at runtime:
+
+```hcl
+data "comfyui_provider_info" "current" {}
+
+output "compatibility" {
+  value = "Provider ${data.comfyui_provider_info.current.provider_version} for ComfyUI ${data.comfyui_provider_info.current.comfyui_version}"
 }
 ```
 

@@ -261,6 +261,19 @@ python3 -m pytest scripts/extract/test_extractors.py -v
 
 The provider version is **tightly coupled to the ComfyUI version** it was generated from.
 
+### Versioning Policy
+
+Provider versions follow the **ComfyUI compatibility line** model:
+
+- Provider `0.18.x` is the compatibility line for ComfyUI `v0.18.5`
+- The first release in this line is `v0.18.5`
+- Later provider-only fixes (bug fixes, documentation improvements, non-schema changes) increment the patch version: `v0.18.6`, `v0.18.7`, etc.
+- The exact upstream pin remains authoritative in `generated.ComfyUIVersion` and the `comfyui_provider_info` data source
+- Users should constrain the provider with `~> 0.18` for this line
+- If the pinned upstream ComfyUI version changes materially (e.g., to `v0.19.0`), a new provider line (`0.19.x`) is started rather than silently continuing `0.18.x`
+
+This ensures users can trust that provider `0.18.x` releases maintain compatibility with their ComfyUI `v0.18.5` workflows while receiving provider-level improvements.
+
 ### Version Sources
 
 | Source | Location | Example |

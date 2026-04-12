@@ -111,9 +111,31 @@ inventory-plan-e2e:
 execution-e2e:
 	./scripts/execution-e2e/run.sh
 
+validate-release-version:
+	@if [ "$(VERSION)" = "0.1.0" ] || [ -z "$(VERSION)" ]; then \
+		echo "ERROR: VERSION not provided or using default dev version"; \
+		echo "Usage: make validate-release-version VERSION=v0.18.5"; \
+		exit 1; \
+	fi
+	./scripts/validate-release-version.sh $(VERSION)
+
 verify: fmt-check generate docs-check vet lint test
+
+release-preflight:
+	@if [ "$(VERSION)" = "0.1.0" ] || [ -z "$(VERSION)" ]; then \
+		echo "ERROR: VERSION not provided or using default dev version"; \
+		echo "Usage: make release-preflight VERSION=v0.18.5"; \
+		exit 1; \
+	fi
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		echo "ERROR: release-preflight requires a clean worktree."; \
+		echo "Commit or stash local changes before running release preflight."; \
+		exit 1; \
+	fi
+	$(MAKE) verify
+	$(MAKE) validate-release-version VERSION=$(VERSION)
 
 clean:
 	rm -f $(BINARY)
 
-.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs docs-validate docs-check tools hooks-install hooks-run-pre-commit hooks-run-pre-push workspace-e2e-browser-install workspace-e2e release-e2e-browser-install release-e2e synthesis-e2e inventory-plan-e2e execution-e2e verify clean
+.PHONY: build install test testacc generate lint fmt fmt-check tidy vet docs docs-validate docs-check tools hooks-install hooks-run-pre-commit hooks-run-pre-push workspace-e2e-browser-install workspace-e2e release-e2e-browser-install release-e2e synthesis-e2e inventory-plan-e2e execution-e2e validate-release-version verify release-preflight clean

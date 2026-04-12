@@ -11,6 +11,17 @@ Provides version and compatibility information about the ComfyUI Terraform provi
 
 Use this data source to confirm which ComfyUI version the generated node resources were extracted from, what provider version is running, and how many generated node resources are currently exposed.
 
+## Versioning Policy
+
+Provider versions follow the **ComfyUI compatibility line** model. The provider version is tightly coupled to the ComfyUI version it was generated from:
+
+- Provider `0.18.x` is the compatibility line for ComfyUI `v0.18.5`
+- The first release in this line is `v0.18.5`
+- Later provider-only fixes are `v0.18.6`, `v0.18.7`, etc.
+- The exact upstream pin remains authoritative in this data source
+- Users should constrain the provider with `~> 0.18` for this line
+- If the pinned upstream ComfyUI version changes materially, a new provider line is started rather than silently continuing `0.18.x`
+
 ## Example Usage
 
 ```terraform
