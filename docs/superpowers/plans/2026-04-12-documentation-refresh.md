@@ -379,3 +379,17 @@ git add docs/superpowers/plans/2026-04-12-documentation-refresh.md
 git commit -m "Record documentation refresh completion notes"
 ```
 Expected: only if the plan file changed in this step.
+
+## Completion Notes
+
+- Rewrote `README.md` around the current provider state, audience split, synthesis surfaces, and strict plan-time inventory validation.
+- Replaced the generated docs index template in `templates/index.md.tmpl` so `make docs` now emits an audience-oriented `docs/index.md`.
+- Added new narrative guides:
+  - `docs/getting-started.md`
+  - `docs/workflow-authoring.md`
+  - `docs/ai-harness-guide.md`
+  - `docs/contributing.md`
+  - `docs/generation-architecture.md`
+  - `docs/known-boundaries.md`
+- Refreshed `docs/ai-maintainability.md` and `docs/release-validation.md` to match the current generated-first architecture and verification matrix.
+- `make docs` completed successfully and did not introduce unexpected generated reference diffs beyond the intended `docs/index.md` update from the template change.

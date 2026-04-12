@@ -1,57 +1,146 @@
 # Release Validation
 
-This provider is mostly generated node wrappers plus a smaller hand-rolled core.
+This guide explains what the repo’s validation lanes prove and how to interpret failures before a release.
 
-Approximate maintenance surface today:
-- hand-rolled Go under `internal/` excluding `internal/resources/generated`: about `19.7k` lines
-- generated Go under `internal/resources/generated`: about `99.4k` lines across `646` files
+## Why Multiple Lanes Exist
 
-That split matters for upgrades. When ComfyUI changes node specs, most of the provider can be regenerated. The riskier upgrade points are the hand-rolled layers:
-- workflow assembly and validation
-- execution-state parsing and overlay logic
-- prompt/workspace translation
-- workspace building and staging
-- upload/output/artifact handling
-- browser-visible assumptions about the ComfyUI canvas
+This provider is mostly generated node wrappers plus a smaller hand-rolled core. The generated surface gives broad schema coverage, but the risky behavior lives in the orchestration layer:
 
-## Validation Lanes
+- workflow assembly
+- semantic validation
+- prompt and workspace translation
+- Terraform synthesis
+- dynamic inventory validation
+- execution-state handling
+- workspace staging and browser-visible layout
 
-Use these lanes together for release confidence:
+That is why the validation strategy is layered rather than relying on one test command.
 
-- `make execution-e2e`
-  - validates the execution-oriented file and metadata path
-  - exercises `comfyui_workflow`, `comfyui_job`, `comfyui_jobs`, `comfyui_output`, and `comfyui_output_artifact`
-- `make workspace-e2e`
-  - validates staged workspaces in real ComfyUI with Playwright
-  - checks node/group counts, layout integrity, link counts, and link health
-- `make release-e2e`
-  - validates canonical release scenarios in real ComfyUI with Playwright
-  - covers assembled-resource workflows, raw JSON import, translation round-trips, and workspace-builder output
+## Validation Matrix
 
-## Browser Prerequisites
+### `make generate`
 
-Install Playwright dependencies before the browser lanes:
+Regenerates:
+
+- node resources
+- structured node schema metadata
+- frontend UI-hints used by workspace layout
+
+This is the first drift detector when the pinned ComfyUI version changes.
+
+### `make synthesis-e2e`
+
+Proves the AI-facing synthesis surfaces:
+
+- `comfyui_prompt_to_terraform`
+- `comfyui_workspace_to_terraform`
+
+It verifies that native prompt and workspace artifacts synthesize into non-empty Terraform IR and rendered HCL through real Terraform runs.
+
+### `make inventory-plan-e2e`
+
+Proves strict plan-time validation for recognized built-in dynamic inventories.
+
+It stages a known inventory value in a disposable ComfyUI runtime, then asserts:
+
+- live inventory is discoverable through `comfyui_inventory`
+- generated node schema exposes the expected inventory metadata
+- a valid `terraform plan` succeeds
+- an invalid runtime-backed selection fails during plan before apply
+
+### `make execution-e2e`
+
+Proves the execution-oriented path without depending on an external model.
+
+It verifies:
+
+- workflow submission
+- execution metadata
+- `/api/jobs`-backed state reads
+- output artifact download
+
+### `make workspace-e2e`
+
+Proves workspace builder behavior in a real browser against a disposable ComfyUI runtime.
+
+It checks:
+
+- workflow-group visibility
+- layout integrity
+- node and group spacing
+- link counts and directionality
+- absence of geometry regressions such as overlaps or containment failures
+
+### `make release-e2e`
+
+Proves the canonical provider-owned release scenarios in real ComfyUI.
+
+It covers:
+
+- assembled-resource workflows
+- raw `workflow_json` import
+- workspace and prompt round-trip behavior
+- workspace export layout and connectivity
+
+## Local Prerequisites
+
+Install browser dependencies before running the Playwright lanes:
 
 ```bash
 make workspace-e2e-browser-install
 make release-e2e-browser-install
 ```
 
-## Runtime Notes
+Then use the validation lanes appropriate to the change.
 
-The workspace and release harnesses start a local ComfyUI runtime under their own `.runtime/` directories and stage generated JSON files as global subgraphs.
+For broad release confidence, the most useful sequence is:
 
-Artifacts are written here:
-- `validation/workspace_e2e/artifacts/browser/`
+```bash
+make generate
+make docs
+go test ./... -timeout 120s
+make synthesis-e2e
+make inventory-plan-e2e
+make execution-e2e
+make workspace-e2e
+make release-e2e
+```
+
+## Artifact Locations
+
+The runtime and browser lanes emit evidence under `validation/`.
+
+Most useful locations:
+
 - `validation/workspace_e2e/artifacts/generated/`
-- `validation/release_e2e/artifacts/browser/`
+- `validation/workspace_e2e/artifacts/browser/`
 - `validation/release_e2e/artifacts/generated/`
+- `validation/release_e2e/artifacts/browser/`
 
-Terraform machine-readable outputs are written under each harness runtime directory as `terraform-outputs.json`.
+Terraform machine-readable outputs land under each harness runtime directory as `terraform-outputs.json`.
 
-## Reading Failures
+## How to Read Failures
 
-Use the emitted artifacts to localize failures quickly:
-- missing or malformed JSON in `artifacts/generated/` usually points to provider-owned assembly, translation, or workspace-builder logic
-- Terraform assertion failures usually point to execution-state or artifact-path regressions
-- Playwright metric mismatches usually point to staging, link preservation, layout, or ComfyUI UI compatibility issues
+Common failure patterns:
+
+- `make generate` changes files unexpectedly
+  - usually means the pinned ComfyUI extraction contract or generated metadata drifted
+- synthesis-e2e failures
+  - usually point to prompt/workspace translation or Terraform synthesis regressions
+- inventory-plan-e2e failures
+  - usually point to dynamic inventory classification, inventory lookup, or plan-time validation regressions
+- execution-e2e failures
+  - usually point to execution-state handling, artifact paths, or output lifecycle regressions
+- workspace-e2e or release-e2e metric failures
+  - usually point to layout, staging, connectivity, or browser-visible compatibility regressions
+
+## Current Release Claim
+
+These lanes are intended to support a narrow but strong release claim:
+
+- built-in ComfyUI behavior pinned in this repo is represented by generated node contracts
+- AI- and human-authored Terraform workflows can be validated against those contracts
+- recognized runtime-backed inventory choices are caught during plan
+- provider-owned assembly, translation, execution, and workspace export behavior are proved against real ComfyUI runtime and browser behavior
+
+For the explicit product boundary, see [Known Boundaries](./known-boundaries.md).

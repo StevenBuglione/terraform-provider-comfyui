@@ -6,32 +6,37 @@
 [![Go 1.25.1](https://img.shields.io/badge/go-1.25.1-00ADD8?logo=go)](./go.mod)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 
-Manage [ComfyUI](https://github.com/comfyanonymous/ComfyUI) workflows with Terraform by modeling nodes, assembling executable graphs, and querying runtime state from a running ComfyUI server.
+Manage [ComfyUI](https://github.com/comfyanonymous/ComfyUI) workflows with Terraform by modeling nodes, assembling executable graphs, validating runtime-backed inputs during `terraform plan`, and translating native ComfyUI artifacts into canonical Terraform.
 
-This provider uses a node-per-resource model: generated Terraform resources describe ComfyUI nodes in state, and `comfyui_workflow` assembles and optionally executes them when you apply. The current build is generated from ComfyUI `v0.18.5` and includes `645` built-in node resources.
+This provider is generated from the ComfyUI version pinned in this repo and currently includes `645` built-in node resources generated from ComfyUI `v0.18.5`.
 
-## Why This Provider
+## What This Provider Does
 
-- Model ComfyUI graphs as typed Terraform resources instead of hand-editing raw workflow JSON.
-- Assemble workflows from `node_ids` or submit raw ComfyUI API-format JSON directly.
-- Export workflow files, execute runs, or do both from the same `comfyui_workflow` resource.
-- Observe normalized execution state through `comfyui_workflow`, `comfyui_job`, `comfyui_jobs`, `comfyui_queue`, and `comfyui_workflow_history`.
-- Cancel queued or running executions through normal Terraform lifecycle with `cancel_on_delete`.
-- Import, translate, and validate native prompt/workspace artifacts before execution.
-- Fail `terraform plan` when built-in runtime-backed inventory selections, such as checkpoints or LoRAs, do not exist on the target ComfyUI server.
-- Upload input images or masks to ComfyUI and materialize remote outputs back to local disk.
-- Organize reusable workflow sets with `comfyui_workflow_collection`.
-- Inspect server state plus artifact import/translation/validation surfaces with provider data sources.
+- Model built-in ComfyUI nodes as typed Terraform resources instead of hand-editing prompt JSON.
+- Assemble and optionally execute workflows with `comfyui_workflow`.
+- Compose multiple workflows into one UI-oriented canvas export with `comfyui_workspace`.
+- Import, translate, validate, and synthesize native prompt and workspace artifacts.
+- Fail `terraform plan` when recognized runtime-backed inventory selections such as checkpoints or LoRAs do not exist on the target ComfyUI server.
+- Expose normalized execution state through `comfyui_workflow`, `comfyui_job`, `comfyui_jobs`, `comfyui_queue`, and `comfyui_workflow_history`.
+- Manage uploaded inputs and downloaded output artifacts through Terraform-managed resources.
+
+## Intended Audiences
+
+- Provider users who want to author and run ComfyUI workflows declaratively in Terraform.
+- AI coding harnesses that need machine-readable node contracts, synthesis surfaces, and strict validation before writing or changing Terraform.
+- Contributors maintaining the generated extraction pipeline, hand-rolled orchestration layer, and release validation harnesses.
+
+## Scope
+
+The supported path is centered on the built-in ComfyUI behavior pinned in this repo. The provider is designed to make built-in workflows and their runtime-backed inventories safe to author, validate, and maintain in Terraform. Arbitrary exotic custom-node ecosystems are not the central compatibility promise.
 
 ## Requirements
 
 - A reachable ComfyUI server. By default the provider connects to `localhost:8188`.
-- A current Terraform CLI with support for modern provider installation syntax.
-- Any models, custom nodes, or partner-node integrations required by the workflow you plan to run.
+- A current Terraform CLI with modern provider installation support.
+- Any built-in or partner-node models required by the workflow you plan to run.
 
 ## Installation
-
-Install the provider from the Terraform Registry:
 
 ```hcl
 terraform {
@@ -50,7 +55,7 @@ Minimal provider configuration:
 provider "comfyui" {}
 ```
 
-The provider also supports environment-variable configuration:
+Environment variables are also supported:
 
 - `COMFYUI_HOST`
 - `COMFYUI_PORT`
@@ -58,7 +63,7 @@ The provider also supports environment-variable configuration:
 
 ## Quick Start
 
-This is the smallest useful text-to-image workflow using generated node resources plus `comfyui_workflow` assembly:
+This is the smallest useful text-to-image workflow built from generated node resources and executed through `comfyui_workflow`.
 
 ```hcl
 terraform {
@@ -130,117 +135,130 @@ resource "comfyui_workflow" "txt2img" {
   wait_for_completion = true
   timeout_seconds     = 300
 }
+
+output "workflow_id" {
+  value = comfyui_workflow.txt2img.workflow_id
+}
+
+output "outputs_json" {
+  value = comfyui_workflow.txt2img.outputs_json
+}
+
+output "execution_status_json" {
+  value = comfyui_workflow.txt2img.execution_status_json
+}
 ```
 
-At apply time:
+At a high level:
 
-- Terraform stores node resources in state and assembles them into ComfyUI API-format JSON.
-- `comfyui_workflow` submits the graph to ComfyUI and can wait for completion.
-- The workflow resource returns execution fields like `prompt_id`, `workflow_id`, `outputs_count`, `preview_output_json`, `outputs_json`, `execution_status_json`, `execution_error_json`, and `assembled_json`.
-- The job data sources let you re-read the same execution through normalized `/api/jobs` views for filtering and feedback loops.
+- `terraform plan` validates the typed node graph and checks recognized runtime-backed inventory values against the live ComfyUI server.
+- `terraform apply` assembles the graph into ComfyUI API-format JSON and submits it when `execute = true`.
+- `comfyui_workflow` returns rich execution surfaces such as `workflow_id`, `outputs_json`, `preview_output_json`, `execution_status_json`, and `execution_error_json`.
 
 ## Core Concepts
 
-### Virtual node resources
+### Generated node resources
 
-Most generated `comfyui_*` node resources are virtual. They define typed node inputs and outputs in Terraform state, but they do not send API requests on their own.
+Most `comfyui_*` node resources are generated from ComfyUI metadata and are virtual: they exist in Terraform state and participate in workflow assembly, but they do not make API calls on their own.
 
 ### `comfyui_workflow`
 
 `comfyui_workflow` is the execution boundary. It can:
 
-- assemble a workflow from node resource IDs
+- assemble a workflow from `node_ids`
 - accept raw `workflow_json`
-- write the assembled graph to `output_file`
-- preserve execution metadata via `extra_data_json` / `partial_execution_targets`
-- expose normalized execution fields like `workflow_id`, `outputs_count`, `preview_output_json`, and `execution_status_json`
-- cancel queued or running executions during destroy when `cancel_on_delete = true`
+- validate against live `/object_info` metadata before execution
+- export assembled prompt JSON to disk
 - execute immediately, export only, or do both
+- expose rich execution fields from `/api/jobs`
 
 ### `comfyui_workspace`
 
-`comfyui_workspace` is a layout-aware meta resource. It can:
+`comfyui_workspace` is the layout-aware canvas export resource. It can:
 
 - accept multiple API-format workflows, including `comfyui_workflow.*.assembled_json`
-- compose them into one UI-oriented workspace/subgraph export
-- position workflow islands with a typed, CSS-inspired `layout` block (`display`, `direction`, `gap`, `columns`, `origin_*`)
-- style individual workflows via per-workflow `group_color` and `title_font_size` settings
-- control internal node layout within each workflow via top-level `node_layout` settings (`mode`, `direction`, `column_gap`, `row_gap`)
-- write the composed workspace JSON to `output_file`
+- compose them into a single workspace/subgraph JSON file
+- lay out workflow islands with typed `layout` settings
+- control internal node readability with `node_layout`
+- preserve UI-oriented styling and deterministic placement
 
-Unlike `comfyui_workflow` file-only export, `comfyui_workspace` still needs a live ComfyUI connection so it can fetch node metadata from `/object_info` and build UI slot/widget information.
+### Artifact import, translation, and synthesis
 
-### Data sources
+The provider also exposes narrative and AI-facing artifact surfaces:
 
-Use data sources to inspect live server state, normalized job state, queue entries, workflow history, output files, or provider metadata generated from the current ComfyUI extraction.
+- `comfyui_prompt_json` and `comfyui_workspace_json` import and normalize native ComfyUI artifacts.
+- `comfyui_prompt_to_workspace` and `comfyui_workspace_to_prompt` translate between prompt and workspace forms with fidelity reporting.
+- `comfyui_prompt_to_terraform` and `comfyui_workspace_to_terraform` synthesize canonical Terraform IR and rendered HCL from native ComfyUI artifacts.
+- `comfyui_prompt_validation` and `comfyui_workspace_validation` validate artifacts in executable or fragment-oriented modes.
+- `comfyui_inventory` exposes live runtime-backed inventory values by normalized kind.
 
-### Artifact round-trip and file lifecycle
+## Validation and Confidence
 
-The provider also exposes dedicated artifact-management surfaces for AI harness workflows:
+The provider’s strongest guarantees come from combining generated contracts with real runtime verification:
 
-- `comfyui_prompt_json` / `comfyui_workspace_json` import and normalize native ComfyUI artifacts.
-- `comfyui_prompt_to_workspace` / `comfyui_workspace_to_prompt` translate between API prompt JSON and workspace JSON with explicit fidelity reporting.
-- `comfyui_prompt_to_terraform` / `comfyui_workspace_to_terraform` synthesize canonical Terraform IR and rendered HCL from native artifacts using the generated node contract.
-- `comfyui_prompt_validation` / `comfyui_workspace_validation` validate artifacts against live `/object_info` metadata, defaulting to executable modes that require output nodes. Fragment-only modes remain available when an AI harness is editing incomplete graphs.
-- `comfyui_inventory` exposes the live built-in runtime inventory by normalized kind so AI harnesses can inspect available checkpoints, LoRAs, text encoders, and related model categories before authoring configuration.
-- `comfyui_uploaded_image` and `comfyui_uploaded_mask` manage ComfyUI-backed uploads.
-- `comfyui_output_artifact` downloads a remote ComfyUI file from `/view` into a Terraform-managed local artifact.
+- `make generate`
+  - regenerates node resources, generated schema metadata, and UI sizing hints from the pinned ComfyUI source and live frontend behavior
+- `make synthesis-e2e`
+  - proves prompt/workspace-to-Terraform synthesis through real Terraform runs
+- `make inventory-plan-e2e`
+  - proves bad dynamic inventory values fail during `terraform plan`
+- `make execution-e2e`
+  - proves model-free execution, job-state reads, and artifact download behavior
+- `make workspace-e2e`
+  - proves workspace layout, spacing, and connectivity in a real ComfyUI browser session
+- `make release-e2e`
+  - proves assembled workflows, raw imports, translation round trips, and workspace exports in real ComfyUI
+
+## Documentation Map
+
+Start here based on what you are doing:
+
+- Provider user: [Getting Started](./docs/getting-started.md)
+- Workflow authoring: [Workflow Authoring](./docs/workflow-authoring.md)
+- AI harness authoring: [AI Harness Guide](./docs/ai-harness-guide.md)
+- Contributor workflow: [Contributing](./docs/contributing.md)
+- Generation internals: [Generation Architecture](./docs/generation-architecture.md)
+- Release confidence: [Release Validation](./docs/release-validation.md)
+- Maintainability boundary: [AI Maintainability](./docs/ai-maintainability.md)
+- Scope and boundaries: [Known Boundaries](./docs/known-boundaries.md)
+- Full docs map: [docs/index.md](./docs/index.md)
+
+Generated API references live under:
+
+- [Resource docs](./docs/resources/)
+- [Data source docs](./docs/data-sources/)
 
 ## Examples
 
-- [Provider configuration](./examples/provider/provider.tf): minimal and explicit provider setup patterns
-- [Text to image](./examples/resources/txt2img/main.tf): generated node resources assembled with `node_ids`
-- [Image to image](./examples/resources/img2img/main.tf): transform an input image with prompt guidance
-- [Upscale](./examples/resources/upscale/main.tf): run an upscale model and save the result
-- [Workflow JSON](./examples/resources/workflow_json/main.tf): submit raw ComfyUI API-format JSON
-- [Workflow file export](./examples/resources/workflow_file/main.tf): write assembled workflows to disk with or without execution
-- [Workflow collections](./examples/resources/collection/main.tf): group workflows and emit an index manifest
-- [Workspace export](./examples/resources/workspace/main.tf): compose multiple workflows into one layout-aware workspace export
-- [Video generation](./examples/resources/video_gen/main.tf): partner-node video workflows for Kling and Seedance
-- [Data sources](./examples/data-sources/main.tf): inspect system stats, queue state, job state, node metadata, history, outputs, and provider metadata
-
-## Provider Configuration
-
-The provider accepts three optional attributes:
-
-- `host`: ComfyUI hostname or IP address
-- `port`: ComfyUI port
-- `api_key`: optional API key for authenticated deployments
-
-Provider arguments take precedence over environment variables, which take precedence over the built-in defaults (`localhost:8188`, no API key). For the full provider schema and generated docs, see the [Terraform Registry documentation](https://registry.terraform.io/providers/StevenBuglione/comfyui/latest/docs).
+- [Provider configuration](./examples/provider/provider.tf)
+- [Text to image](./examples/resources/txt2img/main.tf)
+- [Image to image](./examples/resources/img2img/main.tf)
+- [Upscale](./examples/resources/upscale/main.tf)
+- [Workflow JSON](./examples/resources/workflow_json/main.tf)
+- [Workflow file export](./examples/resources/workflow_file/main.tf)
+- [Workflow collections](./examples/resources/collection/main.tf)
+- [Workspace export](./examples/resources/workspace/main.tf)
+- [Video generation](./examples/resources/video_gen/main.tf)
+- [Data sources](./examples/data-sources/main.tf)
 
 ## Development
 
-The repo keeps contributor workflow intentionally short in the root README:
+Core contributor commands:
 
 ```bash
 make generate
-make test
-make lint
 make docs
-make hooks-install
-make workspace-e2e-browser-install
-make workspace-e2e
-make release-e2e-browser-install
-make release-e2e
+make lint
+make test
+make vet
 make synthesis-e2e
 make inventory-plan-e2e
 make execution-e2e
+make workspace-e2e
+make release-e2e
 ```
 
-`make workspace-e2e` launches a disposable local ComfyUI from `third_party/ComfyUI` (auto-selecting a free local port if 8188 is busy), renders the `validation/workspace_e2e` stress fixtures through `comfyui_workspace`, and verifies the real browser canvas with Playwright. Evidence lands under `validation/workspace_e2e/artifacts/browser/` as screenshots and metrics JSON files. In this repo, "clean and usable" means each staged workspace loads in ComfyUI, every workflow group remains visible, and the captured metrics show zero cross-group overlaps, zero header overlaps, zero body containment violations, zero backward links, and correctly styled group rendering.
-
-`make release-e2e` stages four canonical release scenarios into a live ComfyUI canvas and verifies them with Playwright: an assembled-resource workflow, a raw `workflow_json` import, a workspace->prompt->workspace round trip, and a `comfyui_workspace` gallery export. It is aimed squarely at the provider-owned logic that is hardest to trust by inspection alone: assembly, translation, staging, and graph connectivity.
-
-`make synthesis-e2e` exercises the AI-facing synthesis surfaces with real Terraform. It feeds native prompt and workspace artifacts into `comfyui_prompt_to_terraform` and `comfyui_workspace_to_terraform`, then asserts that both return non-empty Terraform IR, rendered HCL, and the expected workflow/resource blocks without needing a live ComfyUI server.
-
-`make inventory-plan-e2e` launches a disposable local ComfyUI, stages a known checkpoint filename into the runtime inventory, proves that `data.comfyui_inventory` and `data.comfyui_node_schema` expose the expected live/generated contract, then asserts a valid `terraform plan` succeeds while an invalid checkpoint reference fails during plan before apply.
-
-`make execution-e2e` launches a disposable local ComfyUI, uploads a tiny fixture image, runs a model-free `LoadImage -> ImageInvert -> SaveImage` workflow, verifies the structured execution fields through `comfyui_workflow`, re-reads the same run through `comfyui_job` / `comfyui_jobs`, and downloads the saved artifact back to local disk.
-
-Generated node resources come from extracted ComfyUI metadata and are checked in under `internal/resources/generated`. For deeper project structure and development guidance, see [CLAUDE.md](./CLAUDE.md).
-
-The maintenance surface is therefore mostly in the hand-rolled layers, not the generated wrappers: roughly `19.7k` custom Go lines versus `99.4k` generated lines across `646` resource files. Release validation is documented in [docs/release-validation.md](./docs/release-validation.md).
+For deeper development context and repo conventions, see [Contributing](./docs/contributing.md) and [CLAUDE.md](./CLAUDE.md).
 
 ## License
 

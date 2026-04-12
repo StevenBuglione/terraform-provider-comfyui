@@ -1,45 +1,87 @@
 # AI Maintainability
 
-The provider now exposes a generated-first contract intended for AI coding harnesses that need to create and maintain ComfyUI workflows declaratively in Terraform.
+This note explains why the provider is maintainable for AI-authored Terraform workflows without pretending the repo is fully generated end to end.
 
-## Machine-readable surfaces
+## Generated-First Boundary
 
-- `comfyui_node_schema` exposes structured generated node metadata instead of raw JSON strings.
-- `comfyui_prompt_validation` and `comfyui_workspace_validation` default to executable modes so incomplete graphs fail unless fragment validation is explicitly requested.
-- `comfyui_prompt_to_terraform` synthesizes canonical Terraform IR and rendered HCL from native prompt JSON.
-- `comfyui_workspace_to_terraform` translates workspace JSON to prompt form and then synthesizes canonical Terraform IR and rendered HCL.
+The provider intentionally uses ComfyUI as the source of truth wherever that is practical.
 
-## Generated-first boundary
+Generated from pinned ComfyUI server metadata:
 
-The provider uses ComfyUI as the source of truth for:
+- built-in node resource schemas
+- structured node schema contracts
+- enum values, ranges, and dynamic-option metadata
+- dynamic inventory classification metadata
 
-- node resource schemas and node contracts extracted from server metadata
-- frontend sizing hints extracted from the running ComfyUI UI
-- canonical Terraform synthesis built against the generated node contract
+Generated from the live ComfyUI frontend:
 
-Handwritten logic is intentionally limited to:
+- UI sizing hints used by workspace layout and export
+
+Those generated artifacts reduce the amount of provider logic that has to be hand-maintained when the pinned ComfyUI version changes.
+
+## What Remains Hand-Rolled
+
+Some layers are still provider-owned by design:
 
 - Terraform resource and data source orchestration
+- workflow assembly
 - prompt, workspace, and Terraform IR translation
-- validation/reporting semantics
-- runtime and browser verification harnesses
+- validation semantics and diagnostics
+- runtime inventory lookup service
+- workspace staging and browser/runtime verification harnesses
 
-## Verification lanes
+Those layers are smaller than the generated wrapper surface and are where most upgrade risk lives.
 
-- `make generate`
-  Regenerates node resources, UI hints, and generated node-schema metadata from real ComfyUI behavior.
-- `make synthesis-e2e`
-  Proves prompt/workspace-to-Terraform synthesis through real Terraform runs.
-- `make workspace-e2e`
-  Validates workspace rendering, spacing, connectivity, and group layout in a real ComfyUI browser session.
-- `make release-e2e`
-  Validates canonical provider-owned release scenarios through Terraform plus Playwright.
-- `make execution-e2e`
-  Proves model-free workflow execution and artifact lifecycle behavior against a disposable ComfyUI runtime.
+## Why This Is Maintainable
 
-## Intended AI workflow
+The maintainability argument is not that the provider has zero handwritten code. It is that the handwritten code is bounded and increasingly driven by generated metadata instead of magic constants or duplicated schema knowledge.
 
-1. Inspect `comfyui_node_schema` for structured input and output contracts.
-2. Use executable validation modes by default while authoring or refactoring workflows.
-3. Use `comfyui_prompt_to_terraform` or `comfyui_workspace_to_terraform` when starting from native ComfyUI artifacts.
-4. Re-run `make synthesis-e2e` and browser/runtime harnesses before release.
+The current model is maintainable because:
+
+- node contracts are extracted rather than hand-entered
+- AI-facing schema and synthesis surfaces are provider-owned and deterministic
+- workspace UI sizing uses generated hints from real ComfyUI behavior
+- strict plan-time validation for recognized dynamic inventories is generated from extracted metadata
+- runtime and browser harnesses catch drift in the hand-rolled layers quickly
+
+## Regeneration Workflow
+
+The main regeneration path is:
+
+1. update the pinned ComfyUI source
+2. run `make generate`
+3. run `make docs`
+4. run the validation matrix needed for the change
+
+`make generate` is important because it now covers:
+
+- generated node resources
+- structured node schema metadata
+- frontend UI-hints extraction
+
+If the pinned ComfyUI version changes, that command is the first place drift should surface.
+
+## Upgrade Risk Concentration
+
+When ComfyUI changes, the most likely breakpoints are:
+
+- workflow assembly and semantic validation
+- prompt/workspace translation
+- Terraform synthesis
+- dynamic inventory classification or lookup behavior
+- workspace layout and staging assumptions
+- runtime/browser compatibility with the ComfyUI canvas
+
+Those are exactly the areas the repo’s higher-confidence validation lanes target.
+
+## What This Means for AI-Authored Terraform
+
+For the pinned built-in ComfyUI support in this repo, the provider is maintainable enough to serve as the machine contract for AI-authored Terraform workflows.
+
+That claim depends on three things staying true:
+
+- node and inventory contracts remain generated from ComfyUI
+- provider-owned synthesis and validation surfaces remain canonical
+- runtime and browser verification keep proving that the hand-rolled layer still matches real ComfyUI behavior
+
+For the validation side of that claim, see [Release Validation](./release-validation.md).
