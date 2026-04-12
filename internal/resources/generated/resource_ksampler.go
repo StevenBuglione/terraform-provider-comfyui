@@ -69,7 +69,7 @@ func (r *KsamplerResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.",
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: The random seed used for creating the noise.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
@@ -83,7 +83,7 @@ func (r *KsamplerResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				},
 			},
 			"cfg": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1. Tooltip: The Classifier-Free Guidance scale balances creativity and adherence to the prompt. Higher values result in images more closely matching the prompt however too high values will negatively impact quality.",
+				MarkdownDescription: "Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1. Tooltip: The Classifier-Free Guidance scale balances creativity and adherence to the prompt. Higher values result in images more closely matching the prompt however too high values will negatively impact quality.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
@@ -110,7 +110,7 @@ func (r *KsamplerResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Required:            true,
 			},
 			"denoise": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: The amount of denoising applied, lower values will maintain the structure of the initial image allowing for image to image sampling.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: The amount of denoising applied, lower values will maintain the structure of the initial image allowing for image to image sampling.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

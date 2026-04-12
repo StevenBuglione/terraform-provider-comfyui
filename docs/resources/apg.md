@@ -17,10 +17,10 @@ ComfyUI APG node — Adaptive Projected Guidance [sampling/custom_sampling] Sour
 
 ### Required
 
-- `eta` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01. Tooltip: Controls the scale of the parallel guidance vector. Default CFG behavior at a setting of 1.
+- `eta` (Number) Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01. Tooltip: Controls the scale of the parallel guidance vector. Default CFG behavior at a setting of 1.
 - `model` (String) Input: MODEL. Link input.
-- `momentum` (Number) Input: FLOAT. Default: 0. Allowed range: -5 to 1. Step: 0.01. Tooltip: Controls a running average of guidance during diffusion, disabled at a setting of 0.
-- `norm_threshold` (Number) Input: FLOAT. Default: 5. Allowed range: 0 to 50. Step: 0.1. Tooltip: Normalize guidance vector to this value, normalization disable at a setting of 0.
+- `momentum` (Number) Input: FLOAT. Default: 0.0. Allowed range: -5.0 to 1.0. Step: 0.01. Tooltip: Controls a running average of guidance during diffusion, disabled at a setting of 0.
+- `norm_threshold` (Number) Input: FLOAT. Default: 5.0. Allowed range: 0.0 to 50.0. Step: 0.1. Tooltip: Normalize guidance vector to this value, normalization disable at a setting of 0.
 
 ### Read-Only
 

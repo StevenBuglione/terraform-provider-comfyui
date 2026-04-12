@@ -96,21 +96,21 @@ func (r *WanCameraEmbeddingResource) Schema(_ context.Context, _ resource.Schema
 				Required:            true,
 			},
 			"speed": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0 to 10.0. Step: 0.1.",
 				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"fx": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.000000001.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 1e-09.",
 				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"fy": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.000000001.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 1e-09.",
 				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

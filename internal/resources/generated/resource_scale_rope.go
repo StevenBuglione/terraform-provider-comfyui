@@ -65,42 +65,42 @@ func (r *ScaleRopeResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Required:            true,
 			},
 			"scale_x": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"shift_x": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -256.0 to 256.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-256, 256),
 				},
 			},
 			"scale_y": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"shift_y": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -256.0 to 256.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-256, 256),
 				},
 			},
 			"scale_t": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"shift_t": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -256 to 256. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -256.0 to 256.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-256, 256),

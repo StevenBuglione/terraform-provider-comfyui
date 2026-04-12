@@ -25,7 +25,7 @@ ComfyUI StabilityStableImageUltraNode node — Stability AI Stable Image Ultra [
 ### Optional
 
 - `image` (String) Input: IMAGE. Link input.
-- `image_denoise` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.
+- `image_denoise` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.
 - `negative_prompt` (String) Input: STRING. Default: "". Tooltip: A blurb of text describing what you do not wish to see in the output image. This is an advanced feature.
 
 ### Read-Only

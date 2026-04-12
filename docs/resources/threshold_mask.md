@@ -18,7 +18,7 @@ ComfyUI ThresholdMask node [mask] Source: comfy_extras/nodes_mask.py:378 (v3_ext
 ### Required
 
 - `mask` (String) Input: MASK. Link input.
-- `value` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
+- `value` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01.
 
 ### Read-Only
 

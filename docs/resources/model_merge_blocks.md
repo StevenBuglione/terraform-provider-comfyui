@@ -17,11 +17,11 @@ ComfyUI ModelMergeBlocks node — ModelMergeBlocks [advanced/model_merging] Sour
 
 ### Required
 
-- `input` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
-- `middle` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `input` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
+- `middle` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `model1` (String) Input: MODEL. Link input.
 - `model2` (String) Input: MODEL. Link input.
-- `out` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `out` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 
 ### Read-Only
 

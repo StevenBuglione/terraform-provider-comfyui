@@ -18,8 +18,8 @@ Kling Image Generation Node. Generate an image from a text prompt with an option
 ### Required
 
 - `aspect_ratio` (String) Input: COMBO. Default: "16:9". Dynamic options are resolved by ComfyUI at runtime.
-- `human_fidelity` (Number) Input: FLOAT. Default: 0.45. Allowed range: 0 to 1. Step: 0.01. Tooltip: Subject reference similarity.
-- `image_fidelity` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Reference intensity for user-uploaded images.
+- `human_fidelity` (Number) Input: FLOAT. Default: 0.45. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Subject reference similarity.
+- `image_fidelity` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Reference intensity for user-uploaded images.
 - `image_type` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
 - `model_name` (String) Input: COMBO.
 - `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 9. Tooltip: Number of generated images.

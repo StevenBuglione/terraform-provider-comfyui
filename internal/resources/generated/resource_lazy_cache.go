@@ -63,21 +63,21 @@ func (r *LazyCacheResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Required:            true,
 			},
 			"reuse_threshold": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.2. Allowed range: 0 to 3. Step: 0.01. Tooltip: The threshold for reusing cached steps.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.2. Allowed range: 0.0 to 3.0. Step: 0.01. Tooltip: The threshold for reusing cached steps.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 3),
 				},
 			},
 			"start_percent": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.15. Allowed range: 0 to 1. Step: 0.01. Tooltip: The relative sampling step to begin use of LazyCache.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.15. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: The relative sampling step to begin use of LazyCache.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"end_percent": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0 to 1. Step: 0.01. Tooltip: The relative sampling step to end use of LazyCache.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: The relative sampling step to end use of LazyCache.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

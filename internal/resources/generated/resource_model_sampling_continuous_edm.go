@@ -76,14 +76,14 @@ func (r *ModelSamplingContinuousEdmResource) Schema(_ context.Context, _ resourc
 				},
 			},
 			"sigma_max": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 120. Allowed range: 0 to 1000. Step: 0.001.",
+				MarkdownDescription: "Input: FLOAT. Default: 120.0. Allowed range: 0.0 to 1000.0. Step: 0.001.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1000),
 				},
 			},
 			"sigma_min": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.002. Allowed range: 0 to 1000. Step: 0.001.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.002. Allowed range: 0.0 to 1000.0. Step: 0.001.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1000),

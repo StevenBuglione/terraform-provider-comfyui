@@ -78,14 +78,14 @@ func (r *KlingImageGenerationNodeResource) Schema(_ context.Context, _ resource.
 				Required:            true,
 			},
 			"image_fidelity": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Reference intensity for user-uploaded images.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Reference intensity for user-uploaded images.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"human_fidelity": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.45. Allowed range: 0 to 1. Step: 0.01. Tooltip: Subject reference similarity.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.45. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Subject reference similarity.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

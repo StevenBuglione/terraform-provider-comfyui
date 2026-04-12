@@ -80,7 +80,7 @@ func (r *StabilityStableImageSd35NodeResource) Schema(_ context.Context, _ resou
 				Required:            true,
 			},
 			"cfg_scale": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 4. Allowed range: 1 to 10. Step: 0.1. Tooltip: How strictly the diffusion process adheres to the prompt text (higher values keep your image closer to your prompt).",
+				MarkdownDescription: "Input: FLOAT. Default: 4.0. Allowed range: 1.0 to 10.0. Step: 0.1. Tooltip: How strictly the diffusion process adheres to the prompt text (higher values keep your image closer to your prompt).",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 10),
@@ -102,7 +102,7 @@ func (r *StabilityStableImageSd35NodeResource) Schema(_ context.Context, _ resou
 				Optional:            true,
 			},
 			"image_denoise": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Denoise of input image; 0.0 yields image identical to input, 1.0 is as if no image was provided at all.",
 				Optional:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

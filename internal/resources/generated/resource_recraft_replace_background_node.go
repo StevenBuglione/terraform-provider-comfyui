@@ -75,7 +75,7 @@ func (r *RecraftReplaceBackgroundNodeResource) Schema(_ context.Context, _ resou
 				},
 			},
 			"seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),

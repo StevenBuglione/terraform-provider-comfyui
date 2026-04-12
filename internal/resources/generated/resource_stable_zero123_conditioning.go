@@ -92,14 +92,14 @@ func (r *StableZero123ConditioningResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"elevation": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -180 to 180. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -180.0 to 180.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-180, 180),
 				},
 			},
 			"azimuth": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -180 to 180. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -180.0 to 180.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-180, 180),

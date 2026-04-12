@@ -22,7 +22,7 @@ Generates videos synchronously based on a prompt, and optional parameters. [api 
 
 ### Optional
 
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Step: 1. Tooltip: The random seed used for creating the noise.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Step: 1. Tooltip: The random seed used for creating the noise.
 
 ### Read-Only
 

@@ -18,6 +18,7 @@ Validates native ComfyUI workspace JSON by translating it to prompt JSON and che
 ### Optional
 
 - `json` (String) Optional raw ComfyUI workspace JSON string.
+- `mode` (String) Validation mode. Defaults to executable_workspace. Use workspace_fragment to validate incomplete workspace fragments without requiring an output node after translation.
 - `path` (String) Optional file path to load workspace JSON from.
 
 ### Read-Only

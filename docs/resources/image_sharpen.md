@@ -17,10 +17,10 @@ ComfyUI Sharpen node [image/postprocessing] Source: comfy_extras/nodes_post_proc
 
 ### Required
 
-- `alpha` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 5. Step: 0.01.
+- `alpha` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 5.0. Step: 0.01.
 - `image` (String) Input: IMAGE. Link input.
 - `sharpen_radius` (Number) Input: INT. Default: 1. Allowed range: 1 to 31. Step: 1.
-- `sigma` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 10. Step: 0.01.
+- `sigma` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.1 to 10.0. Step: 0.01.
 
 ### Read-Only
 

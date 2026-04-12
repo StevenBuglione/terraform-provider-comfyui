@@ -19,7 +19,7 @@ ComfyUI HunyuanRefinerLatent node Source: comfy_extras/nodes_hunyuan.py:379 (v3_
 
 - `latent` (String) Input: LATENT. Link input.
 - `negative` (String) Input: CONDITIONING. Link input.
-- `noise_augmentation` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0 to 1. Step: 0.01.
+- `noise_augmentation` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `positive` (String) Input: CONDITIONING. Link input.
 
 ### Read-Only

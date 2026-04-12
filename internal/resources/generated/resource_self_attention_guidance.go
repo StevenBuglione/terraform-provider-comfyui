@@ -61,14 +61,14 @@ func (r *SelfAttentionGuidanceResource) Schema(_ context.Context, _ resource.Sch
 				Required:            true,
 			},
 			"scale": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: -2 to 5. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: -2.0 to 5.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-2, 5),
 				},
 			},
 			"blur_sigma": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 2. Allowed range: 0 to 10. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 2.0. Allowed range: 0.0 to 10.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),

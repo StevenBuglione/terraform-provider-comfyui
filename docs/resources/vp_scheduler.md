@@ -17,9 +17,9 @@ ComfyUI VPScheduler node [sampling/custom_sampling/schedulers] Source: comfy_ext
 
 ### Required
 
-- `beta_d` (Number) Input: FLOAT. Default: 19.9. Allowed range: 0 to 5000. Step: 0.01.
-- `beta_min` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0 to 5000. Step: 0.01.
-- `eps_s` (Number) Input: FLOAT. Default: 0.001. Allowed range: 0 to 1. Step: 0.0001.
+- `beta_d` (Number) Input: FLOAT. Default: 19.9. Allowed range: 0.0 to 5000.0. Step: 0.01.
+- `beta_min` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0.0 to 5000.0. Step: 0.01.
+- `eps_s` (Number) Input: FLOAT. Default: 0.001. Allowed range: 0.0 to 1.0. Step: 0.0001.
 - `steps` (Number) Input: INT. Default: 20. Allowed range: 1 to 10000.
 
 ### Read-Only

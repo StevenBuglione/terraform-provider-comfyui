@@ -17,9 +17,9 @@ ComfyUI RenormCFG node [advanced/model] Source: comfy_extras/nodes_lumina2.py:7 
 
 ### Required
 
-- `cfg_trunc` (Number) Input: FLOAT. Default: 100. Allowed range: 0 to 100. Step: 0.01.
+- `cfg_trunc` (Number) Input: FLOAT. Default: 100. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `model` (String) Input: MODEL. Link input.
-- `renorm_cfg` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `renorm_cfg` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
 
 ### Read-Only
 

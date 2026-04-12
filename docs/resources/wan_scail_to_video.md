@@ -21,9 +21,9 @@ description: |-
 - `height` (Number) Input: INT. Default: 896. Minimum value: 32. Step: 32.
 - `length` (Number) Input: INT. Default: 81. Minimum value: 1. Step: 4.
 - `negative` (String) Input: CONDITIONING. Link input.
-- `pose_end` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: End step to use pose conditioning.
-- `pose_start` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Start step to use pose conditioning.
-- `pose_strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01. Tooltip: Strength of the pose latent.
+- `pose_end` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: End step to use pose conditioning.
+- `pose_start` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Start step to use pose conditioning.
+- `pose_strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01. Tooltip: Strength of the pose latent.
 - `positive` (String) Input: CONDITIONING. Link input.
 - `vae` (String) Input: VAE. Link input.
 - `width` (Number) Input: INT. Default: 512. Minimum value: 32. Step: 32.

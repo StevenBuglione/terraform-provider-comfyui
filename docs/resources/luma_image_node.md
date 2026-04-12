@@ -20,8 +20,8 @@ Generates images synchronously based on prompt and aspect ratio. [api node/image
 - `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaAspectRatio.
 - `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: LumaImageModel.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
-- `style_image_weight` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Weight of style image. Ignored if no style_image provided.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
+- `style_image_weight` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Weight of style image. Ignored if no style_image provided.
 
 ### Optional
 

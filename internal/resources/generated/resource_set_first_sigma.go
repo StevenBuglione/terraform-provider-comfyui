@@ -60,7 +60,7 @@ func (r *SetFirstSigmaResource) Schema(_ context.Context, _ resource.SchemaReque
 				Required:            true,
 			},
 			"sigma": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 136. Allowed range: 0 to 20000. Step: 0.001.",
+				MarkdownDescription: "Input: FLOAT. Default: 136.0. Allowed range: 0.0 to 20000.0. Step: 0.001.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 20000),

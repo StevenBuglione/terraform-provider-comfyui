@@ -65,42 +65,42 @@ func (r *KlingCameraControlsResource) Schema(_ context.Context, _ resource.Schem
 				Required:            true,
 			},
 			"horizontal_movement": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's movement along horizontal axis (x-axis). Negative indicates left, positive indicates right.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's movement along horizontal axis (x-axis). Negative indicates left, positive indicates right.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"vertical_movement": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's movement along vertical axis (y-axis). Negative indicates downward, positive indicates upward.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's movement along vertical axis (y-axis). Negative indicates downward, positive indicates upward.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"pan": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rotation in vertical plane (x-axis). Negative indicates downward rotation, positive indicates upward rotation.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's rotation in vertical plane (x-axis). Negative indicates downward rotation, positive indicates upward rotation.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"tilt": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rotation in horizontal plane (y-axis). Negative indicates left rotation, positive indicates right rotation.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's rotation in horizontal plane (y-axis). Negative indicates left rotation, positive indicates right rotation.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"roll": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rolling amount (z-axis). Negative indicates counterclockwise, positive indicates clockwise.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's rolling amount (z-axis). Negative indicates counterclockwise, positive indicates clockwise.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"zoom": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls change in camera's focal length. Negative indicates narrower field of view, positive indicates wider field of view.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls change in camera's focal length. Negative indicates narrower field of view, positive indicates wider field of view.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),

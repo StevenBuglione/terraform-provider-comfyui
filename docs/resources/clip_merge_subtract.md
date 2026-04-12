@@ -19,7 +19,7 @@ ComfyUI CLIPSubtract node — CLIPMergeSubtract [advanced/model_merging] Source:
 
 - `clip1` (String) Input: CLIP. Link input.
 - `clip2` (String) Input: CLIP. Link input.
-- `multiplier` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `multiplier` (Number) Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01.
 
 ### Read-Only
 

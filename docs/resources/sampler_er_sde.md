@@ -17,10 +17,10 @@ ComfyUI SamplerER_SDE node [sampling/custom_sampling/samplers] Source: comfy_ext
 
 ### Required
 
-- `eta` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01. Tooltip: Stochastic strength of reverse-time SDE.
+- `eta` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01. Tooltip: Stochastic strength of reverse-time SDE.
 When eta=0, it reduces to deterministic ODE. This setting doesn't apply to ER-SDE solver type.
 - `max_stage` (Number) Input: INT. Default: 3. Allowed range: 1 to 3.
-- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `s_noise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `solver_type` (String) Input: COMBO.
 
 ### Read-Only

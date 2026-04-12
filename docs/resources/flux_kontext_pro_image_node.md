@@ -18,10 +18,10 @@ Edits images using Flux.1 Kontext [pro] via api based on prompt and aspect ratio
 ### Required
 
 - `aspect_ratio` (String) Input: STRING. Default: "16:9". Tooltip: Aspect ratio of image; must be between 1:4 and 4:1.
-- `guidance` (Number) Input: FLOAT. Default: 3. Allowed range: 0.1 to 99. Step: 0.1. Tooltip: Guidance strength for the image generation process.
+- `guidance` (Number) Input: FLOAT. Default: 3.0. Allowed range: 0.1 to 99.0. Step: 0.1. Tooltip: Guidance strength for the image generation process.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation - specify what and how to edit.
 - `prompt_upsampling` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation, but results are nondeterministic (same seed will not produce exactly the same result).
-- `seed` (Number) Input: INT. Default: 1234. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `seed` (Number) Input: INT. Default: 1234. Allowed range: 0 to 18446744073709551615. Tooltip: The random seed used for creating the noise.
 - `steps` (Number) Input: INT. Default: 50. Allowed range: 1 to 150. Tooltip: Number of steps for the image generation process.
 
 ### Optional

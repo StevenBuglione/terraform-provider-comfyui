@@ -61,7 +61,7 @@ func (r *SamplingPercentToSigmaResource) Schema(_ context.Context, _ resource.Sc
 				Required:            true,
 			},
 			"sampling_percent": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.0001.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.0001.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

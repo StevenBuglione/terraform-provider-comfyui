@@ -17,16 +17,16 @@ ComfyUI SamplerDPMAdaptative node [sampling/custom_sampling/samplers] Source: co
 
 ### Required
 
-- `accept_safety` (Number) Input: FLOAT. Default: 0.81. Allowed range: 0 to 100. Step: 0.01.
-- `atol` (Number) Input: FLOAT. Default: 0.0078. Allowed range: 0 to 100. Step: 0.01.
-- `dcoeff` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.
-- `eta` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.
-- `h_init` (Number) Input: FLOAT. Default: 0.05. Allowed range: 0 to 100. Step: 0.01.
-- `icoeff` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `accept_safety` (Number) Input: FLOAT. Default: 0.81. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `atol` (Number) Input: FLOAT. Default: 0.0078. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `dcoeff` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `eta` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `h_init` (Number) Input: FLOAT. Default: 0.05. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `icoeff` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `order` (Number) Input: INT. Default: 3. Allowed range: 2 to 3.
-- `pcoeff` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.
-- `rtol` (Number) Input: FLOAT. Default: 0.05. Allowed range: 0 to 100. Step: 0.01.
-- `s_noise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `pcoeff` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `rtol` (Number) Input: FLOAT. Default: 0.05. Allowed range: 0.0 to 100.0. Step: 0.01.
+- `s_noise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
 
 ### Read-Only
 

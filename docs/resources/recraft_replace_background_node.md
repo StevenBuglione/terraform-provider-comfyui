@@ -20,7 +20,7 @@ Replace background on image, based on provided prompt. [api node/image/Recraft] 
 - `image` (String) Input: IMAGE. Link input.
 - `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 6. Tooltip: The number of images to generate.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 

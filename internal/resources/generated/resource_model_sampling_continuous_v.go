@@ -72,14 +72,14 @@ func (r *ModelSamplingContinuousVResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"sigma_max": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 500. Allowed range: 0 to 1000. Step: 0.001.",
+				MarkdownDescription: "Input: FLOAT. Default: 500.0. Allowed range: 0.0 to 1000.0. Step: 0.001.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1000),
 				},
 			},
 			"sigma_min": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.03. Allowed range: 0 to 1000. Step: 0.001.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.03. Allowed range: 0.0 to 1000.0. Step: 0.001.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1000),

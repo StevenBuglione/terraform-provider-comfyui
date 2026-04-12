@@ -22,7 +22,7 @@ Transform speech from one voice to another while preserving the original content
 - `output_format` (String) Input: COMBO. Tooltip: Audio output format.
 - `remove_background_noise` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Remove background noise from input audio using audio isolation.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967295. Tooltip: Seed for reproducibility.
-- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
+- `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
 - `voice` (String) Input: ELEVENLABS_VOICE. Link input. Tooltip: Target voice for the transformation. Connect from Voice Selector or Instant Voice Clone.
 
 ### Read-Only

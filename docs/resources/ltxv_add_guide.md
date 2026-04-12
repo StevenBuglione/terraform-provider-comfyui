@@ -22,7 +22,7 @@ ComfyUI LTXVAddGuide node [conditioning/video_models] Source: comfy_extras/nodes
 - `latent` (String) Input: LATENT. Link input.
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `vae` (String) Input: VAE. Link input.
 
 ### Read-Only

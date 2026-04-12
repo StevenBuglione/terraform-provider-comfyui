@@ -104,7 +104,7 @@ func (r *WanTrackToVideoResource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"temperature": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 220. Allowed range: 1 to 1000. Step: 0.1.",
+				MarkdownDescription: "Input: FLOAT. Default: 220.0. Allowed range: 1.0 to 1000.0. Step: 0.1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 1000),

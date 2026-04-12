@@ -26,8 +26,8 @@ Industry-standard upscaling and image enhancement. [api node/image/Topaz] Hidden
 - `creativity` (Number) Input: INT. Default: 3. Allowed range: 1 to 9. Step: 1.
 - `crop_to_fill` (Boolean) Input: BOOLEAN. Default: false. Tooltip: By default, the image is letterboxed when the output aspect ratio differs. Enable to crop the image to fill the output dimensions.
 - `face_enhancement` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Enhance faces (if present) during processing.
-- `face_enhancement_creativity` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Set the creativity level for face enhancement.
-- `face_enhancement_strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Controls how sharp enhanced faces are relative to the background.
+- `face_enhancement_creativity` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Set the creativity level for face enhancement.
+- `face_enhancement_strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Controls how sharp enhanced faces are relative to the background.
 - `face_preservation` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Preserve subjects' facial identity.
 - `output_height` (Number) Input: INT. Default: 0. Allowed range: 0 to 32000. Step: 1. Tooltip: Zero value means to output in the same height as original or output width.
 - `output_width` (Number) Input: INT. Default: 0. Allowed range: 0 to 32000. Step: 1. Tooltip: Zero value means to calculate automatically (usually it will be original size or output_height if specified).

@@ -17,13 +17,13 @@ description: |-
 
 ### Required
 
-- `end_percent` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `end_percent` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `interpolation` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.hooks.InterpolationMethod._LIST.
 - `keyframes_count` (Number) Input: INT. Default: 5. Allowed range: 2 to 100. Step: 1.
 - `print_keyframes` (Boolean) Input: BOOLEAN. Default: false.
-- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
-- `strength_end` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.001.
-- `strength_start` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.001.
+- `start_percent` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.001.
+- `strength_end` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.001.
+- `strength_start` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.001.
 
 ### Optional
 

@@ -68,7 +68,7 @@ func (r *LumaImageModifyNodeResource) Schema(_ context.Context, _ resource.Schem
 				Required:            true,
 			},
 			"image_weight": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.1. Allowed range: 0 to 0.98. Step: 0.01. Tooltip: Weight of the image; the closer to 1.0, the less the image will be modified.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.1. Allowed range: 0.0 to 0.98. Step: 0.01. Tooltip: Weight of the image; the closer to 1.0, the less the image will be modified.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 0.98),
@@ -79,7 +79,7 @@ func (r *LumaImageModifyNodeResource) Schema(_ context.Context, _ resource.Schem
 				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),

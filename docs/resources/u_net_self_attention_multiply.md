@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `k` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `k` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 - `model` (String) Input: MODEL. Link input.
-- `out` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
-- `q` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
-- `v` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `out` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
+- `q` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
+- `v` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 
 ### Read-Only
 

@@ -80,7 +80,7 @@ func (r *KlingStartEndFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 				Required:            true,
 			},
 			"cfg_scale": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

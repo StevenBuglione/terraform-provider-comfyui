@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `end_percent` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0 to 1. Step: 0.01. Tooltip: The relative sampling step to end use of EasyCache.
+- `end_percent` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: The relative sampling step to end use of EasyCache.
 - `model` (String) Input: MODEL. Link input. Tooltip: The model to add EasyCache to.
-- `reuse_threshold` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0 to 3. Step: 0.01. Tooltip: The threshold for reusing cached steps.
-- `start_percent` (Number) Input: FLOAT. Default: 0.15. Allowed range: 0 to 1. Step: 0.01. Tooltip: The relative sampling step to begin use of EasyCache.
+- `reuse_threshold` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0.0 to 3.0. Step: 0.01. Tooltip: The threshold for reusing cached steps.
+- `start_percent` (Number) Input: FLOAT. Default: 0.15. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: The relative sampling step to begin use of EasyCache.
 - `verbose` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to log verbose information.
 
 ### Read-Only

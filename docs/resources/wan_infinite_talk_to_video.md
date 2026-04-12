@@ -18,7 +18,7 @@ ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models] Source: comfy_ex
 ### Required
 
 - `audio_encoder_output_1` (String) Input: AUDIO_ENCODER_OUTPUT. Link input.
-- `audio_scale` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `audio_scale` (Number) Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01.
 - `height` (Number) Input: INT. Default: 480. Minimum value: 16. Step: 16.
 - `length` (Number) Input: INT. Default: 81. Minimum value: 1. Step: 4.
 - `mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.

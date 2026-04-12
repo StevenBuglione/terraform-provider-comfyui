@@ -62,21 +62,21 @@ func (r *ApgResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 				Required:            true,
 			},
 			"eta": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01. Tooltip: Controls the scale of the parallel guidance vector. Default CFG behavior at a setting of 1.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01. Tooltip: Controls the scale of the parallel guidance vector. Default CFG behavior at a setting of 1.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-10, 10),
 				},
 			},
 			"norm_threshold": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 5. Allowed range: 0 to 50. Step: 0.1. Tooltip: Normalize guidance vector to this value, normalization disable at a setting of 0.",
+				MarkdownDescription: "Input: FLOAT. Default: 5.0. Allowed range: 0.0 to 50.0. Step: 0.1. Tooltip: Normalize guidance vector to this value, normalization disable at a setting of 0.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 50),
 				},
 			},
 			"momentum": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: -5 to 1. Step: 0.01. Tooltip: Controls a running average of guidance during diffusion, disabled at a setting of 0.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -5.0 to 1.0. Step: 0.01. Tooltip: Controls a running average of guidance during diffusion, disabled at a setting of 0.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-5, 1),

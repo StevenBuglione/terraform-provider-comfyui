@@ -17,9 +17,9 @@ ComfyUI ModelSamplingFlux node — ModelSamplingFlux [advanced/model] Source: co
 
 ### Required
 
-- `base_shift` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 100. Step: 0.01.
+- `base_shift` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `height` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 8.
-- `max_shift` (Number) Input: FLOAT. Default: 1.15. Allowed range: 0 to 100. Step: 0.01.
+- `max_shift` (Number) Input: FLOAT. Default: 1.15. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `model` (String) Input: MODEL. Link input.
 - `width` (Number) Input: INT. Default: 1024. Minimum value: 16. Step: 8.
 

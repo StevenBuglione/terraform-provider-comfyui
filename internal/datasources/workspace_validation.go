@@ -25,6 +25,7 @@ type WorkspaceValidationDataSource struct {
 type WorkspaceValidationModel struct {
 	Path                         types.String `tfsdk:"path"`
 	JSON                         types.String `tfsdk:"json"`
+	Mode                         types.String `tfsdk:"mode"`
 	Valid                        types.Bool   `tfsdk:"valid"`
 	ErrorCount                   types.Int64  `tfsdk:"error_count"`
 	WarningCount                 types.Int64  `tfsdk:"warning_count"`
@@ -81,6 +82,13 @@ func (d *WorkspaceValidationDataSource) Schema(_ context.Context, _ datasource.S
 				Validators: []validator.String{
 					stringvalidator.AtLeastOneOf(path.MatchRelative().AtParent().AtName("path")),
 					stringvalidator.ConflictsWith(path.MatchRelative().AtParent().AtName("path")),
+				},
+			},
+			"mode": schema.StringAttribute{
+				Optional:    true,
+				Description: "Validation mode. Defaults to executable_workspace. Use workspace_fragment to validate incomplete workspace fragments without requiring an output node after translation.",
+				Validators: []validator.String{
+					stringvalidator.OneOf(string(validationModeWorkspaceFragment), string(validationModeExecutableWorkspace)),
 				},
 			},
 			"valid": schema.BoolAttribute{
@@ -162,7 +170,13 @@ func (d *WorkspaceValidationDataSource) Read(ctx context.Context, req datasource
 		return
 	}
 
-	state, err := workspaceValidationStateFromInput(stringValue(config.Path), stringValue(config.JSON), nodeInfo)
+	mode, err := parseWorkspaceValidationMode(config.Mode)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid validation mode", err.Error())
+		return
+	}
+
+	state, err := workspaceValidationStateFromInput(stringValue(config.Path), stringValue(config.JSON), nodeInfo, mode)
 	if err != nil {
 		resp.Diagnostics.AddError("Unable to validate workspace JSON", err.Error())
 		return
@@ -171,7 +185,7 @@ func (d *WorkspaceValidationDataSource) Read(ctx context.Context, req datasource
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func workspaceValidationStateFromInput(path string, raw string, nodeInfo map[string]client.NodeInfo) (WorkspaceValidationModel, error) {
+func workspaceValidationStateFromInput(path string, raw string, nodeInfo map[string]client.NodeInfo, mode validationMode) (WorkspaceValidationModel, error) {
 	rawJSON, err := loadJSONInput(path, raw)
 	if err != nil {
 		return WorkspaceValidationModel{}, err
@@ -197,10 +211,11 @@ func workspaceValidationStateFromInput(path string, raw string, nodeInfo map[str
 		return WorkspaceValidationModel{}, err
 	}
 
-	validationReport := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{RequireOutputNode: false})
+	validationReport := validation.ValidatePrompt(prompt, nodeInfo, validation.Options{Mode: mode.toValidationMode()})
 	return WorkspaceValidationModel{
 		Path:                         stringValueOrNull(path),
 		JSON:                         stringValueOrNull(raw),
+		Mode:                         types.StringValue(string(mode)),
 		Valid:                        types.BoolValue(validationReport.Valid),
 		ErrorCount:                   types.Int64Value(int64(validationReport.ErrorCount)),
 		WarningCount:                 types.Int64Value(int64(validationReport.WarningCount)),

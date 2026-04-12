@@ -87,7 +87,7 @@ func (r *HunyuanVideo15SuperResolutionResource) Schema(_ context.Context, _ reso
 				Required:            true,
 			},
 			"noise_augmentation": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.7. Allowed range: 0 to 1. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.7. Allowed range: 0.0 to 1.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

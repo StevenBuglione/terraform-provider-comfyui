@@ -25,7 +25,7 @@ Generates videos from prompt, with optional start frame using the new MiniMax Ha
 - `first_frame_image` (String) Input: IMAGE. Link input. Tooltip: Optional image to use as the first frame to generate a video.
 - `prompt_optimizer` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Optimize prompt to improve generation quality when needed.
 - `resolution` (String) Input: COMBO. Default: "768P". Tooltip: The dimensions of the video display. 1080p is 1920x1080, 768p is 1366x768.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Step: 1. Tooltip: The random seed used for creating the noise.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Step: 1. Tooltip: The random seed used for creating the noise.
 
 ### Read-Only
 

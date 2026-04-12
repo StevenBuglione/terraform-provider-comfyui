@@ -17,7 +17,7 @@ ComfyUI SVD_img2vid_Conditioning node — SVD_img2vid_Conditioning [conditioning
 
 ### Required
 
-- `augmentation_level` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 10. Step: 0.01.
+- `augmentation_level` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 - `clip_vision` (String) Input: CLIP_VISION. Link input.
 - `fps` (Number) Input: INT. Default: 6. Allowed range: 1 to 1024.
 - `height` (Number) Input: INT. Default: 576. Minimum value: 16. Step: 8.

@@ -18,12 +18,12 @@ Allows specifying configuration options for Kling Camera Controls and motion con
 ### Required
 
 - `camera_control_type` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingCameraControlType.
-- `horizontal_movement` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's movement along horizontal axis (x-axis). Negative indicates left, positive indicates right.
-- `pan` (Number) Input: FLOAT. Default: 0.5. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rotation in vertical plane (x-axis). Negative indicates downward rotation, positive indicates upward rotation.
-- `roll` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rolling amount (z-axis). Negative indicates counterclockwise, positive indicates clockwise.
-- `tilt` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's rotation in horizontal plane (y-axis). Negative indicates left rotation, positive indicates right rotation.
-- `vertical_movement` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls camera's movement along vertical axis (y-axis). Negative indicates downward, positive indicates upward.
-- `zoom` (Number) Input: FLOAT. Default: 0. Allowed range: -10 to 10. Step: 0.25. Tooltip: Controls change in camera's focal length. Negative indicates narrower field of view, positive indicates wider field of view.
+- `horizontal_movement` (Number) Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's movement along horizontal axis (x-axis). Negative indicates left, positive indicates right.
+- `pan` (Number) Input: FLOAT. Default: 0.5. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's rotation in vertical plane (x-axis). Negative indicates downward rotation, positive indicates upward rotation.
+- `roll` (Number) Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's rolling amount (z-axis). Negative indicates counterclockwise, positive indicates clockwise.
+- `tilt` (Number) Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's rotation in horizontal plane (y-axis). Negative indicates left rotation, positive indicates right rotation.
+- `vertical_movement` (Number) Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls camera's movement along vertical axis (y-axis). Negative indicates downward, positive indicates upward.
+- `zoom` (Number) Input: FLOAT. Default: 0.0. Allowed range: -10.0 to 10.0. Step: 0.25. Tooltip: Controls change in camera's focal length. Negative indicates narrower field of view, positive indicates wider field of view.
 
 ### Read-Only
 

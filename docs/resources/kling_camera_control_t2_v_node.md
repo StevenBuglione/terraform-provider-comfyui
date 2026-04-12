@@ -19,7 +19,7 @@ Transform text into cinematic videos with professional camera movements that sim
 
 - `aspect_ratio` (String) Input: COMBO. Default: "16:9". Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenAspectRatio.
 - `camera_control` (String) Input: CAMERA_CONTROL. Link input. Tooltip: Can be created using the Kling Camera Controls node. Controls the camera movement and motion during the video generation.
-- `cfg_scale` (Number) Input: FLOAT. Default: 0.75. Allowed range: 0 to 1.
+- `cfg_scale` (Number) Input: FLOAT. Default: 0.75. Allowed range: 0.0 to 1.0.
 - `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Negative text prompt.
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.
 

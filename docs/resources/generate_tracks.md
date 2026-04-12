@@ -18,17 +18,17 @@ ComfyUI GenerateTracks node [conditioning/video_models] Source: comfy_extras/nod
 ### Required
 
 - `bezier` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Enable Bezier curve path using the mid point as control point.
-- `end_x` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for end position.
-- `end_y` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for end position.
+- `end_x` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for end position.
+- `end_y` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for end position.
 - `height` (Number) Input: INT. Default: 480. Allowed range: 16 to 4096. Step: 16.
 - `interpolation` (String) Input: COMBO. Tooltip: Controls the timing/speed of movement along the path.
-- `mid_x` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X control point for Bezier curve. Only used when 'bezier' is enabled.
-- `mid_y` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y control point for Bezier curve. Only used when 'bezier' is enabled.
+- `mid_x` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized X control point for Bezier curve. Only used when 'bezier' is enabled.
+- `mid_y` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized Y control point for Bezier curve. Only used when 'bezier' is enabled.
 - `num_frames` (Number) Input: INT. Default: 81. Allowed range: 1 to 1024.
 - `num_tracks` (Number) Input: INT. Default: 5. Allowed range: 1 to 100.
-- `start_x` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for start position.
-- `start_y` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for start position.
-- `track_spread` (Number) Input: FLOAT. Default: 0.025. Allowed range: 0 to 1. Step: 0.001. Tooltip: Normalized distance between tracks. Tracks are spread perpendicular to the motion direction.
+- `start_x` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for start position.
+- `start_y` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for start position.
+- `track_spread` (Number) Input: FLOAT. Default: 0.025. Allowed range: 0.0 to 1.0. Step: 0.001. Tooltip: Normalized distance between tracks. Tracks are spread perpendicular to the motion direction.
 - `width` (Number) Input: INT. Default: 832. Allowed range: 16 to 4096. Step: 16.
 
 ### Optional

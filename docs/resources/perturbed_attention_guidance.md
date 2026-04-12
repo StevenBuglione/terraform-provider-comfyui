@@ -18,7 +18,7 @@ ComfyUI PerturbedAttentionGuidance node [model_patches/unet] Source: comfy_extra
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `scale` (Number) Input: FLOAT. Default: 3. Allowed range: 0 to 100. Step: 0.01.
+- `scale` (Number) Input: FLOAT. Default: 3.0. Allowed range: 0.0 to 100.0. Step: 0.01.
 
 ### Read-Only
 

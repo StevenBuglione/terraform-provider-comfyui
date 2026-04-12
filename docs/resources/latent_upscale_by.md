@@ -18,7 +18,7 @@ ComfyUI LatentUpscaleBy node — Upscale Latent By [latent] Source: nodes.py:133
 ### Required
 
 - `samples` (String) Input: LATENT. Link input.
-- `scale_by` (Number) Input: FLOAT. Default: 1.5. Allowed range: 0.01 to 8. Step: 0.01.
+- `scale_by` (Number) Input: FLOAT. Default: 1.5. Allowed range: 0.01 to 8.0. Step: 0.01.
 - `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: s.upscale_methods.
 
 ### Read-Only

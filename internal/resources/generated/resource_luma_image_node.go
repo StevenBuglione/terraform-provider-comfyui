@@ -75,14 +75,14 @@ func (r *LumaImageNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				Required:            true,
 			},
 			"seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
+				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),
 				},
 			},
 			"style_image_weight": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Weight of style image. Ignored if no style_image provided.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Weight of style image. Ignored if no style_image provided.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

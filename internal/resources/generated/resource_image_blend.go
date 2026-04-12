@@ -67,7 +67,7 @@ func (r *ImageBlendResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"blend_factor": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

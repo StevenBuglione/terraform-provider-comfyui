@@ -18,7 +18,7 @@ ComfyUI RescaleCFG node — RescaleCFG [advanced/model] Source: comfy_extras/nod
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `multiplier` (Number) Input: FLOAT. Default: 0.7. Allowed range: 0 to 1. Step: 0.01.
+- `multiplier` (Number) Input: FLOAT. Default: 0.7. Allowed range: 0.0 to 1.0. Step: 0.01.
 
 ### Read-Only
 

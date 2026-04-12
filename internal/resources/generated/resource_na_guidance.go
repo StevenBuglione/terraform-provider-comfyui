@@ -62,21 +62,21 @@ func (r *NaGuidanceResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"nag_scale": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 5. Allowed range: 0 to 50. Step: 0.1. Tooltip: The guidance scale factor. Higher values push further from the negative prompt.",
+				MarkdownDescription: "Input: FLOAT. Default: 5.0. Allowed range: 0.0 to 50.0. Step: 0.1. Tooltip: The guidance scale factor. Higher values push further from the negative prompt.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 50),
 				},
 			},
 			"nag_alpha": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Blending factor for the normalized attention. 1.0 is full replacement, 0.0 is no effect.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Blending factor for the normalized attention. 1.0 is full replacement, 0.0 is no effect.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"nag_tau": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1.5. Allowed range: 1 to 10. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.5. Allowed range: 1.0 to 10.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 10),

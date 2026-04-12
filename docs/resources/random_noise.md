@@ -17,7 +17,7 @@ ComfyUI RandomNoise node [sampling/custom_sampling/noise] Source: comfy_extras/n
 
 ### Required
 
-- `noise_seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000.
+- `noise_seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.
 
 ### Read-Only
 

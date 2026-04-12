@@ -17,11 +17,11 @@ description: |-
 
 ### Required
 
-- `cross_structural` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
-- `cross_temporal` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `cross_structural` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
+- `cross_temporal` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 - `model` (String) Input: MODEL. Link input.
-- `self_structural` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
-- `self_temporal` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `self_structural` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
+- `self_temporal` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 
 ### Read-Only
 

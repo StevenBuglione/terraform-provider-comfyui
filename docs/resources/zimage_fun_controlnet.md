@@ -19,7 +19,7 @@ description: |-
 
 - `model` (String) Input: MODEL. Link input.
 - `model_patch` (String) Input: MODEL_PATCH. Link input.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01.
 - `vae` (String) Input: VAE. Link input.
 
 ### Optional

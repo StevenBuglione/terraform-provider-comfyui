@@ -19,8 +19,8 @@ ComfyUI ConditioningStableAudio node [conditioning] Source: comfy_extras/nodes_a
 
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
-- `seconds_start` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1000. Step: 0.1.
-- `seconds_total` (Number) Input: FLOAT. Default: 47. Allowed range: 0 to 1000. Step: 0.1.
+- `seconds_start` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1000.0. Step: 0.1.
+- `seconds_total` (Number) Input: FLOAT. Default: 47.0. Allowed range: 0.0 to 1000.0. Step: 0.1.
 
 ### Read-Only
 

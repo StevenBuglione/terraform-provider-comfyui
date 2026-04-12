@@ -26,7 +26,7 @@ description: |-
 - `grad_accumulation_steps` (Number) Input: INT. Default: 1. Allowed range: 1 to 1024. Tooltip: The number of gradient accumulation steps to use for training.
 - `gradient_checkpointing` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Use gradient checkpointing for training.
 - `latents` (String) Input: LATENT. Link input. Tooltip: The Latents to use for training, serve as dataset/input of the model.
-- `learning_rate` (Number) Input: FLOAT. Default: 0.0005. Allowed range: 0.0000001 to 1. Step: 0.0000001. Tooltip: The learning rate to use for training.
+- `learning_rate` (Number) Input: FLOAT. Default: 0.0005. Allowed range: 1e-07 to 1.0. Step: 1e-07. Tooltip: The learning rate to use for training.
 - `lora_dtype` (String) Input: COMBO. Default: "bf16". Tooltip: The dtype to use for lora.
 - `loss_function` (String) Input: COMBO. Default: "MSE". Tooltip: The loss function to use for training.
 - `model` (String) Input: MODEL. Link input. Tooltip: The model to train the LoRA on.
@@ -34,7 +34,7 @@ description: |-
 - `optimizer` (String) Input: COMBO. Default: "AdamW". Tooltip: The optimizer to use for training.
 - `positive` (String) Input: CONDITIONING. Link input. Tooltip: The positive conditioning to use for training.
 - `rank` (Number) Input: INT. Default: 8. Allowed range: 1 to 128. Tooltip: The rank of the LoRA layers.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The seed to use for training (used in generator for LoRA weight initialization and noise sampling).
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: The seed to use for training (used in generator for LoRA weight initialization and noise sampling).
 - `steps` (Number) Input: INT. Default: 16. Allowed range: 1 to 100000. Tooltip: The number of steps to train the LoRA for.
 - `training_dtype` (String) Input: COMBO. Default: "bf16". Tooltip: The dtype to use for training. 'none' preserves the model's native compute dtype instead of overriding it. For fp16 models, GradScaler is automatically enabled.
 

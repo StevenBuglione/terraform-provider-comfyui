@@ -70,7 +70,7 @@ func (r *FluxKontextProImageNodeResource) Schema(_ context.Context, _ resource.S
 				Required:            true,
 			},
 			"guidance": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 3. Allowed range: 0.1 to 99. Step: 0.1. Tooltip: Guidance strength for the image generation process.",
+				MarkdownDescription: "Input: FLOAT. Default: 3.0. Allowed range: 0.1 to 99.0. Step: 0.1. Tooltip: Guidance strength for the image generation process.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0.1, 99),
@@ -84,7 +84,7 @@ func (r *FluxKontextProImageNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"seed": schema.Int64Attribute{
-				MarkdownDescription: "Input: INT. Default: 1234. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.",
+				MarkdownDescription: "Input: INT. Default: 1234. Allowed range: 0 to 18446744073709551615. Tooltip: The random seed used for creating the noise.",
 				Required:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 9223372036854775807),

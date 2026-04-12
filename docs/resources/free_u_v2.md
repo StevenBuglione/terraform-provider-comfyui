@@ -17,11 +17,11 @@ ComfyUI FreeU_V2 node [model_patches/unet] Source: comfy_extras/nodes_freelunch.
 
 ### Required
 
-- `b1` (Number) Input: FLOAT. Default: 1.3. Allowed range: 0 to 10. Step: 0.01.
-- `b2` (Number) Input: FLOAT. Default: 1.4. Allowed range: 0 to 10. Step: 0.01.
+- `b1` (Number) Input: FLOAT. Default: 1.3. Allowed range: 0.0 to 10.0. Step: 0.01.
+- `b2` (Number) Input: FLOAT. Default: 1.4. Allowed range: 0.0 to 10.0. Step: 0.01.
 - `model` (String) Input: MODEL. Link input.
-- `s1` (Number) Input: FLOAT. Default: 0.9. Allowed range: 0 to 10. Step: 0.01.
-- `s2` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0 to 10. Step: 0.01.
+- `s1` (Number) Input: FLOAT. Default: 0.9. Allowed range: 0.0 to 10.0. Step: 0.01.
+- `s2` (Number) Input: FLOAT. Default: 0.2. Allowed range: 0.0 to 10.0. Step: 0.01.
 
 ### Read-Only
 

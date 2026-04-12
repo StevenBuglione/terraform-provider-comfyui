@@ -19,7 +19,7 @@ ComfyUI ConditioningAverage node — ConditioningAverage [conditioning] Source: 
 
 - `conditioning_from` (String) Input: CONDITIONING. Link input.
 - `conditioning_to` (String) Input: CONDITIONING. Link input.
-- `conditioning_to_strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `conditioning_to_strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 
 ### Read-Only
 

@@ -18,9 +18,9 @@ description: |-
 ### Required
 
 - `model` (String) Input: MODEL. Link input. Tooltip: The model to apply NAG to.
-- `nag_alpha` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01. Tooltip: Blending factor for the normalized attention. 1.0 is full replacement, 0.0 is no effect.
-- `nag_scale` (Number) Input: FLOAT. Default: 5. Allowed range: 0 to 50. Step: 0.1. Tooltip: The guidance scale factor. Higher values push further from the negative prompt.
-- `nag_tau` (Number) Input: FLOAT. Default: 1.5. Allowed range: 1 to 10. Step: 0.01.
+- `nag_alpha` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Blending factor for the normalized attention. 1.0 is full replacement, 0.0 is no effect.
+- `nag_scale` (Number) Input: FLOAT. Default: 5.0. Allowed range: 0.0 to 50.0. Step: 0.1. Tooltip: The guidance scale factor. Higher values push further from the negative prompt.
+- `nag_tau` (Number) Input: FLOAT. Default: 1.5. Allowed range: 1.0 to 10.0. Step: 0.01.
 
 ### Read-Only
 

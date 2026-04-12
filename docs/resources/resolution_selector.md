@@ -18,7 +18,7 @@ Calculate width and height from aspect ratio and megapixel target. Useful for se
 ### Required
 
 - `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: AspectRatio. Tooltip: The aspect ratio for the output dimensions.
-- `megapixels` (Number) Input: FLOAT. Default: 1. Allowed range: 0.1 to 16. Step: 0.1. Tooltip: Target total megapixels. 1.0 MP ≈ 1024×1024 for square.
+- `megapixels` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.1 to 16.0. Step: 0.1. Tooltip: Target total megapixels. 1.0 MP ≈ 1024×1024 for square.
 
 ### Read-Only
 

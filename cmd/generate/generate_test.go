@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"math"
 	"strings"
 	"testing"
@@ -252,9 +253,9 @@ func TestBuildResourceDataSurfacesSchemaMetadata(t *testing.T) {
 				Type:     "FLOAT",
 				Required: true,
 				Default:  1.5,
-				Min:      floatPtr(0),
-				Max:      floatPtr(10),
-				Step:     floatPtr(0.5),
+				Min:      numberPtr(0),
+				Max:      numberPtr(10),
+				Step:     numberPtr(0.5),
 				Tooltip:  &tooltip,
 			},
 			{
@@ -367,6 +368,62 @@ func TestBuildNodeUIHintsTemplateDataSortsNodesAndWidgets(t *testing.T) {
 	}
 }
 
+func TestBuildNodeSchemaTemplateData_PreservesStructuredContracts(t *testing.T) {
+	specs := NodeSpecs{
+		Version:        "1.0.0",
+		ExtractedAt:    "2026-04-12T00:00:00Z",
+		ComfyUIVersion: "v0-test",
+		Nodes: []Node{
+			{
+				NodeID:         "KSampler",
+				ClassName:      "KSampler",
+				DisplayName:    stringPtr("KSampler"),
+				Description:    stringPtr("Denoises a latent image."),
+				Category:       "sampling",
+				IsOutputNode:   false,
+				IsDeprecated:   false,
+				IsExperimental: false,
+				Inputs: []Input{
+					{
+						Name:                 "seed",
+						Type:                 "INT",
+						Required:             true,
+						Default:              json.Number("0"),
+						Min:                  &NumberValue{Raw: "0", Float64: 0},
+						Max:                  &NumberValue{Raw: "18446744073709551615", Float64: 18446744073709551615},
+						DynamicOptions:       boolPtr(false),
+						DynamicOptionsSource: stringPtr(""),
+					},
+					{
+						Name:                 "sampler_name",
+						Type:                 "COMBO",
+						Required:             true,
+						DynamicOptions:       boolPtr(true),
+						DynamicOptionsSource: stringPtr("comfy.samplers.KSampler.SAMPLERS"),
+					},
+				},
+				Outputs: []Output{
+					{Name: "LATENT", Type: "LATENT", SlotIndex: 0, IsList: false},
+				},
+			},
+		},
+	}
+
+	data := buildNodeSchemaTemplateData(specs)
+	if data.TotalNodes != 1 {
+		t.Fatalf("expected one generated schema node, got %d", data.TotalNodes)
+	}
+	if got := data.Nodes[0].RequiredInputs[0].MaxValue; got != "18446744073709551615" {
+		t.Fatalf("expected exact max bound preservation, got %q", got)
+	}
+	if !data.Nodes[0].RequiredInputs[1].DynamicOptions {
+		t.Fatalf("expected dynamic options to be preserved, got %#v", data.Nodes[0].RequiredInputs[1])
+	}
+	if len(data.Nodes[0].Outputs) != 1 || data.Nodes[0].Outputs[0].Name != "LATENT" {
+		t.Fatalf("expected output contract to be preserved, got %#v", data.Nodes[0].Outputs)
+	}
+}
+
 func TestBuildInputDescriptionCollapsesVerboseDynamicOptionSources(t *testing.T) {
 	inp := Input{
 		Name:                 "moderation",
@@ -441,24 +498,24 @@ func TestFormatSourceInfo(t *testing.T) {
 func TestFormatRangeHint(t *testing.T) {
 	tests := []struct {
 		name     string
-		min      *float64
-		max      *float64
+		min      *NumberValue
+		max      *NumberValue
 		expected string
 	}{
 		{
 			name:     "min and max",
-			min:      floatPtr(1),
-			max:      floatPtr(5),
+			min:      numberPtr(1),
+			max:      numberPtr(5),
 			expected: "Allowed range: 1 to 5.",
 		},
 		{
 			name:     "min only",
-			min:      floatPtr(0),
+			min:      numberPtr(0),
 			expected: "Minimum value: 0.",
 		},
 		{
 			name:     "max only",
-			max:      floatPtr(10),
+			max:      numberPtr(10),
 			expected: "Maximum value: 10.",
 		},
 		{
@@ -522,6 +579,13 @@ func extractAttrDefinitions(attrs []AttrData) []string {
 
 func floatPtr(v float64) *float64 {
 	return &v
+}
+
+func numberPtr(v float64) *NumberValue {
+	return &NumberValue{
+		Raw:     formatNumber(v),
+		Float64: v,
+	}
 }
 
 func intPtr(v int) *int {

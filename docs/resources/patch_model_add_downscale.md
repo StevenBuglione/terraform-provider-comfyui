@@ -19,11 +19,11 @@ ComfyUI PatchModelAddDownscale node — PatchModelAddDownscale (Kohya Deep Shrin
 
 - `block_number` (Number) Input: INT. Default: 3. Allowed range: 1 to 32. Step: 1.
 - `downscale_after_skip` (Boolean) Input: BOOLEAN. Default: true.
-- `downscale_factor` (Number) Input: FLOAT. Default: 2. Allowed range: 0.1 to 9. Step: 0.001.
+- `downscale_factor` (Number) Input: FLOAT. Default: 2.0. Allowed range: 0.1 to 9.0. Step: 0.001.
 - `downscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.
-- `end_percent` (Number) Input: FLOAT. Default: 0.35. Allowed range: 0 to 1. Step: 0.001.
+- `end_percent` (Number) Input: FLOAT. Default: 0.35. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `model` (String) Input: MODEL. Link input.
-- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `start_percent` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `upscale_method` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: cls.UPSCALE_METHODS.
 
 ### Read-Only

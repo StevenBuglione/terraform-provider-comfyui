@@ -268,3 +268,39 @@ func TestValidatePrompt_RequiresNativeOutputNodeWhenRequested(t *testing.T) {
 
 	requireErrorContaining(t, report, "prompt does not include any node marked output_node=true")
 }
+
+func TestValidatePrompt_ExecutableModeRequiresOutputNode(t *testing.T) {
+	report := ValidatePrompt(
+		mustParsePrompt(t, `{
+		  "1": {
+		    "class_type": "LoadImage",
+		    "inputs": {
+		      "image": "input.png"
+		    }
+		  }
+		}`),
+		testNodeInfo(),
+		Options{Mode: ValidationModeExecutableWorkflow},
+	)
+
+	requireErrorContaining(t, report, "prompt does not include any node marked output_node=true")
+}
+
+func TestValidatePrompt_FragmentModeAllowsMissingOutputNode(t *testing.T) {
+	report := ValidatePrompt(
+		mustParsePrompt(t, `{
+		  "1": {
+		    "class_type": "LoadImage",
+		    "inputs": {
+		      "image": "input.png"
+		    }
+		  }
+		}`),
+		testNodeInfo(),
+		Options{Mode: ValidationModeFragment},
+	)
+
+	if !report.Valid {
+		t.Fatalf("expected fragment validation to allow missing output node, got %v", report.Errors)
+	}
+}

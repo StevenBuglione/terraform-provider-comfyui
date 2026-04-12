@@ -18,7 +18,7 @@ ComfyUI KlingImage2VideoNode node — Kling Image(First Frame) to Video [api nod
 ### Required
 
 - `aspect_ratio` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenAspectRatio.
-- `cfg_scale` (Number) Input: FLOAT. Default: 0.8. Allowed range: 0 to 1.
+- `cfg_scale` (Number) Input: FLOAT. Default: 0.8. Allowed range: 0.0 to 1.0.
 - `duration` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenDuration.
 - `mode` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenMode.
 - `model_name` (String) Input: COMBO. Default: "kling-v2-master". Dynamic options are resolved by ComfyUI at runtime from: KlingVideoGenModelName.

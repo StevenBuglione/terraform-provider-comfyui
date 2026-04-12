@@ -23,7 +23,7 @@ ComfyUI SDPoseDrawKeypoints node [image/preprocessors] Source: comfy_extras/node
 - `draw_hands` (Boolean) Input: BOOLEAN. Default: true.
 - `face_point_size` (Number) Input: INT. Default: 3. Allowed range: 1 to 10. Step: 1.
 - `keypoints` (String) Input: POSE_KEYPOINT. Link input.
-- `score_threshold` (Number) Input: FLOAT. Default: 0.3. Allowed range: 0 to 1. Step: 0.01.
+- `score_threshold` (Number) Input: FLOAT. Default: 0.3. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `stick_width` (Number) Input: INT. Default: 4. Allowed range: 1 to 10. Step: 1.
 
 ### Read-Only

@@ -18,7 +18,7 @@ ComfyUI SolidMask node [mask] Source: comfy_extras/nodes_mask.py:175 (v3_extras)
 ### Required
 
 - `height` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
-- `value` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `value` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `width` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
 
 ### Read-Only

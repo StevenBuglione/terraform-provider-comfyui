@@ -20,7 +20,7 @@ Kling Lip Sync Text to Video Node. Syncs mouth movements in a video file to a te
 - `text` (String) Input: STRING. Supports multiline text. Tooltip: Text Content for Lip-Sync Video Generation. Required when mode is text2video. Maximum length is 120 characters.
 - `video` (String) Input: VIDEO. Link input.
 - `voice` (String) Input: COMBO. Default: "Melody". Dynamic options are resolved by ComfyUI at runtime from: list(VOICES_CONFIG.keys()).
-- `voice_speed` (Number) Input: FLOAT. Default: 1. Allowed range: 0.8 to 2. Tooltip: Speech Rate. Valid range: 0.8~2.0, accurate to one decimal place.
+- `voice_speed` (Number) Input: FLOAT. Default: 1. Allowed range: 0.8 to 2.0. Tooltip: Speech Rate. Valid range: 0.8~2.0, accurate to one decimal place.
 
 ### Read-Only
 

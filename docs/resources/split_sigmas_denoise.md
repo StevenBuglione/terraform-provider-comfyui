@@ -17,7 +17,7 @@ ComfyUI SplitSigmasDenoise node [sampling/custom_sampling/sigmas] Source: comfy_
 
 ### Required
 
-- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `denoise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `sigmas` (String) Input: SIGMAS. Link input.
 
 ### Read-Only

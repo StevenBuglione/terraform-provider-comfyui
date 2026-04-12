@@ -18,7 +18,7 @@ ComfyUI GITSScheduler node [sampling/custom_sampling/schedulers] Source: comfy_e
 ### Required
 
 - `coeff` (Number) Input: FLOAT. Default: 1.2. Allowed range: 0.8 to 1.5. Step: 0.05.
-- `denoise` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01.
+- `denoise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
 - `steps` (Number) Input: INT. Default: 10. Allowed range: 2 to 1000.
 
 ### Read-Only

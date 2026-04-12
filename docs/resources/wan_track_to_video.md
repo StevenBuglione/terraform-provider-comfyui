@@ -23,7 +23,7 @@ ComfyUI WanTrackToVideo node [conditioning/video_models] Source: comfy_extras/no
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
 - `start_image` (String) Input: IMAGE. Link input.
-- `temperature` (Number) Input: FLOAT. Default: 220. Allowed range: 1 to 1000. Step: 0.1.
+- `temperature` (Number) Input: FLOAT. Default: 220.0. Allowed range: 1.0 to 1000.0. Step: 0.1.
 - `topk` (Number) Input: INT. Default: 2. Allowed range: 1 to 10.
 - `tracks` (String) Input: STRING. Default: "[]". Supports multiline text.
 - `vae` (String) Input: VAE. Link input.

@@ -18,7 +18,7 @@ ComfyUI SV3D_Conditioning node [conditioning/3d_models] Source: comfy_extras/nod
 ### Required
 
 - `clip_vision` (String) Input: CLIP_VISION. Link input.
-- `elevation` (Number) Input: FLOAT. Default: 0. Allowed range: -90 to 90. Step: 0.1.
+- `elevation` (Number) Input: FLOAT. Default: 0.0. Allowed range: -90.0 to 90.0. Step: 0.1.
 - `height` (Number) Input: INT. Default: 576. Minimum value: 16. Step: 8.
 - `init_image` (String) Input: IMAGE. Link input.
 - `vae` (String) Input: VAE. Link input.

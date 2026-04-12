@@ -113,21 +113,21 @@ func (r *WanScailToVideoResource) Schema(_ context.Context, _ resource.SchemaReq
 				Optional:            true,
 			},
 			"pose_strength": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01. Tooltip: Strength of the pose latent.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01. Tooltip: Strength of the pose latent.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"pose_start": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.01. Tooltip: Start step to use pose conditioning.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Start step to use pose conditioning.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),
 				},
 			},
 			"pose_end": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.01. Tooltip: End step to use pose conditioning.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: End step to use pose conditioning.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1),

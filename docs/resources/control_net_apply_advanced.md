@@ -18,12 +18,12 @@ ComfyUI ControlNetApplyAdvanced node — Apply ControlNet [conditioning/controln
 ### Required
 
 - `control_net` (String) Input: CONTROL_NET. Link input.
-- `end_percent` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `end_percent` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `image` (String) Input: IMAGE. Link input.
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
-- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `start_percent` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.001.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 
 ### Optional
 

@@ -72,63 +72,63 @@ func (r *SamplerDpmAdaptativeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"rtol": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.05. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.05. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"atol": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.0078. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0078. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"h_init": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.05. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.05. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"pcoeff": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"icoeff": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"dcoeff": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"accept_safety": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.81. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.81. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"eta": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),
 				},
 			},
 			"s_noise": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 100),

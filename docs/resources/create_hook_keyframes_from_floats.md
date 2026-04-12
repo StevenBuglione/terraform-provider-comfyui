@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `end_percent` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1. Step: 0.001.
+- `end_percent` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `floats_strength` (String) Input: FLOATS. Link input. Default: -1. Minimum value: -1. Step: 0.001.
 - `print_keyframes` (Boolean) Input: BOOLEAN. Default: false.
-- `start_percent` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 1. Step: 0.001.
+- `start_percent` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.001.
 
 ### Optional
 

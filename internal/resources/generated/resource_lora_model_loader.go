@@ -66,7 +66,7 @@ func (r *LoraModelLoaderResource) Schema(_ context.Context, _ resource.SchemaReq
 				Required:            true,
 			},
 			"strength_model": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: -100 to 100. Tooltip: How strongly to modify the diffusion model. This value can be negative.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: -100.0 to 100.0. Tooltip: How strongly to modify the diffusion model. This value can be negative.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(-100, 100),

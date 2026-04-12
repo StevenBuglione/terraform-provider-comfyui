@@ -18,12 +18,12 @@ description: |-
 ### Required
 
 - `double_layers` (String) Input: STRING. Default: "7, 8, 9".
-- `end_percent` (Number) Input: FLOAT. Default: 0.15. Allowed range: 0 to 1. Step: 0.001.
+- `end_percent` (Number) Input: FLOAT. Default: 0.15. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `model` (String) Input: MODEL. Link input.
-- `rescaling_scale` (Number) Input: FLOAT. Default: 0. Allowed range: 0 to 10. Step: 0.01.
-- `scale` (Number) Input: FLOAT. Default: 3. Allowed range: 0 to 10. Step: 0.1.
+- `rescaling_scale` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 10.0. Step: 0.01.
+- `scale` (Number) Input: FLOAT. Default: 3.0. Allowed range: 0.0 to 10.0. Step: 0.1.
 - `single_layers` (String) Input: STRING. Default: "7, 8, 9".
-- `start_percent` (Number) Input: FLOAT. Default: 0.01. Allowed range: 0 to 1. Step: 0.001.
+- `start_percent` (Number) Input: FLOAT. Default: 0.01. Allowed range: 0.0 to 1.0. Step: 0.001.
 
 ### Read-Only
 

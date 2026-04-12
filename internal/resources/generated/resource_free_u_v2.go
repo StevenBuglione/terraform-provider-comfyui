@@ -63,28 +63,28 @@ func (r *FreeUV2Resource) Schema(_ context.Context, _ resource.SchemaRequest, re
 				Required:            true,
 			},
 			"b1": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1.3. Allowed range: 0 to 10. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.3. Allowed range: 0.0 to 10.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"b2": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1.4. Allowed range: 0 to 10. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.4. Allowed range: 0.0 to 10.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"s1": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.9. Allowed range: 0 to 10. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.9. Allowed range: 0.0 to 10.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),
 				},
 			},
 			"s2": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 0.2. Allowed range: 0 to 10. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 0.2. Allowed range: 0.0 to 10.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 10),

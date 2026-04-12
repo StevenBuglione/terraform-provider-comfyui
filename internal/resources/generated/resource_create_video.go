@@ -61,7 +61,7 @@ func (r *CreateVideoResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Required:            true,
 			},
 			"fps": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 30. Allowed range: 1 to 120. Step: 1.",
+				MarkdownDescription: "Input: FLOAT. Default: 30.0. Allowed range: 1.0 to 120.0. Step: 1.0.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(1, 120),

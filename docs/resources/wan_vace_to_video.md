@@ -22,7 +22,7 @@ ComfyUI WanVaceToVideo node [conditioning/video_models] Source: comfy_extras/nod
 - `length` (Number) Input: INT. Default: 81. Minimum value: 1. Step: 4.
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1000. Step: 0.01.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1000.0. Step: 0.01.
 - `vae` (String) Input: VAE. Link input.
 - `width` (Number) Input: INT. Default: 832. Minimum value: 16. Step: 16.
 

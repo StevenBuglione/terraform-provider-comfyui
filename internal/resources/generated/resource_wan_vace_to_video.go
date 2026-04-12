@@ -100,7 +100,7 @@ func (r *WanVaceToVideoResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"strength": schema.Float64Attribute{
-				MarkdownDescription: "Input: FLOAT. Default: 1. Allowed range: 0 to 1000. Step: 0.01.",
+				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1000.0. Step: 0.01.",
 				Required:            true,
 				Validators: []validator.Float64{
 					float64validator.Between(0, 1000),

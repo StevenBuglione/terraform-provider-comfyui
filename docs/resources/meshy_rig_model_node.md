@@ -17,7 +17,7 @@ Provides a rigged character in standard formats. Auto-rigging is currently not s
 
 ### Required
 
-- `height_meters` (Number) Input: FLOAT. Default: 1.7. Allowed range: 0.1 to 15. Tooltip: The approximate height of the character model in meters. This aids in scaling and rigging accuracy.
+- `height_meters` (Number) Input: FLOAT. Default: 1.7. Allowed range: 0.1 to 15.0. Tooltip: The approximate height of the character model in meters. This aids in scaling and rigging accuracy.
 - `meshy_task_id` (String) Input: MESHY_TASK_ID. Link input.
 
 ### Optional

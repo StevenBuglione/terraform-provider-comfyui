@@ -21,12 +21,12 @@ Generates images using Flux Pro 1.1 Ultra via api based on prompt and resolution
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt for the image generation.
 - `prompt_upsampling` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to perform upsampling on the prompt. If active, automatically modifies the prompt for more creative generation, but results are nondeterministic (same seed will not produce exactly the same result).
 - `raw` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When True, generate less processed, more natural-looking images.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: The random seed used for creating the noise.
 
 ### Optional
 
 - `image_prompt` (String) Input: IMAGE. Link input.
-- `image_prompt_strength` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0 to 1. Step: 0.01. Tooltip: Blend between the prompt and the image prompt.
+- `image_prompt_strength` (Number) Input: FLOAT. Default: 0.1. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Blend between the prompt and the image prompt.
 
 ### Read-Only
 

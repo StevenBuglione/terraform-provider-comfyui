@@ -23,7 +23,7 @@ ComfyUI LTXVImgToVideo node [conditioning/video_models] Source: comfy_extras/nod
 - `length` (Number) Input: INT. Default: 97. Minimum value: 9. Step: 8.
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
-- `strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 1.
+- `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0.
 - `vae` (String) Input: VAE. Link input.
 - `width` (Number) Input: INT. Default: 768. Minimum value: 64. Step: 32.
 

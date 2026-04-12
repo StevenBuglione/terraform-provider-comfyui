@@ -19,7 +19,7 @@ ComfyUI TextEncodeAceStepAudio node [conditioning] Source: comfy_extras/nodes_ac
 
 - `clip` (String) Input: CLIP. Link input.
 - `lyrics` (String) Input: STRING. Supports multiline text.
-- `lyrics_strength` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 10. Step: 0.01.
+- `lyrics_strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.01.
 - `tags` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only

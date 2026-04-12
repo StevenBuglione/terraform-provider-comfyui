@@ -18,9 +18,9 @@ description: |-
 ### Required
 
 - `codec` (String) Input: COMBO.
-- `crf` (Number) Input: FLOAT. Default: 32. Allowed range: 0 to 63. Step: 1. Tooltip: Higher crf means lower quality with a smaller file size, lower crf means higher quality higher filesize.
+- `crf` (Number) Input: FLOAT. Default: 32.0. Allowed range: 0 to 63.0. Step: 1. Tooltip: Higher crf means lower quality with a smaller file size, lower crf means higher quality higher filesize.
 - `filename_prefix` (String) Input: STRING. Default: "ComfyUI".
-- `fps` (Number) Input: FLOAT. Default: 24. Allowed range: 0.01 to 1000. Step: 0.01.
+- `fps` (Number) Input: FLOAT. Default: 24.0. Allowed range: 0.01 to 1000.0. Step: 0.01.
 - `images` (String) Input: IMAGE. Link input.
 
 ### Read-Only

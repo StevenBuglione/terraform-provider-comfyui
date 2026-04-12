@@ -17,7 +17,7 @@ ComfyUI VoxelToMeshBasic node [3d] Source: comfy_extras/nodes_hunyuan3d.py:422 (
 
 ### Required
 
-- `threshold` (Number) Input: FLOAT. Default: 0.6. Allowed range: -1 to 1. Step: 0.01.
+- `threshold` (Number) Input: FLOAT. Default: 0.6. Allowed range: -1.0 to 1.0. Step: 0.01.
 - `voxel` (String) Input: VOXEL. Link input.
 
 ### Read-Only

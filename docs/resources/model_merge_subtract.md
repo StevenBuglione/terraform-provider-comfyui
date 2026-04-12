@@ -19,7 +19,7 @@ ComfyUI ModelSubtract node — ModelMergeSubtract [advanced/model_merging] Sourc
 
 - `model1` (String) Input: MODEL. Link input.
 - `model2` (String) Input: MODEL. Link input.
-- `multiplier` (Number) Input: FLOAT. Default: 1. Allowed range: -10 to 10. Step: 0.01.
+- `multiplier` (Number) Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01.
 
 ### Read-Only
 

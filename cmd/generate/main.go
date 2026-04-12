@@ -48,15 +48,34 @@ type Input struct {
 	Required             bool          `json:"required"`
 	IsLinkType           bool          `json:"is_link_type"`
 	Default              interface{}   `json:"default"`
-	Min                  *float64      `json:"min"`
-	Max                  *float64      `json:"max"`
-	Step                 *float64      `json:"step"`
+	Min                  *NumberValue  `json:"min"`
+	Max                  *NumberValue  `json:"max"`
+	Step                 *NumberValue  `json:"step"`
 	RawOptions           []interface{} `json:"options"`
 	Multiline            *bool         `json:"multiline"`
 	DynamicOptions       *bool         `json:"dynamic_options"`
 	DynamicOptionsSource *string       `json:"dynamic_options_source"`
 	Tooltip              *string       `json:"tooltip"`
 	DisplayName          *string       `json:"display_name"`
+}
+
+type NumberValue struct {
+	Raw     string
+	Float64 float64
+}
+
+func (n *NumberValue) UnmarshalJSON(data []byte) error {
+	raw := strings.TrimSpace(string(data))
+	if raw == "" || raw == "null" {
+		return nil
+	}
+	n.Raw = raw
+	value, err := strconv.ParseFloat(raw, 64)
+	if err != nil {
+		return err
+	}
+	n.Float64 = value
+	return nil
 }
 
 // StringOptions converts RawOptions to []string, handling int/float/bool values.
@@ -75,6 +94,7 @@ type Output struct {
 	Name      string `json:"name"`
 	Type      string `json:"type"`
 	SlotIndex int    `json:"slot_index"`
+	IsList    bool   `json:"is_list"`
 }
 
 type HiddenInput struct {
@@ -136,6 +156,7 @@ func main() {
 	uiHintsPath := "scripts/extract/node_ui_hints.json"
 	outputDir := "internal/resources/generated"
 	uiHintsOutputPath := "internal/resources/node_ui_hints_generated.go"
+	nodeSchemaOutputPath := "internal/nodeschema/generated.go"
 
 	log.Printf("Reading node specs from %s", specsPath)
 	data, err := os.ReadFile(specsPath)
@@ -144,7 +165,9 @@ func main() {
 	}
 
 	var specs NodeSpecs
-	if err := json.Unmarshal(data, &specs); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	if err := decoder.Decode(&specs); err != nil {
 		log.Fatalf("Failed to parse specs: %v", err)
 	}
 	log.Printf("Loaded %d nodes", len(specs.Nodes))
@@ -176,6 +199,10 @@ func main() {
 	uiHintsTmpl, err := template.New("node_ui_hints").Parse(nodeUIHintsTemplate)
 	if err != nil {
 		log.Fatalf("Failed to parse node UI hints template: %v", err)
+	}
+	nodeSchemaTmpl, err := template.New("node_schema").Parse(nodeSchemaTemplate)
+	if err != nil {
+		log.Fatalf("Failed to parse node schema template: %v", err)
 	}
 
 	// Clean output directory
@@ -256,6 +283,19 @@ func main() {
 		log.Fatalf("Failed to write node UI hints output: %v", err)
 	}
 
+	nodeSchemaTemplateData := buildNodeSchemaTemplateData(specs)
+	var nodeSchemaBuf bytes.Buffer
+	if err := nodeSchemaTmpl.Execute(&nodeSchemaBuf, nodeSchemaTemplateData); err != nil {
+		log.Fatalf("Failed to execute node schema template: %v", err)
+	}
+	nodeSchemaFormatted, err := format.Source(nodeSchemaBuf.Bytes())
+	if err != nil {
+		log.Fatalf("Failed to format node schema output: %v", err)
+	}
+	if err := os.WriteFile(nodeSchemaOutputPath, nodeSchemaFormatted, 0644); err != nil {
+		log.Fatalf("Failed to write node schema output: %v", err)
+	}
+
 	elapsed := time.Since(start)
 
 	fmt.Println("════════════════════════════════════════════")
@@ -328,6 +368,79 @@ func derefFloat64(value *float64) float64 {
 		return 0
 	}
 	return *value
+}
+
+func buildNodeSchemaTemplateData(specs NodeSpecs) NodeSchemaTemplateData {
+	nodes := make([]GeneratedNodeSchema, 0, len(specs.Nodes))
+	for _, node := range specs.Nodes {
+		nodes = append(nodes, GeneratedNodeSchema{
+			NodeType:       node.NodeID,
+			TerraformType:  node.TerraformResourceName,
+			DisplayName:    stringValue(node.DisplayName),
+			Description:    stringValue(node.Description),
+			Category:       node.Category,
+			OutputNode:     node.IsOutputNode,
+			Deprecated:     node.IsDeprecated,
+			Experimental:   node.IsExperimental,
+			RequiredInputs: buildGeneratedNodeSchemaInputs(node.Inputs, true),
+			OptionalInputs: buildGeneratedNodeSchemaInputs(node.Inputs, false),
+			HiddenInputs:   buildGeneratedNodeSchemaHiddenInputs(node.HiddenInputs),
+			Outputs:        buildGeneratedNodeSchemaOutputs(node.Outputs),
+		})
+	}
+
+	return NodeSchemaTemplateData{
+		Version:        specs.Version,
+		ExtractedAt:    specs.ExtractedAt,
+		ComfyUIVersion: specs.ComfyUIVersion,
+		TotalNodes:     len(nodes),
+		Nodes:          nodes,
+	}
+}
+
+func buildGeneratedNodeSchemaInputs(inputs []Input, required bool) []GeneratedNodeSchemaInput {
+	filtered := make([]GeneratedNodeSchemaInput, 0)
+	for _, input := range inputs {
+		if input.Required != required {
+			continue
+		}
+		filtered = append(filtered, GeneratedNodeSchemaInput{
+			Name:                 input.Name,
+			Type:                 input.Type,
+			IsLinkType:           input.IsLinkType,
+			DefaultValue:         formatOptionalValue(input.Default),
+			HasDefaultValue:      input.Default != nil,
+			MinValue:             formatOptionalNumber(input.Min),
+			HasMinValue:          input.Min != nil,
+			MaxValue:             formatOptionalNumber(input.Max),
+			HasMaxValue:          input.Max != nil,
+			StepValue:            formatOptionalNumber(input.Step),
+			HasStepValue:         input.Step != nil,
+			EnumValues:           input.StringOptions(),
+			Multiline:            boolValue(input.Multiline),
+			DynamicOptions:       boolValue(input.DynamicOptions),
+			DynamicOptionsSource: stringValue(input.DynamicOptionsSource),
+			Tooltip:              stringValue(input.Tooltip),
+			DisplayName:          stringValue(input.DisplayName),
+		})
+	}
+	return filtered
+}
+
+func buildGeneratedNodeSchemaHiddenInputs(inputs []HiddenInput) []GeneratedNodeSchemaHiddenInput {
+	filtered := make([]GeneratedNodeSchemaHiddenInput, 0, len(inputs))
+	for _, input := range inputs {
+		filtered = append(filtered, GeneratedNodeSchemaHiddenInput(input))
+	}
+	return filtered
+}
+
+func buildGeneratedNodeSchemaOutputs(outputs []Output) []GeneratedNodeSchemaOutput {
+	filtered := make([]GeneratedNodeSchemaOutput, 0, len(outputs))
+	for _, output := range outputs {
+		filtered = append(filtered, GeneratedNodeSchemaOutput(output))
+	}
+	return filtered
 }
 
 func buildResourceData(node Node) (ResourceData, []string) {
@@ -429,14 +542,14 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 	case "INT":
 		if inp.Min != nil && inp.Max != nil {
 			rd.NeedsInt64Validator = true
-			minVal := clampInt64(*inp.Min)
-			maxVal := clampInt64(*inp.Max)
+			minVal := clampInt64(inp.Min.Float64)
+			maxVal := clampInt64(inp.Max.Float64)
 			fmt.Fprintf(&b, "\t\t\t\tValidators: []validator.Int64{\n\t\t\t\t\tint64validator.Between(%d, %d),\n\t\t\t\t},\n", minVal, maxVal)
 		}
 	case "FLOAT":
 		if inp.Min != nil && inp.Max != nil {
 			rd.NeedsFloat64Validator = true
-			fmt.Fprintf(&b, "\t\t\t\tValidators: []validator.Float64{\n\t\t\t\t\tfloat64validator.Between(%v, %v),\n\t\t\t\t},\n", *inp.Min, *inp.Max)
+			fmt.Fprintf(&b, "\t\t\t\tValidators: []validator.Float64{\n\t\t\t\t\tfloat64validator.Between(%v, %v),\n\t\t\t\t},\n", inp.Min.Float64, inp.Max.Float64)
 		}
 	case "COMBO":
 		opts := inp.StringOptions()
@@ -502,7 +615,7 @@ func buildInputDescription(inp Input) string {
 		parts = append(parts, rangeHint)
 	}
 	if inp.Step != nil {
-		parts = append(parts, fmt.Sprintf("Step: %s.", formatNumber(*inp.Step)))
+		parts = append(parts, fmt.Sprintf("Step: %s.", inp.Step.Raw))
 	}
 	if inp.DynamicOptions != nil && *inp.DynamicOptions {
 		if inp.DynamicOptionsSource != nil && *inp.DynamicOptionsSource != "" {
@@ -556,14 +669,14 @@ func formatSourceInfo(source SourceInfo) string {
 	}
 }
 
-func formatRangeHint(min, max *float64) string {
+func formatRangeHint(min, max *NumberValue) string {
 	switch {
 	case min != nil && max != nil:
-		return fmt.Sprintf("Allowed range: %s to %s.", formatNumber(*min), formatNumber(*max))
+		return fmt.Sprintf("Allowed range: %s to %s.", min.Raw, max.Raw)
 	case min != nil:
-		return fmt.Sprintf("Minimum value: %s.", formatNumber(*min))
+		return fmt.Sprintf("Minimum value: %s.", min.Raw)
 	case max != nil:
-		return fmt.Sprintf("Maximum value: %s.", formatNumber(*max))
+		return fmt.Sprintf("Maximum value: %s.", max.Raw)
 	default:
 		return ""
 	}
@@ -590,6 +703,34 @@ func formatValue(value interface{}) string {
 
 func formatNumber(value float64) string {
 	return strconv.FormatFloat(value, 'f', -1, 64)
+}
+
+func formatOptionalValue(value interface{}) string {
+	if value == nil {
+		return ""
+	}
+	return formatValue(value)
+}
+
+func formatOptionalNumber(value *NumberValue) string {
+	if value == nil {
+		return ""
+	}
+	return value.Raw
+}
+
+func stringValue(value *string) string {
+	if value == nil {
+		return ""
+	}
+	return *value
+}
+
+func boolValue(value *bool) bool {
+	if value == nil {
+		return false
+	}
+	return *value
 }
 
 func conciseDynamicOptionsSource(source string) (string, bool) {

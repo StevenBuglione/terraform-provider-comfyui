@@ -23,9 +23,9 @@ Rescaling the model's score or noise to steer the sampling diversity. [model_pat
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `tsr_k` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0.01 to 100. Step: 0.001. Tooltip: Controls the rescaling strength.
+- `tsr_k` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0.01 to 100.0. Step: 0.001. Tooltip: Controls the rescaling strength.
 Lower k produces more detailed results; higher k produces smoother results in image generation. Setting k = 1 disables rescaling.
-- `tsr_sigma` (Number) Input: FLOAT. Default: 1. Allowed range: 0.01 to 100. Step: 0.001. Tooltip: Controls how early rescaling takes effect.
+- `tsr_sigma` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.01 to 100.0. Step: 0.001. Tooltip: Controls how early rescaling takes effect.
 Larger values take effect earlier.
 
 ### Read-Only

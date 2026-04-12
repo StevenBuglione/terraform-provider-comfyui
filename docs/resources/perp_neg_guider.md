@@ -17,10 +17,10 @@ description: |-
 
 ### Required
 
-- `cfg` (Number) Input: FLOAT. Default: 8. Allowed range: 0 to 100. Step: 0.1.
+- `cfg` (Number) Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1.
 - `empty_conditioning` (String) Input: CONDITIONING. Link input.
 - `model` (String) Input: MODEL. Link input.
-- `neg_scale` (Number) Input: FLOAT. Default: 1. Allowed range: 0 to 100. Step: 0.01.
+- `neg_scale` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `negative` (String) Input: CONDITIONING. Link input.
 - `positive` (String) Input: CONDITIONING. Link input.
 

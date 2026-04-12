@@ -18,8 +18,8 @@ ComfyUI ImageAddNoise node [image] Source: comfy_extras/nodes_images.py:153 (v3_
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709552000. Tooltip: The random seed used for creating the noise.
-- `strength` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0 to 1. Step: 0.01.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615. Tooltip: The random seed used for creating the noise.
+- `strength` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01.
 
 ### Read-Only
 

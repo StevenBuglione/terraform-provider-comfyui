@@ -17,7 +17,7 @@ ComfyUI CLIPTextEncodeSDXLRefiner node [advanced/conditioning] Source: comfy_ext
 
 ### Required
 
-- `ascore` (Number) Input: FLOAT. Default: 6. Allowed range: 0 to 1000. Step: 0.01.
+- `ascore` (Number) Input: FLOAT. Default: 6.0. Allowed range: 0.0 to 1000.0. Step: 0.01.
 - `clip` (String) Input: CLIP. Link input.
 - `height` (Number) Input: INT. Default: 1024. Minimum value: 0.
 - `text` (String) Input: STRING. Supports multiline text.
