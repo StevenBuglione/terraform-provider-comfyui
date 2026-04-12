@@ -96,13 +96,13 @@ resource "comfyui_output_artifact" "saved" {
 output "workflow_execution" {
   value = {
     prompt_id             = comfyui_workflow.execution.prompt_id
-    status                = comfyui_workflow.execution.status
     workflow_id           = comfyui_workflow.execution.workflow_id
     outputs_count         = comfyui_workflow.execution.outputs_count
     outputs_json          = comfyui_workflow.execution.outputs_json
     outputs_structured    = comfyui_workflow.execution.outputs_structured
     preview_output_json   = comfyui_workflow.execution.preview_output_json
     execution_status_json = comfyui_workflow.execution.execution_status_json
+    execution_error_json  = comfyui_workflow.execution.execution_error_json
   }
 }
 

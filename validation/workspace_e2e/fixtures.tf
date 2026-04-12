@@ -521,7 +521,7 @@ locals {
           x = 1840
           y = 120
           style = {
-            group_color    = "#ff00ff"
+            group_color     = "#ff00ff"
             title_font_size = 28
           }
         }

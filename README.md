@@ -218,14 +218,20 @@ make docs
 make hooks-install
 make workspace-e2e-browser-install
 make workspace-e2e
+make release-e2e-browser-install
+make release-e2e
 make execution-e2e
 ```
 
 `make workspace-e2e` launches a disposable local ComfyUI from `third_party/ComfyUI` (auto-selecting a free local port if 8188 is busy), renders the `validation/workspace_e2e` stress fixtures through `comfyui_workspace`, and verifies the real browser canvas with Playwright. Evidence lands under `validation/workspace_e2e/artifacts/browser/` as screenshots and metrics JSON files. In this repo, "clean and usable" means each staged workspace loads in ComfyUI, every workflow group remains visible, and the captured metrics show zero cross-group overlaps, zero header overlaps, zero body containment violations, zero backward links, and correctly styled group rendering.
 
+`make release-e2e` stages four canonical release scenarios into a live ComfyUI canvas and verifies them with Playwright: an assembled-resource workflow, a raw `workflow_json` import, a workspace->prompt->workspace round trip, and a `comfyui_workspace` gallery export. It is aimed squarely at the provider-owned logic that is hardest to trust by inspection alone: assembly, translation, staging, and graph connectivity.
+
 `make execution-e2e` launches a disposable local ComfyUI, uploads a tiny fixture image, runs a model-free `LoadImage -> ImageInvert -> SaveImage` workflow, verifies the structured execution fields through `comfyui_workflow`, re-reads the same run through `comfyui_job` / `comfyui_jobs`, and downloads the saved artifact back to local disk.
 
 Generated node resources come from extracted ComfyUI metadata and are checked in under `internal/resources/generated`. For deeper project structure and development guidance, see [CLAUDE.md](./CLAUDE.md).
+
+The maintenance surface is therefore mostly in the hand-rolled layers, not the generated wrappers: roughly `19.7k` custom Go lines versus `99.4k` generated lines across `646` resource files. Release validation is documented in [docs/release-validation.md](./docs/release-validation.md).
 
 ## License
 

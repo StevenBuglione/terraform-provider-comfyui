@@ -58,12 +58,17 @@ job = data["job_execution"]["value"]
 filtered = data["job_filter_results"]["value"]
 artifact = data["downloaded_artifact"]["value"]
 
-if workflow["status"] != "completed":
-    raise SystemExit(f"Expected workflow status completed, got {workflow['status']!r}")
 if workflow["outputs_count"] < 1:
     raise SystemExit(f"Expected workflow outputs_count >= 1, got {workflow['outputs_count']}")
 if not workflow["workflow_id"]:
     raise SystemExit("Expected workflow_id to be populated")
+execution_status = json.loads(workflow["execution_status_json"])
+if execution_status.get("status_str") not in {"completed", "success"}:
+    raise SystemExit(
+        f"Expected workflow execution_status_json.status_str to indicate terminal success, got {execution_status.get('status_str')!r}"
+    )
+if workflow.get("execution_error_json") not in ("", None, "null"):
+    raise SystemExit(f"Expected execution_error_json to be empty, got {workflow['execution_error_json']!r}")
 
 if job["status"] != "completed":
     raise SystemExit(f"Expected comfyui_job status completed, got {job['status']!r}")

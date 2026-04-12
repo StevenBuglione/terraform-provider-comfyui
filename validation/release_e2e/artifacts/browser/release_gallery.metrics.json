@@ -1,0 +1,9 @@
+{
+  "nodeCount": 41,
+  "groupCount": 3,
+  "linkCount": 64,
+  "brokenLinks": [],
+  "nodesWithInvalidGeometry": [],
+  "maxInDegree": 4,
+  "maxOutDegree": 10
+}
