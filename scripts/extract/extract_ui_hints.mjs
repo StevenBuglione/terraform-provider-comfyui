@@ -27,9 +27,8 @@ export function stableArtifactShape(output) {
 export function mergeExistingMetadata(existing, output) {
   if (
     existing?.comfyui_commit_sha === output.comfyui_commit_sha &&
-    output.comfyui_version === 'unknown' &&
     existing?.comfyui_version &&
-    existing.comfyui_version !== 'unknown'
+    existing.comfyui_version !== output.comfyui_version
   ) {
     output.comfyui_version = existing.comfyui_version;
   }
