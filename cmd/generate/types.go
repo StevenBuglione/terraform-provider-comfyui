@@ -7,6 +7,68 @@ import (
 	"unicode"
 )
 
+type NodeUIHints struct {
+	Version        string                `json:"version"`
+	ExtractedAt    string                `json:"extracted_at"`
+	ComfyUICommit  string                `json:"comfyui_commit_sha"`
+	ComfyUIVersion string                `json:"comfyui_version"`
+	TotalNodes     int                   `json:"total_nodes"`
+	FailedNodes    []NodeUIHintFailure   `json:"failed_nodes"`
+	Nodes          map[string]NodeUIHint `json:"nodes"`
+}
+
+type NodeUIHintFailure struct {
+	NodeType string `json:"node_type"`
+	Message  string `json:"message"`
+}
+
+type NodeUIHint struct {
+	NodeType       string                  `json:"node_type"`
+	DisplayName    string                  `json:"display_name"`
+	MinWidth       *float64                `json:"min_width"`
+	MinHeight      *float64                `json:"min_height"`
+	ComputedWidth  *float64                `json:"computed_width"`
+	ComputedHeight *float64                `json:"computed_height"`
+	Widgets        map[string]WidgetUIHint `json:"widgets"`
+}
+
+type WidgetUIHint struct {
+	WidgetType     string   `json:"widget_type"`
+	HasComputeSize bool     `json:"has_compute_size"`
+	ComputedWidth  *float64 `json:"computed_width"`
+	ComputedHeight *float64 `json:"computed_height"`
+	MinNodeWidth   *float64 `json:"min_node_width"`
+	MinNodeHeight  *float64 `json:"min_node_height"`
+}
+
+type NodeUIHintsTemplateData struct {
+	Version        string
+	ExtractedAt    string
+	ComfyUICommit  string
+	ComfyUIVersion string
+	TotalNodes     int
+	Nodes          []NodeUIHintTemplateNode
+}
+
+type NodeUIHintTemplateNode struct {
+	NodeType       string
+	MinWidth       float64
+	MinHeight      float64
+	ComputedWidth  float64
+	ComputedHeight float64
+	Widgets        []WidgetUIHintTemplateNode
+}
+
+type WidgetUIHintTemplateNode struct {
+	Name           string
+	WidgetType     string
+	HasComputeSize bool
+	ComputedWidth  float64
+	ComputedHeight float64
+	MinNodeWidth   float64
+	MinNodeHeight  float64
+}
+
 // Primitive ComfyUI types that map to specific Terraform attribute types.
 var primitiveTypes = map[string]string{
 	"INT":     "int64",

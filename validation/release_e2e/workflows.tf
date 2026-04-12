@@ -192,8 +192,6 @@ resource "comfyui_workspace" "release_gallery" {
     {
       name          = "Gallery Companion"
       workflow_json = comfyui_workflow.gallery_companion.assembled_json
-      x             = 180
-      y             = 2160
       style = {
         group_color     = "#db2777"
         title_font_size = 18

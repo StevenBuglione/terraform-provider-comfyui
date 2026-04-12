@@ -35,6 +35,7 @@ testacc:
 	TF_ACC=1 go test ./... -v $(TESTARGS) -timeout 120m
 
 generate:
+	./scripts/extract/run_ui_hints.sh
 	go run ./cmd/generate
 
 lint: $(GOLANGCI_LINT)

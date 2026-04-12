@@ -55,6 +55,7 @@ test('verifies release candidate workflows and translations in the real ComfyUI 
       expect(metrics.maxOutDegree).toBe(expectation.max_out_degree);
       expect(metrics.brokenLinks).toEqual([]);
       expect(metrics.nodesWithInvalidGeometry).toEqual([]);
+      expect(metrics.overlappingGroups).toEqual([]);
 
       if (expectation.require_groups) {
         expect(metrics.groupCount).toBeGreaterThan(0);

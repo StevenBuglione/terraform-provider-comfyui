@@ -133,7 +133,9 @@ func main() {
 	start := time.Now()
 
 	specsPath := "scripts/extract/node_specs.json"
+	uiHintsPath := "scripts/extract/node_ui_hints.json"
 	outputDir := "internal/resources/generated"
+	uiHintsOutputPath := "internal/resources/node_ui_hints_generated.go"
 
 	log.Printf("Reading node specs from %s", specsPath)
 	data, err := os.ReadFile(specsPath)
@@ -147,6 +149,21 @@ func main() {
 	}
 	log.Printf("Loaded %d nodes", len(specs.Nodes))
 
+	log.Printf("Reading node UI hints from %s", uiHintsPath)
+	uiHintsData, err := os.ReadFile(uiHintsPath)
+	if err != nil {
+		log.Fatalf("Failed to read UI hints: %v", err)
+	}
+
+	var uiHints NodeUIHints
+	if err := json.Unmarshal(uiHintsData, &uiHints); err != nil {
+		log.Fatalf("Failed to parse UI hints: %v", err)
+	}
+	if len(uiHints.FailedNodes) > 0 {
+		log.Fatalf("UI hints contain %d extraction failures", len(uiHints.FailedNodes))
+	}
+	log.Printf("Loaded %d node UI hints", len(uiHints.Nodes))
+
 	// Parse templates
 	resTmpl, err := template.New("resource").Parse(resourceTemplate)
 	if err != nil {
@@ -155,6 +172,10 @@ func main() {
 	regTmpl, err := template.New("registry").Parse(registryTemplate)
 	if err != nil {
 		log.Fatalf("Failed to parse registry template: %v", err)
+	}
+	uiHintsTmpl, err := template.New("node_ui_hints").Parse(nodeUIHintsTemplate)
+	if err != nil {
+		log.Fatalf("Failed to parse node UI hints template: %v", err)
 	}
 
 	// Clean output directory
@@ -222,6 +243,19 @@ func main() {
 		log.Fatalf("Failed to write registry: %v", err)
 	}
 
+	uiHintsTemplateData := buildNodeUIHintsTemplateData(uiHints)
+	var uiHintsBuf bytes.Buffer
+	if err := uiHintsTmpl.Execute(&uiHintsBuf, uiHintsTemplateData); err != nil {
+		log.Fatalf("Failed to execute node UI hints template: %v", err)
+	}
+	uiHintsFormatted, err := format.Source(uiHintsBuf.Bytes())
+	if err != nil {
+		log.Fatalf("Failed to format node UI hints output: %v", err)
+	}
+	if err := os.WriteFile(uiHintsOutputPath, uiHintsFormatted, 0644); err != nil {
+		log.Fatalf("Failed to write node UI hints output: %v", err)
+	}
+
 	elapsed := time.Since(start)
 
 	fmt.Println("════════════════════════════════════════════")
@@ -237,6 +271,63 @@ func main() {
 	for _, w := range warnings {
 		fmt.Printf("  ⚠  %s\n", w)
 	}
+}
+
+func buildNodeUIHintsTemplateData(hints NodeUIHints) NodeUIHintsTemplateData {
+	nodes := make([]NodeUIHintTemplateNode, 0, len(hints.Nodes))
+
+	nodeTypes := make([]string, 0, len(hints.Nodes))
+	for nodeType := range hints.Nodes {
+		nodeTypes = append(nodeTypes, nodeType)
+	}
+	sort.Strings(nodeTypes)
+
+	for _, nodeType := range nodeTypes {
+		hint := hints.Nodes[nodeType]
+		widgets := make([]WidgetUIHintTemplateNode, 0, len(hint.Widgets))
+		widgetNames := make([]string, 0, len(hint.Widgets))
+		for widgetName := range hint.Widgets {
+			widgetNames = append(widgetNames, widgetName)
+		}
+		sort.Strings(widgetNames)
+		for _, widgetName := range widgetNames {
+			widgetHint := hint.Widgets[widgetName]
+			widgets = append(widgets, WidgetUIHintTemplateNode{
+				Name:           widgetName,
+				WidgetType:     widgetHint.WidgetType,
+				HasComputeSize: widgetHint.HasComputeSize,
+				ComputedWidth:  derefFloat64(widgetHint.ComputedWidth),
+				ComputedHeight: derefFloat64(widgetHint.ComputedHeight),
+				MinNodeWidth:   derefFloat64(widgetHint.MinNodeWidth),
+				MinNodeHeight:  derefFloat64(widgetHint.MinNodeHeight),
+			})
+		}
+
+		nodes = append(nodes, NodeUIHintTemplateNode{
+			NodeType:       nodeType,
+			MinWidth:       derefFloat64(hint.MinWidth),
+			MinHeight:      derefFloat64(hint.MinHeight),
+			ComputedWidth:  derefFloat64(hint.ComputedWidth),
+			ComputedHeight: derefFloat64(hint.ComputedHeight),
+			Widgets:        widgets,
+		})
+	}
+
+	return NodeUIHintsTemplateData{
+		Version:        hints.Version,
+		ExtractedAt:    hints.ExtractedAt,
+		ComfyUICommit:  hints.ComfyUICommit,
+		ComfyUIVersion: hints.ComfyUIVersion,
+		TotalNodes:     len(nodes),
+		Nodes:          nodes,
+	}
+}
+
+func derefFloat64(value *float64) float64 {
+	if value == nil {
+		return 0
+	}
+	return *value
 }
 
 func buildResourceData(node Node) (ResourceData, []string) {

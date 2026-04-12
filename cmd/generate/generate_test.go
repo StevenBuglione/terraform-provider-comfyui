@@ -323,6 +323,50 @@ func TestBuildResourceDataSurfacesSchemaMetadata(t *testing.T) {
 	}
 }
 
+func TestBuildNodeUIHintsTemplateDataSortsNodesAndWidgets(t *testing.T) {
+	hints := NodeUIHints{
+		Version:        "1.0.0",
+		ExtractedAt:    "2026-04-11T00:00:00Z",
+		ComfyUICommit:  "abc123",
+		ComfyUIVersion: "v0-test",
+		Nodes: map[string]NodeUIHint{
+			"ZNode": {
+				MinWidth:  floatPtr(240),
+				MinHeight: floatPtr(120),
+				Widgets: map[string]WidgetUIHint{
+					"zeta": {WidgetType: "string"},
+					"alpha": {
+						WidgetType:    "customtext",
+						MinNodeWidth:  floatPtr(400),
+						MinNodeHeight: floatPtr(200),
+					},
+				},
+			},
+			"ANode": {
+				MinWidth:  floatPtr(300),
+				MinHeight: floatPtr(180),
+			},
+		},
+	}
+
+	data := buildNodeUIHintsTemplateData(hints)
+	if data.TotalNodes != 2 {
+		t.Fatalf("expected 2 nodes, got %d", data.TotalNodes)
+	}
+	if data.Nodes[0].NodeType != "ANode" || data.Nodes[1].NodeType != "ZNode" {
+		t.Fatalf("expected nodes sorted by type, got %#v", data.Nodes)
+	}
+	if len(data.Nodes[1].Widgets) != 2 {
+		t.Fatalf("expected 2 widgets, got %d", len(data.Nodes[1].Widgets))
+	}
+	if data.Nodes[1].Widgets[0].Name != "alpha" || data.Nodes[1].Widgets[1].Name != "zeta" {
+		t.Fatalf("expected widgets sorted by name, got %#v", data.Nodes[1].Widgets)
+	}
+	if data.Nodes[1].Widgets[0].MinNodeWidth != 400 || data.Nodes[1].Widgets[0].MinNodeHeight != 200 {
+		t.Fatalf("expected preserved widget min sizes, got %#v", data.Nodes[1].Widgets[0])
+	}
+}
+
 func TestBuildInputDescriptionCollapsesVerboseDynamicOptionSources(t *testing.T) {
 	inp := Input{
 		Name:                 "moderation",

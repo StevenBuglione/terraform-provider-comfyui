@@ -871,7 +871,7 @@ func TestBuildWorkspaceNodeExpandsHeightForDenseControlNodes(t *testing.T) {
 	}
 }
 
-func TestBuildWorkspaceNodeHonorsMultilineWidgetMinSize(t *testing.T) {
+func TestBuildWorkspaceNodeHonorsGeneratedUIHints(t *testing.T) {
 	info := client.NodeInfo{
 		Input: client.NodeInputInfo{
 			Required: map[string]interface{}{
@@ -914,6 +914,39 @@ func TestBuildWorkspaceNodeHonorsMultilineWidgetMinSize(t *testing.T) {
 	}
 	if node.Size[1] != 200 {
 		t.Fatalf("expected multiline widget min height 200, got %v", node.Size[1])
+	}
+}
+
+func TestBuildWorkspaceNodeFallsBackWithoutGeneratedUIHints(t *testing.T) {
+	info := client.NodeInfo{
+		Input: client.NodeInputInfo{
+			Required: map[string]interface{}{
+				"text": []interface{}{"STRING", map[string]interface{}{
+					"multiline": true,
+				}},
+			},
+		},
+		InputOrder:   map[string][]string{"required": {"text"}},
+		Output:       []string{"STRING"},
+		OutputName:   []string{"STRING"},
+		OutputIsList: []bool{false},
+		Name:         "UnknownCustomNode",
+		DisplayName:  "Unknown Custom Node",
+	}
+
+	orderedInputs, err := orderedNodeInputs(info)
+	if err != nil {
+		t.Fatalf("orderedNodeInputs returned error: %v", err)
+	}
+
+	node, _ := buildWorkspaceNode(1, "UnknownCustomNode", info, orderedInputs, map[string]interface{}{"text": "hello"}, 0, 0, 0, 0)
+
+	if node.Size[0] != defaultNodeWidth {
+		t.Fatalf("expected fallback width %v, got %v", defaultNodeWidth, node.Size[0])
+	}
+	expectedHeight := estimateWorkspaceNodeHeight(len(orderedInputs), len(info.Output))
+	if node.Size[1] != expectedHeight {
+		t.Fatalf("expected fallback height %v, got %v", expectedHeight, node.Size[1])
 	}
 }
 

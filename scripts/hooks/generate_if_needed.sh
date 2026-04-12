@@ -18,4 +18,4 @@ if [ "$needs_generate" -eq 0 ]; then
 fi
 
 make generate
-git add -- internal/resources/generated
+git add -- internal/resources/generated internal/resources/node_ui_hints_generated.go scripts/extract/node_ui_hints.json

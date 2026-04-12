@@ -6,6 +6,7 @@ export type GraphMetrics = {
   linkCount: number;
   brokenLinks: number[];
   nodesWithInvalidGeometry: number[];
+  overlappingGroups: string[];
   maxInDegree: number;
   maxOutDegree: number;
   minVerticalGap: number | null;
@@ -32,6 +33,31 @@ export async function readGraphMetrics(page: Page): Promise<GraphMetrics> {
         return ![x, y, width, height].every((value) => Number.isFinite(value));
       })
       .map((node: any) => node.id);
+
+    const groups = graph?._groups ?? [];
+    const overlappingGroups: string[] = [];
+    for (let i = 0; i < groups.length; i += 1) {
+      const a = groups[i];
+      const [ax, ay, aw, ah] = a?._bounding ?? a?.bounding ?? [NaN, NaN, NaN, NaN];
+      if (![ax, ay, aw, ah].every((value) => Number.isFinite(value))) {
+        continue;
+      }
+      for (let j = i + 1; j < groups.length; j += 1) {
+        const b = groups[j];
+        const [bx, by, bw, bh] = b?._bounding ?? b?.bounding ?? [NaN, NaN, NaN, NaN];
+        if (![bx, by, bw, bh].every((value) => Number.isFinite(value))) {
+          continue;
+        }
+        const overlaps =
+          ax < bx + bw &&
+          ax + aw > bx &&
+          ay < by + bh &&
+          ay + ah > by;
+        if (overlaps) {
+          overlappingGroups.push(`${a.title} <-> ${b.title}`);
+        }
+      }
+    }
 
     const maxInDegree = nodes.reduce((max: number, node: any) => {
       const degree = (node.inputs ?? []).reduce(
@@ -78,6 +104,7 @@ export async function readGraphMetrics(page: Page): Promise<GraphMetrics> {
       linkCount: Object.keys(links).length,
       brokenLinks,
       nodesWithInvalidGeometry,
+      overlappingGroups,
       maxInDegree,
       maxOutDegree,
       minVerticalGap: Number.isFinite(minVerticalGap) ? minVerticalGap : null,

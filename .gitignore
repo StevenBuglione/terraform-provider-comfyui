@@ -43,3 +43,7 @@ validation/release_e2e/artifacts/browser/
 validation/release_e2e/browser/node_modules/
 validation/release_e2e/browser/test-results/
 validation/release_e2e/browser/playwright-report/
+validation/workspace_e2e/.runtime-generate/
+scripts/extract/node_modules/
+scripts/extract/playwright-report/
+scripts/extract/test-results/

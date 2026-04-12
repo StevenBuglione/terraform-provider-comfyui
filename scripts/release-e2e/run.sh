@@ -18,11 +18,15 @@ fi
 
 "$ROOT_DIR/scripts/workspace-e2e/start-comfyui.sh"
 source "$RUNTIME_DIR/runtime.env"
-cp "$RUNTIME_DIR/runtime.env" "$FIXTURE_RUNTIME_DIR/runtime.env"
+if [[ "$RUNTIME_DIR/runtime.env" != "$FIXTURE_RUNTIME_DIR/runtime.env" ]]; then
+  cp "$RUNTIME_DIR/runtime.env" "$FIXTURE_RUNTIME_DIR/runtime.env"
+fi
 HOST="${WORKSPACE_E2E_HOST}"
 PORT="${WORKSPACE_E2E_PORT}"
 "$ROOT_DIR/scripts/release-e2e/render-fixtures.sh"
-cp "$RUNTIME_DIR/terraform-outputs.json" "$FIXTURE_RUNTIME_DIR/terraform-outputs.json"
+if [[ "$RUNTIME_DIR/terraform-outputs.json" != "$FIXTURE_RUNTIME_DIR/terraform-outputs.json" ]]; then
+  cp "$RUNTIME_DIR/terraform-outputs.json" "$FIXTURE_RUNTIME_DIR/terraform-outputs.json"
+fi
 "$ROOT_DIR/scripts/release-e2e/stage-subgraphs.sh"
 
 curl -fsS "http://$HOST:$PORT/global_subgraphs" >"$GLOBAL_SUBGRAPHS_FILE"

@@ -1,0 +1,12 @@
+{
+  "name": "comfyui-ui-hints-extractor",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "extract-ui-hints": "node ./extract_ui_hints.mjs",
+    "install:browsers": "playwright install chromium"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}

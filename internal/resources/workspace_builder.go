@@ -16,8 +16,6 @@ const (
 	defaultNodeWidth         = 240.0
 	defaultNodeHeight        = 120.0
 	defaultNodeEdgePadding   = 40.0
-	multilineNodeMinWidth    = 400.0
-	multilineNodeMinHeight   = 200.0
 	nodeHeightBase           = 62.0
 	nodeHeightPerRow         = 20.0
 	defaultGroupHeaderHeight = 40.0
@@ -546,7 +544,7 @@ func layoutWorkflowNodesLeftToRight(nodes []workspaceNode, nodeIndexByID map[int
 }
 
 func buildWorkspaceNode(nodeID int, classType string, info client.NodeInfo, orderedInputs []string, rawInputs map[string]interface{}, baseX, baseY float64, nodeIndex int, order int) (workspaceNode, []interface{}) {
-	width, height := estimateWorkspaceNodeSize(info, orderedInputs)
+	width, height := estimateWorkspaceNodeSize(classType, info, orderedInputs)
 	node := workspaceNode{
 		ID:         nodeID,
 		Type:       classType,
@@ -602,15 +600,24 @@ func buildWorkspaceNode(nodeID int, classType string, info client.NodeInfo, orde
 	return node, widgetValues
 }
 
-func estimateWorkspaceNodeSize(info client.NodeInfo, orderedInputs []string) (float64, float64) {
+func estimateWorkspaceNodeSize(classType string, info client.NodeInfo, orderedInputs []string) (float64, float64) {
 	width := defaultNodeWidth
 	height := estimateWorkspaceNodeHeight(len(orderedInputs), len(info.Output))
+
+	if hint, ok := generatedNodeUIHints[classType]; ok {
+		if hint.MinWidth > width {
+			width = hint.MinWidth
+		}
+		if hint.MinHeight > height {
+			height = hint.MinHeight
+		}
+	}
 
 	for _, inputName := range orderedInputs {
 		if inputType := lookupNodeInputType(info, inputName); !isWidgetInputType(inputType) {
 			continue
 		}
-		minWidth, minHeight := widgetMinimumNodeSize(info, inputName)
+		minWidth, minHeight := widgetMinimumNodeSize(classType, inputName)
 		if minWidth > width {
 			width = minWidth
 		}
@@ -636,17 +643,17 @@ func estimateWorkspaceNodeHeight(inputCount, outputCount int) float64 {
 	return height
 }
 
-func widgetMinimumNodeSize(info client.NodeInfo, inputName string) (float64, float64) {
-	metadata, ok := lookupNodeInputMetadata(info, inputName)
+func widgetMinimumNodeSize(classType string, inputName string) (float64, float64) {
+	hint, ok := generatedNodeUIHints[classType]
+	if !ok {
+		return 0, 0
+	}
+	widgetHint, ok := hint.Widgets[inputName]
 	if !ok {
 		return 0, 0
 	}
 
-	if multiline, ok := metadata["multiline"].(bool); ok && multiline {
-		return multilineNodeMinWidth, multilineNodeMinHeight
-	}
-
-	return 0, 0
+	return widgetHint.MinNodeWidth, widgetHint.MinNodeHeight
 }
 
 func lookupNodeInputType(info client.NodeInfo, inputName string) string {
@@ -657,16 +664,6 @@ func lookupNodeInputType(info client.NodeInfo, inputName string) string {
 		return inputType
 	}
 	return "UNKNOWN"
-}
-
-func lookupNodeInputMetadata(info client.NodeInfo, inputName string) (map[string]interface{}, bool) {
-	if metadata, ok := extractInputMetadata(info.Input.Required[inputName]); ok {
-		return metadata, true
-	}
-	if metadata, ok := extractInputMetadata(info.Input.Optional[inputName]); ok {
-		return metadata, true
-	}
-	return nil, false
 }
 
 func extractInputType(raw interface{}) (string, bool) {
@@ -682,18 +679,6 @@ func extractInputType(raw interface{}) (string, bool) {
 		return "", false
 	}
 	return value, true
-}
-
-func extractInputMetadata(raw interface{}) (map[string]interface{}, bool) {
-	values, ok := raw.([]interface{})
-	if !ok || len(values) < 2 {
-		return nil, false
-	}
-	metadata, ok := values[1].(map[string]interface{})
-	if !ok {
-		return nil, false
-	}
-	return metadata, true
 }
 
 func parsePromptConnection(value interface{}) (string, int, bool) {
