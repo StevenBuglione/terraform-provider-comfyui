@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &EmptyQwenImageLayeredLatentImageResource{}
+var _ resource.ResourceWithConfigure = &EmptyQwenImageLayeredLatentImageResource{}
+var _ resource.ResourceWithModifyPlan = &EmptyQwenImageLayeredLatentImageResource{}
 
-type EmptyQwenImageLayeredLatentImageResource struct{}
+type EmptyQwenImageLayeredLatentImageResource struct {
+	client *client.Client
+}
 
 type EmptyQwenImageLayeredLatentImageModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type EmptyQwenImageLayeredLatentImageModel struct {
 
 func NewEmptyQwenImageLayeredLatentImageResource() resource.Resource {
 	return &EmptyQwenImageLayeredLatentImageResource{}
+}
+
+func (r *EmptyQwenImageLayeredLatentImageResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *EmptyQwenImageLayeredLatentImageResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *EmptyQwenImageLayeredLatentImageResource) Schema(_ context.Context, _ r
 			},
 		},
 	}
+}
+
+func (r *EmptyQwenImageLayeredLatentImageResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data EmptyQwenImageLayeredLatentImageModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "EmptyQwenImageLayeredLatentImage", data, &resp.Diagnostics)
 }
 
 func (r *EmptyQwenImageLayeredLatentImageResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

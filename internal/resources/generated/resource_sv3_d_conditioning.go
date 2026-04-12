@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &Sv3DConditioningResource{}
+var _ resource.ResourceWithConfigure = &Sv3DConditioningResource{}
+var _ resource.ResourceWithModifyPlan = &Sv3DConditioningResource{}
 
-type Sv3DConditioningResource struct{}
+type Sv3DConditioningResource struct {
+	client *client.Client
+}
 
 type Sv3DConditioningModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -39,6 +44,23 @@ type Sv3DConditioningModel struct {
 
 func NewSv3DConditioningResource() resource.Resource {
 	return &Sv3DConditioningResource{}
+}
+
+func (r *Sv3DConditioningResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Sv3DConditioningResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -120,6 +142,20 @@ func (r *Sv3DConditioningResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *Sv3DConditioningResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Sv3DConditioningModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SV3D_Conditioning", data, &resp.Diagnostics)
 }
 
 func (r *Sv3DConditioningResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &PainterResource{}
+var _ resource.ResourceWithConfigure = &PainterResource{}
+var _ resource.ResourceWithModifyPlan = &PainterResource{}
 
-type PainterResource struct{}
+type PainterResource struct {
+	client *client.Client
+}
 
 type PainterModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type PainterModel struct {
 
 func NewPainterResource() resource.Resource {
 	return &PainterResource{}
+}
+
+func (r *PainterResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *PainterResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -101,6 +123,20 @@ func (r *PainterResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			},
 		},
 	}
+}
+
+func (r *PainterResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data PainterModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "PainterNode", data, &resp.Diagnostics)
 }
 
 func (r *PainterResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

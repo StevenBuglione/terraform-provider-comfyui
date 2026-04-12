@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ConditioningSetDefaultCombineResource{}
+var _ resource.ResourceWithConfigure = &ConditioningSetDefaultCombineResource{}
+var _ resource.ResourceWithModifyPlan = &ConditioningSetDefaultCombineResource{}
 
-type ConditioningSetDefaultCombineResource struct{}
+type ConditioningSetDefaultCombineResource struct {
+	client *client.Client
+}
 
 type ConditioningSetDefaultCombineModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type ConditioningSetDefaultCombineModel struct {
 
 func NewConditioningSetDefaultCombineResource() resource.Resource {
 	return &ConditioningSetDefaultCombineResource{}
+}
+
+func (r *ConditioningSetDefaultCombineResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ConditioningSetDefaultCombineResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *ConditioningSetDefaultCombineResource) Schema(_ context.Context, _ reso
 			},
 		},
 	}
+}
+
+func (r *ConditioningSetDefaultCombineResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ConditioningSetDefaultCombineModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ConditioningSetDefaultAndCombine", data, &resp.Diagnostics)
 }
 
 func (r *ConditioningSetDefaultCombineResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &SamplerDpmpp2SAncestralResource{}
+var _ resource.ResourceWithConfigure = &SamplerDpmpp2SAncestralResource{}
+var _ resource.ResourceWithModifyPlan = &SamplerDpmpp2SAncestralResource{}
 
-type SamplerDpmpp2SAncestralResource struct{}
+type SamplerDpmpp2SAncestralResource struct {
+	client *client.Client
+}
 
 type SamplerDpmpp2SAncestralModel struct {
 	ID            types.String  `tfsdk:"id"`
@@ -31,6 +36,23 @@ type SamplerDpmpp2SAncestralModel struct {
 
 func NewSamplerDpmpp2SAncestralResource() resource.Resource {
 	return &SamplerDpmpp2SAncestralResource{}
+}
+
+func (r *SamplerDpmpp2SAncestralResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SamplerDpmpp2SAncestralResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -78,6 +100,20 @@ func (r *SamplerDpmpp2SAncestralResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *SamplerDpmpp2SAncestralResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SamplerDpmpp2SAncestralModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SamplerDPMPP_2S_Ancestral", data, &resp.Diagnostics)
 }
 
 func (r *SamplerDpmpp2SAncestralResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

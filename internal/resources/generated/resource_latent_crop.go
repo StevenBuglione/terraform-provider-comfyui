@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &LatentCropResource{}
+var _ resource.ResourceWithConfigure = &LatentCropResource{}
+var _ resource.ResourceWithModifyPlan = &LatentCropResource{}
 
-type LatentCropResource struct{}
+type LatentCropResource struct {
+	client *client.Client
+}
 
 type LatentCropModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type LatentCropModel struct {
 
 func NewLatentCropResource() resource.Resource {
 	return &LatentCropResource{}
+}
+
+func (r *LatentCropResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LatentCropResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *LatentCropResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			},
 		},
 	}
+}
+
+func (r *LatentCropResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LatentCropModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LatentCrop", data, &resp.Diagnostics)
 }
 
 func (r *LatentCropResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

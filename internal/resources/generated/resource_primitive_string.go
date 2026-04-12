@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &PrimitiveStringResource{}
+var _ resource.ResourceWithConfigure = &PrimitiveStringResource{}
+var _ resource.ResourceWithModifyPlan = &PrimitiveStringResource{}
 
-type PrimitiveStringResource struct{}
+type PrimitiveStringResource struct {
+	client *client.Client
+}
 
 type PrimitiveStringModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type PrimitiveStringModel struct {
 
 func NewPrimitiveStringResource() resource.Resource {
 	return &PrimitiveStringResource{}
+}
+
+func (r *PrimitiveStringResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *PrimitiveStringResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *PrimitiveStringResource) Schema(_ context.Context, _ resource.SchemaReq
 			},
 		},
 	}
+}
+
+func (r *PrimitiveStringResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data PrimitiveStringModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "String", data, &resp.Diagnostics)
 }
 
 func (r *PrimitiveStringResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

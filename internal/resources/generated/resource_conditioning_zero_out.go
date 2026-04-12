@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ConditioningZeroOutResource{}
+var _ resource.ResourceWithConfigure = &ConditioningZeroOutResource{}
+var _ resource.ResourceWithModifyPlan = &ConditioningZeroOutResource{}
 
-type ConditioningZeroOutResource struct{}
+type ConditioningZeroOutResource struct {
+	client *client.Client
+}
 
 type ConditioningZeroOutModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type ConditioningZeroOutModel struct {
 
 func NewConditioningZeroOutResource() resource.Resource {
 	return &ConditioningZeroOutResource{}
+}
+
+func (r *ConditioningZeroOutResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ConditioningZeroOutResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *ConditioningZeroOutResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *ConditioningZeroOutResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ConditioningZeroOutModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ConditioningZeroOut", data, &resp.Diagnostics)
 }
 
 func (r *ConditioningZeroOutResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

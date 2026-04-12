@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LtxvEmptyLatentAudioResource{}
+var _ resource.ResourceWithConfigure = &LtxvEmptyLatentAudioResource{}
+var _ resource.ResourceWithModifyPlan = &LtxvEmptyLatentAudioResource{}
 
-type LtxvEmptyLatentAudioResource struct{}
+type LtxvEmptyLatentAudioResource struct {
+	client *client.Client
+}
 
 type LtxvEmptyLatentAudioModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type LtxvEmptyLatentAudioModel struct {
 
 func NewLtxvEmptyLatentAudioResource() resource.Resource {
 	return &LtxvEmptyLatentAudioResource{}
+}
+
+func (r *LtxvEmptyLatentAudioResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LtxvEmptyLatentAudioResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -86,6 +108,20 @@ func (r *LtxvEmptyLatentAudioResource) Schema(_ context.Context, _ resource.Sche
 			},
 		},
 	}
+}
+
+func (r *LtxvEmptyLatentAudioResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LtxvEmptyLatentAudioModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LTXVEmptyLatentAudio", data, &resp.Diagnostics)
 }
 
 func (r *LtxvEmptyLatentAudioResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

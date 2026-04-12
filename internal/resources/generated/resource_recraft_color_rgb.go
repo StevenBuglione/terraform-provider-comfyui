@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RecraftColorRgbResource{}
+var _ resource.ResourceWithConfigure = &RecraftColorRgbResource{}
+var _ resource.ResourceWithModifyPlan = &RecraftColorRgbResource{}
 
-type RecraftColorRgbResource struct{}
+type RecraftColorRgbResource struct {
+	client *client.Client
+}
 
 type RecraftColorRgbModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type RecraftColorRgbModel struct {
 
 func NewRecraftColorRgbResource() resource.Resource {
 	return &RecraftColorRgbResource{}
+}
+
+func (r *RecraftColorRgbResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RecraftColorRgbResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,6 +113,20 @@ func (r *RecraftColorRgbResource) Schema(_ context.Context, _ resource.SchemaReq
 			},
 		},
 	}
+}
+
+func (r *RecraftColorRgbResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RecraftColorRgbModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RecraftColorRGBNode", data, &resp.Diagnostics)
 }
 
 func (r *RecraftColorRgbResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

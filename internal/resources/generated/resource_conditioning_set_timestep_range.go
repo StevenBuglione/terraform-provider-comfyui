@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ConditioningSetTimestepRangeResource{}
+var _ resource.ResourceWithConfigure = &ConditioningSetTimestepRangeResource{}
+var _ resource.ResourceWithModifyPlan = &ConditioningSetTimestepRangeResource{}
 
-type ConditioningSetTimestepRangeResource struct{}
+type ConditioningSetTimestepRangeResource struct {
+	client *client.Client
+}
 
 type ConditioningSetTimestepRangeModel struct {
 	ID                 types.String  `tfsdk:"id"`
@@ -32,6 +37,23 @@ type ConditioningSetTimestepRangeModel struct {
 
 func NewConditioningSetTimestepRangeResource() resource.Resource {
 	return &ConditioningSetTimestepRangeResource{}
+}
+
+func (r *ConditioningSetTimestepRangeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ConditioningSetTimestepRangeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -83,6 +105,20 @@ func (r *ConditioningSetTimestepRangeResource) Schema(_ context.Context, _ resou
 			},
 		},
 	}
+}
+
+func (r *ConditioningSetTimestepRangeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ConditioningSetTimestepRangeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ConditioningSetTimestepRange", data, &resp.Diagnostics)
 }
 
 func (r *ConditioningSetTimestepRangeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

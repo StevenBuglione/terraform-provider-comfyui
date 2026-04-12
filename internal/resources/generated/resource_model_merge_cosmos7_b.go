@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ModelMergeCosmos7BResource{}
+var _ resource.ResourceWithConfigure = &ModelMergeCosmos7BResource{}
+var _ resource.ResourceWithModifyPlan = &ModelMergeCosmos7BResource{}
 
-type ModelMergeCosmos7BResource struct{}
+type ModelMergeCosmos7BResource struct {
+	client *client.Client
+}
 
 type ModelMergeCosmos7BModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -63,6 +68,23 @@ type ModelMergeCosmos7BModel struct {
 
 func NewModelMergeCosmos7BResource() resource.Resource {
 	return &ModelMergeCosmos7BResource{}
+}
+
+func (r *ModelMergeCosmos7BResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ModelMergeCosmos7BResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -240,6 +262,20 @@ func (r *ModelMergeCosmos7BResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *ModelMergeCosmos7BResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ModelMergeCosmos7BModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ModelMergeCosmos7B", data, &resp.Diagnostics)
 }
 
 func (r *ModelMergeCosmos7BResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

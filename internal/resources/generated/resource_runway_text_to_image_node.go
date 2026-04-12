@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &RunwayTextToImageNodeResource{}
+var _ resource.ResourceWithConfigure = &RunwayTextToImageNodeResource{}
+var _ resource.ResourceWithModifyPlan = &RunwayTextToImageNodeResource{}
 
-type RunwayTextToImageNodeResource struct{}
+type RunwayTextToImageNodeResource struct {
+	client *client.Client
+}
 
 type RunwayTextToImageNodeModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type RunwayTextToImageNodeModel struct {
 
 func NewRunwayTextToImageNodeResource() resource.Resource {
 	return &RunwayTextToImageNodeResource{}
+}
+
+func (r *RunwayTextToImageNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RunwayTextToImageNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *RunwayTextToImageNodeResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *RunwayTextToImageNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RunwayTextToImageNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RunwayTextToImageNode", data, &resp.Diagnostics)
 }
 
 func (r *RunwayTextToImageNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

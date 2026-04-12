@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ModelMergeMochiPreviewResource{}
+var _ resource.ResourceWithConfigure = &ModelMergeMochiPreviewResource{}
+var _ resource.ResourceWithModifyPlan = &ModelMergeMochiPreviewResource{}
 
-type ModelMergeMochiPreviewResource struct{}
+type ModelMergeMochiPreviewResource struct {
+	client *client.Client
+}
 
 type ModelMergeMochiPreviewModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -82,6 +87,23 @@ type ModelMergeMochiPreviewModel struct {
 
 func NewModelMergeMochiPreviewResource() resource.Resource {
 	return &ModelMergeMochiPreviewResource{}
+}
+
+func (r *ModelMergeMochiPreviewResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ModelMergeMochiPreviewResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -335,6 +357,20 @@ func (r *ModelMergeMochiPreviewResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *ModelMergeMochiPreviewResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ModelMergeMochiPreviewModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ModelMergeMochiPreview", data, &resp.Diagnostics)
 }
 
 func (r *ModelMergeMochiPreviewResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

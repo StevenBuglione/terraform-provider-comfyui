@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &HunyuanVideo15LatentUpscaleWithModelResource{}
+var _ resource.ResourceWithConfigure = &HunyuanVideo15LatentUpscaleWithModelResource{}
+var _ resource.ResourceWithModifyPlan = &HunyuanVideo15LatentUpscaleWithModelResource{}
 
-type HunyuanVideo15LatentUpscaleWithModelResource struct{}
+type HunyuanVideo15LatentUpscaleWithModelResource struct {
+	client *client.Client
+}
 
 type HunyuanVideo15LatentUpscaleWithModelModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -36,6 +41,23 @@ type HunyuanVideo15LatentUpscaleWithModelModel struct {
 
 func NewHunyuanVideo15LatentUpscaleWithModelResource() resource.Resource {
 	return &HunyuanVideo15LatentUpscaleWithModelResource{}
+}
+
+func (r *HunyuanVideo15LatentUpscaleWithModelResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *HunyuanVideo15LatentUpscaleWithModelResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -114,6 +136,20 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Schema(_ context.Context,
 			},
 		},
 	}
+}
+
+func (r *HunyuanVideo15LatentUpscaleWithModelResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data HunyuanVideo15LatentUpscaleWithModelModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "HunyuanVideo15LatentUpscaleWithModel", data, &resp.Diagnostics)
 }
 
 func (r *HunyuanVideo15LatentUpscaleWithModelResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

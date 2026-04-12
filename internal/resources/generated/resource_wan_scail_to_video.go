@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &WanScailToVideoResource{}
+var _ resource.ResourceWithConfigure = &WanScailToVideoResource{}
+var _ resource.ResourceWithModifyPlan = &WanScailToVideoResource{}
 
-type WanScailToVideoResource struct{}
+type WanScailToVideoResource struct {
+	client *client.Client
+}
 
 type WanScailToVideoModel struct {
 	ID               types.String  `tfsdk:"id"`
@@ -45,6 +50,23 @@ type WanScailToVideoModel struct {
 
 func NewWanScailToVideoResource() resource.Resource {
 	return &WanScailToVideoResource{}
+}
+
+func (r *WanScailToVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *WanScailToVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -156,6 +178,20 @@ func (r *WanScailToVideoResource) Schema(_ context.Context, _ resource.SchemaReq
 			},
 		},
 	}
+}
+
+func (r *WanScailToVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data WanScailToVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "WanSCAILToVideo", data, &resp.Diagnostics)
 }
 
 func (r *WanScailToVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

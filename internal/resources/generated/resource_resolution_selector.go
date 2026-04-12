@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ResolutionSelectorResource{}
+var _ resource.ResourceWithConfigure = &ResolutionSelectorResource{}
+var _ resource.ResourceWithModifyPlan = &ResolutionSelectorResource{}
 
-type ResolutionSelectorResource struct{}
+type ResolutionSelectorResource struct {
+	client *client.Client
+}
 
 type ResolutionSelectorModel struct {
 	ID           types.String  `tfsdk:"id"`
@@ -32,6 +37,23 @@ type ResolutionSelectorModel struct {
 
 func NewResolutionSelectorResource() resource.Resource {
 	return &ResolutionSelectorResource{}
+}
+
+func (r *ResolutionSelectorResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ResolutionSelectorResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -83,6 +105,20 @@ func (r *ResolutionSelectorResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *ResolutionSelectorResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ResolutionSelectorModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ResolutionSelector", data, &resp.Diagnostics)
 }
 
 func (r *ResolutionSelectorResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

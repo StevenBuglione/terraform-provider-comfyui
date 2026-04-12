@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ImageCompositeMaskedResource{}
+var _ resource.ResourceWithConfigure = &ImageCompositeMaskedResource{}
+var _ resource.ResourceWithModifyPlan = &ImageCompositeMaskedResource{}
 
-type ImageCompositeMaskedResource struct{}
+type ImageCompositeMaskedResource struct {
+	client *client.Client
+}
 
 type ImageCompositeMaskedModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type ImageCompositeMaskedModel struct {
 
 func NewImageCompositeMaskedResource() resource.Resource {
 	return &ImageCompositeMaskedResource{}
+}
+
+func (r *ImageCompositeMaskedResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ImageCompositeMaskedResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *ImageCompositeMaskedResource) Schema(_ context.Context, _ resource.Sche
 			},
 		},
 	}
+}
+
+func (r *ImageCompositeMaskedResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ImageCompositeMaskedModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageCompositeMasked", data, &resp.Diagnostics)
 }
 
 func (r *ImageCompositeMaskedResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

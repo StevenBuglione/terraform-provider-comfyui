@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &EmptyAceStepLatentAudioResource{}
+var _ resource.ResourceWithConfigure = &EmptyAceStepLatentAudioResource{}
+var _ resource.ResourceWithModifyPlan = &EmptyAceStepLatentAudioResource{}
 
-type EmptyAceStepLatentAudioResource struct{}
+type EmptyAceStepLatentAudioResource struct {
+	client *client.Client
+}
 
 type EmptyAceStepLatentAudioModel struct {
 	ID           types.String  `tfsdk:"id"`
@@ -32,6 +37,23 @@ type EmptyAceStepLatentAudioModel struct {
 
 func NewEmptyAceStepLatentAudioResource() resource.Resource {
 	return &EmptyAceStepLatentAudioResource{}
+}
+
+func (r *EmptyAceStepLatentAudioResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *EmptyAceStepLatentAudioResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -79,6 +101,20 @@ func (r *EmptyAceStepLatentAudioResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *EmptyAceStepLatentAudioResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data EmptyAceStepLatentAudioModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "EmptyAceStepLatentAudio", data, &resp.Diagnostics)
 }
 
 func (r *EmptyAceStepLatentAudioResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

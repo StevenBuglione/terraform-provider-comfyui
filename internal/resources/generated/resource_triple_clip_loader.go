@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &TripleCLIPLoaderResource{}
+var _ resource.ResourceWithConfigure = &TripleCLIPLoaderResource{}
+var _ resource.ResourceWithModifyPlan = &TripleCLIPLoaderResource{}
 
-type TripleCLIPLoaderResource struct{}
+type TripleCLIPLoaderResource struct {
+	client *client.Client
+}
 
 type TripleCLIPLoaderModel struct {
 	ID         types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type TripleCLIPLoaderModel struct {
 
 func NewTripleCLIPLoaderResource() resource.Resource {
 	return &TripleCLIPLoaderResource{}
+}
+
+func (r *TripleCLIPLoaderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TripleCLIPLoaderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *TripleCLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *TripleCLIPLoaderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TripleCLIPLoaderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TripleCLIPLoader", data, &resp.Diagnostics)
 }
 
 func (r *TripleCLIPLoaderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

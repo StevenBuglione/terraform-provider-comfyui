@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &Hunyuan3Dv2ConditioningMultiViewResource{}
+var _ resource.ResourceWithConfigure = &Hunyuan3Dv2ConditioningMultiViewResource{}
+var _ resource.ResourceWithModifyPlan = &Hunyuan3Dv2ConditioningMultiViewResource{}
 
-type Hunyuan3Dv2ConditioningMultiViewResource struct{}
+type Hunyuan3Dv2ConditioningMultiViewResource struct {
+	client *client.Client
+}
 
 type Hunyuan3Dv2ConditioningMultiViewModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type Hunyuan3Dv2ConditioningMultiViewModel struct {
 
 func NewHunyuan3Dv2ConditioningMultiViewResource() resource.Resource {
 	return &Hunyuan3Dv2ConditioningMultiViewResource{}
+}
+
+func (r *Hunyuan3Dv2ConditioningMultiViewResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Hunyuan3Dv2ConditioningMultiViewResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -88,6 +110,20 @@ func (r *Hunyuan3Dv2ConditioningMultiViewResource) Schema(_ context.Context, _ r
 			},
 		},
 	}
+}
+
+func (r *Hunyuan3Dv2ConditioningMultiViewResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Hunyuan3Dv2ConditioningMultiViewModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Hunyuan3Dv2ConditioningMultiView", data, &resp.Diagnostics)
 }
 
 func (r *Hunyuan3Dv2ConditioningMultiViewResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

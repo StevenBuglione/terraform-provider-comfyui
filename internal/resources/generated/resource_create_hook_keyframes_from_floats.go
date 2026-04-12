@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &CreateHookKeyframesFromFloatsResource{}
+var _ resource.ResourceWithConfigure = &CreateHookKeyframesFromFloatsResource{}
+var _ resource.ResourceWithModifyPlan = &CreateHookKeyframesFromFloatsResource{}
 
-type CreateHookKeyframesFromFloatsResource struct{}
+type CreateHookKeyframesFromFloatsResource struct {
+	client *client.Client
+}
 
 type CreateHookKeyframesFromFloatsModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type CreateHookKeyframesFromFloatsModel struct {
 
 func NewCreateHookKeyframesFromFloatsResource() resource.Resource {
 	return &CreateHookKeyframesFromFloatsResource{}
+}
+
+func (r *CreateHookKeyframesFromFloatsResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CreateHookKeyframesFromFloatsResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -93,6 +115,20 @@ func (r *CreateHookKeyframesFromFloatsResource) Schema(_ context.Context, _ reso
 			},
 		},
 	}
+}
+
+func (r *CreateHookKeyframesFromFloatsResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CreateHookKeyframesFromFloatsModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CreateHookKeyframesFromFloats", data, &resp.Diagnostics)
 }
 
 func (r *CreateHookKeyframesFromFloatsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

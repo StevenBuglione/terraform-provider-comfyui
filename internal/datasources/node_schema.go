@@ -31,23 +31,26 @@ type NodeSchemaModel struct {
 }
 
 type NodeSchemaInputModel struct {
-	Name                 types.String `tfsdk:"name"`
-	Type                 types.String `tfsdk:"type"`
-	IsLinkType           types.Bool   `tfsdk:"is_link_type"`
-	DefaultValue         types.String `tfsdk:"default_value"`
-	HasDefaultValue      types.Bool   `tfsdk:"has_default_value"`
-	MinValue             types.String `tfsdk:"min_value"`
-	HasMinValue          types.Bool   `tfsdk:"has_min_value"`
-	MaxValue             types.String `tfsdk:"max_value"`
-	HasMaxValue          types.Bool   `tfsdk:"has_max_value"`
-	StepValue            types.String `tfsdk:"step_value"`
-	HasStepValue         types.Bool   `tfsdk:"has_step_value"`
-	EnumValues           types.List   `tfsdk:"enum_values"`
-	Multiline            types.Bool   `tfsdk:"multiline"`
-	DynamicOptions       types.Bool   `tfsdk:"dynamic_options"`
-	DynamicOptionsSource types.String `tfsdk:"dynamic_options_source"`
-	Tooltip              types.String `tfsdk:"tooltip"`
-	DisplayName          types.String `tfsdk:"display_name"`
+	Name                         types.String `tfsdk:"name"`
+	Type                         types.String `tfsdk:"type"`
+	IsLinkType                   types.Bool   `tfsdk:"is_link_type"`
+	ValidationKind               types.String `tfsdk:"validation_kind"`
+	InventoryKind                types.String `tfsdk:"inventory_kind"`
+	SupportsStrictPlanValidation types.Bool   `tfsdk:"supports_strict_plan_validation"`
+	DefaultValue                 types.String `tfsdk:"default_value"`
+	HasDefaultValue              types.Bool   `tfsdk:"has_default_value"`
+	MinValue                     types.String `tfsdk:"min_value"`
+	HasMinValue                  types.Bool   `tfsdk:"has_min_value"`
+	MaxValue                     types.String `tfsdk:"max_value"`
+	HasMaxValue                  types.Bool   `tfsdk:"has_max_value"`
+	StepValue                    types.String `tfsdk:"step_value"`
+	HasStepValue                 types.Bool   `tfsdk:"has_step_value"`
+	EnumValues                   types.List   `tfsdk:"enum_values"`
+	Multiline                    types.Bool   `tfsdk:"multiline"`
+	DynamicOptions               types.Bool   `tfsdk:"dynamic_options"`
+	DynamicOptionsSource         types.String `tfsdk:"dynamic_options_source"`
+	Tooltip                      types.String `tfsdk:"tooltip"`
+	DisplayName                  types.String `tfsdk:"display_name"`
 }
 
 type NodeSchemaHiddenModel struct {
@@ -140,23 +143,26 @@ func nodeSchemaInputListAttribute(description string) schema.ListNestedAttribute
 		Computed:    true,
 		NestedObject: schema.NestedAttributeObject{
 			Attributes: map[string]schema.Attribute{
-				"name":                   schema.StringAttribute{Computed: true},
-				"type":                   schema.StringAttribute{Computed: true},
-				"is_link_type":           schema.BoolAttribute{Computed: true},
-				"default_value":          schema.StringAttribute{Computed: true},
-				"has_default_value":      schema.BoolAttribute{Computed: true},
-				"min_value":              schema.StringAttribute{Computed: true},
-				"has_min_value":          schema.BoolAttribute{Computed: true},
-				"max_value":              schema.StringAttribute{Computed: true},
-				"has_max_value":          schema.BoolAttribute{Computed: true},
-				"step_value":             schema.StringAttribute{Computed: true},
-				"has_step_value":         schema.BoolAttribute{Computed: true},
-				"enum_values":            schema.ListAttribute{Computed: true, ElementType: types.StringType},
-				"multiline":              schema.BoolAttribute{Computed: true},
-				"dynamic_options":        schema.BoolAttribute{Computed: true},
-				"dynamic_options_source": schema.StringAttribute{Computed: true},
-				"tooltip":                schema.StringAttribute{Computed: true},
-				"display_name":           schema.StringAttribute{Computed: true},
+				"name":                            schema.StringAttribute{Computed: true},
+				"type":                            schema.StringAttribute{Computed: true},
+				"is_link_type":                    schema.BoolAttribute{Computed: true},
+				"validation_kind":                 schema.StringAttribute{Computed: true},
+				"inventory_kind":                  schema.StringAttribute{Computed: true},
+				"supports_strict_plan_validation": schema.BoolAttribute{Computed: true},
+				"default_value":                   schema.StringAttribute{Computed: true},
+				"has_default_value":               schema.BoolAttribute{Computed: true},
+				"min_value":                       schema.StringAttribute{Computed: true},
+				"has_min_value":                   schema.BoolAttribute{Computed: true},
+				"max_value":                       schema.StringAttribute{Computed: true},
+				"has_max_value":                   schema.BoolAttribute{Computed: true},
+				"step_value":                      schema.StringAttribute{Computed: true},
+				"has_step_value":                  schema.BoolAttribute{Computed: true},
+				"enum_values":                     schema.ListAttribute{Computed: true, ElementType: types.StringType},
+				"multiline":                       schema.BoolAttribute{Computed: true},
+				"dynamic_options":                 schema.BoolAttribute{Computed: true},
+				"dynamic_options_source":          schema.StringAttribute{Computed: true},
+				"tooltip":                         schema.StringAttribute{Computed: true},
+				"display_name":                    schema.StringAttribute{Computed: true},
 			},
 		},
 	}
@@ -206,23 +212,26 @@ func buildNodeSchemaInputModels(ctx context.Context, inputs []nodeschema.Generat
 		enumValues, enumDiags := types.ListValueFrom(ctx, types.StringType, input.EnumValues)
 		diags.Append(enumDiags...)
 		models = append(models, NodeSchemaInputModel{
-			Name:                 types.StringValue(input.Name),
-			Type:                 types.StringValue(input.Type),
-			IsLinkType:           types.BoolValue(input.IsLinkType),
-			DefaultValue:         types.StringValue(input.DefaultValue),
-			HasDefaultValue:      types.BoolValue(input.HasDefaultValue),
-			MinValue:             types.StringValue(input.MinValue),
-			HasMinValue:          types.BoolValue(input.HasMinValue),
-			MaxValue:             types.StringValue(input.MaxValue),
-			HasMaxValue:          types.BoolValue(input.HasMaxValue),
-			StepValue:            types.StringValue(input.StepValue),
-			HasStepValue:         types.BoolValue(input.HasStepValue),
-			EnumValues:           enumValues,
-			Multiline:            types.BoolValue(input.Multiline),
-			DynamicOptions:       types.BoolValue(input.DynamicOptions),
-			DynamicOptionsSource: types.StringValue(input.DynamicOptionsSource),
-			Tooltip:              types.StringValue(input.Tooltip),
-			DisplayName:          types.StringValue(input.DisplayName),
+			Name:                         types.StringValue(input.Name),
+			Type:                         types.StringValue(input.Type),
+			IsLinkType:                   types.BoolValue(input.IsLinkType),
+			ValidationKind:               types.StringValue(input.ValidationKind),
+			InventoryKind:                types.StringValue(input.InventoryKind),
+			SupportsStrictPlanValidation: types.BoolValue(input.SupportsStrictPlanValidation),
+			DefaultValue:                 types.StringValue(input.DefaultValue),
+			HasDefaultValue:              types.BoolValue(input.HasDefaultValue),
+			MinValue:                     types.StringValue(input.MinValue),
+			HasMinValue:                  types.BoolValue(input.HasMinValue),
+			MaxValue:                     types.StringValue(input.MaxValue),
+			HasMaxValue:                  types.BoolValue(input.HasMaxValue),
+			StepValue:                    types.StringValue(input.StepValue),
+			HasStepValue:                 types.BoolValue(input.HasStepValue),
+			EnumValues:                   enumValues,
+			Multiline:                    types.BoolValue(input.Multiline),
+			DynamicOptions:               types.BoolValue(input.DynamicOptions),
+			DynamicOptionsSource:         types.StringValue(input.DynamicOptionsSource),
+			Tooltip:                      types.StringValue(input.Tooltip),
+			DisplayName:                  types.StringValue(input.DisplayName),
 		})
 	}
 	return models

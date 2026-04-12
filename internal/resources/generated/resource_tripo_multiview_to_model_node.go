@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &TripoMultiviewToModelNodeResource{}
+var _ resource.ResourceWithConfigure = &TripoMultiviewToModelNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TripoMultiviewToModelNodeResource{}
 
-type TripoMultiviewToModelNodeResource struct{}
+type TripoMultiviewToModelNodeResource struct {
+	client *client.Client
+}
 
 type TripoMultiviewToModelNodeModel struct {
 	ID                types.String `tfsdk:"id"`
@@ -47,6 +52,23 @@ type TripoMultiviewToModelNodeModel struct {
 
 func NewTripoMultiviewToModelNodeResource() resource.Resource {
 	return &TripoMultiviewToModelNodeResource{}
+}
+
+func (r *TripoMultiviewToModelNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TripoMultiviewToModelNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -175,6 +197,20 @@ func (r *TripoMultiviewToModelNodeResource) Schema(_ context.Context, _ resource
 			},
 		},
 	}
+}
+
+func (r *TripoMultiviewToModelNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TripoMultiviewToModelNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TripoMultiviewToModelNode", data, &resp.Diagnostics)
 }
 
 func (r *TripoMultiviewToModelNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

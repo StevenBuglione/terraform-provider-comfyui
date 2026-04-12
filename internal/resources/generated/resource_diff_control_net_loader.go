@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &DiffControlNetLoaderResource{}
+var _ resource.ResourceWithConfigure = &DiffControlNetLoaderResource{}
+var _ resource.ResourceWithModifyPlan = &DiffControlNetLoaderResource{}
 
-type DiffControlNetLoaderResource struct{}
+type DiffControlNetLoaderResource struct {
+	client *client.Client
+}
 
 type DiffControlNetLoaderModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -29,6 +34,23 @@ type DiffControlNetLoaderModel struct {
 
 func NewDiffControlNetLoaderResource() resource.Resource {
 	return &DiffControlNetLoaderResource{}
+}
+
+func (r *DiffControlNetLoaderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *DiffControlNetLoaderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -70,6 +92,20 @@ func (r *DiffControlNetLoaderResource) Schema(_ context.Context, _ resource.Sche
 			},
 		},
 	}
+}
+
+func (r *DiffControlNetLoaderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data DiffControlNetLoaderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "DiffControlNetLoader", data, &resp.Diagnostics)
 }
 
 func (r *DiffControlNetLoaderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

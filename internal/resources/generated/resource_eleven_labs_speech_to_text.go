@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ElevenLabsSpeechToTextResource{}
+var _ resource.ResourceWithConfigure = &ElevenLabsSpeechToTextResource{}
+var _ resource.ResourceWithModifyPlan = &ElevenLabsSpeechToTextResource{}
 
-type ElevenLabsSpeechToTextResource struct{}
+type ElevenLabsSpeechToTextResource struct {
+	client *client.Client
+}
 
 type ElevenLabsSpeechToTextModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -36,6 +41,23 @@ type ElevenLabsSpeechToTextModel struct {
 
 func NewElevenLabsSpeechToTextResource() resource.Resource {
 	return &ElevenLabsSpeechToTextResource{}
+}
+
+func (r *ElevenLabsSpeechToTextResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ElevenLabsSpeechToTextResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -109,6 +131,20 @@ func (r *ElevenLabsSpeechToTextResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *ElevenLabsSpeechToTextResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ElevenLabsSpeechToTextModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ElevenLabsSpeechToText", data, &resp.Diagnostics)
 }
 
 func (r *ElevenLabsSpeechToTextResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

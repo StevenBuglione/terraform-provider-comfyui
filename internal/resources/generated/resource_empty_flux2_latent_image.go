@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &EmptyFlux2LatentImageResource{}
+var _ resource.ResourceWithConfigure = &EmptyFlux2LatentImageResource{}
+var _ resource.ResourceWithModifyPlan = &EmptyFlux2LatentImageResource{}
 
-type EmptyFlux2LatentImageResource struct{}
+type EmptyFlux2LatentImageResource struct {
+	client *client.Client
+}
 
 type EmptyFlux2LatentImageModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type EmptyFlux2LatentImageModel struct {
 
 func NewEmptyFlux2LatentImageResource() resource.Resource {
 	return &EmptyFlux2LatentImageResource{}
+}
+
+func (r *EmptyFlux2LatentImageResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *EmptyFlux2LatentImageResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *EmptyFlux2LatentImageResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *EmptyFlux2LatentImageResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data EmptyFlux2LatentImageModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "EmptyFlux2LatentImage", data, &resp.Diagnostics)
 }
 
 func (r *EmptyFlux2LatentImageResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

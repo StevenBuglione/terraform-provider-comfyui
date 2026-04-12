@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &RecraftStyleV3InfiniteStyleLibraryResource{}
+var _ resource.ResourceWithConfigure = &RecraftStyleV3InfiniteStyleLibraryResource{}
+var _ resource.ResourceWithModifyPlan = &RecraftStyleV3InfiniteStyleLibraryResource{}
 
-type RecraftStyleV3InfiniteStyleLibraryResource struct{}
+type RecraftStyleV3InfiniteStyleLibraryResource struct {
+	client *client.Client
+}
 
 type RecraftStyleV3InfiniteStyleLibraryModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type RecraftStyleV3InfiniteStyleLibraryModel struct {
 
 func NewRecraftStyleV3InfiniteStyleLibraryResource() resource.Resource {
 	return &RecraftStyleV3InfiniteStyleLibraryResource{}
+}
+
+func (r *RecraftStyleV3InfiniteStyleLibraryResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RecraftStyleV3InfiniteStyleLibraryResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *RecraftStyleV3InfiniteStyleLibraryResource) Schema(_ context.Context, _
 			},
 		},
 	}
+}
+
+func (r *RecraftStyleV3InfiniteStyleLibraryResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RecraftStyleV3InfiniteStyleLibraryModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RecraftStyleInfiniteStyleLibrary", data, &resp.Diagnostics)
 }
 
 func (r *RecraftStyleV3InfiniteStyleLibraryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

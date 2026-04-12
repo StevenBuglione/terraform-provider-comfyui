@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ImageMergeTileListResource{}
+var _ resource.ResourceWithConfigure = &ImageMergeTileListResource{}
+var _ resource.ResourceWithModifyPlan = &ImageMergeTileListResource{}
 
-type ImageMergeTileListResource struct{}
+type ImageMergeTileListResource struct {
+	client *client.Client
+}
 
 type ImageMergeTileListModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type ImageMergeTileListModel struct {
 
 func NewImageMergeTileListResource() resource.Resource {
 	return &ImageMergeTileListResource{}
+}
+
+func (r *ImageMergeTileListResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ImageMergeTileListResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,6 +113,20 @@ func (r *ImageMergeTileListResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *ImageMergeTileListResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ImageMergeTileListModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageMergeTileList", data, &resp.Diagnostics)
 }
 
 func (r *ImageMergeTileListResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

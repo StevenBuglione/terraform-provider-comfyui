@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &SdPoseKeypointExtractorResource{}
+var _ resource.ResourceWithConfigure = &SdPoseKeypointExtractorResource{}
+var _ resource.ResourceWithModifyPlan = &SdPoseKeypointExtractorResource{}
 
-type SdPoseKeypointExtractorResource struct{}
+type SdPoseKeypointExtractorResource struct {
+	client *client.Client
+}
 
 type SdPoseKeypointExtractorModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -34,6 +39,23 @@ type SdPoseKeypointExtractorModel struct {
 
 func NewSdPoseKeypointExtractorResource() resource.Resource {
 	return &SdPoseKeypointExtractorResource{}
+}
+
+func (r *SdPoseKeypointExtractorResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SdPoseKeypointExtractorResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *SdPoseKeypointExtractorResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *SdPoseKeypointExtractorResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SdPoseKeypointExtractorModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SDPoseKeypointExtractor", data, &resp.Diagnostics)
 }
 
 func (r *SdPoseKeypointExtractorResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

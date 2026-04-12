@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &Rodin3DSketchResource{}
+var _ resource.ResourceWithConfigure = &Rodin3DSketchResource{}
+var _ resource.ResourceWithModifyPlan = &Rodin3DSketchResource{}
 
-type Rodin3DSketchResource struct{}
+type Rodin3DSketchResource struct {
+	client *client.Client
+}
 
 type Rodin3DSketchModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type Rodin3DSketchModel struct {
 
 func NewRodin3DSketchResource() resource.Resource {
 	return &Rodin3DSketchResource{}
+}
+
+func (r *Rodin3DSketchResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Rodin3DSketchResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -83,6 +105,20 @@ func (r *Rodin3DSketchResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *Rodin3DSketchResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Rodin3DSketchModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Rodin3D_Sketch", data, &resp.Diagnostics)
 }
 
 func (r *Rodin3DSketchResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

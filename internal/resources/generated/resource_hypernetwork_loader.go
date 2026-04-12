@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &HypernetworkLoaderResource{}
+var _ resource.ResourceWithConfigure = &HypernetworkLoaderResource{}
+var _ resource.ResourceWithModifyPlan = &HypernetworkLoaderResource{}
 
-type HypernetworkLoaderResource struct{}
+type HypernetworkLoaderResource struct {
+	client *client.Client
+}
 
 type HypernetworkLoaderModel struct {
 	ID               types.String  `tfsdk:"id"`
@@ -32,6 +37,23 @@ type HypernetworkLoaderModel struct {
 
 func NewHypernetworkLoaderResource() resource.Resource {
 	return &HypernetworkLoaderResource{}
+}
+
+func (r *HypernetworkLoaderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *HypernetworkLoaderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *HypernetworkLoaderResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *HypernetworkLoaderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data HypernetworkLoaderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "HypernetworkLoader", data, &resp.Diagnostics)
 }
 
 func (r *HypernetworkLoaderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

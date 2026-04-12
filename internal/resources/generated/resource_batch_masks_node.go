@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &BatchMasksNodeResource{}
+var _ resource.ResourceWithConfigure = &BatchMasksNodeResource{}
+var _ resource.ResourceWithModifyPlan = &BatchMasksNodeResource{}
 
-type BatchMasksNodeResource struct{}
+type BatchMasksNodeResource struct {
+	client *client.Client
+}
 
 type BatchMasksNodeModel struct {
 	ID         types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type BatchMasksNodeModel struct {
 
 func NewBatchMasksNodeResource() resource.Resource {
 	return &BatchMasksNodeResource{}
+}
+
+func (r *BatchMasksNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *BatchMasksNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *BatchMasksNodeResource) Schema(_ context.Context, _ resource.SchemaRequ
 			},
 		},
 	}
+}
+
+func (r *BatchMasksNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data BatchMasksNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "BatchMasksNode", data, &resp.Diagnostics)
 }
 
 func (r *BatchMasksNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

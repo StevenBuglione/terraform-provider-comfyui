@@ -4,7 +4,9 @@ package generated
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -15,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &CheckpointSaveResource{}
+var _ resource.ResourceWithConfigure = &CheckpointSaveResource{}
+var _ resource.ResourceWithModifyPlan = &CheckpointSaveResource{}
 
-type CheckpointSaveResource struct{}
+type CheckpointSaveResource struct {
+	client *client.Client
+}
 
 type CheckpointSaveModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -29,6 +35,23 @@ type CheckpointSaveModel struct {
 
 func NewCheckpointSaveResource() resource.Resource {
 	return &CheckpointSaveResource{}
+}
+
+func (r *CheckpointSaveResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CheckpointSaveResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -71,6 +94,20 @@ func (r *CheckpointSaveResource) Schema(_ context.Context, _ resource.SchemaRequ
 			},
 		},
 	}
+}
+
+func (r *CheckpointSaveResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CheckpointSaveModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CheckpointSave", data, &resp.Diagnostics)
 }
 
 func (r *CheckpointSaveResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

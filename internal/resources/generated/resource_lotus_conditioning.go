@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &LotusConditioningResource{}
+var _ resource.ResourceWithConfigure = &LotusConditioningResource{}
+var _ resource.ResourceWithModifyPlan = &LotusConditioningResource{}
 
-type LotusConditioningResource struct{}
+type LotusConditioningResource struct {
+	client *client.Client
+}
 
 type LotusConditioningModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -27,6 +32,23 @@ type LotusConditioningModel struct {
 
 func NewLotusConditioningResource() resource.Resource {
 	return &LotusConditioningResource{}
+}
+
+func (r *LotusConditioningResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LotusConditioningResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -60,6 +82,20 @@ func (r *LotusConditioningResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *LotusConditioningResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LotusConditioningModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LotusConditioning", data, &resp.Diagnostics)
 }
 
 func (r *LotusConditioningResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

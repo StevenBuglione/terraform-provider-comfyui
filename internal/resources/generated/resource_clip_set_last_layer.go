@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &CLIPSetLastLayerResource{}
+var _ resource.ResourceWithConfigure = &CLIPSetLastLayerResource{}
+var _ resource.ResourceWithModifyPlan = &CLIPSetLastLayerResource{}
 
-type CLIPSetLastLayerResource struct{}
+type CLIPSetLastLayerResource struct {
+	client *client.Client
+}
 
 type CLIPSetLastLayerModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type CLIPSetLastLayerModel struct {
 
 func NewCLIPSetLastLayerResource() resource.Resource {
 	return &CLIPSetLastLayerResource{}
+}
+
+func (r *CLIPSetLastLayerResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CLIPSetLastLayerResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *CLIPSetLastLayerResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *CLIPSetLastLayerResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CLIPSetLastLayerModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CLIPSetLastLayer", data, &resp.Diagnostics)
 }
 
 func (r *CLIPSetLastLayerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

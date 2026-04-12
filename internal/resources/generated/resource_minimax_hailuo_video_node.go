@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &MinimaxHailuoVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &MinimaxHailuoVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &MinimaxHailuoVideoNodeResource{}
 
-type MinimaxHailuoVideoNodeResource struct{}
+type MinimaxHailuoVideoNodeResource struct {
+	client *client.Client
+}
 
 type MinimaxHailuoVideoNodeModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -36,6 +41,23 @@ type MinimaxHailuoVideoNodeModel struct {
 
 func NewMinimaxHailuoVideoNodeResource() resource.Resource {
 	return &MinimaxHailuoVideoNodeResource{}
+}
+
+func (r *MinimaxHailuoVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *MinimaxHailuoVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -108,6 +130,20 @@ func (r *MinimaxHailuoVideoNodeResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *MinimaxHailuoVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data MinimaxHailuoVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "MinimaxHailuoVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *MinimaxHailuoVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

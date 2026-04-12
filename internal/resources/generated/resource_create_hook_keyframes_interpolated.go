@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &CreateHookKeyframesInterpolatedResource{}
+var _ resource.ResourceWithConfigure = &CreateHookKeyframesInterpolatedResource{}
+var _ resource.ResourceWithModifyPlan = &CreateHookKeyframesInterpolatedResource{}
 
-type CreateHookKeyframesInterpolatedResource struct{}
+type CreateHookKeyframesInterpolatedResource struct {
+	client *client.Client
+}
 
 type CreateHookKeyframesInterpolatedModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -38,6 +43,23 @@ type CreateHookKeyframesInterpolatedModel struct {
 
 func NewCreateHookKeyframesInterpolatedResource() resource.Resource {
 	return &CreateHookKeyframesInterpolatedResource{}
+}
+
+func (r *CreateHookKeyframesInterpolatedResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CreateHookKeyframesInterpolatedResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -118,6 +140,20 @@ func (r *CreateHookKeyframesInterpolatedResource) Schema(_ context.Context, _ re
 			},
 		},
 	}
+}
+
+func (r *CreateHookKeyframesInterpolatedResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CreateHookKeyframesInterpolatedModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CreateHookKeyframesInterpolated", data, &resp.Diagnostics)
 }
 
 func (r *CreateHookKeyframesInterpolatedResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

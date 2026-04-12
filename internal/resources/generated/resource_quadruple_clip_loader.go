@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &QuadrupleCLIPLoaderResource{}
+var _ resource.ResourceWithConfigure = &QuadrupleCLIPLoaderResource{}
+var _ resource.ResourceWithModifyPlan = &QuadrupleCLIPLoaderResource{}
 
-type QuadrupleCLIPLoaderResource struct{}
+type QuadrupleCLIPLoaderResource struct {
+	client *client.Client
+}
 
 type QuadrupleCLIPLoaderModel struct {
 	ID         types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type QuadrupleCLIPLoaderModel struct {
 
 func NewQuadrupleCLIPLoaderResource() resource.Resource {
 	return &QuadrupleCLIPLoaderResource{}
+}
+
+func (r *QuadrupleCLIPLoaderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *QuadrupleCLIPLoaderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *QuadrupleCLIPLoaderResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *QuadrupleCLIPLoaderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data QuadrupleCLIPLoaderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "QuadrupleCLIPLoader", data, &resp.Diagnostics)
 }
 
 func (r *QuadrupleCLIPLoaderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

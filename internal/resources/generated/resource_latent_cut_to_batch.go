@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LatentCutToBatchResource{}
+var _ resource.ResourceWithConfigure = &LatentCutToBatchResource{}
+var _ resource.ResourceWithModifyPlan = &LatentCutToBatchResource{}
 
-type LatentCutToBatchResource struct{}
+type LatentCutToBatchResource struct {
+	client *client.Client
+}
 
 type LatentCutToBatchModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type LatentCutToBatchModel struct {
 
 func NewLatentCutToBatchResource() resource.Resource {
 	return &LatentCutToBatchResource{}
+}
+
+func (r *LatentCutToBatchResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LatentCutToBatchResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -84,6 +106,20 @@ func (r *LatentCutToBatchResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *LatentCutToBatchResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LatentCutToBatchModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LatentCutToBatch", data, &resp.Diagnostics)
 }
 
 func (r *LatentCutToBatchResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

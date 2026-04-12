@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ApgResource{}
+var _ resource.ResourceWithConfigure = &ApgResource{}
+var _ resource.ResourceWithModifyPlan = &ApgResource{}
 
-type ApgResource struct{}
+type ApgResource struct {
+	client *client.Client
+}
 
 type ApgModel struct {
 	ID            types.String  `tfsdk:"id"`
@@ -33,6 +38,23 @@ type ApgModel struct {
 
 func NewApgResource() resource.Resource {
 	return &ApgResource{}
+}
+
+func (r *ApgResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ApgResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -91,6 +113,20 @@ func (r *ApgResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 			},
 		},
 	}
+}
+
+func (r *ApgResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ApgModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "APG", data, &resp.Diagnostics)
 }
 
 func (r *ApgResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

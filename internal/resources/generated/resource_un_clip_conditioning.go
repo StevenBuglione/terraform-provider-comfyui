@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &UnCLIPConditioningResource{}
+var _ resource.ResourceWithConfigure = &UnCLIPConditioningResource{}
+var _ resource.ResourceWithModifyPlan = &UnCLIPConditioningResource{}
 
-type UnCLIPConditioningResource struct{}
+type UnCLIPConditioningResource struct {
+	client *client.Client
+}
 
 type UnCLIPConditioningModel struct {
 	ID                 types.String  `tfsdk:"id"`
@@ -33,6 +38,23 @@ type UnCLIPConditioningModel struct {
 
 func NewUnCLIPConditioningResource() resource.Resource {
 	return &UnCLIPConditioningResource{}
+}
+
+func (r *UnCLIPConditioningResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *UnCLIPConditioningResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -88,6 +110,20 @@ func (r *UnCLIPConditioningResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *UnCLIPConditioningResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data UnCLIPConditioningModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "unCLIPConditioning", data, &resp.Diagnostics)
 }
 
 func (r *UnCLIPConditioningResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

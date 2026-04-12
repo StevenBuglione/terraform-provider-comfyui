@@ -15,6 +15,13 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 
+VALIDATION_KIND_STATIC_ENUM = "static_enum"
+VALIDATION_KIND_DYNAMIC_INVENTORY = "dynamic_inventory"
+VALIDATION_KIND_DYNAMIC_EXPRESSION = "dynamic_expression"
+VALIDATION_KIND_FREEFORM = "freeform"
+
+INVENTORY_SOURCE_RE = re.compile(r"folder_paths\.get_filename_list\('([^']+)'\)")
+
 
 def to_snake_case(name: str) -> str:
     """Convert CamelCase/PascalCase to snake_case."""
@@ -82,6 +89,18 @@ def validate_node(node: dict, index: int) -> list:
             warnings.append(
                 f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing is_link_type flag"
             )
+        if 'validation_kind' not in input_spec:
+            warnings.append(
+                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing validation_kind"
+            )
+        if 'inventory_kind' not in input_spec:
+            warnings.append(
+                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing inventory_kind"
+            )
+        if 'supports_strict_plan_validation' not in input_spec:
+            warnings.append(
+                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing supports_strict_plan_validation"
+            )
 
     for output_index, output_spec in enumerate(node.get('outputs', [])):
         if 'name' not in output_spec or 'type' not in output_spec or 'slot_index' not in output_spec:
@@ -98,6 +117,42 @@ def validate_node(node: dict, index: int) -> list:
         node['terraform_resource_name'] = terraform_resource_name(node.get('node_id', ''))
 
     return warnings
+
+
+def classify_validation_kind(input_spec: dict) -> tuple[str, str, bool]:
+    """Classify input validation behavior from extracted metadata."""
+    options = input_spec.get('options') or []
+    dynamic_options = bool(input_spec.get('dynamic_options'))
+    dynamic_source = input_spec.get('dynamic_options_source') or ""
+    input_type = input_spec.get('type', '')
+    is_link_type = bool(input_spec.get('is_link_type'))
+
+    if options and not dynamic_options:
+        return (VALIDATION_KIND_STATIC_ENUM, "", True)
+
+    inventory_match = INVENTORY_SOURCE_RE.fullmatch(dynamic_source)
+    if dynamic_options and inventory_match:
+        return (VALIDATION_KIND_DYNAMIC_INVENTORY, inventory_match.group(1), True)
+
+    if dynamic_options:
+        return (VALIDATION_KIND_DYNAMIC_EXPRESSION, "", False)
+
+    if input_type == 'COMBO' and options:
+        return (VALIDATION_KIND_STATIC_ENUM, "", True)
+
+    if is_link_type:
+        return (VALIDATION_KIND_FREEFORM, "", True)
+
+    return (VALIDATION_KIND_FREEFORM, "", True)
+
+
+def annotate_validation_metadata(node: dict) -> None:
+    """Add generated validation metadata to extracted inputs."""
+    for input_spec in node.get('inputs', []):
+        validation_kind, inventory_kind, strict = classify_validation_kind(input_spec)
+        input_spec['validation_kind'] = validation_kind
+        input_spec['inventory_kind'] = inventory_kind
+        input_spec['supports_strict_plan_validation'] = strict
 
 
 def main():
@@ -130,6 +185,7 @@ def main():
     duplicates = []
 
     for node in v1_nodes + v3_nodes:
+        annotate_validation_metadata(node)
         nid = node.get('node_id', '')
         if nid in seen_ids:
             duplicates.append((nid, seen_ids[nid]['source']['pattern'], node['source']['pattern']))

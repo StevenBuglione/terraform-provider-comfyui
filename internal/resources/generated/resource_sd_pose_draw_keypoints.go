@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &SdPoseDrawKeypointsResource{}
+var _ resource.ResourceWithConfigure = &SdPoseDrawKeypointsResource{}
+var _ resource.ResourceWithModifyPlan = &SdPoseDrawKeypointsResource{}
 
-type SdPoseDrawKeypointsResource struct{}
+type SdPoseDrawKeypointsResource struct {
+	client *client.Client
+}
 
 type SdPoseDrawKeypointsModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -38,6 +43,23 @@ type SdPoseDrawKeypointsModel struct {
 
 func NewSdPoseDrawKeypointsResource() resource.Resource {
 	return &SdPoseDrawKeypointsResource{}
+}
+
+func (r *SdPoseDrawKeypointsResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SdPoseDrawKeypointsResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -112,6 +134,20 @@ func (r *SdPoseDrawKeypointsResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *SdPoseDrawKeypointsResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SdPoseDrawKeypointsModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SDPoseDrawKeypoints", data, &resp.Diagnostics)
 }
 
 func (r *SdPoseDrawKeypointsResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

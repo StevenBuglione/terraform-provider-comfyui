@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RegexReplaceResource{}
+var _ resource.ResourceWithConfigure = &RegexReplaceResource{}
+var _ resource.ResourceWithModifyPlan = &RegexReplaceResource{}
 
-type RegexReplaceResource struct{}
+type RegexReplaceResource struct {
+	client *client.Client
+}
 
 type RegexReplaceModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -36,6 +41,23 @@ type RegexReplaceModel struct {
 
 func NewRegexReplaceResource() resource.Resource {
 	return &RegexReplaceResource{}
+}
+
+func (r *RegexReplaceResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RegexReplaceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -100,6 +122,20 @@ func (r *RegexReplaceResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 		},
 	}
+}
+
+func (r *RegexReplaceResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RegexReplaceModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RegexReplace", data, &resp.Diagnostics)
 }
 
 func (r *RegexReplaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

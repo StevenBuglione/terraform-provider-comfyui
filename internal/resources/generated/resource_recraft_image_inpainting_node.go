@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RecraftImageInpaintingNodeResource{}
+var _ resource.ResourceWithConfigure = &RecraftImageInpaintingNodeResource{}
+var _ resource.ResourceWithModifyPlan = &RecraftImageInpaintingNodeResource{}
 
-type RecraftImageInpaintingNodeResource struct{}
+type RecraftImageInpaintingNodeResource struct {
+	client *client.Client
+}
 
 type RecraftImageInpaintingNodeModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -36,6 +41,23 @@ type RecraftImageInpaintingNodeModel struct {
 
 func NewRecraftImageInpaintingNodeResource() resource.Resource {
 	return &RecraftImageInpaintingNodeResource{}
+}
+
+func (r *RecraftImageInpaintingNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RecraftImageInpaintingNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -103,6 +125,20 @@ func (r *RecraftImageInpaintingNodeResource) Schema(_ context.Context, _ resourc
 			},
 		},
 	}
+}
+
+func (r *RecraftImageInpaintingNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RecraftImageInpaintingNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RecraftImageInpaintingNode", data, &resp.Diagnostics)
 }
 
 func (r *RecraftImageInpaintingNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

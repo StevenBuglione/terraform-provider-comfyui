@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &MagnificImageRelightNodeResource{}
+var _ resource.ResourceWithConfigure = &MagnificImageRelightNodeResource{}
+var _ resource.ResourceWithModifyPlan = &MagnificImageRelightNodeResource{}
 
-type MagnificImageRelightNodeResource struct{}
+type MagnificImageRelightNodeResource struct {
+	client *client.Client
+}
 
 type MagnificImageRelightNodeModel struct {
 	ID                      types.String `tfsdk:"id"`
@@ -39,6 +44,23 @@ type MagnificImageRelightNodeModel struct {
 
 func NewMagnificImageRelightNodeResource() resource.Resource {
 	return &MagnificImageRelightNodeResource{}
+}
+
+func (r *MagnificImageRelightNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *MagnificImageRelightNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -122,6 +144,20 @@ func (r *MagnificImageRelightNodeResource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *MagnificImageRelightNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data MagnificImageRelightNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "MagnificImageRelightNode", data, &resp.Diagnostics)
 }
 
 func (r *MagnificImageRelightNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

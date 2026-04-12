@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &Flux2ProImageNodeResource{}
+var _ resource.ResourceWithConfigure = &Flux2ProImageNodeResource{}
+var _ resource.ResourceWithModifyPlan = &Flux2ProImageNodeResource{}
 
-type Flux2ProImageNodeResource struct{}
+type Flux2ProImageNodeResource struct {
+	client *client.Client
+}
 
 type Flux2ProImageNodeModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type Flux2ProImageNodeModel struct {
 
 func NewFlux2ProImageNodeResource() resource.Resource {
 	return &Flux2ProImageNodeResource{}
+}
+
+func (r *Flux2ProImageNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Flux2ProImageNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -101,6 +123,20 @@ func (r *Flux2ProImageNodeResource) Schema(_ context.Context, _ resource.SchemaR
 			},
 		},
 	}
+}
+
+func (r *Flux2ProImageNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Flux2ProImageNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Flux2ProImageNode", data, &resp.Diagnostics)
 }
 
 func (r *Flux2ProImageNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

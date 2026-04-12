@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &LtxvLatentUpsamplerResource{}
+var _ resource.ResourceWithConfigure = &LtxvLatentUpsamplerResource{}
+var _ resource.ResourceWithModifyPlan = &LtxvLatentUpsamplerResource{}
 
-type LtxvLatentUpsamplerResource struct{}
+type LtxvLatentUpsamplerResource struct {
+	client *client.Client
+}
 
 type LtxvLatentUpsamplerModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type LtxvLatentUpsamplerModel struct {
 
 func NewLtxvLatentUpsamplerResource() resource.Resource {
 	return &LtxvLatentUpsamplerResource{}
+}
+
+func (r *LtxvLatentUpsamplerResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LtxvLatentUpsamplerResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *LtxvLatentUpsamplerResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *LtxvLatentUpsamplerResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LtxvLatentUpsamplerModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LTXVLatentUpsampler", data, &resp.Diagnostics)
 }
 
 func (r *LtxvLatentUpsamplerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

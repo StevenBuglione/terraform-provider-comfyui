@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LatentRotateResource{}
+var _ resource.ResourceWithConfigure = &LatentRotateResource{}
+var _ resource.ResourceWithModifyPlan = &LatentRotateResource{}
 
-type LatentRotateResource struct{}
+type LatentRotateResource struct {
+	client *client.Client
+}
 
 type LatentRotateModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -31,6 +36,23 @@ type LatentRotateModel struct {
 
 func NewLatentRotateResource() resource.Resource {
 	return &LatentRotateResource{}
+}
+
+func (r *LatentRotateResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LatentRotateResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -80,6 +102,20 @@ func (r *LatentRotateResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 		},
 	}
+}
+
+func (r *LatentRotateResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LatentRotateModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LatentRotate", data, &resp.Diagnostics)
 }
 
 func (r *LatentRotateResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

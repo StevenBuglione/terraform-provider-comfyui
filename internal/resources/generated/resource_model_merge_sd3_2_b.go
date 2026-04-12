@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ModelMergeSd32BResource{}
+var _ resource.ResourceWithConfigure = &ModelMergeSd32BResource{}
+var _ resource.ResourceWithModifyPlan = &ModelMergeSd32BResource{}
 
-type ModelMergeSd32BResource struct{}
+type ModelMergeSd32BResource struct {
+	client *client.Client
+}
 
 type ModelMergeSd32BModel struct {
 	ID              types.String `tfsdk:"id"`
@@ -59,6 +64,23 @@ type ModelMergeSd32BModel struct {
 
 func NewModelMergeSd32BResource() resource.Resource {
 	return &ModelMergeSd32BResource{}
+}
+
+func (r *ModelMergeSd32BResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ModelMergeSd32BResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -220,6 +242,20 @@ func (r *ModelMergeSd32BResource) Schema(_ context.Context, _ resource.SchemaReq
 			},
 		},
 	}
+}
+
+func (r *ModelMergeSd32BResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ModelMergeSd32BModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ModelMergeSD3_2B", data, &resp.Diagnostics)
 }
 
 func (r *ModelMergeSd32BResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

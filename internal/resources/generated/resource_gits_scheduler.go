@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &GitsSchedulerResource{}
+var _ resource.ResourceWithConfigure = &GitsSchedulerResource{}
+var _ resource.ResourceWithModifyPlan = &GitsSchedulerResource{}
 
-type GitsSchedulerResource struct{}
+type GitsSchedulerResource struct {
+	client *client.Client
+}
 
 type GitsSchedulerModel struct {
 	ID           types.String  `tfsdk:"id"`
@@ -33,6 +38,23 @@ type GitsSchedulerModel struct {
 
 func NewGitsSchedulerResource() resource.Resource {
 	return &GitsSchedulerResource{}
+}
+
+func (r *GitsSchedulerResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *GitsSchedulerResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -87,6 +109,20 @@ func (r *GitsSchedulerResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *GitsSchedulerResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data GitsSchedulerModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "GITSScheduler", data, &resp.Diagnostics)
 }
 
 func (r *GitsSchedulerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

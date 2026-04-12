@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &IdeogramV2Resource{}
+var _ resource.ResourceWithConfigure = &IdeogramV2Resource{}
+var _ resource.ResourceWithModifyPlan = &IdeogramV2Resource{}
 
-type IdeogramV2Resource struct{}
+type IdeogramV2Resource struct {
+	client *client.Client
+}
 
 type IdeogramV2Model struct {
 	ID                types.String `tfsdk:"id"`
@@ -39,6 +44,23 @@ type IdeogramV2Model struct {
 
 func NewIdeogramV2Resource() resource.Resource {
 	return &IdeogramV2Resource{}
+}
+
+func (r *IdeogramV2Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *IdeogramV2Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -131,6 +153,20 @@ func (r *IdeogramV2Resource) Schema(_ context.Context, _ resource.SchemaRequest,
 			},
 		},
 	}
+}
+
+func (r *IdeogramV2Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data IdeogramV2Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "IdeogramV2", data, &resp.Diagnostics)
 }
 
 func (r *IdeogramV2Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

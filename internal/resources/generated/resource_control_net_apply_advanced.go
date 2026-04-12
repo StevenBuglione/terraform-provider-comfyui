@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ControlNetApplyAdvancedResource{}
+var _ resource.ResourceWithConfigure = &ControlNetApplyAdvancedResource{}
+var _ resource.ResourceWithModifyPlan = &ControlNetApplyAdvancedResource{}
 
-type ControlNetApplyAdvancedResource struct{}
+type ControlNetApplyAdvancedResource struct {
+	client *client.Client
+}
 
 type ControlNetApplyAdvancedModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -38,6 +43,23 @@ type ControlNetApplyAdvancedModel struct {
 
 func NewControlNetApplyAdvancedResource() resource.Resource {
 	return &ControlNetApplyAdvancedResource{}
+}
+
+func (r *ControlNetApplyAdvancedResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ControlNetApplyAdvancedResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -119,6 +141,20 @@ func (r *ControlNetApplyAdvancedResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *ControlNetApplyAdvancedResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ControlNetApplyAdvancedModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ControlNetApplyAdvanced", data, &resp.Diagnostics)
 }
 
 func (r *ControlNetApplyAdvancedResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

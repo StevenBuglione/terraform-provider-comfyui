@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -20,8 +21,12 @@ import (
 )
 
 var _ resource.Resource = &ExtendIntermediateSigmasResource{}
+var _ resource.ResourceWithConfigure = &ExtendIntermediateSigmasResource{}
+var _ resource.ResourceWithModifyPlan = &ExtendIntermediateSigmasResource{}
 
-type ExtendIntermediateSigmasResource struct{}
+type ExtendIntermediateSigmasResource struct {
+	client *client.Client
+}
 
 type ExtendIntermediateSigmasModel struct {
 	ID           types.String  `tfsdk:"id"`
@@ -36,6 +41,23 @@ type ExtendIntermediateSigmasModel struct {
 
 func NewExtendIntermediateSigmasResource() resource.Resource {
 	return &ExtendIntermediateSigmasResource{}
+}
+
+func (r *ExtendIntermediateSigmasResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ExtendIntermediateSigmasResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -105,6 +127,20 @@ func (r *ExtendIntermediateSigmasResource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *ExtendIntermediateSigmasResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ExtendIntermediateSigmasModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ExtendIntermediateSigmas", data, &resp.Diagnostics)
 }
 
 func (r *ExtendIntermediateSigmasResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &Wan2TextToVideoAPIResource{}
+var _ resource.ResourceWithConfigure = &Wan2TextToVideoAPIResource{}
+var _ resource.ResourceWithModifyPlan = &Wan2TextToVideoAPIResource{}
 
-type Wan2TextToVideoAPIResource struct{}
+type Wan2TextToVideoAPIResource struct {
+	client *client.Client
+}
 
 type Wan2TextToVideoAPIModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -34,6 +39,23 @@ type Wan2TextToVideoAPIModel struct {
 
 func NewWan2TextToVideoAPIResource() resource.Resource {
 	return &Wan2TextToVideoAPIResource{}
+}
+
+func (r *Wan2TextToVideoAPIResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Wan2TextToVideoAPIResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *Wan2TextToVideoAPIResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *Wan2TextToVideoAPIResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Wan2TextToVideoAPIModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Wan2TextToVideoApi", data, &resp.Diagnostics)
 }
 
 func (r *Wan2TextToVideoAPIResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &Wan2VideoEditAPIResource{}
+var _ resource.ResourceWithConfigure = &Wan2VideoEditAPIResource{}
+var _ resource.ResourceWithModifyPlan = &Wan2VideoEditAPIResource{}
 
-type Wan2VideoEditAPIResource struct{}
+type Wan2VideoEditAPIResource struct {
+	client *client.Client
+}
 
 type Wan2VideoEditAPIModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type Wan2VideoEditAPIModel struct {
 
 func NewWan2VideoEditAPIResource() resource.Resource {
 	return &Wan2VideoEditAPIResource{}
+}
+
+func (r *Wan2VideoEditAPIResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Wan2VideoEditAPIResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -97,6 +119,20 @@ func (r *Wan2VideoEditAPIResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *Wan2VideoEditAPIResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Wan2VideoEditAPIModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Wan2VideoEditApi", data, &resp.Diagnostics)
 }
 
 func (r *Wan2VideoEditAPIResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

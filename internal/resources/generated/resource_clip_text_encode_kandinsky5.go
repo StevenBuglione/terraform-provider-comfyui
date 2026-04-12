@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &CLIPTextEncodeKandinsky5Resource{}
+var _ resource.ResourceWithConfigure = &CLIPTextEncodeKandinsky5Resource{}
+var _ resource.ResourceWithModifyPlan = &CLIPTextEncodeKandinsky5Resource{}
 
-type CLIPTextEncodeKandinsky5Resource struct{}
+type CLIPTextEncodeKandinsky5Resource struct {
+	client *client.Client
+}
 
 type CLIPTextEncodeKandinsky5Model struct {
 	ID                 types.String `tfsdk:"id"`
@@ -30,6 +35,23 @@ type CLIPTextEncodeKandinsky5Model struct {
 
 func NewCLIPTextEncodeKandinsky5Resource() resource.Resource {
 	return &CLIPTextEncodeKandinsky5Resource{}
+}
+
+func (r *CLIPTextEncodeKandinsky5Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CLIPTextEncodeKandinsky5Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -75,6 +97,20 @@ func (r *CLIPTextEncodeKandinsky5Resource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *CLIPTextEncodeKandinsky5Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CLIPTextEncodeKandinsky5Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CLIPTextEncodeKandinsky5", data, &resp.Diagnostics)
 }
 
 func (r *CLIPTextEncodeKandinsky5Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

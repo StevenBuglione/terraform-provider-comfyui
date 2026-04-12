@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &TcfgResource{}
+var _ resource.ResourceWithConfigure = &TcfgResource{}
+var _ resource.ResourceWithModifyPlan = &TcfgResource{}
 
-type TcfgResource struct{}
+type TcfgResource struct {
+	client *client.Client
+}
 
 type TcfgModel struct {
 	ID                 types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type TcfgModel struct {
 
 func NewTcfgResource() resource.Resource {
 	return &TcfgResource{}
+}
+
+func (r *TcfgResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TcfgResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *TcfgResource) Schema(_ context.Context, _ resource.SchemaRequest, resp 
 			},
 		},
 	}
+}
+
+func (r *TcfgResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TcfgModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TCFG", data, &resp.Diagnostics)
 }
 
 func (r *TcfgResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

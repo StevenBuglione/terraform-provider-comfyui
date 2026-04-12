@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &TextProcessingNodeResource{}
+var _ resource.ResourceWithConfigure = &TextProcessingNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TextProcessingNodeResource{}
 
-type TextProcessingNodeResource struct{}
+type TextProcessingNodeResource struct {
+	client *client.Client
+}
 
 type TextProcessingNodeModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -27,6 +32,23 @@ type TextProcessingNodeModel struct {
 
 func NewTextProcessingNodeResource() resource.Resource {
 	return &TextProcessingNodeResource{}
+}
+
+func (r *TextProcessingNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TextProcessingNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -60,6 +82,20 @@ func (r *TextProcessingNodeResource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *TextProcessingNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TextProcessingNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TextProcessingNode", data, &resp.Diagnostics)
 }
 
 func (r *TextProcessingNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

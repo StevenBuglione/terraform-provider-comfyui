@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &SdTurboSchedulerResource{}
+var _ resource.ResourceWithConfigure = &SdTurboSchedulerResource{}
+var _ resource.ResourceWithModifyPlan = &SdTurboSchedulerResource{}
 
-type SdTurboSchedulerResource struct{}
+type SdTurboSchedulerResource struct {
+	client *client.Client
+}
 
 type SdTurboSchedulerModel struct {
 	ID           types.String  `tfsdk:"id"`
@@ -33,6 +38,23 @@ type SdTurboSchedulerModel struct {
 
 func NewSdTurboSchedulerResource() resource.Resource {
 	return &SdTurboSchedulerResource{}
+}
+
+func (r *SdTurboSchedulerResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SdTurboSchedulerResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -84,6 +106,20 @@ func (r *SdTurboSchedulerResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *SdTurboSchedulerResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SdTurboSchedulerModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SDTurboScheduler", data, &resp.Diagnostics)
 }
 
 func (r *SdTurboSchedulerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

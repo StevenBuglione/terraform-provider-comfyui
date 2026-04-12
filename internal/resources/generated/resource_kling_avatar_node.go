@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &KlingAvatarNodeResource{}
+var _ resource.ResourceWithConfigure = &KlingAvatarNodeResource{}
+var _ resource.ResourceWithModifyPlan = &KlingAvatarNodeResource{}
 
-type KlingAvatarNodeResource struct{}
+type KlingAvatarNodeResource struct {
+	client *client.Client
+}
 
 type KlingAvatarNodeModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type KlingAvatarNodeModel struct {
 
 func NewKlingAvatarNodeResource() resource.Resource {
 	return &KlingAvatarNodeResource{}
+}
+
+func (r *KlingAvatarNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *KlingAvatarNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -97,6 +119,20 @@ func (r *KlingAvatarNodeResource) Schema(_ context.Context, _ resource.SchemaReq
 			},
 		},
 	}
+}
+
+func (r *KlingAvatarNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data KlingAvatarNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "KlingAvatarNode", data, &resp.Diagnostics)
 }
 
 func (r *KlingAvatarNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -150,6 +150,19 @@
           "type": ["string", "null"],
           "description": "Python expression that generates dynamic options (for documentation)"
         },
+        "validation_kind": {
+          "type": "string",
+          "enum": ["static_enum", "dynamic_inventory", "dynamic_expression", "freeform"],
+          "description": "Normalized generated validation strategy for this input"
+        },
+        "inventory_kind": {
+          "type": "string",
+          "description": "Normalized runtime inventory category when strict live validation is supported"
+        },
+        "supports_strict_plan_validation": {
+          "type": "boolean",
+          "description": "Whether the provider can strictly validate this input during terraform plan"
+        },
         "tooltip": {
           "type": ["string", "null"],
           "description": "Tooltip/help text for this input"

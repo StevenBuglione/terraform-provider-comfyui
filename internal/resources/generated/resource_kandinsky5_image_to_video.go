@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &Kandinsky5ImageToVideoResource{}
+var _ resource.ResourceWithConfigure = &Kandinsky5ImageToVideoResource{}
+var _ resource.ResourceWithModifyPlan = &Kandinsky5ImageToVideoResource{}
 
-type Kandinsky5ImageToVideoResource struct{}
+type Kandinsky5ImageToVideoResource struct {
+	client *client.Client
+}
 
 type Kandinsky5ImageToVideoModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -40,6 +45,23 @@ type Kandinsky5ImageToVideoModel struct {
 
 func NewKandinsky5ImageToVideoResource() resource.Resource {
 	return &Kandinsky5ImageToVideoResource{}
+}
+
+func (r *Kandinsky5ImageToVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Kandinsky5ImageToVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -129,6 +151,20 @@ func (r *Kandinsky5ImageToVideoResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *Kandinsky5ImageToVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Kandinsky5ImageToVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Kandinsky5ImageToVideo", data, &resp.Diagnostics)
 }
 
 func (r *Kandinsky5ImageToVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

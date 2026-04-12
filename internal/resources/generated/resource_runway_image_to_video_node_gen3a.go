@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RunwayImageToVideoNodeGen3aResource{}
+var _ resource.ResourceWithConfigure = &RunwayImageToVideoNodeGen3aResource{}
+var _ resource.ResourceWithModifyPlan = &RunwayImageToVideoNodeGen3aResource{}
 
-type RunwayImageToVideoNodeGen3aResource struct{}
+type RunwayImageToVideoNodeGen3aResource struct {
+	client *client.Client
+}
 
 type RunwayImageToVideoNodeGen3aModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -34,6 +39,23 @@ type RunwayImageToVideoNodeGen3aModel struct {
 
 func NewRunwayImageToVideoNodeGen3aResource() resource.Resource {
 	return &RunwayImageToVideoNodeGen3aResource{}
+}
+
+func (r *RunwayImageToVideoNodeGen3aResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RunwayImageToVideoNodeGen3aResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *RunwayImageToVideoNodeGen3aResource) Schema(_ context.Context, _ resour
 			},
 		},
 	}
+}
+
+func (r *RunwayImageToVideoNodeGen3aResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RunwayImageToVideoNodeGen3aModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RunwayImageToVideoNodeGen3a", data, &resp.Diagnostics)
 }
 
 func (r *RunwayImageToVideoNodeGen3aResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

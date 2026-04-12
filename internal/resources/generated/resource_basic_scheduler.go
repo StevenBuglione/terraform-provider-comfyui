@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &BasicSchedulerResource{}
+var _ resource.ResourceWithConfigure = &BasicSchedulerResource{}
+var _ resource.ResourceWithModifyPlan = &BasicSchedulerResource{}
 
-type BasicSchedulerResource struct{}
+type BasicSchedulerResource struct {
+	client *client.Client
+}
 
 type BasicSchedulerModel struct {
 	ID           types.String  `tfsdk:"id"`
@@ -34,6 +39,23 @@ type BasicSchedulerModel struct {
 
 func NewBasicSchedulerResource() resource.Resource {
 	return &BasicSchedulerResource{}
+}
+
+func (r *BasicSchedulerResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *BasicSchedulerResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -89,6 +111,20 @@ func (r *BasicSchedulerResource) Schema(_ context.Context, _ resource.SchemaRequ
 			},
 		},
 	}
+}
+
+func (r *BasicSchedulerResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data BasicSchedulerModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "BasicScheduler", data, &resp.Diagnostics)
 }
 
 func (r *BasicSchedulerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

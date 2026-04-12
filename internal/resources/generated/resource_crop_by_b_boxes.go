@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &CropByBBoxesResource{}
+var _ resource.ResourceWithConfigure = &CropByBBoxesResource{}
+var _ resource.ResourceWithModifyPlan = &CropByBBoxesResource{}
 
-type CropByBBoxesResource struct{}
+type CropByBBoxesResource struct {
+	client *client.Client
+}
 
 type CropByBBoxesModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -34,6 +39,23 @@ type CropByBBoxesModel struct {
 
 func NewCropByBBoxesResource() resource.Resource {
 	return &CropByBBoxesResource{}
+}
+
+func (r *CropByBBoxesResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CropByBBoxesResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -96,6 +118,20 @@ func (r *CropByBBoxesResource) Schema(_ context.Context, _ resource.SchemaReques
 			},
 		},
 	}
+}
+
+func (r *CropByBBoxesResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CropByBBoxesModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CropByBBoxes", data, &resp.Diagnostics)
 }
 
 func (r *CropByBBoxesResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

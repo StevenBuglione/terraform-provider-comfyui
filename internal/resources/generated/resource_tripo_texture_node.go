@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &TripoTextureNodeResource{}
+var _ resource.ResourceWithConfigure = &TripoTextureNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TripoTextureNodeResource{}
 
-type TripoTextureNodeResource struct{}
+type TripoTextureNodeResource struct {
+	client *client.Client
+}
 
 type TripoTextureNodeModel struct {
 	ID                types.String `tfsdk:"id"`
@@ -37,6 +42,23 @@ type TripoTextureNodeModel struct {
 
 func NewTripoTextureNodeResource() resource.Resource {
 	return &TripoTextureNodeResource{}
+}
+
+func (r *TripoTextureNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TripoTextureNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -120,6 +142,20 @@ func (r *TripoTextureNodeResource) Schema(_ context.Context, _ resource.SchemaRe
 			},
 		},
 	}
+}
+
+func (r *TripoTextureNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TripoTextureNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TripoTextureNode", data, &resp.Diagnostics)
 }
 
 func (r *TripoTextureNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &KlingStartEndFrameNodeResource{}
+var _ resource.ResourceWithConfigure = &KlingStartEndFrameNodeResource{}
+var _ resource.ResourceWithModifyPlan = &KlingStartEndFrameNodeResource{}
 
-type KlingStartEndFrameNodeResource struct{}
+type KlingStartEndFrameNodeResource struct {
+	client *client.Client
+}
 
 type KlingStartEndFrameNodeModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -39,6 +44,23 @@ type KlingStartEndFrameNodeModel struct {
 
 func NewKlingStartEndFrameNodeResource() resource.Resource {
 	return &KlingStartEndFrameNodeResource{}
+}
+
+func (r *KlingStartEndFrameNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *KlingStartEndFrameNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -124,6 +146,20 @@ func (r *KlingStartEndFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *KlingStartEndFrameNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data KlingStartEndFrameNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "KlingStartEndFrameNode", data, &resp.Diagnostics)
 }
 
 func (r *KlingStartEndFrameNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

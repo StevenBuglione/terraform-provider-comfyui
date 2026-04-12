@@ -18,6 +18,7 @@ This provider uses a node-per-resource model: generated Terraform resources desc
 - Observe normalized execution state through `comfyui_workflow`, `comfyui_job`, `comfyui_jobs`, `comfyui_queue`, and `comfyui_workflow_history`.
 - Cancel queued or running executions through normal Terraform lifecycle with `cancel_on_delete`.
 - Import, translate, and validate native prompt/workspace artifacts before execution.
+- Fail `terraform plan` when built-in runtime-backed inventory selections, such as checkpoints or LoRAs, do not exist on the target ComfyUI server.
 - Upload input images or masks to ComfyUI and materialize remote outputs back to local disk.
 - Organize reusable workflow sets with `comfyui_workflow_collection`.
 - Inspect server state plus artifact import/translation/validation surfaces with provider data sources.
@@ -181,6 +182,7 @@ The provider also exposes dedicated artifact-management surfaces for AI harness 
 - `comfyui_prompt_to_workspace` / `comfyui_workspace_to_prompt` translate between API prompt JSON and workspace JSON with explicit fidelity reporting.
 - `comfyui_prompt_to_terraform` / `comfyui_workspace_to_terraform` synthesize canonical Terraform IR and rendered HCL from native artifacts using the generated node contract.
 - `comfyui_prompt_validation` / `comfyui_workspace_validation` validate artifacts against live `/object_info` metadata, defaulting to executable modes that require output nodes. Fragment-only modes remain available when an AI harness is editing incomplete graphs.
+- `comfyui_inventory` exposes the live built-in runtime inventory by normalized kind so AI harnesses can inspect available checkpoints, LoRAs, text encoders, and related model categories before authoring configuration.
 - `comfyui_uploaded_image` and `comfyui_uploaded_mask` manage ComfyUI-backed uploads.
 - `comfyui_output_artifact` downloads a remote ComfyUI file from `/view` into a Terraform-managed local artifact.
 
@@ -222,6 +224,7 @@ make workspace-e2e
 make release-e2e-browser-install
 make release-e2e
 make synthesis-e2e
+make inventory-plan-e2e
 make execution-e2e
 ```
 
@@ -230,6 +233,8 @@ make execution-e2e
 `make release-e2e` stages four canonical release scenarios into a live ComfyUI canvas and verifies them with Playwright: an assembled-resource workflow, a raw `workflow_json` import, a workspace->prompt->workspace round trip, and a `comfyui_workspace` gallery export. It is aimed squarely at the provider-owned logic that is hardest to trust by inspection alone: assembly, translation, staging, and graph connectivity.
 
 `make synthesis-e2e` exercises the AI-facing synthesis surfaces with real Terraform. It feeds native prompt and workspace artifacts into `comfyui_prompt_to_terraform` and `comfyui_workspace_to_terraform`, then asserts that both return non-empty Terraform IR, rendered HCL, and the expected workflow/resource blocks without needing a live ComfyUI server.
+
+`make inventory-plan-e2e` launches a disposable local ComfyUI, stages a known checkpoint filename into the runtime inventory, proves that `data.comfyui_inventory` and `data.comfyui_node_schema` expose the expected live/generated contract, then asserts a valid `terraform plan` succeeds while an invalid checkpoint reference fails during plan before apply.
 
 `make execution-e2e` launches a disposable local ComfyUI, uploads a tiny fixture image, runs a model-free `LoadImage -> ImageInvert -> SaveImage` workflow, verifies the structured execution fields through `comfyui_workflow`, re-reads the same run through `comfyui_job` / `comfyui_jobs`, and downloads the saved artifact back to local disk.
 

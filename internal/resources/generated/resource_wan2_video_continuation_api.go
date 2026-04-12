@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &Wan2VideoContinuationAPIResource{}
+var _ resource.ResourceWithConfigure = &Wan2VideoContinuationAPIResource{}
+var _ resource.ResourceWithModifyPlan = &Wan2VideoContinuationAPIResource{}
 
-type Wan2VideoContinuationAPIResource struct{}
+type Wan2VideoContinuationAPIResource struct {
+	client *client.Client
+}
 
 type Wan2VideoContinuationAPIModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -35,6 +40,23 @@ type Wan2VideoContinuationAPIModel struct {
 
 func NewWan2VideoContinuationAPIResource() resource.Resource {
 	return &Wan2VideoContinuationAPIResource{}
+}
+
+func (r *Wan2VideoContinuationAPIResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Wan2VideoContinuationAPIResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -95,6 +117,20 @@ func (r *Wan2VideoContinuationAPIResource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *Wan2VideoContinuationAPIResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Wan2VideoContinuationAPIModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Wan2VideoContinuationApi", data, &resp.Diagnostics)
 }
 
 func (r *Wan2VideoContinuationAPIResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

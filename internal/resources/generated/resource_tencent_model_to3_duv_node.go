@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &TencentModelTo3DuvNodeResource{}
+var _ resource.ResourceWithConfigure = &TencentModelTo3DuvNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TencentModelTo3DuvNodeResource{}
 
-type TencentModelTo3DuvNodeResource struct{}
+type TencentModelTo3DuvNodeResource struct {
+	client *client.Client
+}
 
 type TencentModelTo3DuvNodeModel struct {
 	ID        types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type TencentModelTo3DuvNodeModel struct {
 
 func NewTencentModelTo3DuvNodeResource() resource.Resource {
 	return &TencentModelTo3DuvNodeResource{}
+}
+
+func (r *TencentModelTo3DuvNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TencentModelTo3DuvNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -83,6 +105,20 @@ func (r *TencentModelTo3DuvNodeResource) Schema(_ context.Context, _ resource.Sc
 			},
 		},
 	}
+}
+
+func (r *TencentModelTo3DuvNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TencentModelTo3DuvNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TencentModelTo3DUVNode", data, &resp.Diagnostics)
 }
 
 func (r *TencentModelTo3DuvNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

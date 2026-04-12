@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &KlingImage2VideoNodeResource{}
+var _ resource.ResourceWithConfigure = &KlingImage2VideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &KlingImage2VideoNodeResource{}
 
-type KlingImage2VideoNodeResource struct{}
+type KlingImage2VideoNodeResource struct {
+	client *client.Client
+}
 
 type KlingImage2VideoNodeModel struct {
 	ID             types.String  `tfsdk:"id"`
@@ -39,6 +44,23 @@ type KlingImage2VideoNodeModel struct {
 
 func NewKlingImage2VideoNodeResource() resource.Resource {
 	return &KlingImage2VideoNodeResource{}
+}
+
+func (r *KlingImage2VideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *KlingImage2VideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -121,6 +143,20 @@ func (r *KlingImage2VideoNodeResource) Schema(_ context.Context, _ resource.Sche
 			},
 		},
 	}
+}
+
+func (r *KlingImage2VideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data KlingImage2VideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "KlingImage2VideoNode", data, &resp.Diagnostics)
 }
 
 func (r *KlingImage2VideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

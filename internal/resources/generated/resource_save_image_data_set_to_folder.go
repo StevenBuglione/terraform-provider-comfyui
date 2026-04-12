@@ -4,7 +4,9 @@ package generated
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -15,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &SaveImageDataSetToFolderResource{}
+var _ resource.ResourceWithConfigure = &SaveImageDataSetToFolderResource{}
+var _ resource.ResourceWithModifyPlan = &SaveImageDataSetToFolderResource{}
 
-type SaveImageDataSetToFolderResource struct{}
+type SaveImageDataSetToFolderResource struct {
+	client *client.Client
+}
 
 type SaveImageDataSetToFolderModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -28,6 +34,23 @@ type SaveImageDataSetToFolderModel struct {
 
 func NewSaveImageDataSetToFolderResource() resource.Resource {
 	return &SaveImageDataSetToFolderResource{}
+}
+
+func (r *SaveImageDataSetToFolderResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *SaveImageDataSetToFolderResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -66,6 +89,20 @@ func (r *SaveImageDataSetToFolderResource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *SaveImageDataSetToFolderResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data SaveImageDataSetToFolderModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "SaveImageDataSetToFolderNode", data, &resp.Diagnostics)
 }
 
 func (r *SaveImageDataSetToFolderResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -4,7 +4,9 @@ package generated
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -19,8 +21,12 @@ import (
 )
 
 var _ resource.Resource = &TripoConversionNodeResource{}
+var _ resource.ResourceWithConfigure = &TripoConversionNodeResource{}
+var _ resource.ResourceWithModifyPlan = &TripoConversionNodeResource{}
 
-type TripoConversionNodeResource struct{}
+type TripoConversionNodeResource struct {
+	client *client.Client
+}
 
 type TripoConversionNodeModel struct {
 	ID                     types.String  `tfsdk:"id"`
@@ -48,6 +54,23 @@ type TripoConversionNodeModel struct {
 
 func NewTripoConversionNodeResource() resource.Resource {
 	return &TripoConversionNodeResource{}
+}
+
+func (r *TripoConversionNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *TripoConversionNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -195,6 +218,20 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 			},
 		},
 	}
+}
+
+func (r *TripoConversionNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data TripoConversionNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "TripoConversionNode", data, &resp.Diagnostics)
 }
 
 func (r *TripoConversionNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

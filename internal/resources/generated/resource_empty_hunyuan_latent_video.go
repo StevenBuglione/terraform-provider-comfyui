@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &EmptyHunyuanLatentVideoResource{}
+var _ resource.ResourceWithConfigure = &EmptyHunyuanLatentVideoResource{}
+var _ resource.ResourceWithModifyPlan = &EmptyHunyuanLatentVideoResource{}
 
-type EmptyHunyuanLatentVideoResource struct{}
+type EmptyHunyuanLatentVideoResource struct {
+	client *client.Client
+}
 
 type EmptyHunyuanLatentVideoModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type EmptyHunyuanLatentVideoModel struct {
 
 func NewEmptyHunyuanLatentVideoResource() resource.Resource {
 	return &EmptyHunyuanLatentVideoResource{}
+}
+
+func (r *EmptyHunyuanLatentVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *EmptyHunyuanLatentVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *EmptyHunyuanLatentVideoResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *EmptyHunyuanLatentVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data EmptyHunyuanLatentVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "EmptyHunyuanLatentVideo", data, &resp.Diagnostics)
 }
 
 func (r *EmptyHunyuanLatentVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

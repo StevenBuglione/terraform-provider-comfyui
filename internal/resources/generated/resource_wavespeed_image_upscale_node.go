@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &WavespeedImageUpscaleNodeResource{}
+var _ resource.ResourceWithConfigure = &WavespeedImageUpscaleNodeResource{}
+var _ resource.ResourceWithModifyPlan = &WavespeedImageUpscaleNodeResource{}
 
-type WavespeedImageUpscaleNodeResource struct{}
+type WavespeedImageUpscaleNodeResource struct {
+	client *client.Client
+}
 
 type WavespeedImageUpscaleNodeModel struct {
 	ID               types.String `tfsdk:"id"`
@@ -32,6 +37,23 @@ type WavespeedImageUpscaleNodeModel struct {
 
 func NewWavespeedImageUpscaleNodeResource() resource.Resource {
 	return &WavespeedImageUpscaleNodeResource{}
+}
+
+func (r *WavespeedImageUpscaleNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *WavespeedImageUpscaleNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *WavespeedImageUpscaleNodeResource) Schema(_ context.Context, _ resource
 			},
 		},
 	}
+}
+
+func (r *WavespeedImageUpscaleNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data WavespeedImageUpscaleNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "WavespeedImageUpscaleNode", data, &resp.Diagnostics)
 }
 
 func (r *WavespeedImageUpscaleNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

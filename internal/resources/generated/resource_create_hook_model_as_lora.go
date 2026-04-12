@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &CreateHookModelAsLoraResource{}
+var _ resource.ResourceWithConfigure = &CreateHookModelAsLoraResource{}
+var _ resource.ResourceWithModifyPlan = &CreateHookModelAsLoraResource{}
 
-type CreateHookModelAsLoraResource struct{}
+type CreateHookModelAsLoraResource struct {
+	client *client.Client
+}
 
 type CreateHookModelAsLoraModel struct {
 	ID            types.String  `tfsdk:"id"`
@@ -33,6 +38,23 @@ type CreateHookModelAsLoraModel struct {
 
 func NewCreateHookModelAsLoraResource() resource.Resource {
 	return &CreateHookModelAsLoraResource{}
+}
+
+func (r *CreateHookModelAsLoraResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *CreateHookModelAsLoraResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -88,6 +110,20 @@ func (r *CreateHookModelAsLoraResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *CreateHookModelAsLoraResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data CreateHookModelAsLoraModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "CreateHookModelAsLora", data, &resp.Diagnostics)
 }
 
 func (r *CreateHookModelAsLoraResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

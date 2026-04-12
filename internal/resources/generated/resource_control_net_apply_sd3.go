@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &ControlNetApplySd3Resource{}
+var _ resource.ResourceWithConfigure = &ControlNetApplySd3Resource{}
+var _ resource.ResourceWithModifyPlan = &ControlNetApplySd3Resource{}
 
-type ControlNetApplySd3Resource struct{}
+type ControlNetApplySd3Resource struct {
+	client *client.Client
+}
 
 type ControlNetApplySd3Model struct {
 	ID             types.String  `tfsdk:"id"`
@@ -38,6 +43,23 @@ type ControlNetApplySd3Model struct {
 
 func NewControlNetApplySd3Resource() resource.Resource {
 	return &ControlNetApplySd3Resource{}
+}
+
+func (r *ControlNetApplySd3Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ControlNetApplySd3Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -119,6 +141,20 @@ func (r *ControlNetApplySd3Resource) Schema(_ context.Context, _ resource.Schema
 			},
 		},
 	}
+}
+
+func (r *ControlNetApplySd3Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ControlNetApplySd3Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ControlNetApplySD3", data, &resp.Diagnostics)
 }
 
 func (r *ControlNetApplySd3Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

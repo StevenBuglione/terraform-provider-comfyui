@@ -138,6 +138,7 @@ func (p *ComfyUIProvider) DataSources(_ context.Context) []func() datasource.Dat
 		datasources.NewQueueDataSource,
 		datasources.NewNodeInfoDataSource,
 		datasources.NewNodeSchemaDataSource,
+		datasources.NewInventoryDataSource,
 		datasources.NewWorkflowHistoryDataSource,
 		datasources.NewOutputDataSource,
 		datasources.NewPromptJSONDataSource,

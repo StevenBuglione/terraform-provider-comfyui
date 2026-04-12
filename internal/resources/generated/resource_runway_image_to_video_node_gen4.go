@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &RunwayImageToVideoNodeGen4Resource{}
+var _ resource.ResourceWithConfigure = &RunwayImageToVideoNodeGen4Resource{}
+var _ resource.ResourceWithModifyPlan = &RunwayImageToVideoNodeGen4Resource{}
 
-type RunwayImageToVideoNodeGen4Resource struct{}
+type RunwayImageToVideoNodeGen4Resource struct {
+	client *client.Client
+}
 
 type RunwayImageToVideoNodeGen4Model struct {
 	ID          types.String `tfsdk:"id"`
@@ -34,6 +39,23 @@ type RunwayImageToVideoNodeGen4Model struct {
 
 func NewRunwayImageToVideoNodeGen4Resource() resource.Resource {
 	return &RunwayImageToVideoNodeGen4Resource{}
+}
+
+func (r *RunwayImageToVideoNodeGen4Resource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *RunwayImageToVideoNodeGen4Resource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -90,6 +112,20 @@ func (r *RunwayImageToVideoNodeGen4Resource) Schema(_ context.Context, _ resourc
 			},
 		},
 	}
+}
+
+func (r *RunwayImageToVideoNodeGen4Resource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data RunwayImageToVideoNodeGen4Model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "RunwayImageToVideoNodeGen4", data, &resp.Diagnostics)
 }
 
 func (r *RunwayImageToVideoNodeGen4Resource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

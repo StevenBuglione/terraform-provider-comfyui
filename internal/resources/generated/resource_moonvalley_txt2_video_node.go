@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/float64validator"
@@ -20,8 +21,12 @@ import (
 )
 
 var _ resource.Resource = &MoonvalleyTxt2VideoNodeResource{}
+var _ resource.ResourceWithConfigure = &MoonvalleyTxt2VideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &MoonvalleyTxt2VideoNodeResource{}
 
-type MoonvalleyTxt2VideoNodeResource struct{}
+type MoonvalleyTxt2VideoNodeResource struct {
+	client *client.Client
+}
 
 type MoonvalleyTxt2VideoNodeModel struct {
 	ID              types.String  `tfsdk:"id"`
@@ -37,6 +42,23 @@ type MoonvalleyTxt2VideoNodeModel struct {
 
 func NewMoonvalleyTxt2VideoNodeResource() resource.Resource {
 	return &MoonvalleyTxt2VideoNodeResource{}
+}
+
+func (r *MoonvalleyTxt2VideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *MoonvalleyTxt2VideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -113,6 +135,20 @@ func (r *MoonvalleyTxt2VideoNodeResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *MoonvalleyTxt2VideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data MoonvalleyTxt2VideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "MoonvalleyTxt2VideoNode", data, &resp.Diagnostics)
 }
 
 func (r *MoonvalleyTxt2VideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &ImageStitchResource{}
+var _ resource.ResourceWithConfigure = &ImageStitchResource{}
+var _ resource.ResourceWithModifyPlan = &ImageStitchResource{}
 
-type ImageStitchResource struct{}
+type ImageStitchResource struct {
+	client *client.Client
+}
 
 type ImageStitchModel struct {
 	ID             types.String `tfsdk:"id"`
@@ -36,6 +41,23 @@ type ImageStitchModel struct {
 
 func NewImageStitchResource() resource.Resource {
 	return &ImageStitchResource{}
+}
+
+func (r *ImageStitchResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ImageStitchResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -113,6 +135,20 @@ func (r *ImageStitchResource) Schema(_ context.Context, _ resource.SchemaRequest
 			},
 		},
 	}
+}
+
+func (r *ImageStitchResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ImageStitchModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ImageStitch", data, &resp.Diagnostics)
 }
 
 func (r *ImageStitchResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

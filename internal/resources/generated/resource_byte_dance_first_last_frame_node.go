@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &ByteDanceFirstLastFrameNodeResource{}
+var _ resource.ResourceWithConfigure = &ByteDanceFirstLastFrameNodeResource{}
+var _ resource.ResourceWithModifyPlan = &ByteDanceFirstLastFrameNodeResource{}
 
-type ByteDanceFirstLastFrameNodeResource struct{}
+type ByteDanceFirstLastFrameNodeResource struct {
+	client *client.Client
+}
 
 type ByteDanceFirstLastFrameNodeModel struct {
 	ID            types.String `tfsdk:"id"`
@@ -41,6 +46,23 @@ type ByteDanceFirstLastFrameNodeModel struct {
 
 func NewByteDanceFirstLastFrameNodeResource() resource.Resource {
 	return &ByteDanceFirstLastFrameNodeResource{}
+}
+
+func (r *ByteDanceFirstLastFrameNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ByteDanceFirstLastFrameNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -149,6 +171,20 @@ func (r *ByteDanceFirstLastFrameNodeResource) Schema(_ context.Context, _ resour
 			},
 		},
 	}
+}
+
+func (r *ByteDanceFirstLastFrameNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ByteDanceFirstLastFrameNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ByteDanceFirstLastFrameNode", data, &resp.Diagnostics)
 }
 
 func (r *ByteDanceFirstLastFrameNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

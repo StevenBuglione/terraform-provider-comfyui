@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &GrokVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &GrokVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &GrokVideoNodeResource{}
 
-type GrokVideoNodeResource struct{}
+type GrokVideoNodeResource struct {
+	client *client.Client
+}
 
 type GrokVideoNodeModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -37,6 +42,23 @@ type GrokVideoNodeModel struct {
 
 func NewGrokVideoNodeResource() resource.Resource {
 	return &GrokVideoNodeResource{}
+}
+
+func (r *GrokVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *GrokVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -128,6 +150,20 @@ func (r *GrokVideoNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 			},
 		},
 	}
+}
+
+func (r *GrokVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data GrokVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "GrokVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *GrokVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

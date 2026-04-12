@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
@@ -16,8 +17,12 @@ import (
 )
 
 var _ resource.Resource = &ElevenLabsVoiceSelectorResource{}
+var _ resource.ResourceWithConfigure = &ElevenLabsVoiceSelectorResource{}
+var _ resource.ResourceWithModifyPlan = &ElevenLabsVoiceSelectorResource{}
 
-type ElevenLabsVoiceSelectorResource struct{}
+type ElevenLabsVoiceSelectorResource struct {
+	client *client.Client
+}
 
 type ElevenLabsVoiceSelectorModel struct {
 	ID          types.String `tfsdk:"id"`
@@ -28,6 +33,23 @@ type ElevenLabsVoiceSelectorModel struct {
 
 func NewElevenLabsVoiceSelectorResource() resource.Resource {
 	return &ElevenLabsVoiceSelectorResource{}
+}
+
+func (r *ElevenLabsVoiceSelectorResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *ElevenLabsVoiceSelectorResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -65,6 +87,20 @@ func (r *ElevenLabsVoiceSelectorResource) Schema(_ context.Context, _ resource.S
 			},
 		},
 	}
+}
+
+func (r *ElevenLabsVoiceSelectorResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data ElevenLabsVoiceSelectorModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "ElevenLabsVoiceSelector", data, &resp.Diagnostics)
 }
 
 func (r *ElevenLabsVoiceSelectorResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

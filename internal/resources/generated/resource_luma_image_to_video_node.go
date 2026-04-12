@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &LumaImageToVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &LumaImageToVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &LumaImageToVideoNodeResource{}
 
-type LumaImageToVideoNodeResource struct{}
+type LumaImageToVideoNodeResource struct {
+	client *client.Client
+}
 
 type LumaImageToVideoNodeModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -38,6 +43,23 @@ type LumaImageToVideoNodeModel struct {
 
 func NewLumaImageToVideoNodeResource() resource.Resource {
 	return &LumaImageToVideoNodeResource{}
+}
+
+func (r *LumaImageToVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *LumaImageToVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -110,6 +132,20 @@ func (r *LumaImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sche
 			},
 		},
 	}
+}
+
+func (r *LumaImageToVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data LumaImageToVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "LumaImageToVideoGenerationNode", data, &resp.Diagnostics)
 }
 
 func (r *LumaImageToVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

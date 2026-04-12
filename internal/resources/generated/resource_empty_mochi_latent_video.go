@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -18,8 +19,12 @@ import (
 )
 
 var _ resource.Resource = &EmptyMochiLatentVideoResource{}
+var _ resource.ResourceWithConfigure = &EmptyMochiLatentVideoResource{}
+var _ resource.ResourceWithModifyPlan = &EmptyMochiLatentVideoResource{}
 
-type EmptyMochiLatentVideoResource struct{}
+type EmptyMochiLatentVideoResource struct {
+	client *client.Client
+}
 
 type EmptyMochiLatentVideoModel struct {
 	ID           types.String `tfsdk:"id"`
@@ -33,6 +38,23 @@ type EmptyMochiLatentVideoModel struct {
 
 func NewEmptyMochiLatentVideoResource() resource.Resource {
 	return &EmptyMochiLatentVideoResource{}
+}
+
+func (r *EmptyMochiLatentVideoResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *EmptyMochiLatentVideoResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -85,6 +107,20 @@ func (r *EmptyMochiLatentVideoResource) Schema(_ context.Context, _ resource.Sch
 			},
 		},
 	}
+}
+
+func (r *EmptyMochiLatentVideoResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data EmptyMochiLatentVideoModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "EmptyMochiLatentVideo", data, &resp.Diagnostics)
 }
 
 func (r *EmptyMochiLatentVideoResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {

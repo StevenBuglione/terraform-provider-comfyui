@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
@@ -19,8 +20,12 @@ import (
 )
 
 var _ resource.Resource = &Vidu2StartEndToVideoNodeResource{}
+var _ resource.ResourceWithConfigure = &Vidu2StartEndToVideoNodeResource{}
+var _ resource.ResourceWithModifyPlan = &Vidu2StartEndToVideoNodeResource{}
 
-type Vidu2StartEndToVideoNodeResource struct{}
+type Vidu2StartEndToVideoNodeResource struct {
+	client *client.Client
+}
 
 type Vidu2StartEndToVideoNodeModel struct {
 	ID                types.String `tfsdk:"id"`
@@ -38,6 +43,23 @@ type Vidu2StartEndToVideoNodeModel struct {
 
 func NewVidu2StartEndToVideoNodeResource() resource.Resource {
 	return &Vidu2StartEndToVideoNodeResource{}
+}
+
+func (r *Vidu2StartEndToVideoNodeResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	if req.ProviderData == nil {
+		return
+	}
+
+	c, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = c
 }
 
 func (r *Vidu2StartEndToVideoNodeResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -130,6 +152,20 @@ func (r *Vidu2StartEndToVideoNodeResource) Schema(_ context.Context, _ resource.
 			},
 		},
 	}
+}
+
+func (r *Vidu2StartEndToVideoNodeResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRequest, resp *resource.ModifyPlanResponse) {
+	if req.Plan.Raw.IsNull() {
+		return
+	}
+
+	var data Vidu2StartEndToVideoNodeModel
+	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	resources.ValidateDynamicInputs(ctx, r.client, "Vidu2StartEndToVideoNode", data, &resp.Diagnostics)
 }
 
 func (r *Vidu2StartEndToVideoNodeResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
