@@ -79,6 +79,7 @@ type NodeSchemaTemplateData struct {
 
 type GeneratedNodeSchema struct {
 	NodeType       string
+	TerraformType  string
 	DisplayName    string
 	Description    string
 	Category       string

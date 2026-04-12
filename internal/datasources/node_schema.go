@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/nodeschema"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -17,6 +17,7 @@ type NodeSchemaDataSource struct{}
 
 type NodeSchemaModel struct {
 	NodeType       types.String            `tfsdk:"node_type"`
+	TerraformType  types.String            `tfsdk:"terraform_type"`
 	DisplayName    types.String            `tfsdk:"display_name"`
 	Description    types.String            `tfsdk:"description"`
 	Category       types.String            `tfsdk:"category"`
@@ -79,6 +80,10 @@ func (d *NodeSchemaDataSource) Schema(_ context.Context, _ datasource.SchemaRequ
 			},
 			"display_name": schema.StringAttribute{
 				Description: "Display name of the node.",
+				Computed:    true,
+			},
+			"terraform_type": schema.StringAttribute{
+				Description: "Canonical generated Terraform resource type for this node.",
 				Computed:    true,
 			},
 			"description": schema.StringAttribute{
@@ -176,6 +181,7 @@ func (d *NodeSchemaDataSource) Read(ctx context.Context, req datasource.ReadRequ
 
 	state := NodeSchemaModel{
 		NodeType:       types.StringValue(generatedSchema.NodeType),
+		TerraformType:  types.StringValue(generatedSchema.TerraformType),
 		DisplayName:    types.StringValue(generatedSchema.DisplayName),
 		Description:    types.StringValue(generatedSchema.Description),
 		Category:       types.StringValue(generatedSchema.Category),
@@ -194,7 +200,7 @@ func (d *NodeSchemaDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func buildNodeSchemaInputModels(ctx context.Context, inputs []resources.GeneratedNodeSchemaInput, diags *diag.Diagnostics) []NodeSchemaInputModel {
+func buildNodeSchemaInputModels(ctx context.Context, inputs []nodeschema.GeneratedNodeSchemaInput, diags *diag.Diagnostics) []NodeSchemaInputModel {
 	models := make([]NodeSchemaInputModel, 0, len(inputs))
 	for _, input := range inputs {
 		enumValues, enumDiags := types.ListValueFrom(ctx, types.StringType, input.EnumValues)
@@ -222,7 +228,7 @@ func buildNodeSchemaInputModels(ctx context.Context, inputs []resources.Generate
 	return models
 }
 
-func buildNodeSchemaHiddenModels(inputs []resources.GeneratedNodeSchemaHiddenInput) []NodeSchemaHiddenModel {
+func buildNodeSchemaHiddenModels(inputs []nodeschema.GeneratedNodeSchemaHiddenInput) []NodeSchemaHiddenModel {
 	models := make([]NodeSchemaHiddenModel, 0, len(inputs))
 	for _, input := range inputs {
 		models = append(models, NodeSchemaHiddenModel{
@@ -233,7 +239,7 @@ func buildNodeSchemaHiddenModels(inputs []resources.GeneratedNodeSchemaHiddenInp
 	return models
 }
 
-func buildNodeSchemaOutputModels(outputs []resources.GeneratedNodeSchemaOutput) []NodeSchemaOutputModel {
+func buildNodeSchemaOutputModels(outputs []nodeschema.GeneratedNodeSchemaOutput) []NodeSchemaOutputModel {
 	models := make([]NodeSchemaOutputModel, 0, len(outputs))
 	for _, output := range outputs {
 		models = append(models, NodeSchemaOutputModel{
@@ -246,6 +252,6 @@ func buildNodeSchemaOutputModels(outputs []resources.GeneratedNodeSchemaOutput) 
 	return models
 }
 
-func lookupGeneratedNodeSchema(nodeType string) (resources.GeneratedNodeSchema, bool) {
-	return resources.LookupGeneratedNodeSchema(nodeType)
+func lookupGeneratedNodeSchema(nodeType string) (nodeschema.GeneratedNodeSchema, bool) {
+	return nodeschema.LookupGeneratedNodeSchema(nodeType)
 }

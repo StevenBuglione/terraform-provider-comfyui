@@ -156,7 +156,7 @@ func main() {
 	uiHintsPath := "scripts/extract/node_ui_hints.json"
 	outputDir := "internal/resources/generated"
 	uiHintsOutputPath := "internal/resources/node_ui_hints_generated.go"
-	nodeSchemaOutputPath := "internal/resources/node_schema_generated.go"
+	nodeSchemaOutputPath := "internal/nodeschema/generated.go"
 
 	log.Printf("Reading node specs from %s", specsPath)
 	data, err := os.ReadFile(specsPath)
@@ -375,6 +375,7 @@ func buildNodeSchemaTemplateData(specs NodeSpecs) NodeSchemaTemplateData {
 	for _, node := range specs.Nodes {
 		nodes = append(nodes, GeneratedNodeSchema{
 			NodeType:       node.NodeID,
+			TerraformType:  node.TerraformResourceName,
 			DisplayName:    stringValue(node.DisplayName),
 			Description:    stringValue(node.Description),
 			Category:       node.Category,
