@@ -50,9 +50,6 @@ type WorkflowModel struct {
 	ClientID              types.String `tfsdk:"client_id"`
 	ExtraDataJSON         types.String `tfsdk:"extra_data_json"`
 	PartialTargets        types.List   `tfsdk:"partial_execution_targets"`
-	Status                types.String `tfsdk:"status"`
-	Outputs               types.String `tfsdk:"outputs"`
-	Error                 types.String `tfsdk:"error"`
 	ValidationSummaryJSON types.String `tfsdk:"validation_summary_json"`
 
 	// Metadata
@@ -164,18 +161,6 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Optional:    true,
 				ElementType: types.StringType,
 				Description: "Optional list of node IDs to send as partial_execution_targets in the /prompt request wrapper.",
-			},
-			"status": schema.StringAttribute{
-				Computed:    true,
-				Description: "Execution status: pending, queued, running, completed, or error.",
-			},
-			"outputs": schema.StringAttribute{
-				Computed:    true,
-				Description: "JSON string of execution outputs (images, audio, etc.).",
-			},
-			"error": schema.StringAttribute{
-				Computed:    true,
-				Description: "Error message if execution failed.",
 			},
 			"validation_summary_json": schema.StringAttribute{
 				Computed:    true,
@@ -329,13 +314,6 @@ func (r *WorkflowResource) Create(ctx context.Context, req resource.CreateReques
 		data.PromptID = types.StringValue("")
 		data.ValidationSummaryJSON = types.StringValue("")
 		clearWorkflowExecutionFields(&data)
-		if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
-			data.Status = types.StringValue("file_only")
-		} else {
-			data.Status = types.StringValue("pending")
-		}
-		data.Outputs = types.StringValue("{}")
-		data.Error = types.StringValue("")
 		resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 		return
 	}
@@ -399,13 +377,6 @@ func (r *WorkflowResource) Update(ctx context.Context, req resource.UpdateReques
 		data.PromptID = types.StringValue("")
 		data.ValidationSummaryJSON = types.StringValue("")
 		clearWorkflowExecutionFields(&data)
-		if !data.OutputFile.IsNull() && !data.OutputFile.IsUnknown() && data.OutputFile.ValueString() != "" {
-			data.Status = types.StringValue("file_only")
-		} else {
-			data.Status = types.StringValue("pending")
-		}
-		data.Outputs = types.StringValue("{}")
-		data.Error = types.StringValue("")
 		resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 		return
 	}
@@ -482,9 +453,6 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		if err != nil {
 			clearWorkflowExecutionFields(data)
 			data.PromptID = types.StringValue("")
-			data.Status = types.StringValue("error")
-			data.Outputs = types.StringValue("{}")
-			data.Error = types.StringValue(fmt.Sprintf("Failed to validate prompt: %s", err.Error()))
 			diags.AddError("Unable to validate workflow", err.Error())
 			return
 		}
@@ -493,9 +461,6 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		if err != nil {
 			clearWorkflowExecutionFields(data)
 			data.PromptID = types.StringValue("")
-			data.Status = types.StringValue("error")
-			data.Outputs = types.StringValue("{}")
-			data.Error = types.StringValue(fmt.Sprintf("Failed to encode validation summary: %s", err.Error()))
 			diags.AddError("Unable to encode validation summary", err.Error())
 			return
 		}
@@ -504,10 +469,7 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		if !report.Valid {
 			clearWorkflowExecutionFields(data)
 			data.PromptID = types.StringValue("")
-			data.Status = types.StringValue("error")
-			data.Outputs = types.StringValue("{}")
 			joinedErrors := strings.Join(report.Errors, "\n- ")
-			data.Error = types.StringValue(fmt.Sprintf("Workflow validation failed:\n- %s", joinedErrors))
 			diags.AddError("Workflow validation failed", fmt.Sprintf("The workflow failed semantic validation:\n- %s", joinedErrors))
 			return
 		}
@@ -538,9 +500,6 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 	if err != nil {
 		clearWorkflowExecutionFields(data)
 		data.PromptID = types.StringValue("")
-		data.Status = types.StringValue("error")
-		data.Outputs = types.StringValue("{}")
-		data.Error = types.StringValue(fmt.Sprintf("Failed to prepare prompt request: %s", err.Error()))
 		diags.AddError("Failed to prepare prompt request", err.Error())
 		return
 	}
@@ -549,18 +508,12 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 	if err != nil {
 		clearWorkflowExecutionFields(data)
 		data.PromptID = types.StringValue("")
-		data.Status = types.StringValue("error")
-		data.Outputs = types.StringValue("{}")
-		data.Error = types.StringValue(fmt.Sprintf("Failed to queue prompt: %s", err.Error()))
 		diags.AddError("Failed to queue workflow", err.Error())
 		return
 	}
 
 	data.PromptID = types.StringValue(queueResp.PromptID)
 	clearWorkflowExecutionFields(data)
-	data.Status = types.StringValue("queued")
-	data.Outputs = types.StringValue("{}")
-	data.Error = types.StringValue("")
 
 	tflog.Info(ctx, "Workflow queued", map[string]interface{}{
 		"prompt_id": queueResp.PromptID,
@@ -579,8 +532,6 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 	entry, err := r.client.WaitForCompletion(queueResp.PromptID, timeout)
 	if err != nil {
 		clearWorkflowExecutionFields(data)
-		data.Status = types.StringValue("error")
-		data.Error = types.StringValue(err.Error())
 		diags.AddError("Failed to wait for workflow completion", err.Error())
 		return
 	}
@@ -652,25 +603,19 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 }
 
 func (r *WorkflowResource) updateFromHistoryEntry(data *WorkflowModel, entry *client.HistoryEntry) {
-	legacyStatus := legacyWorkflowStatusFromHistory(entry.Status)
-	data.Status = types.StringValue(legacyStatus)
-
 	outputsValue, err := jsonCompatibleValue(entry.Outputs)
 	if err != nil {
-		data.Outputs = types.StringValue("{}")
 		data.OutputsJSON = types.StringNull()
 		data.OutputsStructured = types.DynamicNull()
 	} else if outputsValue == nil {
-		data.Outputs = types.StringValue("{}")
+		// Preserve existing rich output state when history omits outputs entirely.
 	} else {
 		outputsJSON, err := json.Marshal(outputsValue)
 		if err != nil {
-			data.Outputs = types.StringValue("{}")
 			data.OutputsJSON = types.StringNull()
 			data.OutputsStructured = types.DynamicNull()
 		} else {
 			encoded := string(outputsJSON)
-			data.Outputs = types.StringValue(encoded)
 			data.OutputsJSON = types.StringValue(encoded)
 			if dynamicOutputs, dynamicErr := workflowDynamicFromAny(outputsValue); dynamicErr == nil {
 				data.OutputsStructured = dynamicOutputs
@@ -738,15 +683,6 @@ func (r *WorkflowResource) updateFromHistoryEntry(data *WorkflowModel, entry *cl
 		data.ExecutionStatusJSON = types.StringNull()
 		data.ExecutionStatus = types.DynamicNull()
 	}
-	if legacyStatus == "error" {
-		if len(executionError) > 0 {
-			data.Error = summarizeExecutionError(executionError)
-		} else if data.Error.IsNull() || data.Error.IsUnknown() || data.Error.ValueString() == "" {
-			data.Error = types.StringValue("Workflow execution failed")
-		}
-	} else {
-		data.Error = types.StringValue("")
-	}
 }
 
 // writeWorkflowFile creates parent directories and writes the prompt as JSON.
@@ -809,18 +745,16 @@ func (r *WorkflowResource) cancelWorkflowOnDelete(ctx context.Context, data *Wor
 	}
 
 	var job *client.Job
-	useStoredStatusFallback := false
 	if j, err := r.client.GetJob(data.PromptID.ValueString()); err == nil {
 		job = j
-	} else if shouldUseStoredStatusFallbackOnDelete(err) {
-		useStoredStatusFallback = true
+	} else if shouldUseExecutionStatusFallbackOnDelete(err) {
 		tflog.Warn(ctx, "Failed to refresh workflow state before delete; falling back to stored status", map[string]interface{}{
 			"prompt_id": data.PromptID.ValueString(),
 			"error":     err.Error(),
 		})
 	}
 
-	action := determineDeleteAction(data, job, useStoredStatusFallback)
+	action := determineDeleteAction(data, job)
 	switch action {
 	case deleteActionRemoveFromQueue:
 		tflog.Info(ctx, "Removing queued workflow from queue", map[string]interface{}{
@@ -851,7 +785,7 @@ const (
 )
 
 // determineDeleteAction decides what cancellation action to take on delete
-func determineDeleteAction(data *WorkflowModel, job *client.Job, useStoredStatusFallback bool) deleteAction {
+func determineDeleteAction(data *WorkflowModel, job *client.Job) deleteAction {
 	// Only cancel if explicitly requested
 	if data.CancelOnDelete.IsNull() || !data.CancelOnDelete.ValueBool() {
 		return deleteActionNoop
@@ -865,8 +799,8 @@ func determineDeleteAction(data *WorkflowModel, job *client.Job, useStoredStatus
 	status := ""
 	if job != nil {
 		status = job.Status
-	} else if useStoredStatusFallback && !data.Status.IsNull() && !data.Status.IsUnknown() {
-		status = data.Status.ValueString()
+	} else {
+		status = storedExecutionStatus(data)
 	}
 
 	if status == "" {
@@ -883,23 +817,6 @@ func determineDeleteAction(data *WorkflowModel, job *client.Job, useStoredStatus
 	default:
 		return deleteActionNoop
 	}
-}
-
-func legacyWorkflowStatusFromHistory(status client.ExecutionStatus) string {
-	switch status.StatusStr {
-	case "failed", "error":
-		return "error"
-	case "cancelled":
-		return "cancelled"
-	case "completed":
-		return "completed"
-	}
-
-	if status.Completed {
-		return "completed"
-	}
-
-	return status.StatusStr
 }
 
 func jsonCompatibleValue(value interface{}) (interface{}, error) {
@@ -928,7 +845,7 @@ func isUnexpectedHTTPStatus(err error, statusCode int) bool {
 	return strings.Contains(err.Error(), fmt.Sprintf("unexpected status %d", statusCode))
 }
 
-func shouldUseStoredStatusFallbackOnDelete(err error) bool {
+func shouldUseExecutionStatusFallbackOnDelete(err error) bool {
 	if err == nil {
 		return false
 	}
@@ -938,6 +855,19 @@ func shouldUseStoredStatusFallbackOnDelete(err error) bool {
 	}
 
 	return strings.Contains(strings.ToLower(err.Error()), "page not found")
+}
+
+func storedExecutionStatus(data *WorkflowModel) string {
+	if data == nil || data.ExecutionStatusJSON.IsNull() || data.ExecutionStatusJSON.IsUnknown() {
+		return ""
+	}
+
+	var decoded client.ExecutionStatus
+	if err := json.Unmarshal([]byte(data.ExecutionStatusJSON.ValueString()), &decoded); err != nil {
+		return ""
+	}
+
+	return decoded.StatusStr
 }
 
 func historyInt64FromAny(value interface{}) (int64, bool) {
@@ -1029,28 +959,9 @@ func isNilLikeValue(value interface{}) bool {
 	}
 }
 
-// applyJobStateToWorkflowModel updates the workflow model from a Job
-// while preserving backward compatibility with legacy fields
 func applyJobStateToWorkflowModel(data *WorkflowModel, job *client.Job) error {
 	if job == nil {
 		return nil
-	}
-
-	switch job.Status {
-	case "failed":
-		data.Status = types.StringValue("error")
-	default:
-		data.Status = types.StringValue(job.Status)
-	}
-	if len(job.ExecutionError) > 0 {
-		data.Error = summarizeExecutionError(job.ExecutionError)
-	}
-	if isNilLikeValue(job.Outputs) {
-		if data.Outputs.IsNull() || data.Outputs.IsUnknown() || data.Outputs.ValueString() == "" {
-			data.Outputs = types.StringValue("{}")
-		}
-	} else {
-		data.Outputs = marshalExecutionJSON(job.Outputs, "{}")
 	}
 
 	if job.CreateTime != nil {
@@ -1172,30 +1083,6 @@ func marshalExecutionJSON(value interface{}, emptyFallback string) types.String 
 	}
 
 	return types.StringValue(string(data))
-}
-
-func summarizeExecutionError(execErr map[string]interface{}) types.String {
-	if len(execErr) == 0 {
-		return types.StringValue("")
-	}
-
-	errMsg := ""
-	if exType, ok := execErr["exception_type"].(string); ok && exType != "" {
-		errMsg = exType
-		if exMsg, ok := execErr["exception_message"].(string); ok && exMsg != "" {
-			errMsg += ": " + exMsg
-		}
-	} else if exMsg, ok := execErr["exception_message"].(string); ok && exMsg != "" {
-		errMsg = exMsg
-	} else if errJSON, err := json.Marshal(execErr); err == nil {
-		errMsg = string(errJSON)
-	}
-
-	if errMsg == "{}" || errMsg == `{"exception_type":""}` {
-		errMsg = ""
-	}
-
-	return types.StringValue(errMsg)
 }
 
 func workflowDynamicFromAny(data interface{}) (types.Dynamic, error) {

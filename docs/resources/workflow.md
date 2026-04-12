@@ -62,10 +62,6 @@ output "workflow_prompt_id" {
   value = comfyui_workflow.example.prompt_id
 }
 
-output "workflow_status" {
-  value = comfyui_workflow.example.status
-}
-
 output "workflow_id" {
   value = comfyui_workflow.example.workflow_id
 }
@@ -76,6 +72,10 @@ output "workflow_outputs_count" {
 
 output "workflow_preview_output_json" {
   value = comfyui_workflow.example.preview_output_json
+}
+
+output "workflow_execution_status_json" {
+  value = comfyui_workflow.example.execution_status_json
 }
 ```
 
@@ -105,7 +105,6 @@ output "workflow_preview_output_json" {
 
 - `assembled_json` (String) The assembled workflow in ComfyUI API format JSON. Populated when workflow_json is provided or node assembly is complete.
 - `create_time` (Number) Timestamp when the workflow was created (from /api/jobs).
-- `error` (String) Error message if execution failed.
 - `execution_end_time` (Number) Timestamp when execution ended (from /api/jobs).
 - `execution_error` (Dynamic) Structured execution error (from /api/jobs).
 - `execution_error_json` (String) Execution error as JSON string (from /api/jobs).
@@ -115,12 +114,10 @@ output "workflow_preview_output_json" {
 - `execution_workflow` (Dynamic) Structured execution workflow (from /api/jobs).
 - `execution_workflow_json` (String) Execution workflow as JSON string (from /api/jobs).
 - `id` (String) Unique identifier for this workflow resource instance.
-- `outputs` (String) JSON string of execution outputs (images, audio, etc.).
 - `outputs_count` (Number) Number of outputs produced (from /api/jobs).
 - `outputs_json` (String) Full outputs as JSON string (from /api/jobs).
 - `outputs_structured` (Dynamic) Structured outputs (from /api/jobs).
 - `preview_output` (Dynamic) Structured preview output (from /api/jobs).
 - `preview_output_json` (String) Preview output as JSON string (from /api/jobs).
-- `status` (String) Execution status: pending, queued, running, completed, or error.
 - `validation_summary_json` (String) Structured JSON summary of semantic validation results when workflow preflight validation runs.
 - `workflow_id` (String) Workflow ID associated with this execution (from /api/jobs).

@@ -47,10 +47,6 @@ output "workflow_prompt_id" {
   value = comfyui_workflow.example.prompt_id
 }
 
-output "workflow_status" {
-  value = comfyui_workflow.example.status
-}
-
 output "workflow_id" {
   value = comfyui_workflow.example.workflow_id
 }
@@ -61,4 +57,8 @@ output "workflow_outputs_count" {
 
 output "workflow_preview_output_json" {
   value = comfyui_workflow.example.preview_output_json
+}
+
+output "workflow_execution_status_json" {
+  value = comfyui_workflow.example.execution_status_json
 }

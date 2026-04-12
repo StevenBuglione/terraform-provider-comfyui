@@ -55,9 +55,9 @@ variable "aspect_ratio" {
 resource "comfyui_kling_text_to_video_node" "kling_video" {
   prompt          = var.prompt
   negative_prompt = var.negative_prompt
-  cfg_scale       = 0.7         # Guidance scale (0–1)
+  cfg_scale       = 0.7 # Guidance scale (0–1)
   aspect_ratio    = var.aspect_ratio
-  mode            = "std"       # "std" (standard) or "pro" (higher quality, slower)
+  mode            = "std" # "std" (standard) or "pro" (higher quality, slower)
 }
 
 # Save the Kling-generated video to disk
@@ -89,13 +89,13 @@ resource "comfyui_workflow" "kling_video_gen" {
 resource "comfyui_byte_dance_text_to_video_node" "seedance_video" {
   model          = "seedance-1-0-pro-fast-251015" # Fast variant
   prompt         = var.prompt
-  resolution     = "720p"       # "480p", "720p", or "1080p"
+  resolution     = "720p" # "480p", "720p", or "1080p"
   aspect_ratio   = var.aspect_ratio
-  duration       = 5            # Video length in seconds (3–12)
-  seed           = 42           # 0 = random
-  camera_fixed   = false        # Lock camera movement
-  watermark      = false        # Add provider watermark
-  generate_audio = false        # Auto-generate matching audio
+  duration       = 5     # Video length in seconds (3–12)
+  seed           = 42    # 0 = random
+  camera_fixed   = false # Lock camera movement
+  watermark      = false # Add provider watermark
+  generate_audio = false # Auto-generate matching audio
 }
 
 # Save the Seedance-generated video to disk
@@ -128,8 +128,8 @@ output "kling_prompt_id" {
 }
 
 output "kling_status" {
-  description = "Kling workflow execution status"
-  value       = comfyui_workflow.kling_video_gen.status
+  description = "Kling workflow execution status payload"
+  value       = comfyui_workflow.kling_video_gen.execution_status_json
 }
 
 output "seedance_prompt_id" {
@@ -138,6 +138,6 @@ output "seedance_prompt_id" {
 }
 
 output "seedance_status" {
-  description = "Seedance workflow execution status"
-  value       = comfyui_workflow.seedance_video_gen.status
+  description = "Seedance workflow execution status payload"
+  value       = comfyui_workflow.seedance_video_gen.execution_status_json
 }

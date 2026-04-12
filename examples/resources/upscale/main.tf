@@ -84,12 +84,12 @@ output "prompt_id" {
   value       = comfyui_workflow.upscale.prompt_id
 }
 
-output "status" {
-  description = "Workflow execution status"
-  value       = comfyui_workflow.upscale.status
+output "workflow_id" {
+  description = "Workflow identifier embedded in execution metadata"
+  value       = comfyui_workflow.upscale.workflow_id
 }
 
-output "outputs" {
+output "outputs_json" {
   description = "JSON string of execution outputs"
-  value       = comfyui_workflow.upscale.outputs
+  value       = comfyui_workflow.upscale.outputs_json
 }

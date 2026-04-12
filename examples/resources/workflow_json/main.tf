@@ -129,17 +129,22 @@ output "prompt_id" {
   value       = comfyui_workflow.from_json.prompt_id
 }
 
-output "status" {
-  description = "Workflow execution status"
-  value       = comfyui_workflow.from_json.status
+output "workflow_id" {
+  description = "Workflow identifier embedded in execution metadata"
+  value       = comfyui_workflow.from_json.workflow_id
 }
 
-output "outputs" {
+output "outputs_json" {
   description = "JSON string of execution outputs"
-  value       = comfyui_workflow.from_json.outputs
+  value       = comfyui_workflow.from_json.outputs_json
 }
 
-output "error" {
-  description = "Error message if execution failed (empty on success)"
-  value       = comfyui_workflow.from_json.error
+output "execution_status_json" {
+  description = "Structured execution status payload"
+  value       = comfyui_workflow.from_json.execution_status_json
+}
+
+output "execution_error_json" {
+  description = "Structured execution error payload when execution fails"
+  value       = comfyui_workflow.from_json.execution_error_json
 }

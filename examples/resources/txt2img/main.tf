@@ -153,12 +153,17 @@ output "prompt_id" {
   value       = comfyui_workflow.txt2img.prompt_id
 }
 
-output "status" {
-  description = "Workflow execution status"
-  value       = comfyui_workflow.txt2img.status
+output "workflow_id" {
+  description = "Workflow identifier embedded in execution metadata"
+  value       = comfyui_workflow.txt2img.workflow_id
 }
 
-output "outputs" {
+output "outputs_json" {
   description = "JSON string of execution outputs (image filenames, etc.)"
-  value       = comfyui_workflow.txt2img.outputs
+  value       = comfyui_workflow.txt2img.outputs_json
+}
+
+output "execution_status_json" {
+  description = "Structured execution status payload"
+  value       = comfyui_workflow.txt2img.execution_status_json
 }

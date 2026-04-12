@@ -163,24 +163,24 @@ output "exportable_assembled_json" {
   value       = comfyui_workflow.exportable.assembled_json
 }
 
-output "exportable_status" {
-  description = "Status of the file-only resource (expect 'file_only')"
-  value       = comfyui_workflow.exportable.status
-}
-
 output "live_run_prompt_id" {
   description = "ComfyUI prompt ID for the executed workflow"
   value       = comfyui_workflow.live_run.prompt_id
 }
 
-output "live_run_status" {
-  description = "Execution status of the live workflow"
-  value       = comfyui_workflow.live_run.status
+output "live_run_workflow_id" {
+  description = "Workflow identifier embedded in execution metadata"
+  value       = comfyui_workflow.live_run.workflow_id
 }
 
-output "live_run_outputs" {
+output "live_run_outputs_json" {
   description = "JSON string of execution outputs (image filenames, etc.)"
-  value       = comfyui_workflow.live_run.outputs
+  value       = comfyui_workflow.live_run.outputs_json
+}
+
+output "live_run_execution_status_json" {
+  description = "Structured execution status of the live workflow"
+  value       = comfyui_workflow.live_run.execution_status_json
 }
 
 output "live_run_file_path" {

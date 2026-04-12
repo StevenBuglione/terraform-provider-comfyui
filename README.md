@@ -135,7 +135,7 @@ At apply time:
 
 - Terraform stores node resources in state and assembles them into ComfyUI API-format JSON.
 - `comfyui_workflow` submits the graph to ComfyUI and can wait for completion.
-- The workflow resource returns execution fields like `prompt_id`, `status`, `workflow_id`, `outputs_count`, `preview_output_json`, `outputs_structured`, `assembled_json`, and `error`.
+- The workflow resource returns execution fields like `prompt_id`, `workflow_id`, `outputs_count`, `preview_output_json`, `outputs_json`, `execution_status_json`, `execution_error_json`, and `assembled_json`.
 - The job data sources let you re-read the same execution through normalized `/api/jobs` views for filtering and feedback loops.
 
 ## Core Concepts
