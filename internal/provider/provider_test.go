@@ -2,10 +2,12 @@ package provider
 
 import (
 	"context"
+	"reflect"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
 func TestProviderRegistersWorkspaceResource(t *testing.T) {
@@ -134,5 +136,74 @@ func TestProviderRegistersSubgraphSurface(t *testing.T) {
 		if !found {
 			t.Fatalf("expected provider to register %s, got %v", typeName, dataSourceTypes)
 		}
+	}
+}
+
+func TestResolveProviderSettings_UsesConfigAndParsesExtraData(t *testing.T) {
+	settings, err := resolveProviderSettings(ComfyUIProviderModel{
+		Host:                         types.StringValue("http://127.0.0.1:8188"),
+		Port:                         types.Int64Value(8188),
+		APIKey:                       types.StringValue("api-key"),
+		ComfyOrgAuthToken:            types.StringValue("auth-token"),
+		ComfyOrgAPIKey:               types.StringValue("partner-key"),
+		DefaultWorkflowExtraDataJSON: types.StringValue(`{"tenant":"dev","extra_pnginfo":{"workflow":{"id":"wf-1"}}}`),
+	}, func(string) string {
+		return ""
+	})
+	if err != nil {
+		t.Fatalf("resolveProviderSettings returned error: %v", err)
+	}
+
+	if settings.ComfyOrgAuthToken != "auth-token" || settings.ComfyOrgAPIKey != "partner-key" {
+		t.Fatalf("unexpected comfy_org credentials: %#v", settings)
+	}
+
+	expected := map[string]interface{}{
+		"tenant": "dev",
+		"extra_pnginfo": map[string]interface{}{
+			"workflow": map[string]interface{}{
+				"id": "wf-1",
+			},
+		},
+	}
+	if !reflect.DeepEqual(settings.DefaultWorkflowExtraData, expected) {
+		t.Fatalf("unexpected default workflow extra data: %#v", settings.DefaultWorkflowExtraData)
+	}
+}
+
+func TestResolveProviderSettings_UsesEnvFallbacksAndValidatesMode(t *testing.T) {
+	getenv := func(key string) string {
+		switch key {
+		case "COMFYUI_COMFY_ORG_AUTH_TOKEN":
+			return "env-auth-token"
+		case "COMFYUI_COMFY_ORG_API_KEY":
+			return "env-partner-key"
+		case "COMFYUI_UNSUPPORTED_DYNAMIC_VALIDATION_MODE":
+			return "warning"
+		default:
+			return ""
+		}
+	}
+
+	settings, err := resolveProviderSettings(ComfyUIProviderModel{}, getenv)
+	if err != nil {
+		t.Fatalf("resolveProviderSettings returned error: %v", err)
+	}
+	if settings.ComfyOrgAuthToken != "env-auth-token" || settings.ComfyOrgAPIKey != "env-partner-key" {
+		t.Fatalf("unexpected env credentials: %#v", settings)
+	}
+	if settings.UnsupportedDynamicValidationMode != "warning" {
+		t.Fatalf("expected warning mode, got %q", settings.UnsupportedDynamicValidationMode)
+	}
+}
+
+func TestResolveProviderSettings_RejectsInvalidValidationMode(t *testing.T) {
+	_, err := resolveProviderSettings(ComfyUIProviderModel{
+		UnsupportedDynamicValidationMode: types.StringValue("explode"),
+	}, func(string) string {
+		return ""
+	})
+	if err == nil {
+		t.Fatal("expected invalid validation mode to fail")
 	}
 }

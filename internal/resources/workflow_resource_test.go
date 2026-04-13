@@ -120,6 +120,47 @@ func TestBuildQueuePromptRequest_InvalidExtraDataJSON(t *testing.T) {
 	}
 }
 
+func TestBuildQueuePromptRequest_MergesProviderDefaultsAndComfyOrgAuth(t *testing.T) {
+	req, err := buildQueuePromptRequest(map[string]interface{}{}, workflowExecutionRequestConfig{
+		DefaultExtraData: map[string]interface{}{
+			"tenant": "provider-default",
+			"extra_pnginfo": map[string]interface{}{
+				"workflow": map[string]interface{}{
+					"id": "wf-default",
+				},
+			},
+		},
+		ComfyOrgAuthToken: "provider-auth-token",
+		ComfyOrgAPIKey:    "provider-api-key",
+		ExtraDataJSON:     `{"tenant":"resource-override","extra_pnginfo":{"workflow":{"title":"resource-title"}},"auth_token_comfy_org":"resource-auth-token"}`,
+	})
+	if err != nil {
+		t.Fatalf("buildQueuePromptRequest returned error: %v", err)
+	}
+
+	if req.ExtraData["tenant"] != "resource-override" {
+		t.Fatalf("expected resource override for tenant, got %#v", req.ExtraData["tenant"])
+	}
+	if req.ExtraData["auth_token_comfy_org"] != "resource-auth-token" {
+		t.Fatalf("expected resource auth token override, got %#v", req.ExtraData["auth_token_comfy_org"])
+	}
+	if req.ExtraData["api_key_comfy_org"] != "provider-api-key" {
+		t.Fatalf("expected provider api key fallback, got %#v", req.ExtraData["api_key_comfy_org"])
+	}
+
+	extraPNGInfo, ok := req.ExtraData["extra_pnginfo"].(map[string]interface{})
+	if !ok {
+		t.Fatalf("expected extra_pnginfo object, got %#v", req.ExtraData["extra_pnginfo"])
+	}
+	workflow, ok := extraPNGInfo["workflow"].(map[string]interface{})
+	if !ok {
+		t.Fatalf("expected extra_pnginfo.workflow object, got %#v", extraPNGInfo["workflow"])
+	}
+	if workflow["id"] != "wf-default" || workflow["title"] != "resource-title" {
+		t.Fatalf("expected deep-merged workflow metadata, got %#v", workflow)
+	}
+}
+
 func TestBuildQueuePromptRequest_ReturnsClientRequest(t *testing.T) {
 	req, err := buildQueuePromptRequest(map[string]interface{}{}, workflowExecutionRequestConfig{})
 	if err != nil {

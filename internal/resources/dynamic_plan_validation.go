@@ -24,8 +24,8 @@ func ValidateDynamicInputs(ctx context.Context, c *client.Client, nodeType strin
 
 	fields := modelFieldsByTag(model)
 	service := inventory.NewService(c)
-	validateInputGroup(ctx, service, fields, schema.RequiredInputs, diags)
-	validateInputGroup(ctx, service, fields, schema.OptionalInputs, diags)
+	validateInputGroup(ctx, c, service, fields, schema.RequiredInputs, diags)
+	validateInputGroup(ctx, c, service, fields, schema.OptionalInputs, diags)
 }
 
 func ValidateDynamicInputsForTest(ctx context.Context, c *client.Client, nodeType string, model any) diag.Diagnostics {
@@ -34,7 +34,8 @@ func ValidateDynamicInputsForTest(ctx context.Context, c *client.Client, nodeTyp
 	return diags
 }
 
-func validateInputGroup(ctx context.Context, service *inventory.Service, fields map[string]reflect.Value, inputs []nodeschema.GeneratedNodeSchemaInput, diags *diag.Diagnostics) {
+func validateInputGroup(ctx context.Context, c *client.Client, service *inventory.Service, fields map[string]reflect.Value, inputs []nodeschema.GeneratedNodeSchemaInput, diags *diag.Diagnostics) {
+	mode := unsupportedDynamicValidationMode(c)
 	for _, input := range inputs {
 		tfName := generatedInputTerraformName(input)
 		field, ok := fields[tfName]
@@ -49,11 +50,22 @@ func validateInputGroup(ctx context.Context, service *inventory.Service, fields 
 
 		switch input.ValidationKind {
 		case validation.InputValidationKindDynamicExpression:
-			diags.AddAttributeError(
-				path.Root(tfName),
-				"Unsupported Dynamic Plan Validation",
-				fmt.Sprintf("Input %q on node %q uses dynamic ComfyUI options that this provider cannot strictly validate during terraform plan.", input.Name, input.Type),
-			)
+			switch mode {
+			case "ignore":
+				continue
+			case "warning":
+				diags.AddAttributeWarning(
+					path.Root(tfName),
+					"Unsupported Dynamic Plan Validation",
+					fmt.Sprintf("Input %q on node %q uses dynamic ComfyUI options that this provider cannot strictly validate during terraform plan. Execution may still succeed at runtime.", input.Name, input.Type),
+				)
+			default:
+				diags.AddAttributeError(
+					path.Root(tfName),
+					"Unsupported Dynamic Plan Validation",
+					fmt.Sprintf("Input %q on node %q uses dynamic ComfyUI options that this provider cannot strictly validate during terraform plan.", input.Name, input.Type),
+				)
+			}
 		case validation.InputValidationKindDynamicInventory:
 			if !known {
 				diags.AddAttributeError(
@@ -90,6 +102,13 @@ func validateInputGroup(ctx context.Context, service *inventory.Service, fields 
 			}
 		}
 	}
+}
+
+func unsupportedDynamicValidationMode(c *client.Client) string {
+	if c == nil || strings.TrimSpace(c.UnsupportedDynamicValidationMode) == "" {
+		return "error"
+	}
+	return strings.ToLower(strings.TrimSpace(c.UnsupportedDynamicValidationMode))
 }
 
 func containsString(values []string, target string) bool {

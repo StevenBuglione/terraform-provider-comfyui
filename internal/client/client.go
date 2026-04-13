@@ -10,28 +10,81 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
 
 type Client struct {
-	Host       string
-	Port       int64
-	APIKey     string
-	HTTPClient *http.Client
-	BaseURL    string
+	Host                             string
+	Port                             int64
+	APIKey                           string
+	HTTPClient                       *http.Client
+	BaseURL                          string
+	DefaultWorkflowExtraData         map[string]interface{}
+	ComfyOrgAuthToken                string
+	ComfyOrgAPIKey                   string
+	UnsupportedDynamicValidationMode string
 }
 
 func NewClient(host string, port int64, apiKey string) *Client {
+	normalizedHost, normalizedPort, baseURL := normalizeConnection(host, port)
 	return &Client{
-		Host:   host,
-		Port:   port,
+		Host:   normalizedHost,
+		Port:   normalizedPort,
 		APIKey: apiKey,
 		HTTPClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
-		BaseURL: fmt.Sprintf("http://%s:%d", host, port),
+		BaseURL: baseURL,
 	}
+}
+
+func normalizeConnection(host string, port int64) (string, int64, string) {
+	host = strings.TrimSpace(host)
+	if host == "" {
+		host = "localhost"
+	}
+
+	var parsed *url.URL
+	switch {
+	case strings.Contains(host, "://"):
+		if candidate, err := url.Parse(host); err == nil && candidate.Host != "" {
+			parsed = candidate
+		}
+	case strings.Contains(host, ":"):
+		if candidate, err := url.Parse("//" + host); err == nil && candidate.Host != "" {
+			parsed = candidate
+		}
+	}
+
+	if parsed == nil {
+		return host, port, fmt.Sprintf("http://%s:%d", host, port)
+	}
+
+	normalizedHost := parsed.Hostname()
+	normalizedPort := port
+	if parsedPort := parsed.Port(); parsedPort != "" {
+		if parsedValue, err := strconv.ParseInt(parsedPort, 10, 64); err == nil {
+			normalizedPort = parsedValue
+		}
+	} else if strings.Contains(host, "://") || strings.Contains(host, "/") {
+		switch parsed.Scheme {
+		case "https":
+			normalizedPort = 443
+		default:
+			normalizedPort = 80
+		}
+	} else if normalizedPort == 0 {
+		normalizedPort = 80
+	}
+
+	scheme := parsed.Scheme
+	if scheme == "" {
+		scheme = "http"
+	}
+
+	return normalizedHost, normalizedPort, fmt.Sprintf("%s://%s:%d", scheme, normalizedHost, normalizedPort)
 }
 
 // QueuePrompt submits a workflow for execution.

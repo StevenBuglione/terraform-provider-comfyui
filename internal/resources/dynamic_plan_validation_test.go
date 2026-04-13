@@ -80,3 +80,26 @@ func TestValidateDynamicInputs_RejectsUnsupportedDynamicExpression(t *testing.T)
 		t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
 	}
 }
+
+func TestValidateDynamicInputs_WarnsForUnsupportedDynamicExpressionWhenConfigured(t *testing.T) {
+	model := basicSchedulerTestModel{Scheduler: types.StringValue("karras")}
+	var diags = ValidateDynamicInputsForTest(context.Background(), &client.Client{
+		UnsupportedDynamicValidationMode: "warning",
+	}, "BasicScheduler", model)
+	if diags.HasError() {
+		t.Fatalf("expected warning-only diagnostics, got %v", diags)
+	}
+	if diags.WarningsCount() != 1 {
+		t.Fatalf("expected one warning, got %d", diags.WarningsCount())
+	}
+}
+
+func TestValidateDynamicInputs_IgnoresUnsupportedDynamicExpressionWhenConfigured(t *testing.T) {
+	model := basicSchedulerTestModel{Scheduler: types.StringValue("karras")}
+	var diags = ValidateDynamicInputsForTest(context.Background(), &client.Client{
+		UnsupportedDynamicValidationMode: "ignore",
+	}, "BasicScheduler", model)
+	if diags.HasError() || diags.WarningsCount() != 0 {
+		t.Fatalf("expected no diagnostics, got %v", diags)
+	}
+}

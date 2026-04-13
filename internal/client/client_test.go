@@ -51,6 +51,45 @@ func TestNewClient(t *testing.T) {
 	}
 }
 
+func TestNewClient_NormalizesFullURLHost(t *testing.T) {
+	c := NewClient("http://127.0.0.1:8188", 9000, "")
+	if c.Host != "127.0.0.1" {
+		t.Fatalf("expected Host=127.0.0.1, got %s", c.Host)
+	}
+	if c.Port != 8188 {
+		t.Fatalf("expected Port=8188 from URL, got %d", c.Port)
+	}
+	if c.BaseURL != "http://127.0.0.1:8188" {
+		t.Fatalf("expected normalized BaseURL, got %s", c.BaseURL)
+	}
+}
+
+func TestNewClient_NormalizesHostPortPair(t *testing.T) {
+	c := NewClient("127.0.0.1:8188", 9000, "")
+	if c.Host != "127.0.0.1" {
+		t.Fatalf("expected Host=127.0.0.1, got %s", c.Host)
+	}
+	if c.Port != 8188 {
+		t.Fatalf("expected Port=8188 from host:port, got %d", c.Port)
+	}
+	if c.BaseURL != "http://127.0.0.1:8188" {
+		t.Fatalf("expected normalized BaseURL, got %s", c.BaseURL)
+	}
+}
+
+func TestNewClient_UsesSchemeDefaultPortForURLWithoutExplicitPort(t *testing.T) {
+	c := NewClient("https://example.com", 8188, "")
+	if c.Host != "example.com" {
+		t.Fatalf("expected Host=example.com, got %s", c.Host)
+	}
+	if c.Port != 443 {
+		t.Fatalf("expected https default port 443, got %d", c.Port)
+	}
+	if c.BaseURL != "https://example.com:443" {
+		t.Fatalf("expected normalized BaseURL, got %s", c.BaseURL)
+	}
+}
+
 func TestGetSystemStats(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/system_stats" {

@@ -49,6 +49,14 @@ Environment variables are also supported:
 - `COMFYUI_HOST`
 - `COMFYUI_PORT`
 - `COMFYUI_API_KEY`
+- `COMFYUI_COMFY_ORG_AUTH_TOKEN`
+- `COMFYUI_COMFY_ORG_API_KEY`
+- `COMFYUI_DEFAULT_WORKFLOW_EXTRA_DATA_JSON`
+- `COMFYUI_UNSUPPORTED_DYNAMIC_VALIDATION_MODE`
+
+`COMFYUI_HOST` can be a bare hostname such as `localhost`, a `host:port` pair, or a full URL such as `http://127.0.0.1:8188`.
+
+If you are executing partner-backed nodes such as hidden `comfy_org` resources, browser login state is not reused automatically. Set `comfy_org_auth_token` / `comfy_org_api_key` on the provider, or export the matching environment variables above, so workflow executions can inject them into `/prompt.extra_data`.
 
 ## Minimal Runnable Workflow
 
@@ -126,6 +134,8 @@ It validates:
 That last point matters for loader-style resources. If a built-in dynamic input maps to a live inventory kind such as `checkpoints`, `loras`, or `text_encoders`, a missing value should fail during `terraform plan`, not later during workflow execution.
 
 Use [comfyui_inventory](../data-sources/inventory.md) to inspect those live values directly.
+
+For unsupported dynamic-expression inputs that cannot be proved at plan time, the provider defaults to `error` but can be downgraded to `warning` or `ignore` with `unsupported_dynamic_validation_mode` when you intentionally accept runtime-only validation.
 
 ## What `terraform apply` Does
 

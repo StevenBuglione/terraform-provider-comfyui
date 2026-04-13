@@ -90,6 +90,9 @@ type workflowExecutionRequestConfig struct {
 	ClientID                string
 	ExtraDataJSON           string
 	PartialExecutionTargets []string
+	DefaultExtraData        map[string]interface{}
+	ComfyOrgAuthToken       string
+	ComfyOrgAPIKey          string
 }
 
 func NewWorkflowResource() resource.Resource {
@@ -496,6 +499,9 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		ClientID:                stringValue(data.ClientID),
 		ExtraDataJSON:           stringValue(data.ExtraDataJSON),
 		PartialExecutionTargets: partialTargets,
+		DefaultExtraData:        r.client.DefaultWorkflowExtraData,
+		ComfyOrgAuthToken:       r.client.ComfyOrgAuthToken,
+		ComfyOrgAPIKey:          r.client.ComfyOrgAPIKey,
 	})
 	if err != nil {
 		clearWorkflowExecutionFields(data)
@@ -580,11 +586,29 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 		PartialExecutionTargets: append([]string(nil), config.PartialExecutionTargets...),
 	}
 
-	extraData := map[string]interface{}{}
+	extraData, err := cloneJSONMap(config.DefaultExtraData)
+	if err != nil {
+		return client.QueuePromptRequest{}, fmt.Errorf("clone default extra_data: %w", err)
+	}
+	if extraData == nil {
+		extraData = map[string]interface{}{}
+	}
+	if config.ComfyOrgAuthToken != "" {
+		if _, ok := extraData["auth_token_comfy_org"]; !ok {
+			extraData["auth_token_comfy_org"] = config.ComfyOrgAuthToken
+		}
+	}
+	if config.ComfyOrgAPIKey != "" {
+		if _, ok := extraData["api_key_comfy_org"]; !ok {
+			extraData["api_key_comfy_org"] = config.ComfyOrgAPIKey
+		}
+	}
 	if config.ExtraDataJSON != "" {
-		if err := json.Unmarshal([]byte(config.ExtraDataJSON), &extraData); err != nil {
+		resourceExtraData := map[string]interface{}{}
+		if err := json.Unmarshal([]byte(config.ExtraDataJSON), &resourceExtraData); err != nil {
 			return client.QueuePromptRequest{}, fmt.Errorf("extra_data_json must be valid JSON: %w", err)
 		}
+		extraData = mergeJSONMaps(extraData, resourceExtraData)
 	}
 
 	extraPNGInfo, _ := extraData["extra_pnginfo"].(map[string]interface{})
@@ -600,6 +624,39 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 	request.ExtraData = extraData
 
 	return request, nil
+}
+
+func cloneJSONMap(input map[string]interface{}) (map[string]interface{}, error) {
+	if len(input) == 0 {
+		return map[string]interface{}{}, nil
+	}
+
+	raw, err := json.Marshal(input)
+	if err != nil {
+		return nil, err
+	}
+
+	cloned := map[string]interface{}{}
+	if err := json.Unmarshal(raw, &cloned); err != nil {
+		return nil, err
+	}
+	return cloned, nil
+}
+
+func mergeJSONMaps(base, overlay map[string]interface{}) map[string]interface{} {
+	if base == nil {
+		base = map[string]interface{}{}
+	}
+	for key, value := range overlay {
+		if existingMap, ok := base[key].(map[string]interface{}); ok {
+			if overlayMap, ok := value.(map[string]interface{}); ok {
+				base[key] = mergeJSONMaps(existingMap, overlayMap)
+				continue
+			}
+		}
+		base[key] = value
+	}
+	return base
 }
 
 func (r *WorkflowResource) updateFromHistoryEntry(data *WorkflowModel, entry *client.HistoryEntry) {
