@@ -324,6 +324,17 @@ func TestBuildResourceDataSurfacesSchemaMetadata(t *testing.T) {
 	}
 }
 
+func TestResourceTemplateReregistersNodeStateDuringRead(t *testing.T) {
+	readIndex := strings.Index(resourceTemplate, "func (r *{{ .StructName }}Resource) Read")
+	if readIndex == -1 {
+		t.Fatal("expected Read function in resource template")
+	}
+	readSection := resourceTemplate[readIndex:]
+	if !strings.Contains(readSection, "resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)") {
+		t.Fatal("expected Read template to re-register node state from state")
+	}
+}
+
 func TestBuildNodeUIHintsTemplateDataSortsNodesAndWidgets(t *testing.T) {
 	hints := NodeUIHints{
 		Version:        "1.0.0",

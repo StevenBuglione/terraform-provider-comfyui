@@ -2,8 +2,10 @@ package provider
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/datasources"
@@ -24,9 +26,23 @@ type ComfyUIProvider struct {
 }
 
 type ComfyUIProviderModel struct {
-	Host   types.String `tfsdk:"host"`
-	Port   types.Int64  `tfsdk:"port"`
-	APIKey types.String `tfsdk:"api_key"`
+	Host                             types.String `tfsdk:"host"`
+	Port                             types.Int64  `tfsdk:"port"`
+	APIKey                           types.String `tfsdk:"api_key"`
+	ComfyOrgAuthToken                types.String `tfsdk:"comfy_org_auth_token"`
+	ComfyOrgAPIKey                   types.String `tfsdk:"comfy_org_api_key"`
+	DefaultWorkflowExtraDataJSON     types.String `tfsdk:"default_workflow_extra_data_json"`
+	UnsupportedDynamicValidationMode types.String `tfsdk:"unsupported_dynamic_validation_mode"`
+}
+
+type providerSettings struct {
+	Host                             string
+	Port                             int64
+	APIKey                           string
+	ComfyOrgAuthToken                string
+	ComfyOrgAPIKey                   string
+	DefaultWorkflowExtraData         map[string]interface{}
+	UnsupportedDynamicValidationMode string
 }
 
 func New(version string) func() provider.Provider {
@@ -63,6 +79,24 @@ func (p *ComfyUIProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 				Optional:    true,
 				Sensitive:   true,
 			},
+			"comfy_org_auth_token": schema.StringAttribute{
+				Description: "Comfy partner auth token to inject into workflow execution extra_data for partner-backed nodes. Can also be set with COMFYUI_COMFY_ORG_AUTH_TOKEN or AUTH_TOKEN_COMFY_ORG.",
+				Optional:    true,
+				Sensitive:   true,
+			},
+			"comfy_org_api_key": schema.StringAttribute{
+				Description: "Comfy partner API key to inject into workflow execution extra_data for partner-backed nodes. Can also be set with COMFYUI_COMFY_ORG_API_KEY or API_KEY_COMFY_ORG.",
+				Optional:    true,
+				Sensitive:   true,
+			},
+			"default_workflow_extra_data_json": schema.StringAttribute{
+				Description: "Default JSON object merged into comfyui_workflow extra_data for every execution. Can also be set with COMFYUI_DEFAULT_WORKFLOW_EXTRA_DATA_JSON.",
+				Optional:    true,
+			},
+			"unsupported_dynamic_validation_mode": schema.StringAttribute{
+				Description: "How unsupported dynamic-expression plan validation should behave for generated node resources: error, warning, or ignore. Can also be set with COMFYUI_UNSUPPORTED_DYNAMIC_VALIDATION_MODE. Defaults to error.",
+				Optional:    true,
+			},
 		},
 	}
 }
@@ -82,40 +116,104 @@ func (p *ComfyUIProvider) Configure(ctx context.Context, req provider.ConfigureR
 		return
 	}
 
-	host := "localhost"
-	if !config.Host.IsNull() && !config.Host.IsUnknown() {
-		host = config.Host.ValueString()
-	} else if v := os.Getenv("COMFYUI_HOST"); v != "" {
-		host = v
+	settings, err := resolveProviderSettings(config, os.Getenv)
+	if err != nil {
+		resp.Diagnostics.AddError("Invalid provider configuration", err.Error())
+		return
 	}
 
-	port := int64(8188)
-	if !config.Port.IsNull() && !config.Port.IsUnknown() {
-		port = config.Port.ValueInt64()
-	} else if v := os.Getenv("COMFYUI_PORT"); v != "" {
-		var p int64
-		_, err := fmt.Sscanf(v, "%d", &p)
-		if err == nil {
-			port = p
-		}
-	}
-
-	apiKey := ""
-	if !config.APIKey.IsNull() && !config.APIKey.IsUnknown() {
-		apiKey = config.APIKey.ValueString()
-	} else if v := os.Getenv("COMFYUI_API_KEY"); v != "" {
-		apiKey = v
-	}
-
-	c := client.NewClient(host, port, apiKey)
+	c := client.NewClient(settings.Host, settings.Port, settings.APIKey)
+	c.ComfyOrgAuthToken = settings.ComfyOrgAuthToken
+	c.ComfyOrgAPIKey = settings.ComfyOrgAPIKey
+	c.DefaultWorkflowExtraData = settings.DefaultWorkflowExtraData
+	c.UnsupportedDynamicValidationMode = settings.UnsupportedDynamicValidationMode
 
 	tflog.Debug(ctx, "ComfyUI client configured", map[string]interface{}{
-		"host": host,
-		"port": port,
+		"host": settings.Host,
+		"port": settings.Port,
 	})
 
 	resp.DataSourceData = c
 	resp.ResourceData = c
+}
+
+func resolveProviderSettings(config ComfyUIProviderModel, getenv func(string) string) (providerSettings, error) {
+	settings := providerSettings{
+		Host:                             "localhost",
+		Port:                             8188,
+		UnsupportedDynamicValidationMode: "error",
+		DefaultWorkflowExtraData:         map[string]interface{}{},
+	}
+
+	if !config.Host.IsNull() && !config.Host.IsUnknown() {
+		settings.Host = config.Host.ValueString()
+	} else if v := getenv("COMFYUI_HOST"); v != "" {
+		settings.Host = v
+	}
+
+	if !config.Port.IsNull() && !config.Port.IsUnknown() {
+		settings.Port = config.Port.ValueInt64()
+	} else if v := getenv("COMFYUI_PORT"); v != "" {
+		var parsed int64
+		if _, err := fmt.Sscanf(v, "%d", &parsed); err == nil {
+			settings.Port = parsed
+		}
+	}
+
+	if !config.APIKey.IsNull() && !config.APIKey.IsUnknown() {
+		settings.APIKey = config.APIKey.ValueString()
+	} else if v := getenv("COMFYUI_API_KEY"); v != "" {
+		settings.APIKey = v
+	}
+
+	if !config.ComfyOrgAuthToken.IsNull() && !config.ComfyOrgAuthToken.IsUnknown() {
+		settings.ComfyOrgAuthToken = config.ComfyOrgAuthToken.ValueString()
+	} else if v := getenv("COMFYUI_COMFY_ORG_AUTH_TOKEN"); v != "" {
+		settings.ComfyOrgAuthToken = v
+	} else if v := getenv("AUTH_TOKEN_COMFY_ORG"); v != "" {
+		settings.ComfyOrgAuthToken = v
+	}
+
+	if !config.ComfyOrgAPIKey.IsNull() && !config.ComfyOrgAPIKey.IsUnknown() {
+		settings.ComfyOrgAPIKey = config.ComfyOrgAPIKey.ValueString()
+	} else if v := getenv("COMFYUI_COMFY_ORG_API_KEY"); v != "" {
+		settings.ComfyOrgAPIKey = v
+	} else if v := getenv("API_KEY_COMFY_ORG"); v != "" {
+		settings.ComfyOrgAPIKey = v
+	}
+
+	extraDataJSON := ""
+	if !config.DefaultWorkflowExtraDataJSON.IsNull() && !config.DefaultWorkflowExtraDataJSON.IsUnknown() {
+		extraDataJSON = config.DefaultWorkflowExtraDataJSON.ValueString()
+	} else if v := getenv("COMFYUI_DEFAULT_WORKFLOW_EXTRA_DATA_JSON"); v != "" {
+		extraDataJSON = v
+	}
+	if strings.TrimSpace(extraDataJSON) != "" {
+		if err := json.Unmarshal([]byte(extraDataJSON), &settings.DefaultWorkflowExtraData); err != nil {
+			return providerSettings{}, fmt.Errorf("default_workflow_extra_data_json must be valid JSON: %w", err)
+		}
+		if settings.DefaultWorkflowExtraData == nil {
+			settings.DefaultWorkflowExtraData = map[string]interface{}{}
+		}
+	}
+
+	mode := ""
+	if !config.UnsupportedDynamicValidationMode.IsNull() && !config.UnsupportedDynamicValidationMode.IsUnknown() {
+		mode = config.UnsupportedDynamicValidationMode.ValueString()
+	} else if v := getenv("COMFYUI_UNSUPPORTED_DYNAMIC_VALIDATION_MODE"); v != "" {
+		mode = v
+	}
+	if strings.TrimSpace(mode) != "" {
+		settings.UnsupportedDynamicValidationMode = strings.ToLower(strings.TrimSpace(mode))
+	}
+
+	switch settings.UnsupportedDynamicValidationMode {
+	case "error", "warning", "ignore":
+	default:
+		return providerSettings{}, fmt.Errorf("unsupported_dynamic_validation_mode must be one of: error, warning, ignore")
+	}
+
+	return settings, nil
 }
 
 func (p *ComfyUIProvider) Resources(_ context.Context) []func() resource.Resource {

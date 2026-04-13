@@ -11,6 +11,8 @@ description: |-
 
 `comfyui_workflow` is the execution boundary for Terraform-authored ComfyUI graphs. Use `node_ids` when the workflow is modeled from generated node resources, or use `workflow_json` when you are importing an existing prompt artifact.
 
+When a workflow is assembled from `node_ids`, generated node resources re-register their virtual node state during `Read`, so the assembly path survives normal refresh/apply cycles instead of only working in the same apply that created the nodes.
+
 {{ if .HasExample -}}
 ## Example Usage
 
@@ -22,6 +24,7 @@ description: |-
 - `execute = true` submits the assembled prompt to ComfyUI.
 - `wait_for_completion = true` keeps the resource blocked until execution reaches a terminal state or the timeout expires.
 - `validate_before_execute = true` uses live `/object_info` metadata to catch provider-known issues before queueing.
+- provider-level workflow `extra_data` defaults, including `comfy_org` partner credentials, are merged into each `/prompt` submission before resource-level `extra_data_json` overrides are applied.
 - `output_file` writes the assembled prompt JSON to disk for debugging, sharing, or downstream artifact flows.
 
 {{ .SchemaMarkdown | trimspace }}

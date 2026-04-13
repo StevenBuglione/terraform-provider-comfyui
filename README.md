@@ -96,6 +96,14 @@ Environment variables are also supported:
 - `COMFYUI_HOST`
 - `COMFYUI_PORT`
 - `COMFYUI_API_KEY`
+- `COMFYUI_COMFY_ORG_AUTH_TOKEN`
+- `COMFYUI_COMFY_ORG_API_KEY`
+- `COMFYUI_DEFAULT_WORKFLOW_EXTRA_DATA_JSON`
+- `COMFYUI_UNSUPPORTED_DYNAMIC_VALIDATION_MODE`
+
+`COMFYUI_HOST` can be either a bare hostname such as `localhost` or a full URL such as `http://127.0.0.1:8188`.
+
+For partner-backed nodes that rely on hidden `comfy_org` auth, browser login state is not inherited by Terraform. Configure `comfy_org_auth_token` / `comfy_org_api_key` on the provider (or the matching environment variables above) so `comfyui_workflow` can inject them into `/prompt.extra_data`.
 
 ## Quick Start
 
