@@ -18,6 +18,22 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
+## [0.18.7] - 2026-04-13
+
+Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
+
+### BUG FIXES
+
+* **Partner Auth Ergonomics:** Add first-class provider support for `comfy_org` auth token / API key defaults and merge them into workflow `extra_data` automatically so partner-node execution no longer depends on hand-authored JSON payloads
+* **Workflow Assembly Stability:** Re-register generated node state during resource `Read` so `comfyui_workflow.node_ids` survives refresh/apply cycles instead of failing with missing in-memory node registry state
+* **Dynamic Validation Escape Hatch:** Add configurable `unsupported_dynamic_validation_mode = "error" | "warning" | "ignore"` so runtime-only dynamic node options such as `SaveVideo` can be used intentionally without forking the provider
+* **Connection Normalization:** Normalize bare hosts, `host:port`, and full URLs consistently, including correct default port handling for `http` and `https`
+
+### NOTES
+
+* Maintains ComfyUI `v0.18.5` compatibility
+* No provider schema breakage for existing `~> 0.18` users; new provider settings are additive
+
 ## [0.18.6] - 2026-04-12
 
 Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
@@ -89,6 +105,7 @@ Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5
 * Built with Terraform Plugin Framework (not SDKv2)
 * Generated node resources are virtual/plan-only - execution happens through `comfyui_workflow`
 
-[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.6...HEAD
+[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.7...HEAD
+[0.18.7]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.7
 [0.18.6]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.6
 [0.18.5]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.5
