@@ -166,6 +166,72 @@ func TestBuildQueuePromptRequest_MergesProviderDefaultsAndComfyOrgAuth(t *testin
 	}
 }
 
+func TestBuildQueuePromptRequest_PrefersExplicitAPIKeyAndScrubsLosingToken(t *testing.T) {
+	req, err := buildQueuePromptRequest(map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "GeminiNanoBanana2",
+			"inputs":     map[string]interface{}{},
+		},
+	}, workflowExecutionRequestConfig{
+		ExtraDataJSON: `{"api_key_comfy_org":"resource-api-key","auth_token_comfy_org":"stale-token"}`,
+	})
+	if err != nil {
+		t.Fatalf("buildQueuePromptRequest returned error: %v", err)
+	}
+
+	if req.ExtraData["api_key_comfy_org"] != "resource-api-key" {
+		t.Fatalf("expected explicit api key to win, got %#v", req.ExtraData["api_key_comfy_org"])
+	}
+	if _, ok := req.ExtraData["auth_token_comfy_org"]; ok {
+		t.Fatalf("expected losing auth token to be scrubbed, got %#v", req.ExtraData["auth_token_comfy_org"])
+	}
+}
+
+func TestBuildQueuePromptRequest_PrefersProviderAPIKeyOverDefaultExtraDataToken(t *testing.T) {
+	req, err := buildQueuePromptRequest(map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "WanImageToVideoApi",
+			"inputs":     map[string]interface{}{},
+		},
+	}, workflowExecutionRequestConfig{
+		DefaultExtraData: map[string]interface{}{
+			"auth_token_comfy_org": "legacy-default-token",
+		},
+		ComfyOrgAPIKey: "provider-api-key",
+	})
+	if err != nil {
+		t.Fatalf("buildQueuePromptRequest returned error: %v", err)
+	}
+
+	if req.ExtraData["api_key_comfy_org"] != "provider-api-key" {
+		t.Fatalf("expected provider api key to win over default extra_data token, got %#v", req.ExtraData["api_key_comfy_org"])
+	}
+	if _, ok := req.ExtraData["auth_token_comfy_org"]; ok {
+		t.Fatalf("expected legacy default token to be scrubbed after resolution, got %#v", req.ExtraData["auth_token_comfy_org"])
+	}
+}
+
+func TestBuildQueuePromptRequest_InjectsProviderAPIKeyForPartnerNode(t *testing.T) {
+	req, err := buildQueuePromptRequest(map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "WanImageToVideoApi",
+			"inputs":     map[string]interface{}{},
+		},
+	}, workflowExecutionRequestConfig{
+		ComfyOrgAPIKey: "provider-api-key",
+	})
+	if err != nil {
+		t.Fatalf("buildQueuePromptRequest returned error: %v", err)
+	}
+
+	if req.ExtraData["api_key_comfy_org"] != "provider-api-key" {
+		t.Fatalf("expected provider api key to be injected, got %#v", req.ExtraData["api_key_comfy_org"])
+	}
+	if _, ok := req.ExtraData["auth_token_comfy_org"]; ok {
+		t.Fatalf("expected auth token to remain absent when api key is selected, got %#v", req.ExtraData["auth_token_comfy_org"])
+	}
+}
+
 func TestBuildQueuePromptRequest_PartnerPromptFailsWithoutResolvedAuth(t *testing.T) {
 	_, err := buildQueuePromptRequest(map[string]interface{}{
 		"1": map[string]interface{}{

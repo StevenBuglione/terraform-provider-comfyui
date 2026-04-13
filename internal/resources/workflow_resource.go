@@ -586,31 +586,32 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 		PartialExecutionTargets: append([]string(nil), config.PartialExecutionTargets...),
 	}
 
-	extraData, err := cloneJSONMap(config.DefaultExtraData)
+	defaultExtraData, err := cloneJSONMap(config.DefaultExtraData)
 	if err != nil {
 		return client.QueuePromptRequest{}, fmt.Errorf("clone default extra_data: %w", err)
 	}
-	if extraData == nil {
-		extraData = map[string]interface{}{}
+	if defaultExtraData == nil {
+		defaultExtraData = map[string]interface{}{}
 	}
+	resourceExtraData := map[string]interface{}{}
 	if config.ExtraDataJSON != "" {
-		resourceExtraData := map[string]interface{}{}
 		if err := json.Unmarshal([]byte(config.ExtraDataJSON), &resourceExtraData); err != nil {
 			return client.QueuePromptRequest{}, fmt.Errorf("extra_data_json must be valid JSON: %w", err)
 		}
-		extraData = mergeJSONMaps(extraData, resourceExtraData)
 	}
+	extraData := mergeJSONMaps(defaultExtraData, resourceExtraData)
 
 	requirements, err := ExtractAuthRequirements(prompt)
 	if err != nil {
 		return client.QueuePromptRequest{}, fmt.Errorf("extract auth requirements: %w", err)
 	}
 
-	resolution := ResolveAuthRequirements(requirements, authResolverConfigFromExtraData(extraData, config))
+	resolution := ResolveAuthRequirements(requirements, authResolverConfigFromExtraData(resourceExtraData, defaultExtraData, config))
 	if len(resolution.Unsatisfied) > 0 {
 		return client.QueuePromptRequest{}, fmt.Errorf("unsatisfied workflow auth requirements: %s", formatUnsatisfiedAuthRequirements(resolution.Unsatisfied))
 	}
 	extraData = mergeJSONMaps(extraData, resolution.ExtraData)
+	extraData = scrubResolvedAuthModes(extraData, resolution.Resolved)
 
 	extraPNGInfo, _ := extraData["extra_pnginfo"].(map[string]interface{})
 	if extraPNGInfo == nil {
@@ -627,17 +628,45 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 	return request, nil
 }
 
-func authResolverConfigFromExtraData(extraData map[string]interface{}, config workflowExecutionRequestConfig) AuthResolverConfig {
-	if apiKey, ok := stringFromMap(extraData, "api_key_comfy_org"); ok {
-		return AuthResolverConfig{ComfyOrgAPIKey: apiKey}
+func authResolverConfigFromExtraData(resourceExtraData, defaultExtraData map[string]interface{}, config workflowExecutionRequestConfig) AuthResolverConfig {
+	if authConfig, ok := authResolverConfigFromMap(resourceExtraData); ok {
+		return authConfig
 	}
-	if authToken, ok := stringFromMap(extraData, "auth_token_comfy_org"); ok {
-		return AuthResolverConfig{ComfyOrgAuthToken: authToken}
+	if config.ComfyOrgAPIKey != "" || config.ComfyOrgAuthToken != "" {
+		return AuthResolverConfig{
+			ComfyOrgAuthToken: config.ComfyOrgAuthToken,
+			ComfyOrgAPIKey:    config.ComfyOrgAPIKey,
+		}
 	}
-	return AuthResolverConfig{
-		ComfyOrgAuthToken: config.ComfyOrgAuthToken,
-		ComfyOrgAPIKey:    config.ComfyOrgAPIKey,
+	if authConfig, ok := authResolverConfigFromMap(defaultExtraData); ok {
+		return authConfig
 	}
+	return AuthResolverConfig{}
+}
+
+func authResolverConfigFromMap(values map[string]interface{}) (AuthResolverConfig, bool) {
+	if apiKey, ok := stringFromMap(values, "api_key_comfy_org"); ok {
+		return AuthResolverConfig{ComfyOrgAPIKey: apiKey}, true
+	}
+	if authToken, ok := stringFromMap(values, "auth_token_comfy_org"); ok {
+		return AuthResolverConfig{ComfyOrgAuthToken: authToken}, true
+	}
+	return AuthResolverConfig{}, false
+}
+
+func scrubResolvedAuthModes(extraData map[string]interface{}, resolved []ResolvedAuthRequirement) map[string]interface{} {
+	for _, requirement := range resolved {
+		switch requirement.Family {
+		case "comfy_org":
+			switch requirement.Mode {
+			case "api_key":
+				delete(extraData, "auth_token_comfy_org")
+			case "auth_token":
+				delete(extraData, "api_key_comfy_org")
+			}
+		}
+	}
+	return extraData
 }
 
 func stringFromMap(values map[string]interface{}, key string) (string, bool) {
