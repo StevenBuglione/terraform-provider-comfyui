@@ -18,6 +18,23 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
+## [0.18.8] - 2026-04-13
+
+### BUG FIXES
+
+* **Auth Requirement Resolution:** Inspect assembled workflows for hidden auth requirements, resolve the correct credential family automatically, and fail fast before queueing when partner-backed nodes have no valid auth
+* **Partner Credential Preference:** Prefer `comfy_org_api_key` over `comfy_org_auth_token` for stable automation and inject only the selected credential instead of mixing both auth modes
+* **Workflow Failure Surfacing:** Surface immediate job failures from `/api/jobs/{id}` during wait polling so prompt failures no longer masquerade as long workflow timeouts
+
+### DOCUMENTATION
+
+* Clarify the split between ComfyUI service auth, partner execution auth, and browser login, including unauthenticated operator options and the current lack of a supported `comfy` CLI partner-login flow for this provider path
+
+### NOTES
+
+* Maintains ComfyUI `v0.18.5` compatibility
+* No provider schema breakage for existing `~> 0.18` users; auth behavior is stricter and more explicit at execution time
+
 ## [0.18.7] - 2026-04-13
 
 Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
@@ -105,7 +122,8 @@ Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5
 * Built with Terraform Plugin Framework (not SDKv2)
 * Generated node resources are virtual/plan-only - execution happens through `comfyui_workflow`
 
-[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.7...HEAD
+[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.8...HEAD
+[0.18.8]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.8
 [0.18.7]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.7
 [0.18.6]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.6
 [0.18.5]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.5

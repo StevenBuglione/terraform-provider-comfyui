@@ -154,14 +154,18 @@ func (c *Client) WaitForCompletion(promptID string, timeout time.Duration) (*His
 
 	for time.Now().Before(deadline) {
 		history, err := c.GetHistory(promptID)
-		if err != nil {
-			time.Sleep(pollInterval)
-			continue
+		if err == nil {
+			if entry, ok := (*history)[promptID]; ok {
+				if entry.Status.Completed {
+					return &entry, nil
+				}
+			}
 		}
 
-		if entry, ok := (*history)[promptID]; ok {
-			if entry.Status.Completed {
-				return &entry, nil
+		if job, err := c.GetJob(promptID); err == nil && job != nil {
+			switch strings.ToLower(strings.TrimSpace(job.Status)) {
+			case "failed", "error", "cancelled", "canceled":
+				return nil, formatJobExecutionError(promptID, job)
 			}
 		}
 
@@ -169,6 +173,26 @@ func (c *Client) WaitForCompletion(promptID string, timeout time.Duration) (*His
 	}
 
 	return nil, fmt.Errorf("timeout waiting for prompt %s to complete after %v", promptID, timeout)
+}
+
+func formatJobExecutionError(promptID string, job *Job) error {
+	if job == nil {
+		return fmt.Errorf("prompt %s failed", promptID)
+	}
+	if len(job.ExecutionError) == 0 {
+		return fmt.Errorf("prompt %s failed with status %s", promptID, job.Status)
+	}
+	if message, ok := job.ExecutionError["exception_message"].(string); ok && strings.TrimSpace(message) != "" {
+		if nodeType, ok := job.ExecutionError["node_type"].(string); ok && strings.TrimSpace(nodeType) != "" {
+			return fmt.Errorf("prompt %s failed at node %s: %s", promptID, nodeType, message)
+		}
+		return fmt.Errorf("prompt %s failed: %s", promptID, message)
+	}
+	raw, err := json.Marshal(job.ExecutionError)
+	if err != nil {
+		return fmt.Errorf("prompt %s failed with status %s", promptID, job.Status)
+	}
+	return fmt.Errorf("prompt %s failed with status %s: %s", promptID, job.Status, string(raw))
 }
 
 // GetHistory retrieves execution history for a prompt

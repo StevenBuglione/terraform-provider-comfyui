@@ -121,7 +121,12 @@ func TestBuildQueuePromptRequest_InvalidExtraDataJSON(t *testing.T) {
 }
 
 func TestBuildQueuePromptRequest_MergesProviderDefaultsAndComfyOrgAuth(t *testing.T) {
-	req, err := buildQueuePromptRequest(map[string]interface{}{}, workflowExecutionRequestConfig{
+	req, err := buildQueuePromptRequest(map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "GeminiNanoBanana2",
+			"inputs":     map[string]interface{}{},
+		},
+	}, workflowExecutionRequestConfig{
 		DefaultExtraData: map[string]interface{}{
 			"tenant": "provider-default",
 			"extra_pnginfo": map[string]interface{}{
@@ -144,8 +149,8 @@ func TestBuildQueuePromptRequest_MergesProviderDefaultsAndComfyOrgAuth(t *testin
 	if req.ExtraData["auth_token_comfy_org"] != "resource-auth-token" {
 		t.Fatalf("expected resource auth token override, got %#v", req.ExtraData["auth_token_comfy_org"])
 	}
-	if req.ExtraData["api_key_comfy_org"] != "provider-api-key" {
-		t.Fatalf("expected provider api key fallback, got %#v", req.ExtraData["api_key_comfy_org"])
+	if _, ok := req.ExtraData["api_key_comfy_org"]; ok {
+		t.Fatalf("expected auth resolution to avoid mixing provider api key with explicit auth token, got %#v", req.ExtraData["api_key_comfy_org"])
 	}
 
 	extraPNGInfo, ok := req.ExtraData["extra_pnginfo"].(map[string]interface{})
@@ -158,6 +163,36 @@ func TestBuildQueuePromptRequest_MergesProviderDefaultsAndComfyOrgAuth(t *testin
 	}
 	if workflow["id"] != "wf-default" || workflow["title"] != "resource-title" {
 		t.Fatalf("expected deep-merged workflow metadata, got %#v", workflow)
+	}
+}
+
+func TestBuildQueuePromptRequest_PartnerPromptFailsWithoutResolvedAuth(t *testing.T) {
+	_, err := buildQueuePromptRequest(map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "WanImageToVideoApi",
+			"inputs":     map[string]interface{}{},
+		},
+	}, workflowExecutionRequestConfig{})
+	if err == nil {
+		t.Fatal("expected partner-backed prompt without auth to fail before queueing")
+	}
+	if !strings.Contains(err.Error(), "WanImageToVideoApi") {
+		t.Fatalf("expected error to name triggering node class, got %q", err.Error())
+	}
+	if !strings.Contains(err.Error(), "comfy_org") {
+		t.Fatalf("expected error to mention comfy_org requirement, got %q", err.Error())
+	}
+}
+
+func TestStringFromMap_TrimsWhitespace(t *testing.T) {
+	value, ok := stringFromMap(map[string]interface{}{
+		"api_key_comfy_org": "  partner-api-key  ",
+	}, "api_key_comfy_org")
+	if !ok {
+		t.Fatal("expected whitespace-padded string to be accepted after trimming")
+	}
+	if value != "partner-api-key" {
+		t.Fatalf("expected trimmed value, got %q", value)
 	}
 }
 
@@ -586,6 +621,50 @@ func TestExecuteWorkflow_WaitFailureAddsDiagnostic(t *testing.T) {
 	r.executeWorkflow(context.Background(), map[string]interface{}{}, &data, &diags)
 	if !diags.HasError() {
 		t.Fatal("expected wait failure to add diagnostics")
+	}
+}
+
+func TestExecuteWorkflow_WaitFailureSurfacesImmediateJobError(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/prompt":
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "prompt-failed",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		case "/history/prompt-failed":
+			http.NotFound(w, r)
+		case "/api/jobs/prompt-failed":
+			mustEncodeResourceJSON(t, w, client.Job{
+				ID:     "prompt-failed",
+				Status: "failed",
+				ExecutionError: map[string]interface{}{
+					"exception_message": "Unauthorized: Please login first to use this node.",
+					"node_type":         "WanImageToVideoApi",
+				},
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(true),
+		TimeoutSeconds:        types.Int64Value(5),
+		ValidateBeforeExecute: types.BoolValue(false),
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), map[string]interface{}{}, &data, &diags)
+	if !diags.HasError() {
+		t.Fatal("expected immediate job failure to add diagnostics")
+	}
+	if !strings.Contains(diags[0].Detail(), "Unauthorized: Please login first to use this node.") {
+		t.Fatalf("expected diagnostic to surface execution error, got %q", diags[0].Detail())
 	}
 }
 

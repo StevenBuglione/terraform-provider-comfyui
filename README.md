@@ -103,7 +103,26 @@ Environment variables are also supported:
 
 `COMFYUI_HOST` can be either a bare hostname such as `localhost` or a full URL such as `http://127.0.0.1:8188`.
 
-For partner-backed nodes that rely on hidden `comfy_org` auth, browser login state is not inherited by Terraform. Configure `comfy_org_auth_token` / `comfy_org_api_key` on the provider (or the matching environment variables above) so `comfyui_workflow` can inject them into `/prompt.extra_data`.
+For partner-backed nodes that rely on hidden `comfy_org` auth, browser login state is not inherited by Terraform. The provider now inspects the assembled workflow, detects when hidden partner auth is required, and fails before queueing if no valid partner credential is configured.
+
+Auth model:
+
+- `api_key` authenticates Terraform to the ComfyUI service itself.
+- `comfy_org_api_key` is the preferred automation credential for partner-backed node execution.
+- `comfy_org_auth_token` is a manual/session-token fallback when you intentionally provide it.
+- Browser login is frontend state only and does **not** authenticate provider-submitted workflows.
+
+When both `comfy_org_api_key` and `comfy_org_auth_token` are configured, the provider prefers `comfy_org_api_key` and injects only that credential family into workflow `extra_data`.
+
+If you are unauthenticated for partner-backed nodes, your options are:
+
+1. **Preferred:** create a ComfyOrg API key and set `comfy_org_api_key` or `COMFYUI_COMFY_ORG_API_KEY`
+2. **Fallback:** explicitly provide a frontend auth token with `comfy_org_auth_token` or `COMFYUI_COMFY_ORG_AUTH_TOKEN`
+3. **Alternative:** switch to a runtime/node surface that uses direct provider credentials instead of `comfy_org`
+
+The locally inspected `comfy` CLI does not currently expose a supported partner-execution login/token acquisition command for this provider path.
+
+You can inspect the provider's current auth posture with `data "comfyui_provider_info" "current" {}`. It now reports whether service API auth is configured, whether partner auth is configured, and which auth families are currently available.
 
 ## Quick Start
 

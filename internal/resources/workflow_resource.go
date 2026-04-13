@@ -593,16 +593,6 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 	if extraData == nil {
 		extraData = map[string]interface{}{}
 	}
-	if config.ComfyOrgAuthToken != "" {
-		if _, ok := extraData["auth_token_comfy_org"]; !ok {
-			extraData["auth_token_comfy_org"] = config.ComfyOrgAuthToken
-		}
-	}
-	if config.ComfyOrgAPIKey != "" {
-		if _, ok := extraData["api_key_comfy_org"]; !ok {
-			extraData["api_key_comfy_org"] = config.ComfyOrgAPIKey
-		}
-	}
 	if config.ExtraDataJSON != "" {
 		resourceExtraData := map[string]interface{}{}
 		if err := json.Unmarshal([]byte(config.ExtraDataJSON), &resourceExtraData); err != nil {
@@ -610,6 +600,17 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 		}
 		extraData = mergeJSONMaps(extraData, resourceExtraData)
 	}
+
+	requirements, err := ExtractAuthRequirements(prompt)
+	if err != nil {
+		return client.QueuePromptRequest{}, fmt.Errorf("extract auth requirements: %w", err)
+	}
+
+	resolution := ResolveAuthRequirements(requirements, authResolverConfigFromExtraData(extraData, config))
+	if len(resolution.Unsatisfied) > 0 {
+		return client.QueuePromptRequest{}, fmt.Errorf("unsatisfied workflow auth requirements: %s", formatUnsatisfiedAuthRequirements(resolution.Unsatisfied))
+	}
+	extraData = mergeJSONMaps(extraData, resolution.ExtraData)
 
 	extraPNGInfo, _ := extraData["extra_pnginfo"].(map[string]interface{})
 	if extraPNGInfo == nil {
@@ -624,6 +625,46 @@ func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecu
 	request.ExtraData = extraData
 
 	return request, nil
+}
+
+func authResolverConfigFromExtraData(extraData map[string]interface{}, config workflowExecutionRequestConfig) AuthResolverConfig {
+	if apiKey, ok := stringFromMap(extraData, "api_key_comfy_org"); ok {
+		return AuthResolverConfig{ComfyOrgAPIKey: apiKey}
+	}
+	if authToken, ok := stringFromMap(extraData, "auth_token_comfy_org"); ok {
+		return AuthResolverConfig{ComfyOrgAuthToken: authToken}
+	}
+	return AuthResolverConfig{
+		ComfyOrgAuthToken: config.ComfyOrgAuthToken,
+		ComfyOrgAPIKey:    config.ComfyOrgAPIKey,
+	}
+}
+
+func stringFromMap(values map[string]interface{}, key string) (string, bool) {
+	if values == nil {
+		return "", false
+	}
+	value, ok := values[key]
+	if !ok {
+		return "", false
+	}
+	text, ok := value.(string)
+	if !ok || strings.TrimSpace(text) == "" {
+		return "", false
+	}
+	return strings.TrimSpace(text), true
+}
+
+func formatUnsatisfiedAuthRequirements(requirements []AuthRequirement) string {
+	parts := make([]string, 0, len(requirements))
+	for _, requirement := range requirements {
+		parts = append(parts, fmt.Sprintf(
+			"family %q required by nodes [%s]; configure comfy_org_auth_token/comfy_org_api_key or COMFYUI_COMFY_ORG_AUTH_TOKEN/COMFYUI_COMFY_ORG_API_KEY (browser login does not authenticate Terraform execution)",
+			requirement.Family,
+			strings.Join(requirement.TriggeringNodes, ", "),
+		))
+	}
+	return strings.Join(parts, "; ")
 }
 
 func cloneJSONMap(input map[string]interface{}) (map[string]interface{}, error) {
