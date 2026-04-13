@@ -11,6 +11,7 @@ LOG_FILE="$RUNTIME_DIR/logs/comfyui.log"
 DB_FILE="$RUNTIME_DIR/comfyui.sqlite3"
 HOST="${COMFYUI_HOST:-127.0.0.1}"
 REQUIREMENTS_FILE="$ROOT_DIR/third_party/ComfyUI/requirements.txt"
+PYTHON_BIN="${WORKSPACE_E2E_PYTHON:-}"
 
 ensure_comfyui_checkout() {
   if [[ -f "$REQUIREMENTS_FILE" ]]; then
@@ -22,6 +23,36 @@ ensure_comfyui_checkout() {
   if [[ ! -f "$REQUIREMENTS_FILE" ]]; then
     echo "ComfyUI submodule is unavailable at $REQUIREMENTS_FILE" >&2
     return 1
+  fi
+}
+
+select_python_bin() {
+  if [[ -n "$PYTHON_BIN" ]]; then
+    return 0
+  fi
+
+  if [[ -x /usr/bin/python3 ]]; then
+    PYTHON_BIN="/usr/bin/python3"
+    return 0
+  fi
+
+  PYTHON_BIN="$(command -v python3)"
+}
+
+ensure_matching_venv() {
+  local current_python desired_python
+
+  desired_python="$(readlink -f "$PYTHON_BIN")"
+  if [[ -d "$VENV_DIR" && -f "$VENV_DIR/pyvenv.cfg" ]]; then
+    current_python="$(awk -F' = ' '/^executable = / { print $2; exit }' "$VENV_DIR/pyvenv.cfg")"
+    current_python="$(readlink -f "$current_python")"
+    if [[ -n "$current_python" && "$current_python" != "$desired_python" ]]; then
+      rm -rf "$VENV_DIR"
+    fi
+  fi
+
+  if [[ ! -d "$VENV_DIR" ]]; then
+    "$PYTHON_BIN" -m venv "$VENV_DIR"
   fi
 }
 
@@ -76,11 +107,9 @@ if [[ -f "$PID_FILE" ]]; then
   rm -f "$PID_FILE"
 fi
 
-if [[ ! -d "$VENV_DIR" ]]; then
-  python3 -m venv "$VENV_DIR"
-fi
-
 ensure_comfyui_checkout
+select_python_bin
+ensure_matching_venv
 
 source "$VENV_DIR/bin/activate"
 
