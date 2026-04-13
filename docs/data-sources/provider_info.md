@@ -38,7 +38,10 @@ output "provider_compatibility" {
 ### Read-Only
 
 - `comfyui_version` (String) The version of ComfyUI that node resources were generated from.
+- `configured_auth_families` (List of String) Auth families that are explicitly configured on the provider for workflow execution.
 - `extracted_at` (String) The timestamp when node specifications were extracted from ComfyUI.
 - `id` (String) Identifier for this data source.
 - `node_count` (Number) The total number of ComfyUI node resources available.
+- `partner_auth_configured` (Boolean) Whether the provider currently has explicit partner execution auth configured.
 - `provider_version` (String) The version of the Terraform provider.
+- `service_api_key_configured` (Boolean) Whether the provider currently has a ComfyUI service API key configured.
