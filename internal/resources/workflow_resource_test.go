@@ -12,7 +12,6 @@ import (
 	"testing"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
-	"github.com/StevenBuglione/terraform-provider-comfyui/internal/validation"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	resourceschema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -340,13 +339,53 @@ func mustEncodeResourceJSON(t *testing.T, w http.ResponseWriter, v any) {
 	}
 }
 
-func mustValidationSummaryJSON(t *testing.T, report validation.Report) string {
+const disabledValidationSummaryJSON = `{"valid":true,"errors":[],"warnings":[],"validated_node_count":0,"error_count":0,"warning_count":0}`
+
+func mustDecodeValidationSummaryJSON(t *testing.T, raw string) map[string]interface{} {
 	t.Helper()
-	summary, err := report.JSON()
-	if err != nil {
-		t.Fatalf("failed to encode validation summary: %v", err)
+
+	var summary map[string]interface{}
+	if err := json.Unmarshal([]byte(raw), &summary); err != nil {
+		t.Fatalf("validation_summary_json should be valid JSON: %v", err)
 	}
 	return summary
+}
+
+func assertDisabledValidationSummaryContract(t *testing.T, raw string) {
+	t.Helper()
+
+	summary := mustDecodeValidationSummaryJSON(t, raw)
+	if len(summary) != 6 {
+		t.Fatalf("validation summary keys = %#v, want exactly 6 contract keys", summary)
+	}
+	if got, ok := summary["valid"].(bool); !ok || !got {
+		t.Fatalf("validation summary valid = %#v, want true", summary["valid"])
+	}
+	if got, ok := summary["validated_node_count"].(float64); !ok || got != 0 {
+		t.Fatalf("validation summary validated_node_count = %#v, want 0", summary["validated_node_count"])
+	}
+
+	assertValidationSummaryHasNoErrors(t, summary)
+
+	if got, ok := summary["warning_count"].(float64); !ok || got != 0 {
+		t.Fatalf("validation summary warning_count = %#v, want 0", summary["warning_count"])
+	}
+	warnings, ok := summary["warnings"].([]interface{})
+	if !ok || len(warnings) != 0 {
+		t.Fatalf("validation summary warnings = %#v, want empty array", summary["warnings"])
+	}
+}
+
+func assertValidationSummaryHasNoErrors(t *testing.T, summary map[string]interface{}) {
+	t.Helper()
+
+	if got, ok := summary["error_count"].(float64); !ok || got != 0 {
+		t.Fatalf("validation summary error_count = %#v, want 0", summary["error_count"])
+	}
+	errors, ok := summary["errors"].([]interface{})
+	if !ok || len(errors) != 0 {
+		t.Fatalf("validation summary errors = %#v, want empty array", summary["errors"])
+	}
 }
 
 func TestValidationSummaryWarningHelpers(t *testing.T) {
@@ -724,6 +763,7 @@ func TestTDDExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidation
 			if summary["valid"] != true {
 				t.Fatalf("expected validation summary to remain valid in %q mode, got %#v", tc.mode, summary["valid"])
 			}
+			assertValidationSummaryHasNoErrors(t, summary)
 			gotWarningCount, err := validationSummaryWarningCount(summary)
 			if err != nil {
 				t.Fatalf("failed to read warning_count: %v", err)
@@ -754,7 +794,6 @@ func TestTDDExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidation
 func TestTDDExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testing.T) {
 	t.Parallel()
 
-	expectedSummary := mustValidationSummaryJSON(t, validation.NewReport(0))
 	testCases := []struct {
 		name        string
 		initialData WorkflowModel
@@ -775,7 +814,7 @@ func TestTDDExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testi
 				WaitForCompletion:     types.BoolValue(false),
 				TimeoutSeconds:        types.Int64Value(30),
 				ValidateBeforeExecute: types.BoolValue(false),
-				ValidationSummaryJSON: types.StringValue(expectedSummary),
+				ValidationSummaryJSON: types.StringValue(disabledValidationSummaryJSON),
 			},
 		},
 	}
@@ -820,9 +859,7 @@ func TestTDDExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testi
 			if data.ValidationSummaryJSON.IsNull() {
 				t.Fatal("expected validation_summary_json to remain a JSON string when validation is disabled")
 			}
-			if got := data.ValidationSummaryJSON.ValueString(); got != expectedSummary {
-				t.Fatalf("validation_summary_json = %q, want %q", got, expectedSummary)
-			}
+			assertDisabledValidationSummaryContract(t, data.ValidationSummaryJSON.ValueString())
 		})
 	}
 }
@@ -832,7 +869,6 @@ func TestTDDExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testi
 func TestTDDWorkflowCreate_DisabledValidationUsesStableSummaryContract(t *testing.T) {
 	t.Parallel()
 
-	expectedSummary := mustValidationSummaryJSON(t, validation.NewReport(0))
 	promptHits := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
@@ -884,9 +920,7 @@ func TestTDDWorkflowCreate_DisabledValidationUsesStableSummaryContract(t *testin
 	if state.ValidationSummaryJSON.IsNull() {
 		t.Fatal("expected create to persist validation_summary_json as a JSON string when validation is disabled")
 	}
-	if got := state.ValidationSummaryJSON.ValueString(); got != expectedSummary {
-		t.Fatalf("create validation_summary_json = %q, want %q", got, expectedSummary)
-	}
+	assertDisabledValidationSummaryContract(t, state.ValidationSummaryJSON.ValueString())
 }
 
 // TDD (intentionally red): update should keep the same disabled-validation
@@ -894,7 +928,6 @@ func TestTDDWorkflowCreate_DisabledValidationUsesStableSummaryContract(t *testin
 func TestTDDWorkflowUpdate_DisabledValidationUsesStableSummaryContract(t *testing.T) {
 	t.Parallel()
 
-	expectedSummary := mustValidationSummaryJSON(t, validation.NewReport(0))
 	promptHits := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
@@ -924,7 +957,7 @@ func TestTDDWorkflowUpdate_DisabledValidationUsesStableSummaryContract(t *testin
 		PromptID:              types.StringValue("queued-previous"),
 		PartialTargets:        types.ListNull(types.StringType),
 		Tags:                  types.ListNull(types.StringType),
-		ValidationSummaryJSON: types.StringValue(expectedSummary),
+		ValidationSummaryJSON: types.StringValue(disabledValidationSummaryJSON),
 	}
 	planData := currentState
 
@@ -951,9 +984,7 @@ func TestTDDWorkflowUpdate_DisabledValidationUsesStableSummaryContract(t *testin
 	if state.ValidationSummaryJSON.IsNull() {
 		t.Fatal("expected update to persist validation_summary_json as a JSON string when validation is disabled")
 	}
-	if got := state.ValidationSummaryJSON.ValueString(); got != expectedSummary {
-		t.Fatalf("update validation_summary_json = %q, want %q", got, expectedSummary)
-	}
+	assertDisabledValidationSummaryContract(t, state.ValidationSummaryJSON.ValueString())
 }
 
 func TestExecuteWorkflow_ObjectInfoFailureReturnsDiagnostic(t *testing.T) {
