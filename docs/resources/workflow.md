@@ -13,7 +13,7 @@ Assembles ComfyUI node definitions into an executable workflow, submits it to th
 
 For durable node-per-resource assembly, pair `node_ids` with `node_definition_jsons`. Each generated node resource now exposes a computed `node_definition_json` snapshot, and `comfyui_workflow` can use the aligned `node_definition_jsons` list to reconstruct missing node state without relying solely on the process-local registry.
 
-If `node_definition_jsons` is omitted, `node_ids` continues to use the compatibility path backed by the in-memory node registry. That path still works well within a single Terraform run, but it is not the durable option for cross-process or cold-registry updates.
+If `node_definition_jsons` is omitted, `node_ids` continues to use the compatibility path backed by the in-memory node registry. Normal refresh/apply cycles still work because generated nodes re-register during `Read`, but this path is not the durable option for cold-start or cross-process registry gaps.
 
 ## Example Usage
 
@@ -105,7 +105,7 @@ output "workflow_execution_status_json" {
 - `execute` (Boolean) Whether to submit the workflow for execution. Defaults to true.
 - `extra_data_json` (String) Optional JSON object to include as extra_data in the /prompt request wrapper.
 - `name` (String) Human-readable name for this workflow.
-- `node_definition_jsons` (List of String) Optional durable serialized node definitions aligned with node_ids. When provided, workflow assembly can reconstruct missing node state without relying solely on the process-local registry.
+- `node_definition_jsons` (List of String) Optional durable serialized node definitions aligned with node_ids. The list must have the same length as `node_ids`, and each entry must correspond by position to the matching node ID. When provided, workflow assembly can reconstruct missing node state without relying solely on the process-local registry.
 - `node_ids` (List of String) List of node resource IDs to include when assembling a workflow from virtual node resources.
 - `output_file` (String) File path to write the assembled workflow JSON. The file is in ComfyUI API format and can be loaded by ComfyUI.
 - `partial_execution_targets` (List of String) Optional list of node IDs to send as partial_execution_targets in the /prompt request wrapper.

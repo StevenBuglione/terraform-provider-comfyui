@@ -31,7 +31,7 @@ Use `node_ids` on `comfyui_workflow` when:
 
 This is still the preferred provider-native authoring path, but there are now two assembly modes:
 
-- **Compatibility path:** `node_ids` alone. This still relies on the process-local node registry and works best when the workflow is assembled in the same Terraform run that hydrated those node resources.
+- **Compatibility path:** `node_ids` alone. Normal refresh/apply cycles still work because generated nodes re-register during resource `Read`, but this path still relies on the process-local registry and is not durable for cold-start or cross-process registry gaps.
 - **Durable path:** `node_ids` plus `node_definition_jsons`. Each generated node resource exposes a computed `node_definition_json`, and the workflow can use the aligned `node_definition_jsons` list to reconstruct node definitions even when the registry is cold.
 
 If you need reliable updates across separate Terraform processes or cold-provider runs, prefer the durable path.
@@ -71,7 +71,7 @@ The canonical execution fields are:
 When you are using generated node resources, the most robust pattern is:
 
 1. keep `node_ids` for ordering and connection identity
-2. pass the matching `node_definition_jsons` list from those same resources
+2. pass the matching `node_definition_jsons` list from those same resources, with the same length and positional alignment as `node_ids`
 3. let `comfyui_workflow` fall back to those serialized definitions if the in-memory registry is unavailable
 
 The older coarse compatibility fields are not part of the current contract.

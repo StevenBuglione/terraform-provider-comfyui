@@ -143,8 +143,8 @@ For unsupported dynamic-expression inputs that cannot be proved at plan time, th
 
 When you author workflows from generated node resources, there are now two assembly options:
 
-- `node_ids` alone keeps the older compatibility path backed by the process-local node registry.
-- `node_ids` plus `node_definition_jsons` is the durable path for cold-registry or cross-process updates. Each generated node resource exposes a computed `node_definition_json` snapshot that you can pass straight into the matching workflow list.
+- `node_ids` alone keeps the older compatibility path backed by the process-local node registry. Normal refresh/apply cycles still work because generated nodes re-register during resource `Read`, but it is not the durable option for cold-start or cross-process registry gaps.
+- `node_ids` plus `node_definition_jsons` is the durable path for cold-registry or cross-process updates. Each generated node resource exposes a computed `node_definition_json` snapshot that you can pass straight into the matching workflow list. Keep the two lists the same length and align each JSON entry by position with the matching `node_ids` entry.
 
 Typical `comfyui_workflow` modes are:
 
