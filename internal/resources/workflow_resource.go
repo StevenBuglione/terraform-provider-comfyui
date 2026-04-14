@@ -485,7 +485,7 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 			return
 		}
 	} else {
-		data.ValidationSummaryJSON = types.StringValue(disabledValidationSummaryContractJSON)
+		applyValidationSummaryContract(data)
 	}
 
 	tflog.Info(ctx, "Submitting workflow to ComfyUI", map[string]interface{}{
@@ -590,7 +590,15 @@ func validationEnabled(value types.Bool) bool {
 	return value.IsNull() || value.IsUnknown() || value.ValueBool()
 }
 
+func executionRequested(value types.Bool) bool {
+	return value.IsNull() || value.IsUnknown() || value.ValueBool()
+}
+
 func applyValidationSummaryContract(data *WorkflowModel) {
+	if !executionRequested(data.Execute) && validationEnabled(data.ValidateBeforeExecute) {
+		data.ValidationSummaryJSON = types.StringValue("")
+		return
+	}
 	if !validationEnabled(data.ValidateBeforeExecute) {
 		data.ValidationSummaryJSON = types.StringValue(disabledValidationSummaryContractJSON)
 	}

@@ -377,6 +377,17 @@ func assertDisabledValidationSummaryContract(t *testing.T, raw string) {
 	}
 }
 
+func assertValidationSummaryNotRun(t *testing.T, value types.String) {
+	t.Helper()
+
+	if value.IsNull() {
+		t.Fatal("expected validation_summary_json to stay a known string when preflight does not run")
+	}
+	if got := value.ValueString(); got != "" {
+		t.Fatalf("validation_summary_json = %q, want empty string when preflight does not run", got)
+	}
+}
+
 func assertValidationSummaryHasNoErrors(t *testing.T, summary map[string]interface{}) {
 	t.Helper()
 
@@ -738,8 +749,6 @@ func TestExecuteWorkflow_DisabledValidationSkipsPreflight(t *testing.T) {
 	}
 }
 
-// TDD (intentionally red): workflow execution preflight should match the
-// generated-node plan-time policy for runtime-backed LoadImage inputs.
 func TestTDDExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidationMode(t *testing.T) {
 	t.Parallel()
 
@@ -893,9 +902,6 @@ func TestTDDExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidation
 	}
 }
 
-// TDD (intentionally red): helper-level coverage for the disabled-validation
-// summary contract. Create/update-facing coverage lives in the resource-path
-// tests below so apply/update regressions fail at the entrypoints Terraform uses.
 func TestTDDExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testing.T) {
 	t.Parallel()
 
@@ -969,8 +975,6 @@ func TestTDDExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testi
 	}
 }
 
-// TDD (intentionally red): apply should preserve a stable JSON summary contract
-// even when validation is disabled, because create is the path Terraform uses.
 func TestTDDWorkflowCreate_DisabledValidationUsesStableSummaryContract(t *testing.T) {
 	t.Parallel()
 
@@ -1028,8 +1032,6 @@ func TestTDDWorkflowCreate_DisabledValidationUsesStableSummaryContract(t *testin
 	assertDisabledValidationSummaryContract(t, state.ValidationSummaryJSON.ValueString())
 }
 
-// TDD (intentionally red): update should keep the same disabled-validation
-// summary contract users rely on during in-place apply operations.
 func TestTDDWorkflowUpdate_DisabledValidationUsesStableSummaryContract(t *testing.T) {
 	t.Parallel()
 
@@ -1092,8 +1094,6 @@ func TestTDDWorkflowUpdate_DisabledValidationUsesStableSummaryContract(t *testin
 	assertDisabledValidationSummaryContract(t, state.ValidationSummaryJSON.ValueString())
 }
 
-// TDD (intentionally red): read should normalize legacy disabled-validation state
-// so refreshes converge on the same JSON contract as create/update/apply.
 func TestTDDWorkflowRead_DisabledValidationUsesStableSummaryContract(t *testing.T) {
 	t.Parallel()
 
@@ -1138,6 +1138,222 @@ func TestTDDWorkflowRead_DisabledValidationUsesStableSummaryContract(t *testing.
 		t.Fatal("expected read to persist validation_summary_json as a JSON string when validation is disabled")
 	}
 	assertDisabledValidationSummaryContract(t, state.ValidationSummaryJSON.ValueString())
+}
+
+func TestWorkflowCreate_ExecuteFalseLeavesEmptyValidationSummaryWhenPreflightDoesNotRun(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name                  string
+		validateBeforeExecute types.Bool
+	}{
+		{name: "validation enabled", validateBeforeExecute: types.BoolValue(true)},
+		{name: "validation defaulted", validateBeforeExecute: types.BoolNull()},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			objectInfoHits := 0
+			promptHits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/object_info":
+					objectInfoHits++
+					http.Error(w, "should not validate", http.StatusInternalServerError)
+				case "/prompt":
+					promptHits++
+					http.Error(w, "should not queue", http.StatusInternalServerError)
+				default:
+					http.NotFound(w, r)
+				}
+			}))
+			defer server.Close()
+
+			r := &WorkflowResource{client: newWorkflowTestClient(server)}
+			schema := workflowTestSchema(t, r)
+			planData := WorkflowModel{
+				WorkflowJSON:          types.StringValue(`{"1":{"class_type":"SaveImage","inputs":{"filename_prefix":"ComfyUI"}}}`),
+				NodeIDs:               types.ListNull(types.StringType),
+				Execute:               types.BoolValue(false),
+				WaitForCompletion:     types.BoolValue(false),
+				TimeoutSeconds:        types.Int64Value(30),
+				ValidateBeforeExecute: tc.validateBeforeExecute,
+				PartialTargets:        types.ListNull(types.StringType),
+				Tags:                  types.ListNull(types.StringType),
+				ValidationSummaryJSON: types.StringValue(disabledValidationSummaryContractJSON),
+			}
+
+			req := resource.CreateRequest{
+				Plan: workflowTestPlanFromModel(t, schema, planData),
+			}
+			resp := resource.CreateResponse{
+				State: tfsdk.State{Schema: schema},
+			}
+
+			r.Create(context.Background(), req, &resp)
+			if resp.Diagnostics.HasError() {
+				t.Fatalf("expected create to skip execution cleanly, got diagnostics %v", resp.Diagnostics)
+			}
+			if objectInfoHits != 0 {
+				t.Fatalf("expected /object_info not to be called during non-executing create, got %d", objectInfoHits)
+			}
+			if promptHits != 0 {
+				t.Fatalf("expected /prompt not to be called during non-executing create, got %d", promptHits)
+			}
+
+			var state WorkflowModel
+			if diags := resp.State.Get(context.Background(), &state); diags.HasError() {
+				t.Fatalf("failed to decode create state: %v", diags)
+			}
+			assertValidationSummaryNotRun(t, state.ValidationSummaryJSON)
+		})
+	}
+}
+
+func TestWorkflowUpdate_ExecuteFalseLeavesEmptyValidationSummaryWhenPreflightDoesNotRun(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name                  string
+		validateBeforeExecute types.Bool
+	}{
+		{name: "validation enabled", validateBeforeExecute: types.BoolValue(true)},
+		{name: "validation defaulted", validateBeforeExecute: types.BoolNull()},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			objectInfoHits := 0
+			promptHits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/object_info":
+					objectInfoHits++
+					http.Error(w, "should not validate", http.StatusInternalServerError)
+				case "/prompt":
+					promptHits++
+					http.Error(w, "should not queue", http.StatusInternalServerError)
+				default:
+					http.NotFound(w, r)
+				}
+			}))
+			defer server.Close()
+
+			r := &WorkflowResource{client: newWorkflowTestClient(server)}
+			schema := workflowTestSchema(t, r)
+			currentState := WorkflowModel{
+				ID:                    types.StringValue("workflow-123"),
+				WorkflowJSON:          types.StringValue(`{"1":{"class_type":"SaveImage","inputs":{"filename_prefix":"ComfyUI"}}}`),
+				NodeIDs:               types.ListNull(types.StringType),
+				Execute:               types.BoolValue(false),
+				WaitForCompletion:     types.BoolValue(false),
+				TimeoutSeconds:        types.Int64Value(30),
+				ValidateBeforeExecute: tc.validateBeforeExecute,
+				PromptID:              types.StringValue("queued-previous"),
+				PartialTargets:        types.ListNull(types.StringType),
+				Tags:                  types.ListNull(types.StringType),
+				ValidationSummaryJSON: types.StringValue(disabledValidationSummaryContractJSON),
+			}
+			planData := currentState
+
+			req := resource.UpdateRequest{
+				Plan:  workflowTestPlanFromModel(t, schema, planData),
+				State: workflowTestStateFromModel(t, schema, currentState),
+			}
+			resp := resource.UpdateResponse{
+				State: tfsdk.State{Schema: schema},
+			}
+
+			r.Update(context.Background(), req, &resp)
+			if resp.Diagnostics.HasError() {
+				t.Fatalf("expected update to skip execution cleanly, got diagnostics %v", resp.Diagnostics)
+			}
+			if objectInfoHits != 0 {
+				t.Fatalf("expected /object_info not to be called during non-executing update, got %d", objectInfoHits)
+			}
+			if promptHits != 0 {
+				t.Fatalf("expected /prompt not to be called during non-executing update, got %d", promptHits)
+			}
+
+			var state WorkflowModel
+			if diags := resp.State.Get(context.Background(), &state); diags.HasError() {
+				t.Fatalf("failed to decode update state: %v", diags)
+			}
+			assertValidationSummaryNotRun(t, state.ValidationSummaryJSON)
+		})
+	}
+}
+
+func TestWorkflowRead_ExecuteFalseLeavesEmptyValidationSummaryWhenPreflightDoesNotRun(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name                  string
+		validateBeforeExecute types.Bool
+	}{
+		{name: "validation enabled", validateBeforeExecute: types.BoolValue(true)},
+		{name: "validation defaulted", validateBeforeExecute: types.BoolNull()},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			objectInfoHits := 0
+			promptHits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/object_info":
+					objectInfoHits++
+					http.Error(w, "should not validate", http.StatusInternalServerError)
+				case "/prompt":
+					promptHits++
+					http.Error(w, "should not queue", http.StatusInternalServerError)
+				default:
+					http.NotFound(w, r)
+				}
+			}))
+			defer server.Close()
+
+			r := &WorkflowResource{client: newWorkflowTestClient(server)}
+			schema := workflowTestSchema(t, r)
+			currentState := WorkflowModel{
+				ID:                    types.StringValue("workflow-123"),
+				WorkflowJSON:          types.StringValue(`{"1":{"class_type":"SaveImage","inputs":{"filename_prefix":"ComfyUI"}}}`),
+				NodeIDs:               types.ListNull(types.StringType),
+				Execute:               types.BoolValue(false),
+				WaitForCompletion:     types.BoolValue(false),
+				TimeoutSeconds:        types.Int64Value(30),
+				ValidateBeforeExecute: tc.validateBeforeExecute,
+				PromptID:              types.StringValue(""),
+				PartialTargets:        types.ListNull(types.StringType),
+				Tags:                  types.ListNull(types.StringType),
+				ValidationSummaryJSON: types.StringValue(disabledValidationSummaryContractJSON),
+			}
+
+			req := resource.ReadRequest{
+				State: workflowTestStateFromModel(t, schema, currentState),
+			}
+			resp := resource.ReadResponse{
+				State: tfsdk.State{Schema: schema},
+			}
+
+			r.Read(context.Background(), req, &resp)
+			if resp.Diagnostics.HasError() {
+				t.Fatalf("expected read to normalize non-executing state cleanly, got diagnostics %v", resp.Diagnostics)
+			}
+			if objectInfoHits != 0 {
+				t.Fatalf("expected /object_info not to be called during non-executing read, got %d", objectInfoHits)
+			}
+			if promptHits != 0 {
+				t.Fatalf("expected /prompt not to be called during non-executing read, got %d", promptHits)
+			}
+
+			var state WorkflowModel
+			if diags := resp.State.Get(context.Background(), &state); diags.HasError() {
+				t.Fatalf("failed to decode read state: %v", diags)
+			}
+			assertValidationSummaryNotRun(t, state.ValidationSummaryJSON)
+		})
+	}
 }
 
 func TestExecuteWorkflow_ObjectInfoFailureReturnsDiagnostic(t *testing.T) {
