@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/validation"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	resourceschema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -338,6 +339,15 @@ func mustEncodeResourceJSON(t *testing.T, w http.ResponseWriter, v any) {
 	}
 }
 
+func mustValidationSummaryJSON(t *testing.T, report validation.Report) string {
+	t.Helper()
+	summary, err := report.JSON()
+	if err != nil {
+		t.Fatalf("failed to encode validation summary: %v", err)
+	}
+	return summary
+}
+
 func TestExecuteWorkflow_ValidationFailureBlocksQueueing(t *testing.T) {
 	objectInfoHits := 0
 	promptHits := 0
@@ -464,6 +474,222 @@ func TestExecuteWorkflow_DisabledValidationSkipsPreflight(t *testing.T) {
 	}
 	if data.PromptID.ValueString() != "queued-123" {
 		t.Fatalf("expected queued prompt_id, got %q", data.PromptID.ValueString())
+	}
+}
+
+func TestExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidationMode(t *testing.T) {
+	t.Parallel()
+
+	// Plan-time generated-node validation already respects unsupported_dynamic_validation_mode.
+	// This test captures the missing parity for workflow execution preflight on the same
+	// runtime-backed LoadImage input contract.
+	testCases := []struct {
+		name              string
+		mode              string
+		wantWarningCount  int
+		wantValidationMsg string
+	}{
+		{
+			name:              "warning mode queues runtime-backed load image",
+			mode:              "warning",
+			wantWarningCount:  1,
+			wantValidationMsg: "unsupported dynamic options",
+		},
+		{
+			name:             "ignore mode queues runtime-backed load image",
+			mode:             "ignore",
+			wantWarningCount: 0,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			objectInfoHits := 0
+			promptHits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/object_info":
+					objectInfoHits++
+					mustEncodeResourceJSON(t, w, map[string]client.NodeInfo{
+						"LoadImage": {
+							Input: client.NodeInputInfo{
+								Required: map[string]interface{}{
+									"image": []interface{}{"COMBO"},
+								},
+							},
+							InputOrder: map[string][]string{
+								"required": {"image"},
+							},
+							Output:     []string{"IMAGE", "MASK"},
+							OutputName: []string{"IMAGE", "MASK"},
+						},
+						"SaveImage": {
+							Input: client.NodeInputInfo{
+								Required: map[string]interface{}{
+									"images": []interface{}{"IMAGE"},
+								},
+								Hidden: map[string]interface{}{
+									"prompt": "PROMPT",
+								},
+							},
+							InputOrder: map[string][]string{
+								"required": {"images"},
+							},
+							OutputNode: true,
+						},
+					})
+				case "/prompt":
+					promptHits++
+					mustEncodeResourceJSON(t, w, client.QueueResponse{
+						PromptID:   "queued-runtime-input",
+						Number:     1,
+						NodeErrors: map[string]interface{}{},
+					})
+				default:
+					http.NotFound(w, r)
+				}
+			}))
+			defer server.Close()
+
+			r := &WorkflowResource{client: &client.Client{
+				HTTPClient:                       server.Client(),
+				BaseURL:                          server.URL,
+				UnsupportedDynamicValidationMode: tc.mode,
+			}}
+			data := WorkflowModel{
+				Execute:               types.BoolValue(true),
+				WaitForCompletion:     types.BoolValue(false),
+				TimeoutSeconds:        types.Int64Value(30),
+				ValidateBeforeExecute: types.BoolValue(true),
+			}
+			prompt := map[string]interface{}{
+				"1": map[string]interface{}{
+					"class_type": "LoadImage",
+					"inputs": map[string]interface{}{
+						"image": "reference.png",
+					},
+				},
+				"2": map[string]interface{}{
+					"class_type": "SaveImage",
+					"inputs": map[string]interface{}{
+						"images": []interface{}{"1", 0},
+					},
+				},
+			}
+
+			var diags diag.Diagnostics
+			r.executeWorkflow(context.Background(), prompt, &data, &diags)
+			if diags.HasError() {
+				t.Fatalf("expected runtime-backed inputs to respect %q mode without blocking queueing, got diagnostics %v", tc.mode, diags)
+			}
+			if objectInfoHits != 1 {
+				t.Fatalf("expected /object_info to be called once, got %d", objectInfoHits)
+			}
+			if promptHits != 1 {
+				t.Fatalf("expected /prompt to be called once, got %d", promptHits)
+			}
+			if data.PromptID.ValueString() != "queued-runtime-input" {
+				t.Fatalf("expected queued prompt_id, got %q", data.PromptID.ValueString())
+			}
+
+			var summary map[string]interface{}
+			if err := json.Unmarshal([]byte(data.ValidationSummaryJSON.ValueString()), &summary); err != nil {
+				t.Fatalf("validation_summary_json should be valid JSON: %v", err)
+			}
+			if summary["valid"] != true {
+				t.Fatalf("expected validation summary to remain valid in %q mode, got %#v", tc.mode, summary["valid"])
+			}
+			if got := int(summary["warning_count"].(float64)); got != tc.wantWarningCount {
+				t.Fatalf("warning_count = %d, want %d", got, tc.wantWarningCount)
+			}
+			if tc.wantValidationMsg != "" {
+				warnings, ok := summary["warnings"].([]interface{})
+				if !ok || len(warnings) != tc.wantWarningCount {
+					t.Fatalf("warnings = %#v, want %d warnings", summary["warnings"], tc.wantWarningCount)
+				}
+				if !strings.Contains(warnings[0].(string), tc.wantValidationMsg) {
+					t.Fatalf("warning = %q, want substring %q", warnings[0].(string), tc.wantValidationMsg)
+				}
+			}
+		})
+	}
+}
+
+func TestExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testing.T) {
+	t.Parallel()
+
+	// Create and Update both route through executeWorkflow, so exercising this helper
+	// documents the disabled-validation state contract across apply/update paths.
+	expectedSummary := mustValidationSummaryJSON(t, validation.NewReport(0))
+	testCases := []struct {
+		name        string
+		initialData WorkflowModel
+	}{
+		{
+			name: "apply initializes disabled-validation summary",
+			initialData: WorkflowModel{
+				Execute:               types.BoolValue(true),
+				WaitForCompletion:     types.BoolValue(false),
+				TimeoutSeconds:        types.Int64Value(30),
+				ValidateBeforeExecute: types.BoolValue(false),
+			},
+		},
+		{
+			name: "update preserves disabled-validation summary contract",
+			initialData: WorkflowModel{
+				Execute:               types.BoolValue(true),
+				WaitForCompletion:     types.BoolValue(false),
+				TimeoutSeconds:        types.Int64Value(30),
+				ValidateBeforeExecute: types.BoolValue(false),
+				ValidationSummaryJSON: types.StringValue(expectedSummary),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			promptHits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/prompt":
+					promptHits++
+					mustEncodeResourceJSON(t, w, client.QueueResponse{
+						PromptID:   "queued-123",
+						Number:     1,
+						NodeErrors: map[string]interface{}{},
+					})
+				default:
+					http.NotFound(w, r)
+				}
+			}))
+			defer server.Close()
+
+			r := &WorkflowResource{client: newWorkflowTestClient(server)}
+			data := tc.initialData
+			prompt := map[string]interface{}{
+				"1": map[string]interface{}{
+					"class_type": "SaveImage",
+					"inputs": map[string]interface{}{
+						"filename_prefix": "ComfyUI",
+					},
+				},
+			}
+
+			var diags diag.Diagnostics
+			r.executeWorkflow(context.Background(), prompt, &data, &diags)
+			if diags.HasError() {
+				t.Fatalf("expected validation to be skipped cleanly, got diagnostics %v", diags)
+			}
+			if promptHits != 1 {
+				t.Fatalf("expected /prompt to be called once, got %d", promptHits)
+			}
+			if data.ValidationSummaryJSON.IsNull() {
+				t.Fatal("expected validation_summary_json to remain a JSON string when validation is disabled")
+			}
+			if got := data.ValidationSummaryJSON.ValueString(); got != expectedSummary {
+				t.Fatalf("validation_summary_json = %q, want %q", got, expectedSummary)
+			}
+		})
 	}
 }
 

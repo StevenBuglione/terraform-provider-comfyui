@@ -1,6 +1,7 @@
 package resources
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -101,5 +102,36 @@ func TestAssembleWorkflowFromNodeIDs_MissingNodeFails(t *testing.T) {
 	_, err := AssembleWorkflowFromNodeIDs([]string{uuidCheckpoint, uuidKSampler})
 	if err == nil {
 		t.Fatal("expected error when a requested node ID is not registered")
+	}
+}
+
+func TestAssembleWorkflowFromNodeIDs_RequiresInProcessRegistryState(t *testing.T) {
+	resetNodeStateRegistry()
+
+	// This documents the current compatibility limitation: node_ids assembly only works
+	// when the process-local registry has already been hydrated in this provider process.
+	nodeIDs := []string{
+		uuidCheckpoint,
+		uuidCLIP,
+		uuidKSampler,
+		uuidVAEDecode,
+		uuidSaveImage,
+	}
+	for _, node := range fullPipeline() {
+		RegisterNodeState(node)
+	}
+
+	if _, err := AssembleWorkflowFromNodeIDs(nodeIDs); err != nil {
+		t.Fatalf("expected initial in-process assembly to succeed, got %v", err)
+	}
+
+	resetNodeStateRegistry()
+
+	_, err := AssembleWorkflowFromNodeIDs(nodeIDs)
+	if err == nil {
+		t.Fatal("expected assembly to fail after process-local registry state is cleared")
+	}
+	if !strings.Contains(err.Error(), "must be created before comfyui_workflow") {
+		t.Fatalf("unexpected error after registry reset: %v", err)
 	}
 }

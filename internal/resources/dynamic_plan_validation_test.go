@@ -23,6 +23,12 @@ type basicSchedulerTestModel struct {
 	Scheduler types.String `tfsdk:"scheduler"`
 }
 
+type loadImageTestModel struct {
+	ID     types.String `tfsdk:"id"`
+	NodeID types.String `tfsdk:"node_id"`
+	Image  types.String `tfsdk:"image"`
+}
+
 func TestValidateDynamicInputs_AcceptsPresentInventoryValue(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/object_info" {
@@ -101,5 +107,52 @@ func TestValidateDynamicInputs_IgnoresUnsupportedDynamicExpressionWhenConfigured
 	}, "BasicScheduler", model)
 	if diags.HasError() || diags.WarningsCount() != 0 {
 		t.Fatalf("expected no diagnostics, got %v", diags)
+	}
+}
+
+func TestValidateDynamicInputs_LoadImageUsesUnsupportedDynamicValidationPolicy(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name         string
+		mode         string
+		wantError    bool
+		wantWarnings int
+		wantSummary  string
+	}{
+		{
+			name:        "default error mode",
+			wantError:   true,
+			wantSummary: "Unsupported Dynamic Plan Validation",
+		},
+		{
+			name:         "warning mode",
+			mode:         "warning",
+			wantWarnings: 1,
+			wantSummary:  "Unsupported Dynamic Plan Validation",
+		},
+		{
+			name: "ignore mode",
+			mode: "ignore",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			model := loadImageTestModel{Image: types.StringValue("reference.png")}
+			diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{
+				UnsupportedDynamicValidationMode: tc.mode,
+			}, "LoadImage", model)
+
+			if diags.HasError() != tc.wantError {
+				t.Fatalf("HasError() = %v, want %v; diagnostics: %v", diags.HasError(), tc.wantError, diags)
+			}
+			if diags.WarningsCount() != tc.wantWarnings {
+				t.Fatalf("WarningsCount() = %d, want %d; diagnostics: %v", diags.WarningsCount(), tc.wantWarnings, diags)
+			}
+			if tc.wantSummary != "" && !strings.Contains(diags[0].Summary(), tc.wantSummary) {
+				t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
+			}
+		})
 	}
 }
