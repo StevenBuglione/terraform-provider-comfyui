@@ -31,6 +31,7 @@ type TripoConversionNodeResource struct {
 type TripoConversionNodeModel struct {
 	ID                     types.String  `tfsdk:"id"`
 	NodeID                 types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON     types.String  `tfsdk:"node_definition_json"`
 	OriginalModelTaskID    types.String  `tfsdk:"original_model_task_id"`
 	Format                 types.String  `tfsdk:"format"`
 	Quad                   types.Bool    `tfsdk:"quad"`
@@ -91,6 +92,13 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -244,10 +252,12 @@ func (r *TripoConversionNodeResource) Create(ctx context.Context, req resource.C
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("TripoConversionNode")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -258,10 +268,12 @@ func (r *TripoConversionNodeResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -272,10 +284,12 @@ func (r *TripoConversionNodeResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

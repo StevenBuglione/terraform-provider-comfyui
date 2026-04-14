@@ -25,9 +25,10 @@ type ImageProcessingNodeResource struct {
 }
 
 type ImageProcessingNodeModel struct {
-	ID           types.String `tfsdk:"id"`
-	NodeID       types.String `tfsdk:"node_id"`
-	ImagesOutput types.String `tfsdk:"images_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	ImagesOutput       types.String `tfsdk:"images_output"`
 }
 
 func NewImageProcessingNodeResource() resource.Resource {
@@ -73,6 +74,13 @@ func (r *ImageProcessingNodeResource) Schema(_ context.Context, _ resource.Schem
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"images_output": schema.StringAttribute{
 				MarkdownDescription: "Output: IMAGE (slot 0).",
 				Computed:            true,
@@ -109,10 +117,12 @@ func (r *ImageProcessingNodeResource) Create(ctx context.Context, req resource.C
 	data.NodeID = types.StringValue("ImageProcessingNode")
 	data.ImagesOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -123,10 +133,12 @@ func (r *ImageProcessingNodeResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -137,10 +149,12 @@ func (r *ImageProcessingNodeResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

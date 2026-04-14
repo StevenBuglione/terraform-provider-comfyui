@@ -28,15 +28,16 @@ type WanMoveVisualizeTracksResource struct {
 }
 
 type WanMoveVisualizeTracksModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	Images         types.String  `tfsdk:"images"`
-	Tracks         types.String  `tfsdk:"tracks"`
-	LineResolution types.Int64   `tfsdk:"line_resolution"`
-	CircleSize     types.Int64   `tfsdk:"circle_size"`
-	Opacity        types.Float64 `tfsdk:"opacity"`
-	LineWidth      types.Int64   `tfsdk:"line_width"`
-	ImageOutput    types.String  `tfsdk:"image_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Images             types.String  `tfsdk:"images"`
+	Tracks             types.String  `tfsdk:"tracks"`
+	LineResolution     types.Int64   `tfsdk:"line_resolution"`
+	CircleSize         types.Int64   `tfsdk:"circle_size"`
+	Opacity            types.Float64 `tfsdk:"opacity"`
+	LineWidth          types.Int64   `tfsdk:"line_width"`
+	ImageOutput        types.String  `tfsdk:"image_output"`
 }
 
 func NewWanMoveVisualizeTracksResource() resource.Resource {
@@ -78,6 +79,13 @@ func (r *WanMoveVisualizeTracksResource) Schema(_ context.Context, _ resource.Sc
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -154,10 +162,12 @@ func (r *WanMoveVisualizeTracksResource) Create(ctx context.Context, req resourc
 	data.NodeID = types.StringValue("WanMoveVisualizeTracks")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -168,10 +178,12 @@ func (r *WanMoveVisualizeTracksResource) Read(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -182,10 +194,12 @@ func (r *WanMoveVisualizeTracksResource) Update(ctx context.Context, req resourc
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

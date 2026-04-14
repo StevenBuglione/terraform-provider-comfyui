@@ -27,14 +27,15 @@ type CreateHookKeyframesFromFloatsResource struct {
 }
 
 type CreateHookKeyframesFromFloatsModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	FloatsStrength types.String  `tfsdk:"floats_strength"`
-	StartPercent   types.Float64 `tfsdk:"start_percent"`
-	EndPercent     types.Float64 `tfsdk:"end_percent"`
-	PrintKeyframes types.Bool    `tfsdk:"print_keyframes"`
-	PrevHookKf     types.String  `tfsdk:"prev_hook_kf"`
-	HookKfOutput   types.String  `tfsdk:"hook_kf_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	FloatsStrength     types.String  `tfsdk:"floats_strength"`
+	StartPercent       types.Float64 `tfsdk:"start_percent"`
+	EndPercent         types.Float64 `tfsdk:"end_percent"`
+	PrintKeyframes     types.Bool    `tfsdk:"print_keyframes"`
+	PrevHookKf         types.String  `tfsdk:"prev_hook_kf"`
+	HookKfOutput       types.String  `tfsdk:"hook_kf_output"`
 }
 
 func NewCreateHookKeyframesFromFloatsResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *CreateHookKeyframesFromFloatsResource) Schema(_ context.Context, _ reso
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -142,10 +150,12 @@ func (r *CreateHookKeyframesFromFloatsResource) Create(ctx context.Context, req 
 	data.NodeID = types.StringValue("CreateHookKeyframesFromFloats")
 	data.HookKfOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -156,10 +166,12 @@ func (r *CreateHookKeyframesFromFloatsResource) Read(ctx context.Context, req re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -170,10 +182,12 @@ func (r *CreateHookKeyframesFromFloatsResource) Update(ctx context.Context, req 
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -27,6 +27,7 @@ type CLIPTextEncodeHiDreamResource struct {
 type CLIPTextEncodeHiDreamModel struct {
 	ID                 types.String `tfsdk:"id"`
 	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
 	CLIP               types.String `tfsdk:"clip"`
 	CLIPL              types.String `tfsdk:"clip_l"`
 	CLIPG              types.String `tfsdk:"clip_g"`
@@ -74,6 +75,13 @@ func (r *CLIPTextEncodeHiDreamResource) Schema(_ context.Context, _ resource.Sch
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -134,10 +142,12 @@ func (r *CLIPTextEncodeHiDreamResource) Create(ctx context.Context, req resource
 	data.NodeID = types.StringValue("CLIPTextEncodeHiDream")
 	data.ConditioningOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -148,10 +158,12 @@ func (r *CLIPTextEncodeHiDreamResource) Read(ctx context.Context, req resource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -162,10 +174,12 @@ func (r *CLIPTextEncodeHiDreamResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

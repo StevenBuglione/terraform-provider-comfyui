@@ -25,15 +25,16 @@ type PairConditioningSetDefaultCombineResource struct {
 }
 
 type PairConditioningSetDefaultCombineModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	Positive        types.String `tfsdk:"positive"`
-	Negative        types.String `tfsdk:"negative"`
-	PositiveDefault types.String `tfsdk:"positive_default"`
-	NegativeDefault types.String `tfsdk:"negative_default"`
-	Hooks           types.String `tfsdk:"hooks"`
-	PositiveOutput  types.String `tfsdk:"positive_output"`
-	NegativeOutput  types.String `tfsdk:"negative_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Positive           types.String `tfsdk:"positive"`
+	Negative           types.String `tfsdk:"negative"`
+	PositiveDefault    types.String `tfsdk:"positive_default"`
+	NegativeDefault    types.String `tfsdk:"negative_default"`
+	Hooks              types.String `tfsdk:"hooks"`
+	PositiveOutput     types.String `tfsdk:"positive_output"`
+	NegativeOutput     types.String `tfsdk:"negative_output"`
 }
 
 func NewPairConditioningSetDefaultCombineResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *PairConditioningSetDefaultCombineResource) Schema(_ context.Context, _ 
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -143,10 +151,12 @@ func (r *PairConditioningSetDefaultCombineResource) Create(ctx context.Context, 
 	data.PositiveOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.NegativeOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -157,10 +167,12 @@ func (r *PairConditioningSetDefaultCombineResource) Read(ctx context.Context, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -171,10 +183,12 @@ func (r *PairConditioningSetDefaultCombineResource) Update(ctx context.Context, 
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

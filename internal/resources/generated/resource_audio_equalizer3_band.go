@@ -28,17 +28,18 @@ type AudioEqualizer3BandResource struct {
 }
 
 type AudioEqualizer3BandModel struct {
-	ID          types.String  `tfsdk:"id"`
-	NodeID      types.String  `tfsdk:"node_id"`
-	Audio       types.String  `tfsdk:"audio"`
-	LowGainDb   types.Float64 `tfsdk:"low_gain_db"`
-	LowFreq     types.Int64   `tfsdk:"low_freq"`
-	MidGainDb   types.Float64 `tfsdk:"mid_gain_db"`
-	MidFreq     types.Int64   `tfsdk:"mid_freq"`
-	MidQ        types.Float64 `tfsdk:"mid_q"`
-	HighGainDb  types.Float64 `tfsdk:"high_gain_db"`
-	HighFreq    types.Int64   `tfsdk:"high_freq"`
-	AudioOutput types.String  `tfsdk:"audio_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Audio              types.String  `tfsdk:"audio"`
+	LowGainDb          types.Float64 `tfsdk:"low_gain_db"`
+	LowFreq            types.Int64   `tfsdk:"low_freq"`
+	MidGainDb          types.Float64 `tfsdk:"mid_gain_db"`
+	MidFreq            types.Int64   `tfsdk:"mid_freq"`
+	MidQ               types.Float64 `tfsdk:"mid_q"`
+	HighGainDb         types.Float64 `tfsdk:"high_gain_db"`
+	HighFreq           types.Int64   `tfsdk:"high_freq"`
+	AudioOutput        types.String  `tfsdk:"audio_output"`
 }
 
 func NewAudioEqualizer3BandResource() resource.Resource {
@@ -80,6 +81,13 @@ func (r *AudioEqualizer3BandResource) Schema(_ context.Context, _ resource.Schem
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -173,10 +181,12 @@ func (r *AudioEqualizer3BandResource) Create(ctx context.Context, req resource.C
 	data.NodeID = types.StringValue("AudioEqualizer3Band")
 	data.AudioOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -187,10 +197,12 @@ func (r *AudioEqualizer3BandResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -201,10 +213,12 @@ func (r *AudioEqualizer3BandResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

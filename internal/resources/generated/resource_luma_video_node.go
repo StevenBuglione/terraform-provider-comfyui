@@ -27,17 +27,18 @@ type LumaVideoNodeResource struct {
 }
 
 type LumaVideoNodeModel struct {
-	ID           types.String `tfsdk:"id"`
-	NodeID       types.String `tfsdk:"node_id"`
-	Prompt       types.String `tfsdk:"prompt"`
-	Model        types.String `tfsdk:"model"`
-	AspectRatio  types.String `tfsdk:"aspect_ratio"`
-	Resolution   types.String `tfsdk:"resolution"`
-	Duration     types.String `tfsdk:"duration"`
-	Loop         types.Bool   `tfsdk:"loop"`
-	Seed         types.Int64  `tfsdk:"seed"`
-	LumaConcepts types.String `tfsdk:"luma_concepts"`
-	VideoOutput  types.String `tfsdk:"video_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Prompt             types.String `tfsdk:"prompt"`
+	Model              types.String `tfsdk:"model"`
+	AspectRatio        types.String `tfsdk:"aspect_ratio"`
+	Resolution         types.String `tfsdk:"resolution"`
+	Duration           types.String `tfsdk:"duration"`
+	Loop               types.Bool   `tfsdk:"loop"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	LumaConcepts       types.String `tfsdk:"luma_concepts"`
+	VideoOutput        types.String `tfsdk:"video_output"`
 }
 
 func NewLumaVideoNodeResource() resource.Resource {
@@ -79,6 +80,13 @@ func (r *LumaVideoNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -154,10 +162,12 @@ func (r *LumaVideoNodeResource) Create(ctx context.Context, req resource.CreateR
 	data.NodeID = types.StringValue("LumaTextToVideoGenerationNode")
 	data.VideoOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -168,10 +178,12 @@ func (r *LumaVideoNodeResource) Read(ctx context.Context, req resource.ReadReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -182,10 +194,12 @@ func (r *LumaVideoNodeResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

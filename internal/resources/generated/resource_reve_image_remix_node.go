@@ -27,13 +27,14 @@ type ReveImageRemixNodeResource struct {
 }
 
 type ReveImageRemixNodeModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	ReferenceImages types.String `tfsdk:"reference_images"`
-	Prompt          types.String `tfsdk:"prompt"`
-	Model           types.String `tfsdk:"model"`
-	Seed            types.Int64  `tfsdk:"seed"`
-	ImageOutput     types.String `tfsdk:"image_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	ReferenceImages    types.String `tfsdk:"reference_images"`
+	Prompt             types.String `tfsdk:"prompt"`
+	Model              types.String `tfsdk:"model"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	ImageOutput        types.String `tfsdk:"image_output"`
 }
 
 func NewReveImageRemixNodeResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *ReveImageRemixNodeResource) Schema(_ context.Context, _ resource.Schema
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -134,10 +142,12 @@ func (r *ReveImageRemixNodeResource) Create(ctx context.Context, req resource.Cr
 	data.NodeID = types.StringValue("ReveImageRemixNode")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -148,10 +158,12 @@ func (r *ReveImageRemixNodeResource) Read(ctx context.Context, req resource.Read
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -162,10 +174,12 @@ func (r *ReveImageRemixNodeResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

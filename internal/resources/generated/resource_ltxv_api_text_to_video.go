@@ -27,15 +27,16 @@ type LtxvAPITextToVideoResource struct {
 }
 
 type LtxvAPITextToVideoModel struct {
-	ID            types.String `tfsdk:"id"`
-	NodeID        types.String `tfsdk:"node_id"`
-	Model         types.String `tfsdk:"model"`
-	Prompt        types.String `tfsdk:"prompt"`
-	Duration      types.String `tfsdk:"duration"`
-	Resolution    types.String `tfsdk:"resolution"`
-	Fps           types.String `tfsdk:"fps"`
-	GenerateAudio types.Bool   `tfsdk:"generate_audio"`
-	VideoOutput   types.String `tfsdk:"video_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model              types.String `tfsdk:"model"`
+	Prompt             types.String `tfsdk:"prompt"`
+	Duration           types.String `tfsdk:"duration"`
+	Resolution         types.String `tfsdk:"resolution"`
+	Fps                types.String `tfsdk:"fps"`
+	GenerateAudio      types.Bool   `tfsdk:"generate_audio"`
+	VideoOutput        types.String `tfsdk:"video_output"`
 }
 
 func NewLtxvAPITextToVideoResource() resource.Resource {
@@ -77,6 +78,13 @@ func (r *LtxvAPITextToVideoResource) Schema(_ context.Context, _ resource.Schema
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -166,10 +174,12 @@ func (r *LtxvAPITextToVideoResource) Create(ctx context.Context, req resource.Cr
 	data.NodeID = types.StringValue("TextToVideoNode")
 	data.VideoOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -180,10 +190,12 @@ func (r *LtxvAPITextToVideoResource) Read(ctx context.Context, req resource.Read
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -194,10 +206,12 @@ func (r *LtxvAPITextToVideoResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

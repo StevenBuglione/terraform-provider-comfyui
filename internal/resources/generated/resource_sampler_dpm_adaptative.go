@@ -28,19 +28,20 @@ type SamplerDpmAdaptativeResource struct {
 }
 
 type SamplerDpmAdaptativeModel struct {
-	ID            types.String  `tfsdk:"id"`
-	NodeID        types.String  `tfsdk:"node_id"`
-	Order         types.Int64   `tfsdk:"order"`
-	Rtol          types.Float64 `tfsdk:"rtol"`
-	Atol          types.Float64 `tfsdk:"atol"`
-	HInit         types.Float64 `tfsdk:"h_init"`
-	Pcoeff        types.Float64 `tfsdk:"pcoeff"`
-	Icoeff        types.Float64 `tfsdk:"icoeff"`
-	Dcoeff        types.Float64 `tfsdk:"dcoeff"`
-	AcceptSafety  types.Float64 `tfsdk:"accept_safety"`
-	Eta           types.Float64 `tfsdk:"eta"`
-	SNoise        types.Float64 `tfsdk:"s_noise"`
-	SamplerOutput types.String  `tfsdk:"sampler_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Order              types.Int64   `tfsdk:"order"`
+	Rtol               types.Float64 `tfsdk:"rtol"`
+	Atol               types.Float64 `tfsdk:"atol"`
+	HInit              types.Float64 `tfsdk:"h_init"`
+	Pcoeff             types.Float64 `tfsdk:"pcoeff"`
+	Icoeff             types.Float64 `tfsdk:"icoeff"`
+	Dcoeff             types.Float64 `tfsdk:"dcoeff"`
+	AcceptSafety       types.Float64 `tfsdk:"accept_safety"`
+	Eta                types.Float64 `tfsdk:"eta"`
+	SNoise             types.Float64 `tfsdk:"s_noise"`
+	SamplerOutput      types.String  `tfsdk:"sampler_output"`
 }
 
 func NewSamplerDpmAdaptativeResource() resource.Resource {
@@ -82,6 +83,13 @@ func (r *SamplerDpmAdaptativeResource) Schema(_ context.Context, _ resource.Sche
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -192,10 +200,12 @@ func (r *SamplerDpmAdaptativeResource) Create(ctx context.Context, req resource.
 	data.NodeID = types.StringValue("SamplerDPMAdaptative")
 	data.SamplerOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -206,10 +216,12 @@ func (r *SamplerDpmAdaptativeResource) Read(ctx context.Context, req resource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -220,10 +232,12 @@ func (r *SamplerDpmAdaptativeResource) Update(ctx context.Context, req resource.
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

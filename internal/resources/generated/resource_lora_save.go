@@ -27,14 +27,15 @@ type LoraSaveResource struct {
 }
 
 type LoraSaveModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	FilenamePrefix  types.String `tfsdk:"filename_prefix"`
-	Rank            types.Int64  `tfsdk:"rank"`
-	LoraType        types.String `tfsdk:"lora_type"`
-	BiasDiff        types.Bool   `tfsdk:"bias_diff"`
-	ModelDiff       types.String `tfsdk:"model_diff"`
-	TextEncoderDiff types.String `tfsdk:"text_encoder_diff"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	FilenamePrefix     types.String `tfsdk:"filename_prefix"`
+	Rank               types.Int64  `tfsdk:"rank"`
+	LoraType           types.String `tfsdk:"lora_type"`
+	BiasDiff           types.Bool   `tfsdk:"bias_diff"`
+	ModelDiff          types.String `tfsdk:"model_diff"`
+	TextEncoderDiff    types.String `tfsdk:"text_encoder_diff"`
 }
 
 func NewLoraSaveResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *LoraSaveResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -135,10 +143,12 @@ func (r *LoraSaveResource) Create(ctx context.Context, req resource.CreateReques
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("LoraSave")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -149,10 +159,12 @@ func (r *LoraSaveResource) Read(ctx context.Context, req resource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -163,10 +175,12 @@ func (r *LoraSaveResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

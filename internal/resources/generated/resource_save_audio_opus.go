@@ -27,11 +27,12 @@ type SaveAudioOpusResource struct {
 }
 
 type SaveAudioOpusModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Audio          types.String `tfsdk:"audio"`
-	FilenamePrefix types.String `tfsdk:"filename_prefix"`
-	Quality        types.String `tfsdk:"quality"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Audio              types.String `tfsdk:"audio"`
+	FilenamePrefix     types.String `tfsdk:"filename_prefix"`
+	Quality            types.String `tfsdk:"quality"`
 }
 
 func NewSaveAudioOpusResource() resource.Resource {
@@ -73,6 +74,13 @@ func (r *SaveAudioOpusResource) Schema(_ context.Context, _ resource.SchemaReque
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -126,10 +134,12 @@ func (r *SaveAudioOpusResource) Create(ctx context.Context, req resource.CreateR
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("SaveAudioOpus")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -140,10 +150,12 @@ func (r *SaveAudioOpusResource) Read(ctx context.Context, req resource.ReadReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -154,10 +166,12 @@ func (r *SaveAudioOpusResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

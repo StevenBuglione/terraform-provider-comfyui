@@ -25,10 +25,11 @@ type LtxvAudioVAEDecodeResource struct {
 }
 
 type LtxvAudioVAEDecodeModel struct {
-	ID          types.String `tfsdk:"id"`
-	NodeID      types.String `tfsdk:"node_id"`
-	Samples     types.String `tfsdk:"samples"`
-	AudioOutput types.String `tfsdk:"audio_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Samples            types.String `tfsdk:"samples"`
+	AudioOutput        types.String `tfsdk:"audio_output"`
 }
 
 func NewLtxvAudioVAEDecodeResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *LtxvAudioVAEDecodeResource) Schema(_ context.Context, _ resource.Schema
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"samples": schema.StringAttribute{
 				MarkdownDescription: "Input: LATENT. Link input. Tooltip: The latent to be decoded.",
 				Required:            true,
@@ -114,10 +122,12 @@ func (r *LtxvAudioVAEDecodeResource) Create(ctx context.Context, req resource.Cr
 	data.NodeID = types.StringValue("LTXVAudioVAEDecode")
 	data.AudioOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -128,10 +138,12 @@ func (r *LtxvAudioVAEDecodeResource) Read(ctx context.Context, req resource.Read
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -142,10 +154,12 @@ func (r *LtxvAudioVAEDecodeResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

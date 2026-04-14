@@ -29,12 +29,13 @@ type OptimalStepsSchedulerResource struct {
 }
 
 type OptimalStepsSchedulerModel struct {
-	ID           types.String  `tfsdk:"id"`
-	NodeID       types.String  `tfsdk:"node_id"`
-	ModelType    types.String  `tfsdk:"model_type"`
-	Steps        types.Int64   `tfsdk:"steps"`
-	Denoise      types.Float64 `tfsdk:"denoise"`
-	SigmasOutput types.String  `tfsdk:"sigmas_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	ModelType          types.String  `tfsdk:"model_type"`
+	Steps              types.Int64   `tfsdk:"steps"`
+	Denoise            types.Float64 `tfsdk:"denoise"`
+	SigmasOutput       types.String  `tfsdk:"sigmas_output"`
 }
 
 func NewOptimalStepsSchedulerResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *OptimalStepsSchedulerResource) Schema(_ context.Context, _ resource.Sch
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -141,10 +149,12 @@ func (r *OptimalStepsSchedulerResource) Create(ctx context.Context, req resource
 	data.NodeID = types.StringValue("OptimalStepsScheduler")
 	data.SigmasOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -155,10 +165,12 @@ func (r *OptimalStepsSchedulerResource) Read(ctx context.Context, req resource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -169,10 +181,12 @@ func (r *OptimalStepsSchedulerResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

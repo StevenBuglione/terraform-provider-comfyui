@@ -27,6 +27,7 @@ type GeminiInputFilesResource struct {
 type GeminiInputFilesModel struct {
 	ID                     types.String `tfsdk:"id"`
 	NodeID                 types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON     types.String `tfsdk:"node_definition_json"`
 	File                   types.String `tfsdk:"file"`
 	GeminiInputFiles       types.String `tfsdk:"gemini_input_files"`
 	GeminiInputFilesOutput types.String `tfsdk:"gemini_input_files_output"`
@@ -75,6 +76,13 @@ func (r *GeminiInputFilesResource) Schema(_ context.Context, _ resource.SchemaRe
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"file": schema.StringAttribute{
 				MarkdownDescription: "Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: input_files. Tooltip: Input files to include as context for the model. Only accepts text (.txt) and PDF (.pdf) files for now.",
 				Required:            true,
@@ -119,10 +127,12 @@ func (r *GeminiInputFilesResource) Create(ctx context.Context, req resource.Crea
 	data.NodeID = types.StringValue("GeminiInputFiles")
 	data.GeminiInputFilesOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -133,10 +143,12 @@ func (r *GeminiInputFilesResource) Read(ctx context.Context, req resource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -147,10 +159,12 @@ func (r *GeminiInputFilesResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

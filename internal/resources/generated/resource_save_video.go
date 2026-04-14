@@ -25,12 +25,13 @@ type SaveVideoResource struct {
 }
 
 type SaveVideoModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Video          types.String `tfsdk:"video"`
-	FilenamePrefix types.String `tfsdk:"filename_prefix"`
-	Format         types.String `tfsdk:"format"`
-	Codec          types.String `tfsdk:"codec"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Video              types.String `tfsdk:"video"`
+	FilenamePrefix     types.String `tfsdk:"filename_prefix"`
+	Format             types.String `tfsdk:"format"`
+	Codec              types.String `tfsdk:"codec"`
 }
 
 func NewSaveVideoResource() resource.Resource {
@@ -72,6 +73,13 @@ func (r *SaveVideoResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -120,10 +128,12 @@ func (r *SaveVideoResource) Create(ctx context.Context, req resource.CreateReque
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("SaveVideo")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -134,10 +144,12 @@ func (r *SaveVideoResource) Read(ctx context.Context, req resource.ReadRequest, 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -148,10 +160,12 @@ func (r *SaveVideoResource) Update(ctx context.Context, req resource.UpdateReque
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

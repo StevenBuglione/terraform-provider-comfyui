@@ -25,13 +25,14 @@ type QuadrupleCLIPLoaderResource struct {
 }
 
 type QuadrupleCLIPLoaderModel struct {
-	ID         types.String `tfsdk:"id"`
-	NodeID     types.String `tfsdk:"node_id"`
-	CLIPName1  types.String `tfsdk:"clip_name1"`
-	CLIPName2  types.String `tfsdk:"clip_name2"`
-	CLIPName3  types.String `tfsdk:"clip_name3"`
-	CLIPName4  types.String `tfsdk:"clip_name4"`
-	CLIPOutput types.String `tfsdk:"clip_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	CLIPName1          types.String `tfsdk:"clip_name1"`
+	CLIPName2          types.String `tfsdk:"clip_name2"`
+	CLIPName3          types.String `tfsdk:"clip_name3"`
+	CLIPName4          types.String `tfsdk:"clip_name4"`
+	CLIPOutput         types.String `tfsdk:"clip_output"`
 }
 
 func NewQuadrupleCLIPLoaderResource() resource.Resource {
@@ -73,6 +74,13 @@ func (r *QuadrupleCLIPLoaderResource) Schema(_ context.Context, _ resource.Schem
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -129,10 +137,12 @@ func (r *QuadrupleCLIPLoaderResource) Create(ctx context.Context, req resource.C
 	data.NodeID = types.StringValue("QuadrupleCLIPLoader")
 	data.CLIPOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -143,10 +153,12 @@ func (r *QuadrupleCLIPLoaderResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -157,10 +169,12 @@ func (r *QuadrupleCLIPLoaderResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

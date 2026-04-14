@@ -25,10 +25,11 @@ type LossGraphNodeResource struct {
 }
 
 type LossGraphNodeModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Loss           types.String `tfsdk:"loss"`
-	FilenamePrefix types.String `tfsdk:"filename_prefix"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Loss               types.String `tfsdk:"loss"`
+	FilenamePrefix     types.String `tfsdk:"filename_prefix"`
 }
 
 func NewLossGraphNodeResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *LossGraphNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"loss": schema.StringAttribute{
 				MarkdownDescription: "Input: LOSS_MAP. Link input. Tooltip: Loss map from training node.",
 				Required:            true,
@@ -110,10 +118,12 @@ func (r *LossGraphNodeResource) Create(ctx context.Context, req resource.CreateR
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("LossGraphNode")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -124,10 +134,12 @@ func (r *LossGraphNodeResource) Read(ctx context.Context, req resource.ReadReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -138,10 +150,12 @@ func (r *LossGraphNodeResource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -27,15 +27,16 @@ type MeshyRigModelNodeResource struct {
 }
 
 type MeshyRigModelNodeModel struct {
-	ID              types.String  `tfsdk:"id"`
-	NodeID          types.String  `tfsdk:"node_id"`
-	MeshyTaskID     types.String  `tfsdk:"meshy_task_id"`
-	HeightMeters    types.Float64 `tfsdk:"height_meters"`
-	TextureImage    types.String  `tfsdk:"texture_image"`
-	ModelFileOutput types.String  `tfsdk:"model_file_output"`
-	RigTaskIDOutput types.String  `tfsdk:"rig_task_id_output"`
-	GlbOutput       types.String  `tfsdk:"glb_output"`
-	FbxOutput       types.String  `tfsdk:"fbx_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	MeshyTaskID        types.String  `tfsdk:"meshy_task_id"`
+	HeightMeters       types.Float64 `tfsdk:"height_meters"`
+	TextureImage       types.String  `tfsdk:"texture_image"`
+	ModelFileOutput    types.String  `tfsdk:"model_file_output"`
+	RigTaskIDOutput    types.String  `tfsdk:"rig_task_id_output"`
+	GlbOutput          types.String  `tfsdk:"glb_output"`
+	FbxOutput          types.String  `tfsdk:"fbx_output"`
 }
 
 func NewMeshyRigModelNodeResource() resource.Resource {
@@ -77,6 +78,13 @@ func (r *MeshyRigModelNodeResource) Schema(_ context.Context, _ resource.SchemaR
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -156,10 +164,12 @@ func (r *MeshyRigModelNodeResource) Create(ctx context.Context, req resource.Cre
 	data.GlbOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 	data.FbxOutput = types.StringValue(fmt.Sprintf("%s:3", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -170,10 +180,12 @@ func (r *MeshyRigModelNodeResource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -184,10 +196,12 @@ func (r *MeshyRigModelNodeResource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

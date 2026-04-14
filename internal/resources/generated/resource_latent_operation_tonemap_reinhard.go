@@ -29,6 +29,7 @@ type LatentOperationTonemapReinhardResource struct {
 type LatentOperationTonemapReinhardModel struct {
 	ID                    types.String  `tfsdk:"id"`
 	NodeID                types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON    types.String  `tfsdk:"node_definition_json"`
 	Multiplier            types.Float64 `tfsdk:"multiplier"`
 	LatentOperationOutput types.String  `tfsdk:"latent_operation_output"`
 }
@@ -76,6 +77,13 @@ func (r *LatentOperationTonemapReinhardResource) Schema(_ context.Context, _ res
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"multiplier": schema.Float64Attribute{
 				MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.",
 				Required:            true,
@@ -119,10 +127,12 @@ func (r *LatentOperationTonemapReinhardResource) Create(ctx context.Context, req
 	data.NodeID = types.StringValue("LatentOperationTonemapReinhard")
 	data.LatentOperationOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -133,10 +143,12 @@ func (r *LatentOperationTonemapReinhardResource) Read(ctx context.Context, req r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -147,10 +159,12 @@ func (r *LatentOperationTonemapReinhardResource) Update(ctx context.Context, req
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

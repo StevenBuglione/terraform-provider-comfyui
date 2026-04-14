@@ -28,13 +28,14 @@ type SaveWebmResource struct {
 }
 
 type SaveWebmModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	Images         types.String  `tfsdk:"images"`
-	FilenamePrefix types.String  `tfsdk:"filename_prefix"`
-	Codec          types.String  `tfsdk:"codec"`
-	Fps            types.Float64 `tfsdk:"fps"`
-	Crf            types.Float64 `tfsdk:"crf"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Images             types.String  `tfsdk:"images"`
+	FilenamePrefix     types.String  `tfsdk:"filename_prefix"`
+	Codec              types.String  `tfsdk:"codec"`
+	Fps                types.Float64 `tfsdk:"fps"`
+	Crf                types.Float64 `tfsdk:"crf"`
 }
 
 func NewSaveWebmResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *SaveWebmResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -140,10 +148,12 @@ func (r *SaveWebmResource) Create(ctx context.Context, req resource.CreateReques
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("SaveWEBM")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -154,10 +164,12 @@ func (r *SaveWebmResource) Read(ctx context.Context, req resource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -168,10 +180,12 @@ func (r *SaveWebmResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

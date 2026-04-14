@@ -27,20 +27,21 @@ type WanImageToVideoResource struct {
 }
 
 type WanImageToVideoModel struct {
-	ID               types.String `tfsdk:"id"`
-	NodeID           types.String `tfsdk:"node_id"`
-	Positive         types.String `tfsdk:"positive"`
-	Negative         types.String `tfsdk:"negative"`
-	VAE              types.String `tfsdk:"vae"`
-	Width            types.Int64  `tfsdk:"width"`
-	Height           types.Int64  `tfsdk:"height"`
-	Length           types.Int64  `tfsdk:"length"`
-	BatchSize        types.Int64  `tfsdk:"batch_size"`
-	CLIPVisionOutput types.String `tfsdk:"clip_vision_output"`
-	StartImage       types.String `tfsdk:"start_image"`
-	PositiveOutput   types.String `tfsdk:"positive_output"`
-	NegativeOutput   types.String `tfsdk:"negative_output"`
-	LatentOutput     types.String `tfsdk:"latent_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Positive           types.String `tfsdk:"positive"`
+	Negative           types.String `tfsdk:"negative"`
+	VAE                types.String `tfsdk:"vae"`
+	Width              types.Int64  `tfsdk:"width"`
+	Height             types.Int64  `tfsdk:"height"`
+	Length             types.Int64  `tfsdk:"length"`
+	BatchSize          types.Int64  `tfsdk:"batch_size"`
+	CLIPVisionOutput   types.String `tfsdk:"clip_vision_output"`
+	StartImage         types.String `tfsdk:"start_image"`
+	PositiveOutput     types.String `tfsdk:"positive_output"`
+	NegativeOutput     types.String `tfsdk:"negative_output"`
+	LatentOutput       types.String `tfsdk:"latent_output"`
 }
 
 func NewWanImageToVideoResource() resource.Resource {
@@ -82,6 +83,13 @@ func (r *WanImageToVideoResource) Schema(_ context.Context, _ resource.SchemaReq
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -177,10 +185,12 @@ func (r *WanImageToVideoResource) Create(ctx context.Context, req resource.Creat
 	data.NegativeOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 	data.LatentOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -191,10 +201,12 @@ func (r *WanImageToVideoResource) Read(ctx context.Context, req resource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -205,10 +217,12 @@ func (r *WanImageToVideoResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

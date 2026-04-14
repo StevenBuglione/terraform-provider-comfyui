@@ -29,24 +29,25 @@ type GenerateTracksResource struct {
 }
 
 type GenerateTracksModel struct {
-	ID                types.String  `tfsdk:"id"`
-	NodeID            types.String  `tfsdk:"node_id"`
-	Width             types.Int64   `tfsdk:"width"`
-	Height            types.Int64   `tfsdk:"height"`
-	StartX            types.Float64 `tfsdk:"start_x"`
-	StartY            types.Float64 `tfsdk:"start_y"`
-	EndX              types.Float64 `tfsdk:"end_x"`
-	EndY              types.Float64 `tfsdk:"end_y"`
-	NumFrames         types.Int64   `tfsdk:"num_frames"`
-	NumTracks         types.Int64   `tfsdk:"num_tracks"`
-	TrackSpread       types.Float64 `tfsdk:"track_spread"`
-	Bezier            types.Bool    `tfsdk:"bezier"`
-	MidX              types.Float64 `tfsdk:"mid_x"`
-	MidY              types.Float64 `tfsdk:"mid_y"`
-	Interpolation     types.String  `tfsdk:"interpolation"`
-	TrackMask         types.String  `tfsdk:"track_mask"`
-	TracksOutput      types.String  `tfsdk:"tracks_output"`
-	TrackLengthOutput types.String  `tfsdk:"track_length_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Width              types.Int64   `tfsdk:"width"`
+	Height             types.Int64   `tfsdk:"height"`
+	StartX             types.Float64 `tfsdk:"start_x"`
+	StartY             types.Float64 `tfsdk:"start_y"`
+	EndX               types.Float64 `tfsdk:"end_x"`
+	EndY               types.Float64 `tfsdk:"end_y"`
+	NumFrames          types.Int64   `tfsdk:"num_frames"`
+	NumTracks          types.Int64   `tfsdk:"num_tracks"`
+	TrackSpread        types.Float64 `tfsdk:"track_spread"`
+	Bezier             types.Bool    `tfsdk:"bezier"`
+	MidX               types.Float64 `tfsdk:"mid_x"`
+	MidY               types.Float64 `tfsdk:"mid_y"`
+	Interpolation      types.String  `tfsdk:"interpolation"`
+	TrackMask          types.String  `tfsdk:"track_mask"`
+	TracksOutput       types.String  `tfsdk:"tracks_output"`
+	TrackLengthOutput  types.String  `tfsdk:"track_length_output"`
 }
 
 func NewGenerateTracksResource() resource.Resource {
@@ -88,6 +89,13 @@ func (r *GenerateTracksResource) Schema(_ context.Context, _ resource.SchemaRequ
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -234,10 +242,12 @@ func (r *GenerateTracksResource) Create(ctx context.Context, req resource.Create
 	data.TracksOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.TrackLengthOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -248,10 +258,12 @@ func (r *GenerateTracksResource) Read(ctx context.Context, req resource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -262,10 +274,12 @@ func (r *GenerateTracksResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

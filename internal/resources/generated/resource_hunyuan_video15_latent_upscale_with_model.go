@@ -28,15 +28,16 @@ type HunyuanVideo15LatentUpscaleWithModelResource struct {
 }
 
 type HunyuanVideo15LatentUpscaleWithModelModel struct {
-	ID            types.String `tfsdk:"id"`
-	NodeID        types.String `tfsdk:"node_id"`
-	Model         types.String `tfsdk:"model"`
-	Samples       types.String `tfsdk:"samples"`
-	UpscaleMethod types.String `tfsdk:"upscale_method"`
-	Width         types.Int64  `tfsdk:"width"`
-	Height        types.Int64  `tfsdk:"height"`
-	Crop          types.String `tfsdk:"crop"`
-	LatentOutput  types.String `tfsdk:"latent_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model              types.String `tfsdk:"model"`
+	Samples            types.String `tfsdk:"samples"`
+	UpscaleMethod      types.String `tfsdk:"upscale_method"`
+	Width              types.Int64  `tfsdk:"width"`
+	Height             types.Int64  `tfsdk:"height"`
+	Crop               types.String `tfsdk:"crop"`
+	LatentOutput       types.String `tfsdk:"latent_output"`
 }
 
 func NewHunyuanVideo15LatentUpscaleWithModelResource() resource.Resource {
@@ -78,6 +79,13 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Schema(_ context.Context,
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -163,10 +171,12 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Create(ctx context.Contex
 	data.NodeID = types.StringValue("HunyuanVideo15LatentUpscaleWithModel")
 	data.LatentOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -177,10 +187,12 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Read(ctx context.Context,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -191,10 +203,12 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Update(ctx context.Contex
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

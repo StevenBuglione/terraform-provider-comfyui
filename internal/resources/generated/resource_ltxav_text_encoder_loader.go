@@ -27,12 +27,13 @@ type LtxavTextEncoderLoaderResource struct {
 }
 
 type LtxavTextEncoderLoaderModel struct {
-	ID          types.String `tfsdk:"id"`
-	NodeID      types.String `tfsdk:"node_id"`
-	TextEncoder types.String `tfsdk:"text_encoder"`
-	CkptName    types.String `tfsdk:"ckpt_name"`
-	Device      types.String `tfsdk:"device"`
-	CLIPOutput  types.String `tfsdk:"clip_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	TextEncoder        types.String `tfsdk:"text_encoder"`
+	CkptName           types.String `tfsdk:"ckpt_name"`
+	Device             types.String `tfsdk:"device"`
+	CLIPOutput         types.String `tfsdk:"clip_output"`
 }
 
 func NewLtxavTextEncoderLoaderResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *LtxavTextEncoderLoaderResource) Schema(_ context.Context, _ resource.Sc
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -132,10 +140,12 @@ func (r *LtxavTextEncoderLoaderResource) Create(ctx context.Context, req resourc
 	data.NodeID = types.StringValue("LTXAVTextEncoderLoader")
 	data.CLIPOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -146,10 +156,12 @@ func (r *LtxavTextEncoderLoaderResource) Read(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -160,10 +172,12 @@ func (r *LtxavTextEncoderLoaderResource) Update(ctx context.Context, req resourc
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -25,64 +25,65 @@ type ModelMergeMochiPreviewResource struct {
 }
 
 type ModelMergeMochiPreviewModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Model1         types.String `tfsdk:"model1"`
-	Model2         types.String `tfsdk:"model2"`
-	PosFrequencies types.String `tfsdk:"pos_frequencies"`
-	TEmbedder      types.String `tfsdk:"t_embedder"`
-	T5YEmbedder    types.String `tfsdk:"t5_y_embedder"`
-	T5Yproj        types.String `tfsdk:"t5_yproj"`
-	Blocks0        types.String `tfsdk:"blocks_0"`
-	Blocks1        types.String `tfsdk:"blocks_1"`
-	Blocks2        types.String `tfsdk:"blocks_2"`
-	Blocks3        types.String `tfsdk:"blocks_3"`
-	Blocks4        types.String `tfsdk:"blocks_4"`
-	Blocks5        types.String `tfsdk:"blocks_5"`
-	Blocks6        types.String `tfsdk:"blocks_6"`
-	Blocks7        types.String `tfsdk:"blocks_7"`
-	Blocks8        types.String `tfsdk:"blocks_8"`
-	Blocks9        types.String `tfsdk:"blocks_9"`
-	Blocks10       types.String `tfsdk:"blocks_10"`
-	Blocks11       types.String `tfsdk:"blocks_11"`
-	Blocks12       types.String `tfsdk:"blocks_12"`
-	Blocks13       types.String `tfsdk:"blocks_13"`
-	Blocks14       types.String `tfsdk:"blocks_14"`
-	Blocks15       types.String `tfsdk:"blocks_15"`
-	Blocks16       types.String `tfsdk:"blocks_16"`
-	Blocks17       types.String `tfsdk:"blocks_17"`
-	Blocks18       types.String `tfsdk:"blocks_18"`
-	Blocks19       types.String `tfsdk:"blocks_19"`
-	Blocks20       types.String `tfsdk:"blocks_20"`
-	Blocks21       types.String `tfsdk:"blocks_21"`
-	Blocks22       types.String `tfsdk:"blocks_22"`
-	Blocks23       types.String `tfsdk:"blocks_23"`
-	Blocks24       types.String `tfsdk:"blocks_24"`
-	Blocks25       types.String `tfsdk:"blocks_25"`
-	Blocks26       types.String `tfsdk:"blocks_26"`
-	Blocks27       types.String `tfsdk:"blocks_27"`
-	Blocks28       types.String `tfsdk:"blocks_28"`
-	Blocks29       types.String `tfsdk:"blocks_29"`
-	Blocks30       types.String `tfsdk:"blocks_30"`
-	Blocks31       types.String `tfsdk:"blocks_31"`
-	Blocks32       types.String `tfsdk:"blocks_32"`
-	Blocks33       types.String `tfsdk:"blocks_33"`
-	Blocks34       types.String `tfsdk:"blocks_34"`
-	Blocks35       types.String `tfsdk:"blocks_35"`
-	Blocks36       types.String `tfsdk:"blocks_36"`
-	Blocks37       types.String `tfsdk:"blocks_37"`
-	Blocks38       types.String `tfsdk:"blocks_38"`
-	Blocks39       types.String `tfsdk:"blocks_39"`
-	Blocks40       types.String `tfsdk:"blocks_40"`
-	Blocks41       types.String `tfsdk:"blocks_41"`
-	Blocks42       types.String `tfsdk:"blocks_42"`
-	Blocks43       types.String `tfsdk:"blocks_43"`
-	Blocks44       types.String `tfsdk:"blocks_44"`
-	Blocks45       types.String `tfsdk:"blocks_45"`
-	Blocks46       types.String `tfsdk:"blocks_46"`
-	Blocks47       types.String `tfsdk:"blocks_47"`
-	FinalLayer     types.String `tfsdk:"final_layer"`
-	ModelOutput    types.String `tfsdk:"model_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model1             types.String `tfsdk:"model1"`
+	Model2             types.String `tfsdk:"model2"`
+	PosFrequencies     types.String `tfsdk:"pos_frequencies"`
+	TEmbedder          types.String `tfsdk:"t_embedder"`
+	T5YEmbedder        types.String `tfsdk:"t5_y_embedder"`
+	T5Yproj            types.String `tfsdk:"t5_yproj"`
+	Blocks0            types.String `tfsdk:"blocks_0"`
+	Blocks1            types.String `tfsdk:"blocks_1"`
+	Blocks2            types.String `tfsdk:"blocks_2"`
+	Blocks3            types.String `tfsdk:"blocks_3"`
+	Blocks4            types.String `tfsdk:"blocks_4"`
+	Blocks5            types.String `tfsdk:"blocks_5"`
+	Blocks6            types.String `tfsdk:"blocks_6"`
+	Blocks7            types.String `tfsdk:"blocks_7"`
+	Blocks8            types.String `tfsdk:"blocks_8"`
+	Blocks9            types.String `tfsdk:"blocks_9"`
+	Blocks10           types.String `tfsdk:"blocks_10"`
+	Blocks11           types.String `tfsdk:"blocks_11"`
+	Blocks12           types.String `tfsdk:"blocks_12"`
+	Blocks13           types.String `tfsdk:"blocks_13"`
+	Blocks14           types.String `tfsdk:"blocks_14"`
+	Blocks15           types.String `tfsdk:"blocks_15"`
+	Blocks16           types.String `tfsdk:"blocks_16"`
+	Blocks17           types.String `tfsdk:"blocks_17"`
+	Blocks18           types.String `tfsdk:"blocks_18"`
+	Blocks19           types.String `tfsdk:"blocks_19"`
+	Blocks20           types.String `tfsdk:"blocks_20"`
+	Blocks21           types.String `tfsdk:"blocks_21"`
+	Blocks22           types.String `tfsdk:"blocks_22"`
+	Blocks23           types.String `tfsdk:"blocks_23"`
+	Blocks24           types.String `tfsdk:"blocks_24"`
+	Blocks25           types.String `tfsdk:"blocks_25"`
+	Blocks26           types.String `tfsdk:"blocks_26"`
+	Blocks27           types.String `tfsdk:"blocks_27"`
+	Blocks28           types.String `tfsdk:"blocks_28"`
+	Blocks29           types.String `tfsdk:"blocks_29"`
+	Blocks30           types.String `tfsdk:"blocks_30"`
+	Blocks31           types.String `tfsdk:"blocks_31"`
+	Blocks32           types.String `tfsdk:"blocks_32"`
+	Blocks33           types.String `tfsdk:"blocks_33"`
+	Blocks34           types.String `tfsdk:"blocks_34"`
+	Blocks35           types.String `tfsdk:"blocks_35"`
+	Blocks36           types.String `tfsdk:"blocks_36"`
+	Blocks37           types.String `tfsdk:"blocks_37"`
+	Blocks38           types.String `tfsdk:"blocks_38"`
+	Blocks39           types.String `tfsdk:"blocks_39"`
+	Blocks40           types.String `tfsdk:"blocks_40"`
+	Blocks41           types.String `tfsdk:"blocks_41"`
+	Blocks42           types.String `tfsdk:"blocks_42"`
+	Blocks43           types.String `tfsdk:"blocks_43"`
+	Blocks44           types.String `tfsdk:"blocks_44"`
+	Blocks45           types.String `tfsdk:"blocks_45"`
+	Blocks46           types.String `tfsdk:"blocks_46"`
+	Blocks47           types.String `tfsdk:"blocks_47"`
+	FinalLayer         types.String `tfsdk:"final_layer"`
+	ModelOutput        types.String `tfsdk:"model_output"`
 }
 
 func NewModelMergeMochiPreviewResource() resource.Resource {
@@ -124,6 +125,13 @@ func (r *ModelMergeMochiPreviewResource) Schema(_ context.Context, _ resource.Sc
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -384,10 +392,12 @@ func (r *ModelMergeMochiPreviewResource) Create(ctx context.Context, req resourc
 	data.NodeID = types.StringValue("ModelMergeMochiPreview")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -398,10 +408,12 @@ func (r *ModelMergeMochiPreviewResource) Read(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -412,10 +424,12 @@ func (r *ModelMergeMochiPreviewResource) Update(ctx context.Context, req resourc
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

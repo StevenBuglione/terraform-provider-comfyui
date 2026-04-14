@@ -27,12 +27,13 @@ type LumaReferenceNodeResource struct {
 }
 
 type LumaReferenceNodeModel struct {
-	ID            types.String  `tfsdk:"id"`
-	NodeID        types.String  `tfsdk:"node_id"`
-	Image         types.String  `tfsdk:"image"`
-	Weight        types.Float64 `tfsdk:"weight"`
-	LumaRef       types.String  `tfsdk:"luma_ref"`
-	LumaRefOutput types.String  `tfsdk:"luma_ref_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Image              types.String  `tfsdk:"image"`
+	Weight             types.Float64 `tfsdk:"weight"`
+	LumaRef            types.String  `tfsdk:"luma_ref"`
+	LumaRefOutput      types.String  `tfsdk:"luma_ref_output"`
 }
 
 func NewLumaReferenceNodeResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *LumaReferenceNodeResource) Schema(_ context.Context, _ resource.SchemaR
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -129,10 +137,12 @@ func (r *LumaReferenceNodeResource) Create(ctx context.Context, req resource.Cre
 	data.NodeID = types.StringValue("LumaReferenceNode")
 	data.LumaRefOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -143,10 +153,12 @@ func (r *LumaReferenceNodeResource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -157,10 +169,12 @@ func (r *LumaReferenceNodeResource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

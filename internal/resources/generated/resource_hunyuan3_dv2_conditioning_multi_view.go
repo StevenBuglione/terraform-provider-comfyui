@@ -25,14 +25,15 @@ type Hunyuan3Dv2ConditioningMultiViewResource struct {
 }
 
 type Hunyuan3Dv2ConditioningMultiViewModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Front          types.String `tfsdk:"front"`
-	Left           types.String `tfsdk:"left"`
-	Back           types.String `tfsdk:"back"`
-	Right          types.String `tfsdk:"right"`
-	PositiveOutput types.String `tfsdk:"positive_output"`
-	NegativeOutput types.String `tfsdk:"negative_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Front              types.String `tfsdk:"front"`
+	Left               types.String `tfsdk:"left"`
+	Back               types.String `tfsdk:"back"`
+	Right              types.String `tfsdk:"right"`
+	PositiveOutput     types.String `tfsdk:"positive_output"`
+	NegativeOutput     types.String `tfsdk:"negative_output"`
 }
 
 func NewHunyuan3Dv2ConditioningMultiViewResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *Hunyuan3Dv2ConditioningMultiViewResource) Schema(_ context.Context, _ r
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -138,10 +146,12 @@ func (r *Hunyuan3Dv2ConditioningMultiViewResource) Create(ctx context.Context, r
 	data.PositiveOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.NegativeOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -152,10 +162,12 @@ func (r *Hunyuan3Dv2ConditioningMultiViewResource) Read(ctx context.Context, req
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -166,10 +178,12 @@ func (r *Hunyuan3Dv2ConditioningMultiViewResource) Update(ctx context.Context, r
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

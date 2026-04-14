@@ -27,6 +27,7 @@ type BatchImagesMasksLatentsNodeResource struct {
 type BatchImagesMasksLatentsNodeModel struct {
 	ID                     types.String `tfsdk:"id"`
 	NodeID                 types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON     types.String `tfsdk:"node_definition_json"`
 	Inputs                 types.String `tfsdk:"inputs"`
 	ComfyMatchtypeV3Output types.String `tfsdk:"comfy_matchtype_v3_output"`
 }
@@ -74,6 +75,13 @@ func (r *BatchImagesMasksLatentsNodeResource) Schema(_ context.Context, _ resour
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"inputs": schema.StringAttribute{
 				MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
 				Required:            true,
@@ -114,10 +122,12 @@ func (r *BatchImagesMasksLatentsNodeResource) Create(ctx context.Context, req re
 	data.NodeID = types.StringValue("BatchImagesMasksLatentsNode")
 	data.ComfyMatchtypeV3Output = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -128,10 +138,12 @@ func (r *BatchImagesMasksLatentsNodeResource) Read(ctx context.Context, req reso
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -142,10 +154,12 @@ func (r *BatchImagesMasksLatentsNodeResource) Update(ctx context.Context, req re
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

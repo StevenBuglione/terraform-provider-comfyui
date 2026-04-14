@@ -27,13 +27,14 @@ type MagnificImageSkinEnhancerNodeResource struct {
 }
 
 type MagnificImageSkinEnhancerNodeModel struct {
-	ID          types.String `tfsdk:"id"`
-	NodeID      types.String `tfsdk:"node_id"`
-	Image       types.String `tfsdk:"image"`
-	Sharpen     types.Int64  `tfsdk:"sharpen"`
-	SmartGrain  types.Int64  `tfsdk:"smart_grain"`
-	Mode        types.String `tfsdk:"mode"`
-	ImageOutput types.String `tfsdk:"image_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Image              types.String `tfsdk:"image"`
+	Sharpen            types.Int64  `tfsdk:"sharpen"`
+	SmartGrain         types.Int64  `tfsdk:"smart_grain"`
+	Mode               types.String `tfsdk:"mode"`
+	ImageOutput        types.String `tfsdk:"image_output"`
 }
 
 func NewMagnificImageSkinEnhancerNodeResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *MagnificImageSkinEnhancerNodeResource) Schema(_ context.Context, _ reso
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -137,10 +145,12 @@ func (r *MagnificImageSkinEnhancerNodeResource) Create(ctx context.Context, req 
 	data.NodeID = types.StringValue("MagnificImageSkinEnhancerNode")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -151,10 +161,12 @@ func (r *MagnificImageSkinEnhancerNodeResource) Read(ctx context.Context, req re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -165,10 +177,12 @@ func (r *MagnificImageSkinEnhancerNodeResource) Update(ctx context.Context, req 
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

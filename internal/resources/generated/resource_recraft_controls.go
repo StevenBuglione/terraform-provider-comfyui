@@ -27,6 +27,7 @@ type RecraftControlsResource struct {
 type RecraftControlsModel struct {
 	ID                    types.String `tfsdk:"id"`
 	NodeID                types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON    types.String `tfsdk:"node_definition_json"`
 	Colors                types.String `tfsdk:"colors"`
 	BackgroundColor       types.String `tfsdk:"background_color"`
 	RecraftControlsOutput types.String `tfsdk:"recraft_controls_output"`
@@ -75,6 +76,13 @@ func (r *RecraftControlsResource) Schema(_ context.Context, _ resource.SchemaReq
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"colors": schema.StringAttribute{
 				MarkdownDescription: "Input: RecraftIO.COLOR. Link input.",
 				Optional:            true,
@@ -119,10 +127,12 @@ func (r *RecraftControlsResource) Create(ctx context.Context, req resource.Creat
 	data.NodeID = types.StringValue("RecraftControlsNode")
 	data.RecraftControlsOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -133,10 +143,12 @@ func (r *RecraftControlsResource) Read(ctx context.Context, req resource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -147,10 +159,12 @@ func (r *RecraftControlsResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

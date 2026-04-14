@@ -27,6 +27,7 @@ type RecraftStyleV3InfiniteStyleLibraryResource struct {
 type RecraftStyleV3InfiniteStyleLibraryModel struct {
 	ID                 types.String `tfsdk:"id"`
 	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
 	StyleID            types.String `tfsdk:"style_id"`
 	RecraftStyleOutput types.String `tfsdk:"recraft_style_output"`
 }
@@ -74,6 +75,13 @@ func (r *RecraftStyleV3InfiniteStyleLibraryResource) Schema(_ context.Context, _
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"style_id": schema.StringAttribute{
 				MarkdownDescription: "Input: STRING. Default: \"\". Tooltip: UUID of style from Infinite Style Library.",
 				Required:            true,
@@ -114,10 +122,12 @@ func (r *RecraftStyleV3InfiniteStyleLibraryResource) Create(ctx context.Context,
 	data.NodeID = types.StringValue("RecraftStyleInfiniteStyleLibrary")
 	data.RecraftStyleOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -128,10 +138,12 @@ func (r *RecraftStyleV3InfiniteStyleLibraryResource) Read(ctx context.Context, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -142,10 +154,12 @@ func (r *RecraftStyleV3InfiniteStyleLibraryResource) Update(ctx context.Context,
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

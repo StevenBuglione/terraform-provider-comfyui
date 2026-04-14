@@ -27,14 +27,15 @@ type OpenAiDalle3Resource struct {
 }
 
 type OpenAiDalle3Model struct {
-	ID          types.String `tfsdk:"id"`
-	NodeID      types.String `tfsdk:"node_id"`
-	Prompt      types.String `tfsdk:"prompt"`
-	Seed        types.Int64  `tfsdk:"seed"`
-	Quality     types.String `tfsdk:"quality"`
-	Style       types.String `tfsdk:"style"`
-	Size        types.String `tfsdk:"size"`
-	ImageOutput types.String `tfsdk:"image_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Prompt             types.String `tfsdk:"prompt"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	Quality            types.String `tfsdk:"quality"`
+	Style              types.String `tfsdk:"style"`
+	Size               types.String `tfsdk:"size"`
+	ImageOutput        types.String `tfsdk:"image_output"`
 }
 
 func NewOpenAiDalle3Resource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *OpenAiDalle3Resource) Schema(_ context.Context, _ resource.SchemaReques
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -155,10 +163,12 @@ func (r *OpenAiDalle3Resource) Create(ctx context.Context, req resource.CreateRe
 	data.NodeID = types.StringValue("OpenAIDalle3")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -169,10 +179,12 @@ func (r *OpenAiDalle3Resource) Read(ctx context.Context, req resource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -183,10 +195,12 @@ func (r *OpenAiDalle3Resource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

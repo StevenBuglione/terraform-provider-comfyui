@@ -25,12 +25,13 @@ type ComfySwitchNodeResource struct {
 }
 
 type ComfySwitchNodeModel struct {
-	ID           types.String `tfsdk:"id"`
-	NodeID       types.String `tfsdk:"node_id"`
-	Switch_      types.Bool   `tfsdk:"switch"`
-	OnFalse      types.String `tfsdk:"on_false"`
-	OnTrue       types.String `tfsdk:"on_true"`
-	OutputOutput types.String `tfsdk:"output_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Switch_            types.Bool   `tfsdk:"switch"`
+	OnFalse            types.String `tfsdk:"on_false"`
+	OnTrue             types.String `tfsdk:"on_true"`
+	OutputOutput       types.String `tfsdk:"output_output"`
 }
 
 func NewComfySwitchNodeResource() resource.Resource {
@@ -72,6 +73,13 @@ func (r *ComfySwitchNodeResource) Schema(_ context.Context, _ resource.SchemaReq
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -124,10 +132,12 @@ func (r *ComfySwitchNodeResource) Create(ctx context.Context, req resource.Creat
 	data.NodeID = types.StringValue("SwitchNode")
 	data.OutputOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -138,10 +148,12 @@ func (r *ComfySwitchNodeResource) Read(ctx context.Context, req resource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -152,10 +164,12 @@ func (r *ComfySwitchNodeResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

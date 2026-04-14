@@ -28,16 +28,17 @@ type IdeogramV1Resource struct {
 }
 
 type IdeogramV1Model struct {
-	ID                types.String `tfsdk:"id"`
-	NodeID            types.String `tfsdk:"node_id"`
-	Prompt            types.String `tfsdk:"prompt"`
-	Turbo             types.Bool   `tfsdk:"turbo"`
-	AspectRatio       types.String `tfsdk:"aspect_ratio"`
-	MagicPromptOption types.String `tfsdk:"magic_prompt_option"`
-	Seed              types.Int64  `tfsdk:"seed"`
-	NegativePrompt    types.String `tfsdk:"negative_prompt"`
-	NumImages         types.Int64  `tfsdk:"num_images"`
-	ImageOutput       types.String `tfsdk:"image_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Prompt             types.String `tfsdk:"prompt"`
+	Turbo              types.Bool   `tfsdk:"turbo"`
+	AspectRatio        types.String `tfsdk:"aspect_ratio"`
+	MagicPromptOption  types.String `tfsdk:"magic_prompt_option"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	NegativePrompt     types.String `tfsdk:"negative_prompt"`
+	NumImages          types.Int64  `tfsdk:"num_images"`
+	ImageOutput        types.String `tfsdk:"image_output"`
 }
 
 func NewIdeogramV1Resource() resource.Resource {
@@ -79,6 +80,13 @@ func (r *IdeogramV1Resource) Schema(_ context.Context, _ resource.SchemaRequest,
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -160,10 +168,12 @@ func (r *IdeogramV1Resource) Create(ctx context.Context, req resource.CreateRequ
 	data.NodeID = types.StringValue("IdeogramV1")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -174,10 +184,12 @@ func (r *IdeogramV1Resource) Read(ctx context.Context, req resource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -188,10 +200,12 @@ func (r *IdeogramV1Resource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

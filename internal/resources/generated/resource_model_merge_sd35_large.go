@@ -25,55 +25,56 @@ type ModelMergeSd35LargeResource struct {
 }
 
 type ModelMergeSd35LargeModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	Model1          types.String `tfsdk:"model1"`
-	Model2          types.String `tfsdk:"model2"`
-	PosEmbed        types.String `tfsdk:"pos_embed"`
-	XEmbedder       types.String `tfsdk:"x_embedder"`
-	ContextEmbedder types.String `tfsdk:"context_embedder"`
-	YEmbedder       types.String `tfsdk:"y_embedder"`
-	TEmbedder       types.String `tfsdk:"t_embedder"`
-	JointBlocks0    types.String `tfsdk:"joint_blocks_0"`
-	JointBlocks1    types.String `tfsdk:"joint_blocks_1"`
-	JointBlocks2    types.String `tfsdk:"joint_blocks_2"`
-	JointBlocks3    types.String `tfsdk:"joint_blocks_3"`
-	JointBlocks4    types.String `tfsdk:"joint_blocks_4"`
-	JointBlocks5    types.String `tfsdk:"joint_blocks_5"`
-	JointBlocks6    types.String `tfsdk:"joint_blocks_6"`
-	JointBlocks7    types.String `tfsdk:"joint_blocks_7"`
-	JointBlocks8    types.String `tfsdk:"joint_blocks_8"`
-	JointBlocks9    types.String `tfsdk:"joint_blocks_9"`
-	JointBlocks10   types.String `tfsdk:"joint_blocks_10"`
-	JointBlocks11   types.String `tfsdk:"joint_blocks_11"`
-	JointBlocks12   types.String `tfsdk:"joint_blocks_12"`
-	JointBlocks13   types.String `tfsdk:"joint_blocks_13"`
-	JointBlocks14   types.String `tfsdk:"joint_blocks_14"`
-	JointBlocks15   types.String `tfsdk:"joint_blocks_15"`
-	JointBlocks16   types.String `tfsdk:"joint_blocks_16"`
-	JointBlocks17   types.String `tfsdk:"joint_blocks_17"`
-	JointBlocks18   types.String `tfsdk:"joint_blocks_18"`
-	JointBlocks19   types.String `tfsdk:"joint_blocks_19"`
-	JointBlocks20   types.String `tfsdk:"joint_blocks_20"`
-	JointBlocks21   types.String `tfsdk:"joint_blocks_21"`
-	JointBlocks22   types.String `tfsdk:"joint_blocks_22"`
-	JointBlocks23   types.String `tfsdk:"joint_blocks_23"`
-	JointBlocks24   types.String `tfsdk:"joint_blocks_24"`
-	JointBlocks25   types.String `tfsdk:"joint_blocks_25"`
-	JointBlocks26   types.String `tfsdk:"joint_blocks_26"`
-	JointBlocks27   types.String `tfsdk:"joint_blocks_27"`
-	JointBlocks28   types.String `tfsdk:"joint_blocks_28"`
-	JointBlocks29   types.String `tfsdk:"joint_blocks_29"`
-	JointBlocks30   types.String `tfsdk:"joint_blocks_30"`
-	JointBlocks31   types.String `tfsdk:"joint_blocks_31"`
-	JointBlocks32   types.String `tfsdk:"joint_blocks_32"`
-	JointBlocks33   types.String `tfsdk:"joint_blocks_33"`
-	JointBlocks34   types.String `tfsdk:"joint_blocks_34"`
-	JointBlocks35   types.String `tfsdk:"joint_blocks_35"`
-	JointBlocks36   types.String `tfsdk:"joint_blocks_36"`
-	JointBlocks37   types.String `tfsdk:"joint_blocks_37"`
-	FinalLayer      types.String `tfsdk:"final_layer"`
-	ModelOutput     types.String `tfsdk:"model_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model1             types.String `tfsdk:"model1"`
+	Model2             types.String `tfsdk:"model2"`
+	PosEmbed           types.String `tfsdk:"pos_embed"`
+	XEmbedder          types.String `tfsdk:"x_embedder"`
+	ContextEmbedder    types.String `tfsdk:"context_embedder"`
+	YEmbedder          types.String `tfsdk:"y_embedder"`
+	TEmbedder          types.String `tfsdk:"t_embedder"`
+	JointBlocks0       types.String `tfsdk:"joint_blocks_0"`
+	JointBlocks1       types.String `tfsdk:"joint_blocks_1"`
+	JointBlocks2       types.String `tfsdk:"joint_blocks_2"`
+	JointBlocks3       types.String `tfsdk:"joint_blocks_3"`
+	JointBlocks4       types.String `tfsdk:"joint_blocks_4"`
+	JointBlocks5       types.String `tfsdk:"joint_blocks_5"`
+	JointBlocks6       types.String `tfsdk:"joint_blocks_6"`
+	JointBlocks7       types.String `tfsdk:"joint_blocks_7"`
+	JointBlocks8       types.String `tfsdk:"joint_blocks_8"`
+	JointBlocks9       types.String `tfsdk:"joint_blocks_9"`
+	JointBlocks10      types.String `tfsdk:"joint_blocks_10"`
+	JointBlocks11      types.String `tfsdk:"joint_blocks_11"`
+	JointBlocks12      types.String `tfsdk:"joint_blocks_12"`
+	JointBlocks13      types.String `tfsdk:"joint_blocks_13"`
+	JointBlocks14      types.String `tfsdk:"joint_blocks_14"`
+	JointBlocks15      types.String `tfsdk:"joint_blocks_15"`
+	JointBlocks16      types.String `tfsdk:"joint_blocks_16"`
+	JointBlocks17      types.String `tfsdk:"joint_blocks_17"`
+	JointBlocks18      types.String `tfsdk:"joint_blocks_18"`
+	JointBlocks19      types.String `tfsdk:"joint_blocks_19"`
+	JointBlocks20      types.String `tfsdk:"joint_blocks_20"`
+	JointBlocks21      types.String `tfsdk:"joint_blocks_21"`
+	JointBlocks22      types.String `tfsdk:"joint_blocks_22"`
+	JointBlocks23      types.String `tfsdk:"joint_blocks_23"`
+	JointBlocks24      types.String `tfsdk:"joint_blocks_24"`
+	JointBlocks25      types.String `tfsdk:"joint_blocks_25"`
+	JointBlocks26      types.String `tfsdk:"joint_blocks_26"`
+	JointBlocks27      types.String `tfsdk:"joint_blocks_27"`
+	JointBlocks28      types.String `tfsdk:"joint_blocks_28"`
+	JointBlocks29      types.String `tfsdk:"joint_blocks_29"`
+	JointBlocks30      types.String `tfsdk:"joint_blocks_30"`
+	JointBlocks31      types.String `tfsdk:"joint_blocks_31"`
+	JointBlocks32      types.String `tfsdk:"joint_blocks_32"`
+	JointBlocks33      types.String `tfsdk:"joint_blocks_33"`
+	JointBlocks34      types.String `tfsdk:"joint_blocks_34"`
+	JointBlocks35      types.String `tfsdk:"joint_blocks_35"`
+	JointBlocks36      types.String `tfsdk:"joint_blocks_36"`
+	JointBlocks37      types.String `tfsdk:"joint_blocks_37"`
+	FinalLayer         types.String `tfsdk:"final_layer"`
+	ModelOutput        types.String `tfsdk:"model_output"`
 }
 
 func NewModelMergeSd35LargeResource() resource.Resource {
@@ -115,6 +116,13 @@ func (r *ModelMergeSd35LargeResource) Schema(_ context.Context, _ resource.Schem
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -339,10 +347,12 @@ func (r *ModelMergeSd35LargeResource) Create(ctx context.Context, req resource.C
 	data.NodeID = types.StringValue("ModelMergeSD35_Large")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -353,10 +363,12 @@ func (r *ModelMergeSd35LargeResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -367,10 +379,12 @@ func (r *ModelMergeSd35LargeResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

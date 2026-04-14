@@ -27,19 +27,20 @@ type KlingImage2VideoNodeResource struct {
 }
 
 type KlingImage2VideoNodeModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	StartFrame     types.String  `tfsdk:"start_frame"`
-	Prompt         types.String  `tfsdk:"prompt"`
-	NegativePrompt types.String  `tfsdk:"negative_prompt"`
-	ModelName      types.String  `tfsdk:"model_name"`
-	CfgScale       types.Float64 `tfsdk:"cfg_scale"`
-	Mode           types.String  `tfsdk:"mode"`
-	AspectRatio    types.String  `tfsdk:"aspect_ratio"`
-	Duration       types.String  `tfsdk:"duration"`
-	VideoOutput    types.String  `tfsdk:"video_output"`
-	VideoIDOutput  types.String  `tfsdk:"video_id_output"`
-	DurationOutput types.String  `tfsdk:"duration_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	StartFrame         types.String  `tfsdk:"start_frame"`
+	Prompt             types.String  `tfsdk:"prompt"`
+	NegativePrompt     types.String  `tfsdk:"negative_prompt"`
+	ModelName          types.String  `tfsdk:"model_name"`
+	CfgScale           types.Float64 `tfsdk:"cfg_scale"`
+	Mode               types.String  `tfsdk:"mode"`
+	AspectRatio        types.String  `tfsdk:"aspect_ratio"`
+	Duration           types.String  `tfsdk:"duration"`
+	VideoOutput        types.String  `tfsdk:"video_output"`
+	VideoIDOutput      types.String  `tfsdk:"video_id_output"`
+	DurationOutput     types.String  `tfsdk:"duration_output"`
 }
 
 func NewKlingImage2VideoNodeResource() resource.Resource {
@@ -81,6 +82,13 @@ func (r *KlingImage2VideoNodeResource) Schema(_ context.Context, _ resource.Sche
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -172,10 +180,12 @@ func (r *KlingImage2VideoNodeResource) Create(ctx context.Context, req resource.
 	data.VideoIDOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 	data.DurationOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -186,10 +196,12 @@ func (r *KlingImage2VideoNodeResource) Read(ctx context.Context, req resource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -200,10 +212,12 @@ func (r *KlingImage2VideoNodeResource) Update(ctx context.Context, req resource.
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

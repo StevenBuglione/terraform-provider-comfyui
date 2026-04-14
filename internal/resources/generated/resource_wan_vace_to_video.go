@@ -28,23 +28,24 @@ type WanVaceToVideoResource struct {
 }
 
 type WanVaceToVideoModel struct {
-	ID               types.String  `tfsdk:"id"`
-	NodeID           types.String  `tfsdk:"node_id"`
-	Positive         types.String  `tfsdk:"positive"`
-	Negative         types.String  `tfsdk:"negative"`
-	VAE              types.String  `tfsdk:"vae"`
-	Width            types.Int64   `tfsdk:"width"`
-	Height           types.Int64   `tfsdk:"height"`
-	Length           types.Int64   `tfsdk:"length"`
-	BatchSize        types.Int64   `tfsdk:"batch_size"`
-	Strength         types.Float64 `tfsdk:"strength"`
-	ControlVideo     types.String  `tfsdk:"control_video"`
-	ControlMasks     types.String  `tfsdk:"control_masks"`
-	ReferenceImage   types.String  `tfsdk:"reference_image"`
-	PositiveOutput   types.String  `tfsdk:"positive_output"`
-	NegativeOutput   types.String  `tfsdk:"negative_output"`
-	LatentOutput     types.String  `tfsdk:"latent_output"`
-	TrimLatentOutput types.String  `tfsdk:"trim_latent_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Positive           types.String  `tfsdk:"positive"`
+	Negative           types.String  `tfsdk:"negative"`
+	VAE                types.String  `tfsdk:"vae"`
+	Width              types.Int64   `tfsdk:"width"`
+	Height             types.Int64   `tfsdk:"height"`
+	Length             types.Int64   `tfsdk:"length"`
+	BatchSize          types.Int64   `tfsdk:"batch_size"`
+	Strength           types.Float64 `tfsdk:"strength"`
+	ControlVideo       types.String  `tfsdk:"control_video"`
+	ControlMasks       types.String  `tfsdk:"control_masks"`
+	ReferenceImage     types.String  `tfsdk:"reference_image"`
+	PositiveOutput     types.String  `tfsdk:"positive_output"`
+	NegativeOutput     types.String  `tfsdk:"negative_output"`
+	LatentOutput       types.String  `tfsdk:"latent_output"`
+	TrimLatentOutput   types.String  `tfsdk:"trim_latent_output"`
 }
 
 func NewWanVaceToVideoResource() resource.Resource {
@@ -86,6 +87,13 @@ func (r *WanVaceToVideoResource) Schema(_ context.Context, _ resource.SchemaRequ
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -200,10 +208,12 @@ func (r *WanVaceToVideoResource) Create(ctx context.Context, req resource.Create
 	data.LatentOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 	data.TrimLatentOutput = types.StringValue(fmt.Sprintf("%s:3", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -214,10 +224,12 @@ func (r *WanVaceToVideoResource) Read(ctx context.Context, req resource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -228,10 +240,12 @@ func (r *WanVaceToVideoResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

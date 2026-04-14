@@ -28,12 +28,13 @@ type EmptyAudioResource struct {
 }
 
 type EmptyAudioModel struct {
-	ID          types.String  `tfsdk:"id"`
-	NodeID      types.String  `tfsdk:"node_id"`
-	Duration    types.Float64 `tfsdk:"duration"`
-	SampleRate  types.Int64   `tfsdk:"sample_rate"`
-	Channels    types.Int64   `tfsdk:"channels"`
-	AudioOutput types.String  `tfsdk:"audio_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Duration           types.Float64 `tfsdk:"duration"`
+	SampleRate         types.Int64   `tfsdk:"sample_rate"`
+	Channels           types.Int64   `tfsdk:"channels"`
+	AudioOutput        types.String  `tfsdk:"audio_output"`
 }
 
 func NewEmptyAudioResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *EmptyAudioResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -136,10 +144,12 @@ func (r *EmptyAudioResource) Create(ctx context.Context, req resource.CreateRequ
 	data.NodeID = types.StringValue("EmptyAudio")
 	data.AudioOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -150,10 +160,12 @@ func (r *EmptyAudioResource) Read(ctx context.Context, req resource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -164,10 +176,12 @@ func (r *EmptyAudioResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

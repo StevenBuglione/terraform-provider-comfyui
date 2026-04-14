@@ -29,16 +29,17 @@ type MoonvalleyImg2VideoNodeResource struct {
 }
 
 type MoonvalleyImg2VideoNodeModel struct {
-	ID              types.String  `tfsdk:"id"`
-	NodeID          types.String  `tfsdk:"node_id"`
-	Image           types.String  `tfsdk:"image"`
-	Prompt          types.String  `tfsdk:"prompt"`
-	NegativePrompt  types.String  `tfsdk:"negative_prompt"`
-	Resolution      types.String  `tfsdk:"resolution"`
-	PromptAdherence types.Float64 `tfsdk:"prompt_adherence"`
-	Seed            types.Int64   `tfsdk:"seed"`
-	Steps           types.Int64   `tfsdk:"steps"`
-	VideoOutput     types.String  `tfsdk:"video_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Image              types.String  `tfsdk:"image"`
+	Prompt             types.String  `tfsdk:"prompt"`
+	NegativePrompt     types.String  `tfsdk:"negative_prompt"`
+	Resolution         types.String  `tfsdk:"resolution"`
+	PromptAdherence    types.Float64 `tfsdk:"prompt_adherence"`
+	Seed               types.Int64   `tfsdk:"seed"`
+	Steps              types.Int64   `tfsdk:"steps"`
+	VideoOutput        types.String  `tfsdk:"video_output"`
 }
 
 func NewMoonvalleyImg2VideoNodeResource() resource.Resource {
@@ -80,6 +81,13 @@ func (r *MoonvalleyImg2VideoNodeResource) Schema(_ context.Context, _ resource.S
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -166,10 +174,12 @@ func (r *MoonvalleyImg2VideoNodeResource) Create(ctx context.Context, req resour
 	data.NodeID = types.StringValue("MoonvalleyImg2VideoNode")
 	data.VideoOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -180,10 +190,12 @@ func (r *MoonvalleyImg2VideoNodeResource) Read(ctx context.Context, req resource
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -194,10 +206,12 @@ func (r *MoonvalleyImg2VideoNodeResource) Update(ctx context.Context, req resour
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

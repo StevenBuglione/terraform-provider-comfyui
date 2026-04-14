@@ -27,12 +27,13 @@ type ComboOptionTestNodeResource struct {
 }
 
 type ComboOptionTestNodeModel struct {
-	ID           types.String `tfsdk:"id"`
-	NodeID       types.String `tfsdk:"node_id"`
-	Combo        types.String `tfsdk:"combo"`
-	Combo2       types.String `tfsdk:"combo2"`
-	ComboOutput  types.String `tfsdk:"combo_output"`
-	ComboOutput2 types.String `tfsdk:"combo_output_2"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Combo              types.String `tfsdk:"combo"`
+	Combo2             types.String `tfsdk:"combo2"`
+	ComboOutput        types.String `tfsdk:"combo_output"`
+	ComboOutput2       types.String `tfsdk:"combo_output_2"`
 }
 
 func NewComboOptionTestNodeResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *ComboOptionTestNodeResource) Schema(_ context.Context, _ resource.Schem
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -144,10 +152,12 @@ func (r *ComboOptionTestNodeResource) Create(ctx context.Context, req resource.C
 	data.ComboOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.ComboOutput2 = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -158,10 +168,12 @@ func (r *ComboOptionTestNodeResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -172,10 +184,12 @@ func (r *ComboOptionTestNodeResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

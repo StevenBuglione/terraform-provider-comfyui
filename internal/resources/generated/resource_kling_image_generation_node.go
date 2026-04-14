@@ -29,19 +29,20 @@ type KlingImageGenerationNodeResource struct {
 }
 
 type KlingImageGenerationNodeModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	Prompt         types.String  `tfsdk:"prompt"`
-	NegativePrompt types.String  `tfsdk:"negative_prompt"`
-	ImageType      types.String  `tfsdk:"image_type"`
-	ImageFidelity  types.Float64 `tfsdk:"image_fidelity"`
-	HumanFidelity  types.Float64 `tfsdk:"human_fidelity"`
-	ModelName      types.String  `tfsdk:"model_name"`
-	AspectRatio    types.String  `tfsdk:"aspect_ratio"`
-	N              types.Int64   `tfsdk:"n"`
-	Image          types.String  `tfsdk:"image"`
-	Seed           types.Int64   `tfsdk:"seed"`
-	ImageOutput    types.String  `tfsdk:"image_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Prompt             types.String  `tfsdk:"prompt"`
+	NegativePrompt     types.String  `tfsdk:"negative_prompt"`
+	ImageType          types.String  `tfsdk:"image_type"`
+	ImageFidelity      types.Float64 `tfsdk:"image_fidelity"`
+	HumanFidelity      types.Float64 `tfsdk:"human_fidelity"`
+	ModelName          types.String  `tfsdk:"model_name"`
+	AspectRatio        types.String  `tfsdk:"aspect_ratio"`
+	N                  types.Int64   `tfsdk:"n"`
+	Image              types.String  `tfsdk:"image"`
+	Seed               types.Int64   `tfsdk:"seed"`
+	ImageOutput        types.String  `tfsdk:"image_output"`
 }
 
 func NewKlingImageGenerationNodeResource() resource.Resource {
@@ -83,6 +84,13 @@ func (r *KlingImageGenerationNodeResource) Schema(_ context.Context, _ resource.
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -182,10 +190,12 @@ func (r *KlingImageGenerationNodeResource) Create(ctx context.Context, req resou
 	data.NodeID = types.StringValue("KlingImageGenerationNode")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -196,10 +206,12 @@ func (r *KlingImageGenerationNodeResource) Read(ctx context.Context, req resourc
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -210,10 +222,12 @@ func (r *KlingImageGenerationNodeResource) Update(ctx context.Context, req resou
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

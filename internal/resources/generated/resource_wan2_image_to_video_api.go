@@ -27,16 +27,17 @@ type Wan2ImageToVideoAPIResource struct {
 }
 
 type Wan2ImageToVideoAPIModel struct {
-	ID           types.String `tfsdk:"id"`
-	NodeID       types.String `tfsdk:"node_id"`
-	Model        types.String `tfsdk:"model"`
-	FirstFrame   types.String `tfsdk:"first_frame"`
-	LastFrame    types.String `tfsdk:"last_frame"`
-	Audio        types.String `tfsdk:"audio"`
-	Seed         types.Int64  `tfsdk:"seed"`
-	PromptExtend types.Bool   `tfsdk:"prompt_extend"`
-	Watermark    types.Bool   `tfsdk:"watermark"`
-	VideoOutput  types.String `tfsdk:"video_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model              types.String `tfsdk:"model"`
+	FirstFrame         types.String `tfsdk:"first_frame"`
+	LastFrame          types.String `tfsdk:"last_frame"`
+	Audio              types.String `tfsdk:"audio"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	PromptExtend       types.Bool   `tfsdk:"prompt_extend"`
+	Watermark          types.Bool   `tfsdk:"watermark"`
+	VideoOutput        types.String `tfsdk:"video_output"`
 }
 
 func NewWan2ImageToVideoAPIResource() resource.Resource {
@@ -78,6 +79,13 @@ func (r *Wan2ImageToVideoAPIResource) Schema(_ context.Context, _ resource.Schem
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -149,10 +157,12 @@ func (r *Wan2ImageToVideoAPIResource) Create(ctx context.Context, req resource.C
 	data.NodeID = types.StringValue("Wan2ImageToVideoApi")
 	data.VideoOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -163,10 +173,12 @@ func (r *Wan2ImageToVideoAPIResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -177,10 +189,12 @@ func (r *Wan2ImageToVideoAPIResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

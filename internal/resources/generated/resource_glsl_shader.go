@@ -25,17 +25,18 @@ type GlslShaderResource struct {
 }
 
 type GlslShaderModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	FragmentShader types.String `tfsdk:"fragment_shader"`
-	SizeMode       types.String `tfsdk:"size_mode"`
-	Images         types.String `tfsdk:"images"`
-	Floats         types.String `tfsdk:"floats"`
-	Ints           types.String `tfsdk:"ints"`
-	Image0Output   types.String `tfsdk:"image0_output"`
-	Image1Output   types.String `tfsdk:"image1_output"`
-	Image2Output   types.String `tfsdk:"image2_output"`
-	Image3Output   types.String `tfsdk:"image3_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	FragmentShader     types.String `tfsdk:"fragment_shader"`
+	SizeMode           types.String `tfsdk:"size_mode"`
+	Images             types.String `tfsdk:"images"`
+	Floats             types.String `tfsdk:"floats"`
+	Ints               types.String `tfsdk:"ints"`
+	Image0Output       types.String `tfsdk:"image0_output"`
+	Image1Output       types.String `tfsdk:"image1_output"`
+	Image2Output       types.String `tfsdk:"image2_output"`
+	Image3Output       types.String `tfsdk:"image3_output"`
 }
 
 func NewGlslShaderResource() resource.Resource {
@@ -77,6 +78,13 @@ func (r *GlslShaderResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -161,10 +169,12 @@ func (r *GlslShaderResource) Create(ctx context.Context, req resource.CreateRequ
 	data.Image2Output = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 	data.Image3Output = types.StringValue(fmt.Sprintf("%s:3", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -175,10 +185,12 @@ func (r *GlslShaderResource) Read(ctx context.Context, req resource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -189,10 +201,12 @@ func (r *GlslShaderResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

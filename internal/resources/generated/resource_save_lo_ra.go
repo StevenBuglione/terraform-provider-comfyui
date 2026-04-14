@@ -25,11 +25,12 @@ type SaveLoRaResource struct {
 }
 
 type SaveLoRaModel struct {
-	ID     types.String `tfsdk:"id"`
-	NodeID types.String `tfsdk:"node_id"`
-	Lora   types.String `tfsdk:"lora"`
-	Prefix types.String `tfsdk:"prefix"`
-	Steps  types.Int64  `tfsdk:"steps"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Lora               types.String `tfsdk:"lora"`
+	Prefix             types.String `tfsdk:"prefix"`
+	Steps              types.Int64  `tfsdk:"steps"`
 }
 
 func NewSaveLoRaResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *SaveLoRaResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"lora": schema.StringAttribute{
 				MarkdownDescription: "Input: LORA_MODEL. Link input. Tooltip: The LoRA model to save. Do not use the model with LoRA layers.",
 				Required:            true,
@@ -115,10 +123,12 @@ func (r *SaveLoRaResource) Create(ctx context.Context, req resource.CreateReques
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("SaveLoRA")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -129,10 +139,12 @@ func (r *SaveLoRaResource) Read(ctx context.Context, req resource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -143,10 +155,12 @@ func (r *SaveLoRaResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

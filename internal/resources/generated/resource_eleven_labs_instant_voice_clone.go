@@ -27,6 +27,7 @@ type ElevenLabsInstantVoiceCloneResource struct {
 type ElevenLabsInstantVoiceCloneModel struct {
 	ID                    types.String `tfsdk:"id"`
 	NodeID                types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON    types.String `tfsdk:"node_definition_json"`
 	Files                 types.String `tfsdk:"files"`
 	RemoveBackgroundNoise types.Bool   `tfsdk:"remove_background_noise"`
 	VoiceOutput           types.String `tfsdk:"voice_output"`
@@ -75,6 +76,13 @@ func (r *ElevenLabsInstantVoiceCloneResource) Schema(_ context.Context, _ resour
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"files": schema.StringAttribute{
 				MarkdownDescription: "Input: COMFY_AUTOGROW_V3. Tooltip: Audio recordings for voice cloning.",
 				Required:            true,
@@ -119,10 +127,12 @@ func (r *ElevenLabsInstantVoiceCloneResource) Create(ctx context.Context, req re
 	data.NodeID = types.StringValue("ElevenLabsInstantVoiceClone")
 	data.VoiceOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -133,10 +143,12 @@ func (r *ElevenLabsInstantVoiceCloneResource) Read(ctx context.Context, req reso
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -147,10 +159,12 @@ func (r *ElevenLabsInstantVoiceCloneResource) Update(ctx context.Context, req re
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

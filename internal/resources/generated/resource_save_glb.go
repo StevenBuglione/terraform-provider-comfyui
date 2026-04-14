@@ -25,10 +25,11 @@ type SaveGlbResource struct {
 }
 
 type SaveGlbModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	IOMeshInputMesh types.String `tfsdk:"io_mesh_input_mesh"`
-	FilenamePrefix  types.String `tfsdk:"filename_prefix"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	IOMeshInputMesh    types.String `tfsdk:"io_mesh_input_mesh"`
+	FilenamePrefix     types.String `tfsdk:"filename_prefix"`
 }
 
 func NewSaveGlbResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *SaveGlbResource) Schema(_ context.Context, _ resource.SchemaRequest, re
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 			"io_mesh_input_mesh": schema.StringAttribute{
 				MarkdownDescription: "Input: COMFY_MULTITYPED_V3. Tooltip: Mesh or 3D file to save.",
 				Required:            true,
@@ -110,10 +118,12 @@ func (r *SaveGlbResource) Create(ctx context.Context, req resource.CreateRequest
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("SaveGLB")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -124,10 +134,12 @@ func (r *SaveGlbResource) Read(ctx context.Context, req resource.ReadRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -138,10 +150,12 @@ func (r *SaveGlbResource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

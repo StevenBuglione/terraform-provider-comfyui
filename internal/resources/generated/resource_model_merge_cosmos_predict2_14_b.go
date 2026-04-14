@@ -25,52 +25,53 @@ type ModelMergeCosmosPredict214BResource struct {
 }
 
 type ModelMergeCosmosPredict214BModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Model1         types.String `tfsdk:"model1"`
-	Model2         types.String `tfsdk:"model2"`
-	PosEmbedder    types.String `tfsdk:"pos_embedder"`
-	XEmbedder      types.String `tfsdk:"x_embedder"`
-	TEmbedder      types.String `tfsdk:"t_embedder"`
-	TEmbeddingNorm types.String `tfsdk:"t_embedding_norm"`
-	Blocks0        types.String `tfsdk:"blocks_0"`
-	Blocks1        types.String `tfsdk:"blocks_1"`
-	Blocks2        types.String `tfsdk:"blocks_2"`
-	Blocks3        types.String `tfsdk:"blocks_3"`
-	Blocks4        types.String `tfsdk:"blocks_4"`
-	Blocks5        types.String `tfsdk:"blocks_5"`
-	Blocks6        types.String `tfsdk:"blocks_6"`
-	Blocks7        types.String `tfsdk:"blocks_7"`
-	Blocks8        types.String `tfsdk:"blocks_8"`
-	Blocks9        types.String `tfsdk:"blocks_9"`
-	Blocks10       types.String `tfsdk:"blocks_10"`
-	Blocks11       types.String `tfsdk:"blocks_11"`
-	Blocks12       types.String `tfsdk:"blocks_12"`
-	Blocks13       types.String `tfsdk:"blocks_13"`
-	Blocks14       types.String `tfsdk:"blocks_14"`
-	Blocks15       types.String `tfsdk:"blocks_15"`
-	Blocks16       types.String `tfsdk:"blocks_16"`
-	Blocks17       types.String `tfsdk:"blocks_17"`
-	Blocks18       types.String `tfsdk:"blocks_18"`
-	Blocks19       types.String `tfsdk:"blocks_19"`
-	Blocks20       types.String `tfsdk:"blocks_20"`
-	Blocks21       types.String `tfsdk:"blocks_21"`
-	Blocks22       types.String `tfsdk:"blocks_22"`
-	Blocks23       types.String `tfsdk:"blocks_23"`
-	Blocks24       types.String `tfsdk:"blocks_24"`
-	Blocks25       types.String `tfsdk:"blocks_25"`
-	Blocks26       types.String `tfsdk:"blocks_26"`
-	Blocks27       types.String `tfsdk:"blocks_27"`
-	Blocks28       types.String `tfsdk:"blocks_28"`
-	Blocks29       types.String `tfsdk:"blocks_29"`
-	Blocks30       types.String `tfsdk:"blocks_30"`
-	Blocks31       types.String `tfsdk:"blocks_31"`
-	Blocks32       types.String `tfsdk:"blocks_32"`
-	Blocks33       types.String `tfsdk:"blocks_33"`
-	Blocks34       types.String `tfsdk:"blocks_34"`
-	Blocks35       types.String `tfsdk:"blocks_35"`
-	FinalLayer     types.String `tfsdk:"final_layer"`
-	ModelOutput    types.String `tfsdk:"model_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model1             types.String `tfsdk:"model1"`
+	Model2             types.String `tfsdk:"model2"`
+	PosEmbedder        types.String `tfsdk:"pos_embedder"`
+	XEmbedder          types.String `tfsdk:"x_embedder"`
+	TEmbedder          types.String `tfsdk:"t_embedder"`
+	TEmbeddingNorm     types.String `tfsdk:"t_embedding_norm"`
+	Blocks0            types.String `tfsdk:"blocks_0"`
+	Blocks1            types.String `tfsdk:"blocks_1"`
+	Blocks2            types.String `tfsdk:"blocks_2"`
+	Blocks3            types.String `tfsdk:"blocks_3"`
+	Blocks4            types.String `tfsdk:"blocks_4"`
+	Blocks5            types.String `tfsdk:"blocks_5"`
+	Blocks6            types.String `tfsdk:"blocks_6"`
+	Blocks7            types.String `tfsdk:"blocks_7"`
+	Blocks8            types.String `tfsdk:"blocks_8"`
+	Blocks9            types.String `tfsdk:"blocks_9"`
+	Blocks10           types.String `tfsdk:"blocks_10"`
+	Blocks11           types.String `tfsdk:"blocks_11"`
+	Blocks12           types.String `tfsdk:"blocks_12"`
+	Blocks13           types.String `tfsdk:"blocks_13"`
+	Blocks14           types.String `tfsdk:"blocks_14"`
+	Blocks15           types.String `tfsdk:"blocks_15"`
+	Blocks16           types.String `tfsdk:"blocks_16"`
+	Blocks17           types.String `tfsdk:"blocks_17"`
+	Blocks18           types.String `tfsdk:"blocks_18"`
+	Blocks19           types.String `tfsdk:"blocks_19"`
+	Blocks20           types.String `tfsdk:"blocks_20"`
+	Blocks21           types.String `tfsdk:"blocks_21"`
+	Blocks22           types.String `tfsdk:"blocks_22"`
+	Blocks23           types.String `tfsdk:"blocks_23"`
+	Blocks24           types.String `tfsdk:"blocks_24"`
+	Blocks25           types.String `tfsdk:"blocks_25"`
+	Blocks26           types.String `tfsdk:"blocks_26"`
+	Blocks27           types.String `tfsdk:"blocks_27"`
+	Blocks28           types.String `tfsdk:"blocks_28"`
+	Blocks29           types.String `tfsdk:"blocks_29"`
+	Blocks30           types.String `tfsdk:"blocks_30"`
+	Blocks31           types.String `tfsdk:"blocks_31"`
+	Blocks32           types.String `tfsdk:"blocks_32"`
+	Blocks33           types.String `tfsdk:"blocks_33"`
+	Blocks34           types.String `tfsdk:"blocks_34"`
+	Blocks35           types.String `tfsdk:"blocks_35"`
+	FinalLayer         types.String `tfsdk:"final_layer"`
+	ModelOutput        types.String `tfsdk:"model_output"`
 }
 
 func NewModelMergeCosmosPredict214BResource() resource.Resource {
@@ -112,6 +113,13 @@ func (r *ModelMergeCosmosPredict214BResource) Schema(_ context.Context, _ resour
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -324,10 +332,12 @@ func (r *ModelMergeCosmosPredict214BResource) Create(ctx context.Context, req re
 	data.NodeID = types.StringValue("ModelMergeCosmosPredict2_14B")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -338,10 +348,12 @@ func (r *ModelMergeCosmosPredict214BResource) Read(ctx context.Context, req reso
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -352,10 +364,12 @@ func (r *ModelMergeCosmosPredict214BResource) Update(ctx context.Context, req re
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

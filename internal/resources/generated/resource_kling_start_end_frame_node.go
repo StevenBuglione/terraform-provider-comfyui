@@ -28,18 +28,19 @@ type KlingStartEndFrameNodeResource struct {
 }
 
 type KlingStartEndFrameNodeModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	StartFrame     types.String  `tfsdk:"start_frame"`
-	EndFrame       types.String  `tfsdk:"end_frame"`
-	Prompt         types.String  `tfsdk:"prompt"`
-	NegativePrompt types.String  `tfsdk:"negative_prompt"`
-	CfgScale       types.Float64 `tfsdk:"cfg_scale"`
-	AspectRatio    types.String  `tfsdk:"aspect_ratio"`
-	Mode           types.String  `tfsdk:"mode"`
-	VideoOutput    types.String  `tfsdk:"video_output"`
-	VideoIDOutput  types.String  `tfsdk:"video_id_output"`
-	DurationOutput types.String  `tfsdk:"duration_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	StartFrame         types.String  `tfsdk:"start_frame"`
+	EndFrame           types.String  `tfsdk:"end_frame"`
+	Prompt             types.String  `tfsdk:"prompt"`
+	NegativePrompt     types.String  `tfsdk:"negative_prompt"`
+	CfgScale           types.Float64 `tfsdk:"cfg_scale"`
+	AspectRatio        types.String  `tfsdk:"aspect_ratio"`
+	Mode               types.String  `tfsdk:"mode"`
+	VideoOutput        types.String  `tfsdk:"video_output"`
+	VideoIDOutput      types.String  `tfsdk:"video_id_output"`
+	DurationOutput     types.String  `tfsdk:"duration_output"`
 }
 
 func NewKlingStartEndFrameNodeResource() resource.Resource {
@@ -81,6 +82,13 @@ func (r *KlingStartEndFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -175,10 +183,12 @@ func (r *KlingStartEndFrameNodeResource) Create(ctx context.Context, req resourc
 	data.VideoIDOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 	data.DurationOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -189,10 +199,12 @@ func (r *KlingStartEndFrameNodeResource) Read(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -203,10 +215,12 @@ func (r *KlingStartEndFrameNodeResource) Update(ctx context.Context, req resourc
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

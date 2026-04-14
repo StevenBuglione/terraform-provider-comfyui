@@ -28,12 +28,13 @@ type SaveAnimatedPngResource struct {
 }
 
 type SaveAnimatedPngModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	Images         types.String  `tfsdk:"images"`
-	FilenamePrefix types.String  `tfsdk:"filename_prefix"`
-	Fps            types.Float64 `tfsdk:"fps"`
-	CompressLevel  types.Int64   `tfsdk:"compress_level"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Images             types.String  `tfsdk:"images"`
+	FilenamePrefix     types.String  `tfsdk:"filename_prefix"`
+	Fps                types.Float64 `tfsdk:"fps"`
+	CompressLevel      types.Int64   `tfsdk:"compress_level"`
 }
 
 func NewSaveAnimatedPngResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *SaveAnimatedPngResource) Schema(_ context.Context, _ resource.SchemaReq
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -129,10 +137,12 @@ func (r *SaveAnimatedPngResource) Create(ctx context.Context, req resource.Creat
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("SaveAnimatedPNG")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -143,10 +153,12 @@ func (r *SaveAnimatedPngResource) Read(ctx context.Context, req resource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -157,10 +169,12 @@ func (r *SaveAnimatedPngResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -25,15 +25,16 @@ type KlingSingleImageVideoEffectNodeResource struct {
 }
 
 type KlingSingleImageVideoEffectNodeModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Image          types.String `tfsdk:"image"`
-	EffectScene    types.String `tfsdk:"effect_scene"`
-	ModelName      types.String `tfsdk:"model_name"`
-	Duration       types.String `tfsdk:"duration"`
-	VideoOutput    types.String `tfsdk:"video_output"`
-	VideoIDOutput  types.String `tfsdk:"video_id_output"`
-	DurationOutput types.String `tfsdk:"duration_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Image              types.String `tfsdk:"image"`
+	EffectScene        types.String `tfsdk:"effect_scene"`
+	ModelName          types.String `tfsdk:"model_name"`
+	Duration           types.String `tfsdk:"duration"`
+	VideoOutput        types.String `tfsdk:"video_output"`
+	VideoIDOutput      types.String `tfsdk:"video_id_output"`
+	DurationOutput     types.String `tfsdk:"duration_output"`
 }
 
 func NewKlingSingleImageVideoEffectNodeResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *KlingSingleImageVideoEffectNodeResource) Schema(_ context.Context, _ re
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -147,10 +155,12 @@ func (r *KlingSingleImageVideoEffectNodeResource) Create(ctx context.Context, re
 	data.VideoIDOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 	data.DurationOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -161,10 +171,12 @@ func (r *KlingSingleImageVideoEffectNodeResource) Read(ctx context.Context, req 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -175,10 +187,12 @@ func (r *KlingSingleImageVideoEffectNodeResource) Update(ctx context.Context, re
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

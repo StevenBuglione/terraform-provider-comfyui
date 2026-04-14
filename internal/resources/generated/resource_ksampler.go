@@ -28,19 +28,20 @@ type KsamplerResource struct {
 }
 
 type KsamplerModel struct {
-	ID           types.String  `tfsdk:"id"`
-	NodeID       types.String  `tfsdk:"node_id"`
-	Model        types.String  `tfsdk:"model"`
-	Seed         types.Int64   `tfsdk:"seed"`
-	Steps        types.Int64   `tfsdk:"steps"`
-	Cfg          types.Float64 `tfsdk:"cfg"`
-	SamplerName  types.String  `tfsdk:"sampler_name"`
-	Scheduler    types.String  `tfsdk:"scheduler"`
-	Positive     types.String  `tfsdk:"positive"`
-	Negative     types.String  `tfsdk:"negative"`
-	LatentImage  types.String  `tfsdk:"latent_image"`
-	Denoise      types.Float64 `tfsdk:"denoise"`
-	LatentOutput types.String  `tfsdk:"latent_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Model              types.String  `tfsdk:"model"`
+	Seed               types.Int64   `tfsdk:"seed"`
+	Steps              types.Int64   `tfsdk:"steps"`
+	Cfg                types.Float64 `tfsdk:"cfg"`
+	SamplerName        types.String  `tfsdk:"sampler_name"`
+	Scheduler          types.String  `tfsdk:"scheduler"`
+	Positive           types.String  `tfsdk:"positive"`
+	Negative           types.String  `tfsdk:"negative"`
+	LatentImage        types.String  `tfsdk:"latent_image"`
+	Denoise            types.Float64 `tfsdk:"denoise"`
+	LatentOutput       types.String  `tfsdk:"latent_output"`
 }
 
 func NewKsamplerResource() resource.Resource {
@@ -82,6 +83,13 @@ func (r *KsamplerResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -174,10 +182,12 @@ func (r *KsamplerResource) Create(ctx context.Context, req resource.CreateReques
 	data.NodeID = types.StringValue("KSampler")
 	data.LatentOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -188,10 +198,12 @@ func (r *KsamplerResource) Read(ctx context.Context, req resource.ReadRequest, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -202,10 +214,12 @@ func (r *KsamplerResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

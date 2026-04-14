@@ -27,15 +27,16 @@ type QwenImageDiffsynthControlnetResource struct {
 }
 
 type QwenImageDiffsynthControlnetModel struct {
-	ID          types.String  `tfsdk:"id"`
-	NodeID      types.String  `tfsdk:"node_id"`
-	Model       types.String  `tfsdk:"model"`
-	ModelPatch  types.String  `tfsdk:"model_patch"`
-	VAE         types.String  `tfsdk:"vae"`
-	Image       types.String  `tfsdk:"image"`
-	Strength    types.Float64 `tfsdk:"strength"`
-	Mask        types.String  `tfsdk:"mask"`
-	ModelOutput types.String  `tfsdk:"model_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Model              types.String  `tfsdk:"model"`
+	ModelPatch         types.String  `tfsdk:"model_patch"`
+	VAE                types.String  `tfsdk:"vae"`
+	Image              types.String  `tfsdk:"image"`
+	Strength           types.Float64 `tfsdk:"strength"`
+	Mask               types.String  `tfsdk:"mask"`
+	ModelOutput        types.String  `tfsdk:"model_output"`
 }
 
 func NewQwenImageDiffsynthControlnetResource() resource.Resource {
@@ -77,6 +78,13 @@ func (r *QwenImageDiffsynthControlnetResource) Schema(_ context.Context, _ resou
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -144,10 +152,12 @@ func (r *QwenImageDiffsynthControlnetResource) Create(ctx context.Context, req r
 	data.NodeID = types.StringValue("QwenImageDiffsynthControlnet")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -158,10 +168,12 @@ func (r *QwenImageDiffsynthControlnetResource) Read(ctx context.Context, req res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -172,10 +184,12 @@ func (r *QwenImageDiffsynthControlnetResource) Update(ctx context.Context, req r
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

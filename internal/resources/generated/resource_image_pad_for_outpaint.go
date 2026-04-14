@@ -25,16 +25,17 @@ type ImagePadForOutpaintResource struct {
 }
 
 type ImagePadForOutpaintModel struct {
-	ID          types.String `tfsdk:"id"`
-	NodeID      types.String `tfsdk:"node_id"`
-	Image       types.String `tfsdk:"image"`
-	Left        types.Int64  `tfsdk:"left"`
-	Top         types.Int64  `tfsdk:"top"`
-	Right       types.Int64  `tfsdk:"right"`
-	Bottom      types.Int64  `tfsdk:"bottom"`
-	Feathering  types.Int64  `tfsdk:"feathering"`
-	ImageOutput types.String `tfsdk:"image_output"`
-	MaskOutput  types.String `tfsdk:"mask_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Image              types.String `tfsdk:"image"`
+	Left               types.Int64  `tfsdk:"left"`
+	Top                types.Int64  `tfsdk:"top"`
+	Right              types.Int64  `tfsdk:"right"`
+	Bottom             types.Int64  `tfsdk:"bottom"`
+	Feathering         types.Int64  `tfsdk:"feathering"`
+	ImageOutput        types.String `tfsdk:"image_output"`
+	MaskOutput         types.String `tfsdk:"mask_output"`
 }
 
 func NewImagePadForOutpaintResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *ImagePadForOutpaintResource) Schema(_ context.Context, _ resource.Schem
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -148,10 +156,12 @@ func (r *ImagePadForOutpaintResource) Create(ctx context.Context, req resource.C
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.MaskOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -162,10 +172,12 @@ func (r *ImagePadForOutpaintResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -176,10 +188,12 @@ func (r *ImagePadForOutpaintResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

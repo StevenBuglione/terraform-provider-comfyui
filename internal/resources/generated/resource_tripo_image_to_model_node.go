@@ -28,24 +28,25 @@ type TripoImageToModelNodeResource struct {
 }
 
 type TripoImageToModelNodeModel struct {
-	ID                types.String `tfsdk:"id"`
-	NodeID            types.String `tfsdk:"node_id"`
-	Image             types.String `tfsdk:"image"`
-	ModelVersion      types.String `tfsdk:"model_version"`
-	Style             types.String `tfsdk:"style"`
-	Texture           types.Bool   `tfsdk:"texture"`
-	Pbr               types.Bool   `tfsdk:"pbr"`
-	ModelSeed         types.Int64  `tfsdk:"model_seed"`
-	Orientation       types.String `tfsdk:"orientation"`
-	TextureSeed       types.Int64  `tfsdk:"texture_seed"`
-	TextureQuality    types.String `tfsdk:"texture_quality"`
-	TextureAlignment  types.String `tfsdk:"texture_alignment"`
-	FaceLimit         types.Int64  `tfsdk:"face_limit"`
-	Quad              types.Bool   `tfsdk:"quad"`
-	GeometryQuality   types.String `tfsdk:"geometry_quality"`
-	ModelFileOutput   types.String `tfsdk:"model_file_output"`
-	ModelTaskIDOutput types.String `tfsdk:"model_task_id_output"`
-	GlbOutput         types.String `tfsdk:"glb_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Image              types.String `tfsdk:"image"`
+	ModelVersion       types.String `tfsdk:"model_version"`
+	Style              types.String `tfsdk:"style"`
+	Texture            types.Bool   `tfsdk:"texture"`
+	Pbr                types.Bool   `tfsdk:"pbr"`
+	ModelSeed          types.Int64  `tfsdk:"model_seed"`
+	Orientation        types.String `tfsdk:"orientation"`
+	TextureSeed        types.Int64  `tfsdk:"texture_seed"`
+	TextureQuality     types.String `tfsdk:"texture_quality"`
+	TextureAlignment   types.String `tfsdk:"texture_alignment"`
+	FaceLimit          types.Int64  `tfsdk:"face_limit"`
+	Quad               types.Bool   `tfsdk:"quad"`
+	GeometryQuality    types.String `tfsdk:"geometry_quality"`
+	ModelFileOutput    types.String `tfsdk:"model_file_output"`
+	ModelTaskIDOutput  types.String `tfsdk:"model_task_id_output"`
+	GlbOutput          types.String `tfsdk:"glb_output"`
 }
 
 func NewTripoImageToModelNodeResource() resource.Resource {
@@ -87,6 +88,13 @@ func (r *TripoImageToModelNodeResource) Schema(_ context.Context, _ resource.Sch
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -216,10 +224,12 @@ func (r *TripoImageToModelNodeResource) Create(ctx context.Context, req resource
 	data.ModelTaskIDOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 	data.GlbOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -230,10 +240,12 @@ func (r *TripoImageToModelNodeResource) Read(ctx context.Context, req resource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -244,10 +256,12 @@ func (r *TripoImageToModelNodeResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

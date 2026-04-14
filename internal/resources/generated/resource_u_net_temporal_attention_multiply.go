@@ -27,14 +27,15 @@ type UNetTemporalAttentionMultiplyResource struct {
 }
 
 type UNetTemporalAttentionMultiplyModel struct {
-	ID              types.String  `tfsdk:"id"`
-	NodeID          types.String  `tfsdk:"node_id"`
-	Model           types.String  `tfsdk:"model"`
-	SelfStructural  types.Float64 `tfsdk:"self_structural"`
-	SelfTemporal    types.Float64 `tfsdk:"self_temporal"`
-	CrossStructural types.Float64 `tfsdk:"cross_structural"`
-	CrossTemporal   types.Float64 `tfsdk:"cross_temporal"`
-	ModelOutput     types.String  `tfsdk:"model_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Model              types.String  `tfsdk:"model"`
+	SelfStructural     types.Float64 `tfsdk:"self_structural"`
+	SelfTemporal       types.Float64 `tfsdk:"self_temporal"`
+	CrossStructural    types.Float64 `tfsdk:"cross_structural"`
+	CrossTemporal      types.Float64 `tfsdk:"cross_temporal"`
+	ModelOutput        types.String  `tfsdk:"model_output"`
 }
 
 func NewUNetTemporalAttentionMultiplyResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *UNetTemporalAttentionMultiplyResource) Schema(_ context.Context, _ reso
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -148,10 +156,12 @@ func (r *UNetTemporalAttentionMultiplyResource) Create(ctx context.Context, req 
 	data.NodeID = types.StringValue("UNetTemporalAttentionMultiply")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -162,10 +172,12 @@ func (r *UNetTemporalAttentionMultiplyResource) Read(ctx context.Context, req re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -176,10 +188,12 @@ func (r *UNetTemporalAttentionMultiplyResource) Update(ctx context.Context, req 
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

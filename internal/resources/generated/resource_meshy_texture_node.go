@@ -27,18 +27,19 @@ type MeshyTextureNodeResource struct {
 }
 
 type MeshyTextureNodeModel struct {
-	ID                types.String `tfsdk:"id"`
-	NodeID            types.String `tfsdk:"node_id"`
-	Model             types.String `tfsdk:"model"`
-	MeshyTaskID       types.String `tfsdk:"meshy_task_id"`
-	EnableOriginalUv  types.Bool   `tfsdk:"enable_original_uv"`
-	Pbr               types.Bool   `tfsdk:"pbr"`
-	TextStylePrompt   types.String `tfsdk:"text_style_prompt"`
-	ImageStyle        types.String `tfsdk:"image_style"`
-	ModelFileOutput   types.String `tfsdk:"model_file_output"`
-	MeshyTaskIDOutput types.String `tfsdk:"meshy_task_id_output"`
-	GlbOutput         types.String `tfsdk:"glb_output"`
-	FbxOutput         types.String `tfsdk:"fbx_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model              types.String `tfsdk:"model"`
+	MeshyTaskID        types.String `tfsdk:"meshy_task_id"`
+	EnableOriginalUv   types.Bool   `tfsdk:"enable_original_uv"`
+	Pbr                types.Bool   `tfsdk:"pbr"`
+	TextStylePrompt    types.String `tfsdk:"text_style_prompt"`
+	ImageStyle         types.String `tfsdk:"image_style"`
+	ModelFileOutput    types.String `tfsdk:"model_file_output"`
+	MeshyTaskIDOutput  types.String `tfsdk:"meshy_task_id_output"`
+	GlbOutput          types.String `tfsdk:"glb_output"`
+	FbxOutput          types.String `tfsdk:"fbx_output"`
 }
 
 func NewMeshyTextureNodeResource() resource.Resource {
@@ -80,6 +81,13 @@ func (r *MeshyTextureNodeResource) Schema(_ context.Context, _ resource.SchemaRe
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -173,10 +181,12 @@ func (r *MeshyTextureNodeResource) Create(ctx context.Context, req resource.Crea
 	data.GlbOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 	data.FbxOutput = types.StringValue(fmt.Sprintf("%s:3", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -187,10 +197,12 @@ func (r *MeshyTextureNodeResource) Read(ctx context.Context, req resource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -201,10 +213,12 @@ func (r *MeshyTextureNodeResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

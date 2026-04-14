@@ -28,17 +28,18 @@ type SdPoseDrawKeypointsResource struct {
 }
 
 type SdPoseDrawKeypointsModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	Keypoints      types.String  `tfsdk:"keypoints"`
-	DrawBody       types.Bool    `tfsdk:"draw_body"`
-	DrawHands      types.Bool    `tfsdk:"draw_hands"`
-	DrawFace       types.Bool    `tfsdk:"draw_face"`
-	DrawFeet       types.Bool    `tfsdk:"draw_feet"`
-	StickWidth     types.Int64   `tfsdk:"stick_width"`
-	FacePointSize  types.Int64   `tfsdk:"face_point_size"`
-	ScoreThreshold types.Float64 `tfsdk:"score_threshold"`
-	ImageOutput    types.String  `tfsdk:"image_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Keypoints          types.String  `tfsdk:"keypoints"`
+	DrawBody           types.Bool    `tfsdk:"draw_body"`
+	DrawHands          types.Bool    `tfsdk:"draw_hands"`
+	DrawFace           types.Bool    `tfsdk:"draw_face"`
+	DrawFeet           types.Bool    `tfsdk:"draw_feet"`
+	StickWidth         types.Int64   `tfsdk:"stick_width"`
+	FacePointSize      types.Int64   `tfsdk:"face_point_size"`
+	ScoreThreshold     types.Float64 `tfsdk:"score_threshold"`
+	ImageOutput        types.String  `tfsdk:"image_output"`
 }
 
 func NewSdPoseDrawKeypointsResource() resource.Resource {
@@ -80,6 +81,13 @@ func (r *SdPoseDrawKeypointsResource) Schema(_ context.Context, _ resource.Schem
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -161,10 +169,12 @@ func (r *SdPoseDrawKeypointsResource) Create(ctx context.Context, req resource.C
 	data.NodeID = types.StringValue("SDPoseDrawKeypoints")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -175,10 +185,12 @@ func (r *SdPoseDrawKeypointsResource) Read(ctx context.Context, req resource.Rea
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -189,10 +201,12 @@ func (r *SdPoseDrawKeypointsResource) Update(ctx context.Context, req resource.U
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

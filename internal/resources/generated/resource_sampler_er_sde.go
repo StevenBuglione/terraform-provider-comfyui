@@ -29,13 +29,14 @@ type SamplerErSdeResource struct {
 }
 
 type SamplerErSdeModel struct {
-	ID            types.String  `tfsdk:"id"`
-	NodeID        types.String  `tfsdk:"node_id"`
-	SolverType    types.String  `tfsdk:"solver_type"`
-	MaxStage      types.Int64   `tfsdk:"max_stage"`
-	Eta           types.Float64 `tfsdk:"eta"`
-	SNoise        types.Float64 `tfsdk:"s_noise"`
-	SamplerOutput types.String  `tfsdk:"sampler_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	SolverType         types.String  `tfsdk:"solver_type"`
+	MaxStage           types.Int64   `tfsdk:"max_stage"`
+	Eta                types.Float64 `tfsdk:"eta"`
+	SNoise             types.Float64 `tfsdk:"s_noise"`
+	SamplerOutput      types.String  `tfsdk:"sampler_output"`
 }
 
 func NewSamplerErSdeResource() resource.Resource {
@@ -77,6 +78,13 @@ func (r *SamplerErSdeResource) Schema(_ context.Context, _ resource.SchemaReques
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -149,10 +157,12 @@ func (r *SamplerErSdeResource) Create(ctx context.Context, req resource.CreateRe
 	data.NodeID = types.StringValue("SamplerER_SDE")
 	data.SamplerOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -163,10 +173,12 @@ func (r *SamplerErSdeResource) Read(ctx context.Context, req resource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -177,10 +189,12 @@ func (r *SamplerErSdeResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

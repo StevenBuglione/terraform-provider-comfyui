@@ -27,14 +27,15 @@ type KlingVideoNodeResource struct {
 }
 
 type KlingVideoNodeModel struct {
-	ID            types.String `tfsdk:"id"`
-	NodeID        types.String `tfsdk:"node_id"`
-	MultiShot     types.String `tfsdk:"multi_shot"`
-	GenerateAudio types.Bool   `tfsdk:"generate_audio"`
-	Model         types.String `tfsdk:"model"`
-	Seed          types.Int64  `tfsdk:"seed"`
-	StartFrame    types.String `tfsdk:"start_frame"`
-	VideoOutput   types.String `tfsdk:"video_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	MultiShot          types.String `tfsdk:"multi_shot"`
+	GenerateAudio      types.Bool   `tfsdk:"generate_audio"`
+	Model              types.String `tfsdk:"model"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	StartFrame         types.String `tfsdk:"start_frame"`
+	VideoOutput        types.String `tfsdk:"video_output"`
 }
 
 func NewKlingVideoNodeResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *KlingVideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequ
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -139,10 +147,12 @@ func (r *KlingVideoNodeResource) Create(ctx context.Context, req resource.Create
 	data.NodeID = types.StringValue("KlingVideoNode")
 	data.VideoOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -153,10 +163,12 @@ func (r *KlingVideoNodeResource) Read(ctx context.Context, req resource.ReadRequ
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -167,10 +179,12 @@ func (r *KlingVideoNodeResource) Update(ctx context.Context, req resource.Update
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -28,16 +28,17 @@ type MagnificImageUpscalerPreciseV2NodeResource struct {
 }
 
 type MagnificImageUpscalerPreciseV2NodeModel struct {
-	ID            types.String `tfsdk:"id"`
-	NodeID        types.String `tfsdk:"node_id"`
-	Image         types.String `tfsdk:"image"`
-	ScaleFactor   types.String `tfsdk:"scale_factor"`
-	Flavor        types.String `tfsdk:"flavor"`
-	Sharpen       types.Int64  `tfsdk:"sharpen"`
-	SmartGrain    types.Int64  `tfsdk:"smart_grain"`
-	UltraDetail   types.Int64  `tfsdk:"ultra_detail"`
-	AutoDownscale types.Bool   `tfsdk:"auto_downscale"`
-	ImageOutput   types.String `tfsdk:"image_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Image              types.String `tfsdk:"image"`
+	ScaleFactor        types.String `tfsdk:"scale_factor"`
+	Flavor             types.String `tfsdk:"flavor"`
+	Sharpen            types.Int64  `tfsdk:"sharpen"`
+	SmartGrain         types.Int64  `tfsdk:"smart_grain"`
+	UltraDetail        types.Int64  `tfsdk:"ultra_detail"`
+	AutoDownscale      types.Bool   `tfsdk:"auto_downscale"`
+	ImageOutput        types.String `tfsdk:"image_output"`
 }
 
 func NewMagnificImageUpscalerPreciseV2NodeResource() resource.Resource {
@@ -79,6 +80,13 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Schema(_ context.Context, _
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -171,10 +179,12 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Create(ctx context.Context,
 	data.NodeID = types.StringValue("MagnificImageUpscalerPreciseV2Node")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -185,10 +195,12 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Read(ctx context.Context, r
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -199,10 +211,12 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Update(ctx context.Context,
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

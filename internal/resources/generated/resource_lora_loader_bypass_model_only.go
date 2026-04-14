@@ -27,12 +27,13 @@ type LoraLoaderBypassModelOnlyResource struct {
 }
 
 type LoraLoaderBypassModelOnlyModel struct {
-	ID            types.String  `tfsdk:"id"`
-	NodeID        types.String  `tfsdk:"node_id"`
-	Model         types.String  `tfsdk:"model"`
-	LoraName      types.String  `tfsdk:"lora_name"`
-	StrengthModel types.Float64 `tfsdk:"strength_model"`
-	ModelOutput   types.String  `tfsdk:"model_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Model              types.String  `tfsdk:"model"`
+	LoraName           types.String  `tfsdk:"lora_name"`
+	StrengthModel      types.Float64 `tfsdk:"strength_model"`
+	ModelOutput        types.String  `tfsdk:"model_output"`
 }
 
 func NewLoraLoaderBypassModelOnlyResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *LoraLoaderBypassModelOnlyResource) Schema(_ context.Context, _ resource
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -129,10 +137,12 @@ func (r *LoraLoaderBypassModelOnlyResource) Create(ctx context.Context, req reso
 	data.NodeID = types.StringValue("LoraLoaderBypassModelOnly")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -143,10 +153,12 @@ func (r *LoraLoaderBypassModelOnlyResource) Read(ctx context.Context, req resour
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -157,10 +169,12 @@ func (r *LoraLoaderBypassModelOnlyResource) Update(ctx context.Context, req reso
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

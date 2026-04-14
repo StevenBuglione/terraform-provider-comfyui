@@ -28,17 +28,18 @@ type GeminiNodeResource struct {
 }
 
 type GeminiNodeModel struct {
-	ID           types.String `tfsdk:"id"`
-	NodeID       types.String `tfsdk:"node_id"`
-	Prompt       types.String `tfsdk:"prompt"`
-	Model        types.String `tfsdk:"model"`
-	Seed         types.Int64  `tfsdk:"seed"`
-	Images       types.String `tfsdk:"images"`
-	Audio        types.String `tfsdk:"audio"`
-	Video        types.String `tfsdk:"video"`
-	Files        types.String `tfsdk:"files"`
-	SystemPrompt types.String `tfsdk:"system_prompt"`
-	StringOutput types.String `tfsdk:"string_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Prompt             types.String `tfsdk:"prompt"`
+	Model              types.String `tfsdk:"model"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	Images             types.String `tfsdk:"images"`
+	Audio              types.String `tfsdk:"audio"`
+	Video              types.String `tfsdk:"video"`
+	Files              types.String `tfsdk:"files"`
+	SystemPrompt       types.String `tfsdk:"system_prompt"`
+	StringOutput       types.String `tfsdk:"string_output"`
 }
 
 func NewGeminiNodeResource() resource.Resource {
@@ -80,6 +81,13 @@ func (r *GeminiNodeResource) Schema(_ context.Context, _ resource.SchemaRequest,
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -166,10 +174,12 @@ func (r *GeminiNodeResource) Create(ctx context.Context, req resource.CreateRequ
 	data.NodeID = types.StringValue("GeminiNode")
 	data.StringOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -180,10 +190,12 @@ func (r *GeminiNodeResource) Read(ctx context.Context, req resource.ReadRequest,
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -194,10 +206,12 @@ func (r *GeminiNodeResource) Update(ctx context.Context, req resource.UpdateRequ
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

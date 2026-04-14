@@ -28,17 +28,18 @@ type CreateHookKeyframesInterpolatedResource struct {
 }
 
 type CreateHookKeyframesInterpolatedModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	StrengthStart  types.Float64 `tfsdk:"strength_start"`
-	StrengthEnd    types.Float64 `tfsdk:"strength_end"`
-	Interpolation  types.String  `tfsdk:"interpolation"`
-	StartPercent   types.Float64 `tfsdk:"start_percent"`
-	EndPercent     types.Float64 `tfsdk:"end_percent"`
-	KeyframesCount types.Int64   `tfsdk:"keyframes_count"`
-	PrintKeyframes types.Bool    `tfsdk:"print_keyframes"`
-	PrevHookKf     types.String  `tfsdk:"prev_hook_kf"`
-	HookKfOutput   types.String  `tfsdk:"hook_kf_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	StrengthStart      types.Float64 `tfsdk:"strength_start"`
+	StrengthEnd        types.Float64 `tfsdk:"strength_end"`
+	Interpolation      types.String  `tfsdk:"interpolation"`
+	StartPercent       types.Float64 `tfsdk:"start_percent"`
+	EndPercent         types.Float64 `tfsdk:"end_percent"`
+	KeyframesCount     types.Int64   `tfsdk:"keyframes_count"`
+	PrintKeyframes     types.Bool    `tfsdk:"print_keyframes"`
+	PrevHookKf         types.String  `tfsdk:"prev_hook_kf"`
+	HookKfOutput       types.String  `tfsdk:"hook_kf_output"`
 }
 
 func NewCreateHookKeyframesInterpolatedResource() resource.Resource {
@@ -80,6 +81,13 @@ func (r *CreateHookKeyframesInterpolatedResource) Schema(_ context.Context, _ re
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -167,10 +175,12 @@ func (r *CreateHookKeyframesInterpolatedResource) Create(ctx context.Context, re
 	data.NodeID = types.StringValue("CreateHookKeyframesInterpolated")
 	data.HookKfOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -181,10 +191,12 @@ func (r *CreateHookKeyframesInterpolatedResource) Read(ctx context.Context, req 
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -195,10 +207,12 @@ func (r *CreateHookKeyframesInterpolatedResource) Update(ctx context.Context, re
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -28,18 +28,19 @@ type WanReferenceVideoAPIResource struct {
 }
 
 type WanReferenceVideoAPIModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	Model           types.String `tfsdk:"model"`
-	Prompt          types.String `tfsdk:"prompt"`
-	NegativePrompt  types.String `tfsdk:"negative_prompt"`
-	ReferenceVideos types.String `tfsdk:"reference_videos"`
-	Size            types.String `tfsdk:"size"`
-	Duration        types.Int64  `tfsdk:"duration"`
-	Seed            types.Int64  `tfsdk:"seed"`
-	ShotType        types.String `tfsdk:"shot_type"`
-	Watermark       types.Bool   `tfsdk:"watermark"`
-	VideoOutput     types.String `tfsdk:"video_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model              types.String `tfsdk:"model"`
+	Prompt             types.String `tfsdk:"prompt"`
+	NegativePrompt     types.String `tfsdk:"negative_prompt"`
+	ReferenceVideos    types.String `tfsdk:"reference_videos"`
+	Size               types.String `tfsdk:"size"`
+	Duration           types.Int64  `tfsdk:"duration"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	ShotType           types.String `tfsdk:"shot_type"`
+	Watermark          types.Bool   `tfsdk:"watermark"`
+	VideoOutput        types.String `tfsdk:"video_output"`
 }
 
 func NewWanReferenceVideoAPIResource() resource.Resource {
@@ -81,6 +82,13 @@ func (r *WanReferenceVideoAPIResource) Schema(_ context.Context, _ resource.Sche
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -188,10 +196,12 @@ func (r *WanReferenceVideoAPIResource) Create(ctx context.Context, req resource.
 	data.NodeID = types.StringValue("WanReferenceVideoApi")
 	data.VideoOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -202,10 +212,12 @@ func (r *WanReferenceVideoAPIResource) Read(ctx context.Context, req resource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -216,10 +228,12 @@ func (r *WanReferenceVideoAPIResource) Update(ctx context.Context, req resource.
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -27,14 +27,15 @@ type StableCascadeEmptyLatentImageResource struct {
 }
 
 type StableCascadeEmptyLatentImageModel struct {
-	ID           types.String `tfsdk:"id"`
-	NodeID       types.String `tfsdk:"node_id"`
-	Width        types.Int64  `tfsdk:"width"`
-	Height       types.Int64  `tfsdk:"height"`
-	Compression  types.Int64  `tfsdk:"compression"`
-	BatchSize    types.Int64  `tfsdk:"batch_size"`
-	StageCOutput types.String `tfsdk:"stage_c_output"`
-	StageBOutput types.String `tfsdk:"stage_b_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Width              types.Int64  `tfsdk:"width"`
+	Height             types.Int64  `tfsdk:"height"`
+	Compression        types.Int64  `tfsdk:"compression"`
+	BatchSize          types.Int64  `tfsdk:"batch_size"`
+	StageCOutput       types.String `tfsdk:"stage_c_output"`
+	StageBOutput       types.String `tfsdk:"stage_b_output"`
 }
 
 func NewStableCascadeEmptyLatentImageResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *StableCascadeEmptyLatentImageResource) Schema(_ context.Context, _ reso
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -146,10 +154,12 @@ func (r *StableCascadeEmptyLatentImageResource) Create(ctx context.Context, req 
 	data.StageCOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.StageBOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -160,10 +170,12 @@ func (r *StableCascadeEmptyLatentImageResource) Read(ctx context.Context, req re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -174,10 +186,12 @@ func (r *StableCascadeEmptyLatentImageResource) Update(ctx context.Context, req 
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

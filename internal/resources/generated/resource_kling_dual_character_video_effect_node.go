@@ -25,16 +25,17 @@ type KlingDualCharacterVideoEffectNodeResource struct {
 }
 
 type KlingDualCharacterVideoEffectNodeModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	ImageLeft      types.String `tfsdk:"image_left"`
-	ImageRight     types.String `tfsdk:"image_right"`
-	EffectScene    types.String `tfsdk:"effect_scene"`
-	ModelName      types.String `tfsdk:"model_name"`
-	Mode           types.String `tfsdk:"mode"`
-	Duration       types.String `tfsdk:"duration"`
-	VideoOutput    types.String `tfsdk:"video_output"`
-	DurationOutput types.String `tfsdk:"duration_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	ImageLeft          types.String `tfsdk:"image_left"`
+	ImageRight         types.String `tfsdk:"image_right"`
+	EffectScene        types.String `tfsdk:"effect_scene"`
+	ModelName          types.String `tfsdk:"model_name"`
+	Mode               types.String `tfsdk:"mode"`
+	Duration           types.String `tfsdk:"duration"`
+	VideoOutput        types.String `tfsdk:"video_output"`
+	DurationOutput     types.String `tfsdk:"duration_output"`
 }
 
 func NewKlingDualCharacterVideoEffectNodeResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *KlingDualCharacterVideoEffectNodeResource) Schema(_ context.Context, _ 
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -148,10 +156,12 @@ func (r *KlingDualCharacterVideoEffectNodeResource) Create(ctx context.Context, 
 	data.VideoOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.DurationOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -162,10 +172,12 @@ func (r *KlingDualCharacterVideoEffectNodeResource) Read(ctx context.Context, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -176,10 +188,12 @@ func (r *KlingDualCharacterVideoEffectNodeResource) Update(ctx context.Context, 
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

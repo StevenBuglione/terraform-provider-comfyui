@@ -28,14 +28,15 @@ type SaveAnimatedWebpResource struct {
 }
 
 type SaveAnimatedWebpModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	Images         types.String  `tfsdk:"images"`
-	FilenamePrefix types.String  `tfsdk:"filename_prefix"`
-	Fps            types.Float64 `tfsdk:"fps"`
-	Lossless       types.Bool    `tfsdk:"lossless"`
-	Quality        types.Int64   `tfsdk:"quality"`
-	Method         types.String  `tfsdk:"method"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Images             types.String  `tfsdk:"images"`
+	FilenamePrefix     types.String  `tfsdk:"filename_prefix"`
+	Fps                types.Float64 `tfsdk:"fps"`
+	Lossless           types.Bool    `tfsdk:"lossless"`
+	Quality            types.Int64   `tfsdk:"quality"`
+	Method             types.String  `tfsdk:"method"`
 }
 
 func NewSaveAnimatedWebpResource() resource.Resource {
@@ -77,6 +78,13 @@ func (r *SaveAnimatedWebpResource) Schema(_ context.Context, _ resource.SchemaRe
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -139,10 +147,12 @@ func (r *SaveAnimatedWebpResource) Create(ctx context.Context, req resource.Crea
 	data.ID = types.StringValue(uuid.New().String())
 	data.NodeID = types.StringValue("SaveAnimatedWEBP")
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -153,10 +163,12 @@ func (r *SaveAnimatedWebpResource) Read(ctx context.Context, req resource.ReadRe
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -167,10 +179,12 @@ func (r *SaveAnimatedWebpResource) Update(ctx context.Context, req resource.Upda
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

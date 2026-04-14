@@ -25,74 +25,75 @@ type ModelMergeFlux1Resource struct {
 }
 
 type ModelMergeFlux1Model struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Model1         types.String `tfsdk:"model1"`
-	Model2         types.String `tfsdk:"model2"`
-	ImgIn          types.String `tfsdk:"img_in"`
-	TimeIn         types.String `tfsdk:"time_in"`
-	GuidanceIn     types.String `tfsdk:"guidance_in"`
-	VectorIn       types.String `tfsdk:"vector_in"`
-	TxtIn          types.String `tfsdk:"txt_in"`
-	DoubleBlocks0  types.String `tfsdk:"double_blocks_0"`
-	DoubleBlocks1  types.String `tfsdk:"double_blocks_1"`
-	DoubleBlocks2  types.String `tfsdk:"double_blocks_2"`
-	DoubleBlocks3  types.String `tfsdk:"double_blocks_3"`
-	DoubleBlocks4  types.String `tfsdk:"double_blocks_4"`
-	DoubleBlocks5  types.String `tfsdk:"double_blocks_5"`
-	DoubleBlocks6  types.String `tfsdk:"double_blocks_6"`
-	DoubleBlocks7  types.String `tfsdk:"double_blocks_7"`
-	DoubleBlocks8  types.String `tfsdk:"double_blocks_8"`
-	DoubleBlocks9  types.String `tfsdk:"double_blocks_9"`
-	DoubleBlocks10 types.String `tfsdk:"double_blocks_10"`
-	DoubleBlocks11 types.String `tfsdk:"double_blocks_11"`
-	DoubleBlocks12 types.String `tfsdk:"double_blocks_12"`
-	DoubleBlocks13 types.String `tfsdk:"double_blocks_13"`
-	DoubleBlocks14 types.String `tfsdk:"double_blocks_14"`
-	DoubleBlocks15 types.String `tfsdk:"double_blocks_15"`
-	DoubleBlocks16 types.String `tfsdk:"double_blocks_16"`
-	DoubleBlocks17 types.String `tfsdk:"double_blocks_17"`
-	DoubleBlocks18 types.String `tfsdk:"double_blocks_18"`
-	SingleBlocks0  types.String `tfsdk:"single_blocks_0"`
-	SingleBlocks1  types.String `tfsdk:"single_blocks_1"`
-	SingleBlocks2  types.String `tfsdk:"single_blocks_2"`
-	SingleBlocks3  types.String `tfsdk:"single_blocks_3"`
-	SingleBlocks4  types.String `tfsdk:"single_blocks_4"`
-	SingleBlocks5  types.String `tfsdk:"single_blocks_5"`
-	SingleBlocks6  types.String `tfsdk:"single_blocks_6"`
-	SingleBlocks7  types.String `tfsdk:"single_blocks_7"`
-	SingleBlocks8  types.String `tfsdk:"single_blocks_8"`
-	SingleBlocks9  types.String `tfsdk:"single_blocks_9"`
-	SingleBlocks10 types.String `tfsdk:"single_blocks_10"`
-	SingleBlocks11 types.String `tfsdk:"single_blocks_11"`
-	SingleBlocks12 types.String `tfsdk:"single_blocks_12"`
-	SingleBlocks13 types.String `tfsdk:"single_blocks_13"`
-	SingleBlocks14 types.String `tfsdk:"single_blocks_14"`
-	SingleBlocks15 types.String `tfsdk:"single_blocks_15"`
-	SingleBlocks16 types.String `tfsdk:"single_blocks_16"`
-	SingleBlocks17 types.String `tfsdk:"single_blocks_17"`
-	SingleBlocks18 types.String `tfsdk:"single_blocks_18"`
-	SingleBlocks19 types.String `tfsdk:"single_blocks_19"`
-	SingleBlocks20 types.String `tfsdk:"single_blocks_20"`
-	SingleBlocks21 types.String `tfsdk:"single_blocks_21"`
-	SingleBlocks22 types.String `tfsdk:"single_blocks_22"`
-	SingleBlocks23 types.String `tfsdk:"single_blocks_23"`
-	SingleBlocks24 types.String `tfsdk:"single_blocks_24"`
-	SingleBlocks25 types.String `tfsdk:"single_blocks_25"`
-	SingleBlocks26 types.String `tfsdk:"single_blocks_26"`
-	SingleBlocks27 types.String `tfsdk:"single_blocks_27"`
-	SingleBlocks28 types.String `tfsdk:"single_blocks_28"`
-	SingleBlocks29 types.String `tfsdk:"single_blocks_29"`
-	SingleBlocks30 types.String `tfsdk:"single_blocks_30"`
-	SingleBlocks31 types.String `tfsdk:"single_blocks_31"`
-	SingleBlocks32 types.String `tfsdk:"single_blocks_32"`
-	SingleBlocks33 types.String `tfsdk:"single_blocks_33"`
-	SingleBlocks34 types.String `tfsdk:"single_blocks_34"`
-	SingleBlocks35 types.String `tfsdk:"single_blocks_35"`
-	SingleBlocks36 types.String `tfsdk:"single_blocks_36"`
-	SingleBlocks37 types.String `tfsdk:"single_blocks_37"`
-	FinalLayer     types.String `tfsdk:"final_layer"`
-	ModelOutput    types.String `tfsdk:"model_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model1             types.String `tfsdk:"model1"`
+	Model2             types.String `tfsdk:"model2"`
+	ImgIn              types.String `tfsdk:"img_in"`
+	TimeIn             types.String `tfsdk:"time_in"`
+	GuidanceIn         types.String `tfsdk:"guidance_in"`
+	VectorIn           types.String `tfsdk:"vector_in"`
+	TxtIn              types.String `tfsdk:"txt_in"`
+	DoubleBlocks0      types.String `tfsdk:"double_blocks_0"`
+	DoubleBlocks1      types.String `tfsdk:"double_blocks_1"`
+	DoubleBlocks2      types.String `tfsdk:"double_blocks_2"`
+	DoubleBlocks3      types.String `tfsdk:"double_blocks_3"`
+	DoubleBlocks4      types.String `tfsdk:"double_blocks_4"`
+	DoubleBlocks5      types.String `tfsdk:"double_blocks_5"`
+	DoubleBlocks6      types.String `tfsdk:"double_blocks_6"`
+	DoubleBlocks7      types.String `tfsdk:"double_blocks_7"`
+	DoubleBlocks8      types.String `tfsdk:"double_blocks_8"`
+	DoubleBlocks9      types.String `tfsdk:"double_blocks_9"`
+	DoubleBlocks10     types.String `tfsdk:"double_blocks_10"`
+	DoubleBlocks11     types.String `tfsdk:"double_blocks_11"`
+	DoubleBlocks12     types.String `tfsdk:"double_blocks_12"`
+	DoubleBlocks13     types.String `tfsdk:"double_blocks_13"`
+	DoubleBlocks14     types.String `tfsdk:"double_blocks_14"`
+	DoubleBlocks15     types.String `tfsdk:"double_blocks_15"`
+	DoubleBlocks16     types.String `tfsdk:"double_blocks_16"`
+	DoubleBlocks17     types.String `tfsdk:"double_blocks_17"`
+	DoubleBlocks18     types.String `tfsdk:"double_blocks_18"`
+	SingleBlocks0      types.String `tfsdk:"single_blocks_0"`
+	SingleBlocks1      types.String `tfsdk:"single_blocks_1"`
+	SingleBlocks2      types.String `tfsdk:"single_blocks_2"`
+	SingleBlocks3      types.String `tfsdk:"single_blocks_3"`
+	SingleBlocks4      types.String `tfsdk:"single_blocks_4"`
+	SingleBlocks5      types.String `tfsdk:"single_blocks_5"`
+	SingleBlocks6      types.String `tfsdk:"single_blocks_6"`
+	SingleBlocks7      types.String `tfsdk:"single_blocks_7"`
+	SingleBlocks8      types.String `tfsdk:"single_blocks_8"`
+	SingleBlocks9      types.String `tfsdk:"single_blocks_9"`
+	SingleBlocks10     types.String `tfsdk:"single_blocks_10"`
+	SingleBlocks11     types.String `tfsdk:"single_blocks_11"`
+	SingleBlocks12     types.String `tfsdk:"single_blocks_12"`
+	SingleBlocks13     types.String `tfsdk:"single_blocks_13"`
+	SingleBlocks14     types.String `tfsdk:"single_blocks_14"`
+	SingleBlocks15     types.String `tfsdk:"single_blocks_15"`
+	SingleBlocks16     types.String `tfsdk:"single_blocks_16"`
+	SingleBlocks17     types.String `tfsdk:"single_blocks_17"`
+	SingleBlocks18     types.String `tfsdk:"single_blocks_18"`
+	SingleBlocks19     types.String `tfsdk:"single_blocks_19"`
+	SingleBlocks20     types.String `tfsdk:"single_blocks_20"`
+	SingleBlocks21     types.String `tfsdk:"single_blocks_21"`
+	SingleBlocks22     types.String `tfsdk:"single_blocks_22"`
+	SingleBlocks23     types.String `tfsdk:"single_blocks_23"`
+	SingleBlocks24     types.String `tfsdk:"single_blocks_24"`
+	SingleBlocks25     types.String `tfsdk:"single_blocks_25"`
+	SingleBlocks26     types.String `tfsdk:"single_blocks_26"`
+	SingleBlocks27     types.String `tfsdk:"single_blocks_27"`
+	SingleBlocks28     types.String `tfsdk:"single_blocks_28"`
+	SingleBlocks29     types.String `tfsdk:"single_blocks_29"`
+	SingleBlocks30     types.String `tfsdk:"single_blocks_30"`
+	SingleBlocks31     types.String `tfsdk:"single_blocks_31"`
+	SingleBlocks32     types.String `tfsdk:"single_blocks_32"`
+	SingleBlocks33     types.String `tfsdk:"single_blocks_33"`
+	SingleBlocks34     types.String `tfsdk:"single_blocks_34"`
+	SingleBlocks35     types.String `tfsdk:"single_blocks_35"`
+	SingleBlocks36     types.String `tfsdk:"single_blocks_36"`
+	SingleBlocks37     types.String `tfsdk:"single_blocks_37"`
+	FinalLayer         types.String `tfsdk:"final_layer"`
+	ModelOutput        types.String `tfsdk:"model_output"`
 }
 
 func NewModelMergeFlux1Resource() resource.Resource {
@@ -134,6 +135,13 @@ func (r *ModelMergeFlux1Resource) Schema(_ context.Context, _ resource.SchemaReq
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -434,10 +442,12 @@ func (r *ModelMergeFlux1Resource) Create(ctx context.Context, req resource.Creat
 	data.NodeID = types.StringValue("ModelMergeFlux1")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -448,10 +458,12 @@ func (r *ModelMergeFlux1Resource) Read(ctx context.Context, req resource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -462,10 +474,12 @@ func (r *ModelMergeFlux1Resource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

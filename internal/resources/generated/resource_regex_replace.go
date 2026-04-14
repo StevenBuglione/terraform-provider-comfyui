@@ -27,16 +27,17 @@ type RegexReplaceResource struct {
 }
 
 type RegexReplaceModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	String          types.String `tfsdk:"string"`
-	RegexPattern    types.String `tfsdk:"regex_pattern"`
-	Replace         types.String `tfsdk:"replace"`
-	CaseInsensitive types.Bool   `tfsdk:"case_insensitive"`
-	Multiline       types.Bool   `tfsdk:"multiline"`
-	Dotall          types.Bool   `tfsdk:"dotall"`
-	CountValue      types.Int64  `tfsdk:"count_value"`
-	StringOutput    types.String `tfsdk:"string_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	String             types.String `tfsdk:"string"`
+	RegexPattern       types.String `tfsdk:"regex_pattern"`
+	Replace            types.String `tfsdk:"replace"`
+	CaseInsensitive    types.Bool   `tfsdk:"case_insensitive"`
+	Multiline          types.Bool   `tfsdk:"multiline"`
+	Dotall             types.Bool   `tfsdk:"dotall"`
+	CountValue         types.Int64  `tfsdk:"count_value"`
+	StringOutput       types.String `tfsdk:"string_output"`
 }
 
 func NewRegexReplaceResource() resource.Resource {
@@ -78,6 +79,13 @@ func (r *RegexReplaceResource) Schema(_ context.Context, _ resource.SchemaReques
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -149,10 +157,12 @@ func (r *RegexReplaceResource) Create(ctx context.Context, req resource.CreateRe
 	data.NodeID = types.StringValue("RegexReplace")
 	data.StringOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -163,10 +173,12 @@ func (r *RegexReplaceResource) Read(ctx context.Context, req resource.ReadReques
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -177,10 +189,12 @@ func (r *RegexReplaceResource) Update(ctx context.Context, req resource.UpdateRe
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

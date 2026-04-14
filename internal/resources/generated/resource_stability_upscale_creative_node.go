@@ -28,15 +28,16 @@ type StabilityUpscaleCreativeNodeResource struct {
 }
 
 type StabilityUpscaleCreativeNodeModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	Image          types.String  `tfsdk:"image"`
-	Prompt         types.String  `tfsdk:"prompt"`
-	Creativity     types.Float64 `tfsdk:"creativity"`
-	StylePreset    types.String  `tfsdk:"style_preset"`
-	Seed           types.Int64   `tfsdk:"seed"`
-	NegativePrompt types.String  `tfsdk:"negative_prompt"`
-	ImageOutput    types.String  `tfsdk:"image_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Image              types.String  `tfsdk:"image"`
+	Prompt             types.String  `tfsdk:"prompt"`
+	Creativity         types.Float64 `tfsdk:"creativity"`
+	StylePreset        types.String  `tfsdk:"style_preset"`
+	Seed               types.Int64   `tfsdk:"seed"`
+	NegativePrompt     types.String  `tfsdk:"negative_prompt"`
+	ImageOutput        types.String  `tfsdk:"image_output"`
 }
 
 func NewStabilityUpscaleCreativeNodeResource() resource.Resource {
@@ -78,6 +79,13 @@ func (r *StabilityUpscaleCreativeNodeResource) Schema(_ context.Context, _ resou
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -148,10 +156,12 @@ func (r *StabilityUpscaleCreativeNodeResource) Create(ctx context.Context, req r
 	data.NodeID = types.StringValue("StabilityUpscaleCreativeNode")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -162,10 +172,12 @@ func (r *StabilityUpscaleCreativeNodeResource) Read(ctx context.Context, req res
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -176,10 +188,12 @@ func (r *StabilityUpscaleCreativeNodeResource) Update(ctx context.Context, req r
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

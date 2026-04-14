@@ -27,12 +27,13 @@ type SamplingPercentToSigmaResource struct {
 }
 
 type SamplingPercentToSigmaModel struct {
-	ID                types.String  `tfsdk:"id"`
-	NodeID            types.String  `tfsdk:"node_id"`
-	Model             types.String  `tfsdk:"model"`
-	SamplingPercent   types.Float64 `tfsdk:"sampling_percent"`
-	ReturnActualSigma types.Bool    `tfsdk:"return_actual_sigma"`
-	SigmaValueOutput  types.String  `tfsdk:"sigma_value_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Model              types.String  `tfsdk:"model"`
+	SamplingPercent    types.Float64 `tfsdk:"sampling_percent"`
+	ReturnActualSigma  types.Bool    `tfsdk:"return_actual_sigma"`
+	SigmaValueOutput   types.String  `tfsdk:"sigma_value_output"`
 }
 
 func NewSamplingPercentToSigmaResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *SamplingPercentToSigmaResource) Schema(_ context.Context, _ resource.Sc
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -129,10 +137,12 @@ func (r *SamplingPercentToSigmaResource) Create(ctx context.Context, req resourc
 	data.NodeID = types.StringValue("SamplingPercentToSigma")
 	data.SigmaValueOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -143,10 +153,12 @@ func (r *SamplingPercentToSigmaResource) Read(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -157,10 +169,12 @@ func (r *SamplingPercentToSigmaResource) Update(ctx context.Context, req resourc
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

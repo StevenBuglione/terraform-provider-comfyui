@@ -28,21 +28,22 @@ type WanImageToVideoAPIResource struct {
 }
 
 type WanImageToVideoAPIModel struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Model          types.String `tfsdk:"model"`
-	Image          types.String `tfsdk:"image"`
-	Prompt         types.String `tfsdk:"prompt"`
-	NegativePrompt types.String `tfsdk:"negative_prompt"`
-	Resolution     types.String `tfsdk:"resolution"`
-	Duration       types.Int64  `tfsdk:"duration"`
-	Audio          types.String `tfsdk:"audio"`
-	Seed           types.Int64  `tfsdk:"seed"`
-	GenerateAudio  types.Bool   `tfsdk:"generate_audio"`
-	PromptExtend   types.Bool   `tfsdk:"prompt_extend"`
-	Watermark      types.Bool   `tfsdk:"watermark"`
-	ShotType       types.String `tfsdk:"shot_type"`
-	VideoOutput    types.String `tfsdk:"video_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model              types.String `tfsdk:"model"`
+	Image              types.String `tfsdk:"image"`
+	Prompt             types.String `tfsdk:"prompt"`
+	NegativePrompt     types.String `tfsdk:"negative_prompt"`
+	Resolution         types.String `tfsdk:"resolution"`
+	Duration           types.Int64  `tfsdk:"duration"`
+	Audio              types.String `tfsdk:"audio"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	GenerateAudio      types.Bool   `tfsdk:"generate_audio"`
+	PromptExtend       types.Bool   `tfsdk:"prompt_extend"`
+	Watermark          types.Bool   `tfsdk:"watermark"`
+	ShotType           types.String `tfsdk:"shot_type"`
+	VideoOutput        types.String `tfsdk:"video_output"`
 }
 
 func NewWanImageToVideoAPIResource() resource.Resource {
@@ -84,6 +85,13 @@ func (r *WanImageToVideoAPIResource) Schema(_ context.Context, _ resource.Schema
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -197,10 +205,12 @@ func (r *WanImageToVideoAPIResource) Create(ctx context.Context, req resource.Cr
 	data.NodeID = types.StringValue("WanImageToVideoApi")
 	data.VideoOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -211,10 +221,12 @@ func (r *WanImageToVideoAPIResource) Read(ctx context.Context, req resource.Read
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -225,10 +237,12 @@ func (r *WanImageToVideoAPIResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

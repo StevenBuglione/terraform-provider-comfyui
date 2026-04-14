@@ -25,15 +25,16 @@ type LatentCompositeMaskedResource struct {
 }
 
 type LatentCompositeMaskedModel struct {
-	ID           types.String `tfsdk:"id"`
-	NodeID       types.String `tfsdk:"node_id"`
-	Destination  types.String `tfsdk:"destination"`
-	Source       types.String `tfsdk:"source"`
-	X            types.Int64  `tfsdk:"x"`
-	Y            types.Int64  `tfsdk:"y"`
-	ResizeSource types.Bool   `tfsdk:"resize_source"`
-	Mask         types.String `tfsdk:"mask"`
-	LatentOutput types.String `tfsdk:"latent_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Destination        types.String `tfsdk:"destination"`
+	Source             types.String `tfsdk:"source"`
+	X                  types.Int64  `tfsdk:"x"`
+	Y                  types.Int64  `tfsdk:"y"`
+	ResizeSource       types.Bool   `tfsdk:"resize_source"`
+	Mask               types.String `tfsdk:"mask"`
+	LatentOutput       types.String `tfsdk:"latent_output"`
 }
 
 func NewLatentCompositeMaskedResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *LatentCompositeMaskedResource) Schema(_ context.Context, _ resource.Sch
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -139,10 +147,12 @@ func (r *LatentCompositeMaskedResource) Create(ctx context.Context, req resource
 	data.NodeID = types.StringValue("LatentCompositeMasked")
 	data.LatentOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -153,10 +163,12 @@ func (r *LatentCompositeMaskedResource) Read(ctx context.Context, req resource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -167,10 +179,12 @@ func (r *LatentCompositeMaskedResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

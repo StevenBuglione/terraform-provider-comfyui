@@ -28,16 +28,17 @@ type FluxProFillNodeResource struct {
 }
 
 type FluxProFillNodeModel struct {
-	ID               types.String  `tfsdk:"id"`
-	NodeID           types.String  `tfsdk:"node_id"`
-	Image            types.String  `tfsdk:"image"`
-	Mask             types.String  `tfsdk:"mask"`
-	Prompt           types.String  `tfsdk:"prompt"`
-	PromptUpsampling types.Bool    `tfsdk:"prompt_upsampling"`
-	Guidance         types.Float64 `tfsdk:"guidance"`
-	Steps            types.Int64   `tfsdk:"steps"`
-	Seed             types.Int64   `tfsdk:"seed"`
-	ImageOutput      types.String  `tfsdk:"image_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Image              types.String  `tfsdk:"image"`
+	Mask               types.String  `tfsdk:"mask"`
+	Prompt             types.String  `tfsdk:"prompt"`
+	PromptUpsampling   types.Bool    `tfsdk:"prompt_upsampling"`
+	Guidance           types.Float64 `tfsdk:"guidance"`
+	Steps              types.Int64   `tfsdk:"steps"`
+	Seed               types.Int64   `tfsdk:"seed"`
+	ImageOutput        types.String  `tfsdk:"image_output"`
 }
 
 func NewFluxProFillNodeResource() resource.Resource {
@@ -79,6 +80,13 @@ func (r *FluxProFillNodeResource) Schema(_ context.Context, _ resource.SchemaReq
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -156,10 +164,12 @@ func (r *FluxProFillNodeResource) Create(ctx context.Context, req resource.Creat
 	data.NodeID = types.StringValue("FluxProFillNode")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -170,10 +180,12 @@ func (r *FluxProFillNodeResource) Read(ctx context.Context, req resource.ReadReq
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -184,10 +196,12 @@ func (r *FluxProFillNodeResource) Update(ctx context.Context, req resource.Updat
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

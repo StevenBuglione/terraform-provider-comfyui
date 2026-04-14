@@ -27,13 +27,14 @@ type MeshyAnimateModelNodeResource struct {
 }
 
 type MeshyAnimateModelNodeModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	RigTaskID       types.String `tfsdk:"rig_task_id"`
-	ActionID        types.Int64  `tfsdk:"action_id"`
-	ModelFileOutput types.String `tfsdk:"model_file_output"`
-	GlbOutput       types.String `tfsdk:"glb_output"`
-	FbxOutput       types.String `tfsdk:"fbx_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	RigTaskID          types.String `tfsdk:"rig_task_id"`
+	ActionID           types.Int64  `tfsdk:"action_id"`
+	ModelFileOutput    types.String `tfsdk:"model_file_output"`
+	GlbOutput          types.String `tfsdk:"glb_output"`
+	FbxOutput          types.String `tfsdk:"fbx_output"`
 }
 
 func NewMeshyAnimateModelNodeResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *MeshyAnimateModelNodeResource) Schema(_ context.Context, _ resource.Sch
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -142,10 +150,12 @@ func (r *MeshyAnimateModelNodeResource) Create(ctx context.Context, req resource
 	data.GlbOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 	data.FbxOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -156,10 +166,12 @@ func (r *MeshyAnimateModelNodeResource) Read(ctx context.Context, req resource.R
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -170,10 +182,12 @@ func (r *MeshyAnimateModelNodeResource) Update(ctx context.Context, req resource
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

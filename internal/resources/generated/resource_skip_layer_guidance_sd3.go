@@ -27,14 +27,15 @@ type SkipLayerGuidanceSd3Resource struct {
 }
 
 type SkipLayerGuidanceSd3Model struct {
-	ID           types.String  `tfsdk:"id"`
-	NodeID       types.String  `tfsdk:"node_id"`
-	Model        types.String  `tfsdk:"model"`
-	Layers       types.String  `tfsdk:"layers"`
-	Scale        types.Float64 `tfsdk:"scale"`
-	StartPercent types.Float64 `tfsdk:"start_percent"`
-	EndPercent   types.Float64 `tfsdk:"end_percent"`
-	ModelOutput  types.String  `tfsdk:"model_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Model              types.String  `tfsdk:"model"`
+	Layers             types.String  `tfsdk:"layers"`
+	Scale              types.Float64 `tfsdk:"scale"`
+	StartPercent       types.Float64 `tfsdk:"start_percent"`
+	EndPercent         types.Float64 `tfsdk:"end_percent"`
+	ModelOutput        types.String  `tfsdk:"model_output"`
 }
 
 func NewSkipLayerGuidanceSd3Resource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *SkipLayerGuidanceSd3Resource) Schema(_ context.Context, _ resource.Sche
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -145,10 +153,12 @@ func (r *SkipLayerGuidanceSd3Resource) Create(ctx context.Context, req resource.
 	data.NodeID = types.StringValue("SkipLayerGuidanceSD3")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -159,10 +169,12 @@ func (r *SkipLayerGuidanceSd3Resource) Read(ctx context.Context, req resource.Re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -173,10 +185,12 @@ func (r *SkipLayerGuidanceSd3Resource) Update(ctx context.Context, req resource.
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

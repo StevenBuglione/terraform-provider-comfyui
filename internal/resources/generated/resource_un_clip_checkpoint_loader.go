@@ -25,13 +25,14 @@ type UnCLIPCheckpointLoaderResource struct {
 }
 
 type UnCLIPCheckpointLoaderModel struct {
-	ID               types.String `tfsdk:"id"`
-	NodeID           types.String `tfsdk:"node_id"`
-	CkptName         types.String `tfsdk:"ckpt_name"`
-	ModelOutput      types.String `tfsdk:"model_output"`
-	CLIPOutput       types.String `tfsdk:"clip_output"`
-	VAEOutput        types.String `tfsdk:"vae_output"`
-	CLIPVisionOutput types.String `tfsdk:"clip_vision_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	CkptName           types.String `tfsdk:"ckpt_name"`
+	ModelOutput        types.String `tfsdk:"model_output"`
+	CLIPOutput         types.String `tfsdk:"clip_output"`
+	VAEOutput          types.String `tfsdk:"vae_output"`
+	CLIPVisionOutput   types.String `tfsdk:"clip_vision_output"`
 }
 
 func NewUnCLIPCheckpointLoaderResource() resource.Resource {
@@ -73,6 +74,13 @@ func (r *UnCLIPCheckpointLoaderResource) Schema(_ context.Context, _ resource.Sc
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -141,10 +149,12 @@ func (r *UnCLIPCheckpointLoaderResource) Create(ctx context.Context, req resourc
 	data.VAEOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 	data.CLIPVisionOutput = types.StringValue(fmt.Sprintf("%s:3", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -155,10 +165,12 @@ func (r *UnCLIPCheckpointLoaderResource) Read(ctx context.Context, req resource.
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -169,10 +181,12 @@ func (r *UnCLIPCheckpointLoaderResource) Update(ctx context.Context, req resourc
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

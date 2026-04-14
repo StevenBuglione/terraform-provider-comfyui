@@ -28,13 +28,14 @@ type ImageScaleToTotalPixelsResource struct {
 }
 
 type ImageScaleToTotalPixelsModel struct {
-	ID              types.String  `tfsdk:"id"`
-	NodeID          types.String  `tfsdk:"node_id"`
-	Image           types.String  `tfsdk:"image"`
-	UpscaleMethod   types.String  `tfsdk:"upscale_method"`
-	Megapixels      types.Float64 `tfsdk:"megapixels"`
-	ResolutionSteps types.Int64   `tfsdk:"resolution_steps"`
-	ImageOutput     types.String  `tfsdk:"image_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Image              types.String  `tfsdk:"image"`
+	UpscaleMethod      types.String  `tfsdk:"upscale_method"`
+	Megapixels         types.Float64 `tfsdk:"megapixels"`
+	ResolutionSteps    types.Int64   `tfsdk:"resolution_steps"`
+	ImageOutput        types.String  `tfsdk:"image_output"`
 }
 
 func NewImageScaleToTotalPixelsResource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *ImageScaleToTotalPixelsResource) Schema(_ context.Context, _ resource.S
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -138,10 +146,12 @@ func (r *ImageScaleToTotalPixelsResource) Create(ctx context.Context, req resour
 	data.NodeID = types.StringValue("ImageScaleToTotalPixels")
 	data.ImageOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -152,10 +162,12 @@ func (r *ImageScaleToTotalPixelsResource) Read(ctx context.Context, req resource
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -166,10 +178,12 @@ func (r *ImageScaleToTotalPixelsResource) Update(ctx context.Context, req resour
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

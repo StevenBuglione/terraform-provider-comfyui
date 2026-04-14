@@ -27,16 +27,17 @@ type KlingCameraControlT2VNodeResource struct {
 }
 
 type KlingCameraControlT2VNodeModel struct {
-	ID             types.String  `tfsdk:"id"`
-	NodeID         types.String  `tfsdk:"node_id"`
-	Prompt         types.String  `tfsdk:"prompt"`
-	NegativePrompt types.String  `tfsdk:"negative_prompt"`
-	CfgScale       types.Float64 `tfsdk:"cfg_scale"`
-	AspectRatio    types.String  `tfsdk:"aspect_ratio"`
-	CameraControl  types.String  `tfsdk:"camera_control"`
-	VideoOutput    types.String  `tfsdk:"video_output"`
-	VideoIDOutput  types.String  `tfsdk:"video_id_output"`
-	DurationOutput types.String  `tfsdk:"duration_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Prompt             types.String  `tfsdk:"prompt"`
+	NegativePrompt     types.String  `tfsdk:"negative_prompt"`
+	CfgScale           types.Float64 `tfsdk:"cfg_scale"`
+	AspectRatio        types.String  `tfsdk:"aspect_ratio"`
+	CameraControl      types.String  `tfsdk:"camera_control"`
+	VideoOutput        types.String  `tfsdk:"video_output"`
+	VideoIDOutput      types.String  `tfsdk:"video_id_output"`
+	DurationOutput     types.String  `tfsdk:"duration_output"`
 }
 
 func NewKlingCameraControlT2VNodeResource() resource.Resource {
@@ -78,6 +79,13 @@ func (r *KlingCameraControlT2VNodeResource) Schema(_ context.Context, _ resource
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -157,10 +165,12 @@ func (r *KlingCameraControlT2VNodeResource) Create(ctx context.Context, req reso
 	data.VideoIDOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 	data.DurationOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -171,10 +181,12 @@ func (r *KlingCameraControlT2VNodeResource) Read(ctx context.Context, req resour
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -185,10 +197,12 @@ func (r *KlingCameraControlT2VNodeResource) Update(ctx context.Context, req reso
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

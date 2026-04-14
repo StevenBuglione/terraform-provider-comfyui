@@ -28,19 +28,20 @@ type MeshyMultiImageToModelNodeResource struct {
 }
 
 type MeshyMultiImageToModelNodeModel struct {
-	ID                types.String `tfsdk:"id"`
-	NodeID            types.String `tfsdk:"node_id"`
-	Model             types.String `tfsdk:"model"`
-	Images            types.String `tfsdk:"images"`
-	ShouldRemesh      types.String `tfsdk:"should_remesh"`
-	SymmetryMode      types.String `tfsdk:"symmetry_mode"`
-	ShouldTexture     types.String `tfsdk:"should_texture"`
-	PoseMode          types.String `tfsdk:"pose_mode"`
-	Seed              types.Int64  `tfsdk:"seed"`
-	ModelFileOutput   types.String `tfsdk:"model_file_output"`
-	MeshyTaskIDOutput types.String `tfsdk:"meshy_task_id_output"`
-	GlbOutput         types.String `tfsdk:"glb_output"`
-	FbxOutput         types.String `tfsdk:"fbx_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model              types.String `tfsdk:"model"`
+	Images             types.String `tfsdk:"images"`
+	ShouldRemesh       types.String `tfsdk:"should_remesh"`
+	SymmetryMode       types.String `tfsdk:"symmetry_mode"`
+	ShouldTexture      types.String `tfsdk:"should_texture"`
+	PoseMode           types.String `tfsdk:"pose_mode"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	ModelFileOutput    types.String `tfsdk:"model_file_output"`
+	MeshyTaskIDOutput  types.String `tfsdk:"meshy_task_id_output"`
+	GlbOutput          types.String `tfsdk:"glb_output"`
+	FbxOutput          types.String `tfsdk:"fbx_output"`
 }
 
 func NewMeshyMultiImageToModelNodeResource() resource.Resource {
@@ -82,6 +83,13 @@ func (r *MeshyMultiImageToModelNodeResource) Schema(_ context.Context, _ resourc
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -196,10 +204,12 @@ func (r *MeshyMultiImageToModelNodeResource) Create(ctx context.Context, req res
 	data.GlbOutput = types.StringValue(fmt.Sprintf("%s:2", data.ID.ValueString()))
 	data.FbxOutput = types.StringValue(fmt.Sprintf("%s:3", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -210,10 +220,12 @@ func (r *MeshyMultiImageToModelNodeResource) Read(ctx context.Context, req resou
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -224,10 +236,12 @@ func (r *MeshyMultiImageToModelNodeResource) Update(ctx context.Context, req res
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

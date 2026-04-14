@@ -27,14 +27,15 @@ type FreeUV2Resource struct {
 }
 
 type FreeUV2Model struct {
-	ID          types.String  `tfsdk:"id"`
-	NodeID      types.String  `tfsdk:"node_id"`
-	Model       types.String  `tfsdk:"model"`
-	B1          types.Float64 `tfsdk:"b1"`
-	B2          types.Float64 `tfsdk:"b2"`
-	S1          types.Float64 `tfsdk:"s1"`
-	S2          types.Float64 `tfsdk:"s2"`
-	ModelOutput types.String  `tfsdk:"model_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	Model              types.String  `tfsdk:"model"`
+	B1                 types.Float64 `tfsdk:"b1"`
+	B2                 types.Float64 `tfsdk:"b2"`
+	S1                 types.Float64 `tfsdk:"s1"`
+	S2                 types.Float64 `tfsdk:"s2"`
+	ModelOutput        types.String  `tfsdk:"model_output"`
 }
 
 func NewFreeUV2Resource() resource.Resource {
@@ -76,6 +77,13 @@ func (r *FreeUV2Resource) Schema(_ context.Context, _ resource.SchemaRequest, re
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -148,10 +156,12 @@ func (r *FreeUV2Resource) Create(ctx context.Context, req resource.CreateRequest
 	data.NodeID = types.StringValue("FreeU_V2")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -162,10 +172,12 @@ func (r *FreeUV2Resource) Read(ctx context.Context, req resource.ReadRequest, re
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -176,10 +188,12 @@ func (r *FreeUV2Resource) Update(ctx context.Context, req resource.UpdateRequest
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -27,12 +27,13 @@ type ResolutionSelectorResource struct {
 }
 
 type ResolutionSelectorModel struct {
-	ID           types.String  `tfsdk:"id"`
-	NodeID       types.String  `tfsdk:"node_id"`
-	AspectRatio  types.String  `tfsdk:"aspect_ratio"`
-	Megapixels   types.Float64 `tfsdk:"megapixels"`
-	WidthOutput  types.String  `tfsdk:"width_output"`
-	HeightOutput types.String  `tfsdk:"height_output"`
+	ID                 types.String  `tfsdk:"id"`
+	NodeID             types.String  `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String  `tfsdk:"node_definition_json"`
+	AspectRatio        types.String  `tfsdk:"aspect_ratio"`
+	Megapixels         types.Float64 `tfsdk:"megapixels"`
+	WidthOutput        types.String  `tfsdk:"width_output"`
+	HeightOutput       types.String  `tfsdk:"height_output"`
 }
 
 func NewResolutionSelectorResource() resource.Resource {
@@ -74,6 +75,13 @@ func (r *ResolutionSelectorResource) Schema(_ context.Context, _ resource.Schema
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -133,10 +141,12 @@ func (r *ResolutionSelectorResource) Create(ctx context.Context, req resource.Cr
 	data.WidthOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 	data.HeightOutput = types.StringValue(fmt.Sprintf("%s:1", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -147,10 +157,12 @@ func (r *ResolutionSelectorResource) Read(ctx context.Context, req resource.Read
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -161,10 +173,12 @@ func (r *ResolutionSelectorResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

@@ -27,13 +27,14 @@ type VAEDecodeHunyuan3DResource struct {
 }
 
 type VAEDecodeHunyuan3DModel struct {
-	ID               types.String `tfsdk:"id"`
-	NodeID           types.String `tfsdk:"node_id"`
-	Samples          types.String `tfsdk:"samples"`
-	VAE              types.String `tfsdk:"vae"`
-	NumChunks        types.Int64  `tfsdk:"num_chunks"`
-	OctreeResolution types.Int64  `tfsdk:"octree_resolution"`
-	VoxelOutput      types.String `tfsdk:"voxel_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Samples            types.String `tfsdk:"samples"`
+	VAE                types.String `tfsdk:"vae"`
+	NumChunks          types.Int64  `tfsdk:"num_chunks"`
+	OctreeResolution   types.Int64  `tfsdk:"octree_resolution"`
+	VoxelOutput        types.String `tfsdk:"voxel_output"`
 }
 
 func NewVAEDecodeHunyuan3DResource() resource.Resource {
@@ -75,6 +76,13 @@ func (r *VAEDecodeHunyuan3DResource) Schema(_ context.Context, _ resource.Schema
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -137,10 +145,12 @@ func (r *VAEDecodeHunyuan3DResource) Create(ctx context.Context, req resource.Cr
 	data.NodeID = types.StringValue("VAEDecodeHunyuan3D")
 	data.VoxelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -151,10 +161,12 @@ func (r *VAEDecodeHunyuan3DResource) Read(ctx context.Context, req resource.Read
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -165,10 +177,12 @@ func (r *VAEDecodeHunyuan3DResource) Update(ctx context.Context, req resource.Up
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

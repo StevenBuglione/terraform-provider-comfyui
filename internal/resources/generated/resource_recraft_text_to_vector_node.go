@@ -27,16 +27,17 @@ type RecraftTextToVectorNodeResource struct {
 }
 
 type RecraftTextToVectorNodeModel struct {
-	ID              types.String `tfsdk:"id"`
-	NodeID          types.String `tfsdk:"node_id"`
-	Prompt          types.String `tfsdk:"prompt"`
-	Substyle        types.String `tfsdk:"substyle"`
-	Size            types.String `tfsdk:"size"`
-	N               types.Int64  `tfsdk:"n"`
-	Seed            types.Int64  `tfsdk:"seed"`
-	NegativePrompt  types.String `tfsdk:"negative_prompt"`
-	RecraftControls types.String `tfsdk:"recraft_controls"`
-	SvgOutput       types.String `tfsdk:"svg_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Prompt             types.String `tfsdk:"prompt"`
+	Substyle           types.String `tfsdk:"substyle"`
+	Size               types.String `tfsdk:"size"`
+	N                  types.Int64  `tfsdk:"n"`
+	Seed               types.Int64  `tfsdk:"seed"`
+	NegativePrompt     types.String `tfsdk:"negative_prompt"`
+	RecraftControls    types.String `tfsdk:"recraft_controls"`
+	SvgOutput          types.String `tfsdk:"svg_output"`
 }
 
 func NewRecraftTextToVectorNodeResource() resource.Resource {
@@ -78,6 +79,13 @@ func (r *RecraftTextToVectorNodeResource) Schema(_ context.Context, _ resource.S
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -152,10 +160,12 @@ func (r *RecraftTextToVectorNodeResource) Create(ctx context.Context, req resour
 	data.NodeID = types.StringValue("RecraftTextToVectorNode")
 	data.SvgOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -166,10 +176,12 @@ func (r *RecraftTextToVectorNodeResource) Read(ctx context.Context, req resource
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -180,10 +192,12 @@ func (r *RecraftTextToVectorNodeResource) Update(ctx context.Context, req resour
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

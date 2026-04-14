@@ -25,41 +25,42 @@ type ModelMergeSd2Resource struct {
 }
 
 type ModelMergeSd2Model struct {
-	ID             types.String `tfsdk:"id"`
-	NodeID         types.String `tfsdk:"node_id"`
-	Model1         types.String `tfsdk:"model1"`
-	Model2         types.String `tfsdk:"model2"`
-	TimeEmbed      types.String `tfsdk:"time_embed"`
-	LabelEmb       types.String `tfsdk:"label_emb"`
-	InputBlocks0   types.String `tfsdk:"input_blocks_0"`
-	InputBlocks1   types.String `tfsdk:"input_blocks_1"`
-	InputBlocks2   types.String `tfsdk:"input_blocks_2"`
-	InputBlocks3   types.String `tfsdk:"input_blocks_3"`
-	InputBlocks4   types.String `tfsdk:"input_blocks_4"`
-	InputBlocks5   types.String `tfsdk:"input_blocks_5"`
-	InputBlocks6   types.String `tfsdk:"input_blocks_6"`
-	InputBlocks7   types.String `tfsdk:"input_blocks_7"`
-	InputBlocks8   types.String `tfsdk:"input_blocks_8"`
-	InputBlocks9   types.String `tfsdk:"input_blocks_9"`
-	InputBlocks10  types.String `tfsdk:"input_blocks_10"`
-	InputBlocks11  types.String `tfsdk:"input_blocks_11"`
-	MiddleBlock0   types.String `tfsdk:"middle_block_0"`
-	MiddleBlock1   types.String `tfsdk:"middle_block_1"`
-	MiddleBlock2   types.String `tfsdk:"middle_block_2"`
-	OutputBlocks0  types.String `tfsdk:"output_blocks_0"`
-	OutputBlocks1  types.String `tfsdk:"output_blocks_1"`
-	OutputBlocks2  types.String `tfsdk:"output_blocks_2"`
-	OutputBlocks3  types.String `tfsdk:"output_blocks_3"`
-	OutputBlocks4  types.String `tfsdk:"output_blocks_4"`
-	OutputBlocks5  types.String `tfsdk:"output_blocks_5"`
-	OutputBlocks6  types.String `tfsdk:"output_blocks_6"`
-	OutputBlocks7  types.String `tfsdk:"output_blocks_7"`
-	OutputBlocks8  types.String `tfsdk:"output_blocks_8"`
-	OutputBlocks9  types.String `tfsdk:"output_blocks_9"`
-	OutputBlocks10 types.String `tfsdk:"output_blocks_10"`
-	OutputBlocks11 types.String `tfsdk:"output_blocks_11"`
-	Out            types.String `tfsdk:"out"`
-	ModelOutput    types.String `tfsdk:"model_output"`
+	ID                 types.String `tfsdk:"id"`
+	NodeID             types.String `tfsdk:"node_id"`
+	NodeDefinitionJSON types.String `tfsdk:"node_definition_json"`
+	Model1             types.String `tfsdk:"model1"`
+	Model2             types.String `tfsdk:"model2"`
+	TimeEmbed          types.String `tfsdk:"time_embed"`
+	LabelEmb           types.String `tfsdk:"label_emb"`
+	InputBlocks0       types.String `tfsdk:"input_blocks_0"`
+	InputBlocks1       types.String `tfsdk:"input_blocks_1"`
+	InputBlocks2       types.String `tfsdk:"input_blocks_2"`
+	InputBlocks3       types.String `tfsdk:"input_blocks_3"`
+	InputBlocks4       types.String `tfsdk:"input_blocks_4"`
+	InputBlocks5       types.String `tfsdk:"input_blocks_5"`
+	InputBlocks6       types.String `tfsdk:"input_blocks_6"`
+	InputBlocks7       types.String `tfsdk:"input_blocks_7"`
+	InputBlocks8       types.String `tfsdk:"input_blocks_8"`
+	InputBlocks9       types.String `tfsdk:"input_blocks_9"`
+	InputBlocks10      types.String `tfsdk:"input_blocks_10"`
+	InputBlocks11      types.String `tfsdk:"input_blocks_11"`
+	MiddleBlock0       types.String `tfsdk:"middle_block_0"`
+	MiddleBlock1       types.String `tfsdk:"middle_block_1"`
+	MiddleBlock2       types.String `tfsdk:"middle_block_2"`
+	OutputBlocks0      types.String `tfsdk:"output_blocks_0"`
+	OutputBlocks1      types.String `tfsdk:"output_blocks_1"`
+	OutputBlocks2      types.String `tfsdk:"output_blocks_2"`
+	OutputBlocks3      types.String `tfsdk:"output_blocks_3"`
+	OutputBlocks4      types.String `tfsdk:"output_blocks_4"`
+	OutputBlocks5      types.String `tfsdk:"output_blocks_5"`
+	OutputBlocks6      types.String `tfsdk:"output_blocks_6"`
+	OutputBlocks7      types.String `tfsdk:"output_blocks_7"`
+	OutputBlocks8      types.String `tfsdk:"output_blocks_8"`
+	OutputBlocks9      types.String `tfsdk:"output_blocks_9"`
+	OutputBlocks10     types.String `tfsdk:"output_blocks_10"`
+	OutputBlocks11     types.String `tfsdk:"output_blocks_11"`
+	Out                types.String `tfsdk:"out"`
+	ModelOutput        types.String `tfsdk:"model_output"`
 }
 
 func NewModelMergeSd2Resource() resource.Resource {
@@ -101,6 +102,13 @@ func (r *ModelMergeSd2Resource) Schema(_ context.Context, _ resource.SchemaReque
 			"node_id": schema.StringAttribute{
 				Computed:            true,
 				MarkdownDescription: "ComfyUI node class type.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:            true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 				},
@@ -269,10 +277,12 @@ func (r *ModelMergeSd2Resource) Create(ctx context.Context, req resource.CreateR
 	data.NodeID = types.StringValue("ModelMergeSD1")
 	data.ModelOutput = types.StringValue(fmt.Sprintf("%s:0", data.ID.ValueString()))
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -283,10 +293,12 @@ func (r *ModelMergeSd2Resource) Read(ctx context.Context, req resource.ReadReque
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -297,10 +309,12 @@ func (r *ModelMergeSd2Resource) Update(ctx context.Context, req resource.UpdateR
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
