@@ -18,6 +18,25 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
+## [0.18.9] - 2026-04-14
+
+Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
+
+### BUG FIXES
+
+* **Reference-Image Validation Parity:** Make workflow preflight honor `unsupported_dynamic_validation_mode` for runtime-backed inputs such as `LoadImage.image`, so the generated-node plan validation policy and execution preflight no longer disagree
+* **Workflow Validation State Consistency:** Preserve a stable `validation_summary_json` contract across create, update, read, and non-executing workflow paths instead of returning inconsistent post-apply values
+* **Durable Workflow Assembly Fallback:** Add generated `node_definition_json` snapshots and workflow `node_definition_jsons` fallback assembly so node-authored workflows can recover when the in-memory registry is cold instead of failing on missing registered nodes
+
+### DOCUMENTATION
+
+* Document the durable `node_ids` + `node_definition_jsons` workflow authoring path, the remaining `node_ids` compatibility path semantics, and the fact that `unsupported_dynamic_validation_mode` now applies during workflow preflight as well as generated-node plan validation
+
+### NOTES
+
+* Maintains ComfyUI `v0.18.5` compatibility
+* No breaking schema removals for existing `~> 0.18` users; new workflow and generated-node attributes are additive
+
 ## [0.18.8] - 2026-04-13
 
 ### BUG FIXES
@@ -122,7 +141,8 @@ Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5
 * Built with Terraform Plugin Framework (not SDKv2)
 * Generated node resources are virtual/plan-only - execution happens through `comfyui_workflow`
 
-[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.8...HEAD
+[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.9...HEAD
+[0.18.9]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.9
 [0.18.8]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.8
 [0.18.7]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.7
 [0.18.6]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.6
