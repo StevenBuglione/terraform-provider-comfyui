@@ -15,9 +15,10 @@ import (
 )
 
 type Options struct {
-	Mode              ValidationMode
-	RequireOutputNode bool
-	InventoryService  InventoryService
+	Mode                             ValidationMode
+	RequireOutputNode                bool
+	InventoryService                 InventoryService
+	UnsupportedDynamicValidationMode UnsupportedDynamicValidationMode
 }
 
 type InventoryService interface {
@@ -42,6 +43,10 @@ func (o Options) requireOutputNode() bool {
 	default:
 		return o.RequireOutputNode
 	}
+}
+
+func (o Options) unsupportedDynamicValidationMode() UnsupportedDynamicValidationMode {
+	return ResolveUnsupportedDynamicValidationMode(string(o.UnsupportedDynamicValidationMode))
 }
 
 func ValidatePrompt(prompt *artifacts.Prompt, nodeInfo map[string]client.NodeInfo, opts Options) Report {
@@ -133,7 +138,15 @@ func validateDynamicInputValue(report *Report, nodeID, classType, inputName stri
 
 	switch input.ValidationKind {
 	case InputValidationKindDynamicExpression:
-		report.AddError(fmt.Sprintf(`node %q (%s) input %q uses unsupported dynamic options that cannot be strictly validated`, nodeID, classType, inputName))
+		message := fmt.Sprintf(`node %q (%s) input %q uses unsupported dynamic options that cannot be strictly validated`, nodeID, classType, inputName)
+		switch opts.unsupportedDynamicValidationMode() {
+		case UnsupportedDynamicValidationModeIgnore:
+			return
+		case UnsupportedDynamicValidationModeWarning:
+			report.AddWarning(message)
+		default:
+			report.AddError(message)
+		}
 	case InputValidationKindDynamicInventory:
 		if opts.InventoryService == nil {
 			report.AddError(fmt.Sprintf(`node %q (%s) input %q requires live inventory validation but no inventory service is configured`, nodeID, classType, inputName))

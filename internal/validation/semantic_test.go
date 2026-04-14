@@ -3,6 +3,7 @@ package validation
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 	"testing"
 
@@ -381,6 +382,90 @@ func TestValidatePrompt_RejectsUnsupportedDynamicExpressionInput(t *testing.T) {
 		t.Fatal("expected prompt to be invalid")
 	}
 	requireErrorContaining(t, report, `uses unsupported dynamic options`)
+}
+
+func TestValidatePrompt_WarnsForUnsupportedDynamicExpressionInputWhenConfigured(t *testing.T) {
+	report := ValidatePrompt(
+		mustParsePrompt(t, `{
+		  "1": {
+		    "class_type": "BasicScheduler",
+		    "inputs": {
+		      "scheduler": "karras",
+		      "model": ["2", 0],
+		      "steps": 20,
+		      "denoise": 1.0
+		    }
+		  },
+		  "2": {
+		    "class_type": "CheckpointLoaderSimple",
+		    "inputs": {
+		      "ckpt_name": "realistic.safetensors"
+		    }
+		  }
+		}`),
+		testNodeInfo(),
+		Options{
+			Mode:                             ValidationModeFragment,
+			UnsupportedDynamicValidationMode: UnsupportedDynamicValidationModeWarning,
+			InventoryService: fakeInventoryService{
+				values: map[inventory.Kind][]string{
+					inventory.KindCheckpoints: {"realistic.safetensors"},
+				},
+			},
+		},
+	)
+
+	if !report.Valid {
+		t.Fatalf("expected prompt to remain valid, got %#v", report)
+	}
+	if report.ErrorCount != 0 {
+		t.Fatalf("expected no errors, got %#v", report.Errors)
+	}
+	if report.WarningCount != 1 {
+		t.Fatalf("expected one warning, got %#v", report.Warnings)
+	}
+	if !slices.Contains(report.Warnings, `node "1" (BasicScheduler) input "scheduler" uses unsupported dynamic options that cannot be strictly validated`) {
+		t.Fatalf("expected warning about unsupported dynamic options, got %#v", report.Warnings)
+	}
+}
+
+func TestValidatePrompt_IgnoresUnsupportedDynamicExpressionInputWhenConfigured(t *testing.T) {
+	report := ValidatePrompt(
+		mustParsePrompt(t, `{
+		  "1": {
+		    "class_type": "BasicScheduler",
+		    "inputs": {
+		      "scheduler": "karras",
+		      "model": ["2", 0],
+		      "steps": 20,
+		      "denoise": 1.0
+		    }
+		  },
+		  "2": {
+		    "class_type": "CheckpointLoaderSimple",
+		    "inputs": {
+		      "ckpt_name": "realistic.safetensors"
+		    }
+		  }
+		}`),
+		testNodeInfo(),
+		Options{
+			Mode:                             ValidationModeFragment,
+			UnsupportedDynamicValidationMode: UnsupportedDynamicValidationModeIgnore,
+			InventoryService: fakeInventoryService{
+				values: map[inventory.Kind][]string{
+					inventory.KindCheckpoints: {"realistic.safetensors"},
+				},
+			},
+		},
+	)
+
+	if !report.Valid {
+		t.Fatalf("expected prompt to remain valid, got %#v", report)
+	}
+	if report.ErrorCount != 0 || report.WarningCount != 0 {
+		t.Fatalf("expected no diagnostics, got %#v", report)
+	}
 }
 
 func TestValidatePrompt_ReportsInventoryLookupFailure(t *testing.T) {

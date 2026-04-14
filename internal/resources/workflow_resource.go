@@ -14,6 +14,7 @@ import (
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/artifacts"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/inventory"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/validation"
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
@@ -469,6 +470,13 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		}
 		data.ValidationSummaryJSON = types.StringValue(summaryJSON)
 
+		if len(report.Warnings) > 0 {
+			diags.AddWarning(
+				"Workflow validation warnings",
+				fmt.Sprintf("The workflow passed semantic validation with warnings:\n- %s", strings.Join(report.Warnings, "\n- ")),
+			)
+		}
+
 		if !report.Valid {
 			clearWorkflowExecutionFields(data)
 			data.PromptID = types.StringValue("")
@@ -571,7 +579,11 @@ func (r *WorkflowResource) validatePromptForExecution(prompt map[string]interfac
 		return validation.Report{}, err
 	}
 
-	return validation.ValidatePrompt(parsedPrompt, nodeInfo, validation.Options{RequireOutputNode: true}), nil
+	return validation.ValidatePrompt(parsedPrompt, nodeInfo, validation.Options{
+		RequireOutputNode:                true,
+		InventoryService:                 inventory.NewService(r.client),
+		UnsupportedDynamicValidationMode: unsupportedDynamicValidationMode(r.client),
+	}), nil
 }
 
 func validationEnabled(value types.Bool) bool {

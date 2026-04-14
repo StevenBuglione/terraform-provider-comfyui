@@ -651,18 +651,21 @@ func TestTDDExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidation
 		name              string
 		mode              string
 		wantWarningCount  int
+		wantDiagWarnings  int
 		wantValidationMsg string
 	}{
 		{
 			name:              "warning mode queues runtime-backed load image",
 			mode:              "warning",
 			wantWarningCount:  1,
+			wantDiagWarnings:  1,
 			wantValidationMsg: "unsupported dynamic options",
 		},
 		{
 			name:             "ignore mode queues runtime-backed load image",
 			mode:             "ignore",
 			wantWarningCount: 0,
+			wantDiagWarnings: 0,
 		},
 	}
 
@@ -745,6 +748,9 @@ func TestTDDExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidation
 			r.executeWorkflow(context.Background(), prompt, &data, &diags)
 			if diags.HasError() {
 				t.Fatalf("expected runtime-backed inputs to respect %q mode without blocking queueing, got diagnostics %v", tc.mode, diags)
+			}
+			if diags.WarningsCount() != tc.wantDiagWarnings {
+				t.Fatalf("WarningsCount() = %d, want %d; diagnostics: %v", diags.WarningsCount(), tc.wantDiagWarnings, diags)
 			}
 			if objectInfoHits != 1 {
 				t.Fatalf("expected /object_info to be called once, got %d", objectInfoHits)

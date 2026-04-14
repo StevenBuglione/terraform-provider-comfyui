@@ -51,9 +51,9 @@ func validateInputGroup(ctx context.Context, c *client.Client, service *inventor
 		switch input.ValidationKind {
 		case validation.InputValidationKindDynamicExpression:
 			switch mode {
-			case "ignore":
+			case validation.UnsupportedDynamicValidationModeIgnore:
 				continue
-			case "warning":
+			case validation.UnsupportedDynamicValidationModeWarning:
 				diags.AddAttributeWarning(
 					path.Root(tfName),
 					"Unsupported Dynamic Plan Validation",
@@ -104,11 +104,11 @@ func validateInputGroup(ctx context.Context, c *client.Client, service *inventor
 	}
 }
 
-func unsupportedDynamicValidationMode(c *client.Client) string {
-	if c == nil || strings.TrimSpace(c.UnsupportedDynamicValidationMode) == "" {
-		return "error"
+func unsupportedDynamicValidationMode(c *client.Client) validation.UnsupportedDynamicValidationMode {
+	if c == nil {
+		return validation.ResolveUnsupportedDynamicValidationMode("")
 	}
-	return strings.ToLower(strings.TrimSpace(c.UnsupportedDynamicValidationMode))
+	return validation.ResolveUnsupportedDynamicValidationMode(c.UnsupportedDynamicValidationMode)
 }
 
 func containsString(values []string, target string) bool {
