@@ -23,4 +23,5 @@ ComfyUI StabilityUpscaleFastNode node — Stability AI Upscale Fast [api node/im
 
 - `id` (String) Unique identifier for this node instance.
 - `image_output` (String) Output: IMAGE (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

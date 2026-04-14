@@ -29,7 +29,12 @@ Use `node_ids` on `comfyui_workflow` when:
 - you want Terraform references between node outputs and downstream inputs
 - you want strict plan-time validation where the provider can support it
 
-This is the default and preferred provider-native authoring path.
+This is still the preferred provider-native authoring path, but there are now two assembly modes:
+
+- **Compatibility path:** `node_ids` alone. This still relies on the process-local node registry and works best when the workflow is assembled in the same Terraform run that hydrated those node resources.
+- **Durable path:** `node_ids` plus `node_definition_jsons`. Each generated node resource exposes a computed `node_definition_json`, and the workflow can use the aligned `node_definition_jsons` list to reconstruct node definitions even when the registry is cold.
+
+If you need reliable updates across separate Terraform processes or cold-provider runs, prefer the durable path.
 
 ## When to Use `workflow_json`
 
@@ -46,6 +51,7 @@ Use raw `workflow_json` on `comfyui_workflow` when:
 The current `comfyui_workflow` resource can:
 
 - assemble from `node_ids`
+- assemble durably from `node_ids` + `node_definition_jsons`
 - accept raw `workflow_json`
 - validate against live `/object_info` metadata before queueing execution
 - write assembled prompt JSON to `output_file`
@@ -61,6 +67,12 @@ The canonical execution fields are:
 - `outputs_json`
 - `execution_status_json`
 - `execution_error_json`
+
+When you are using generated node resources, the most robust pattern is:
+
+1. keep `node_ids` for ordering and connection identity
+2. pass the matching `node_definition_jsons` list from those same resources
+3. let `comfyui_workflow` fall back to those serialized definitions if the in-memory registry is unavailable
 
 The older coarse compatibility fields are not part of the current contract.
 
@@ -155,6 +167,7 @@ This is the preferred way to keep authored workflows aligned with the real serve
 ## Recommended Patterns
 
 - Use generated node resources plus `node_ids` for provider-native workflows.
+- Prefer generated node resources plus `node_ids` **and** `node_definition_jsons` when the workflow must survive cold-registry or cross-process updates.
 - Use `workflow_json` when importing existing prompt artifacts.
 - Use synthesis data sources when you want canonical Terraform produced from native artifacts.
 - Use executable validation by default.
@@ -166,6 +179,7 @@ This is the preferred way to keep authored workflows aligned with the real serve
 
 - Treating generated reference docs as the only authoring guide.
 - Assuming a successful `terraform plan` means all arbitrary dynamic expressions are supported.
+- Relying on `node_ids` alone when you need durable workflow updates across separate Terraform processes.
 - Hardcoding inventory-backed model names without checking the live server when you are authoring against a specific runtime.
 - Using workspace export as a substitute for prompt validation when what you need is an executable graph.
 

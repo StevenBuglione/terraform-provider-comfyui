@@ -49,4 +49,5 @@ omnigen2: qwen vl 2.5 3B [advanced/loaders] Source: nodes.py:976 (v1_core).
 
 - `clip_output` (String) Output: CLIP (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

@@ -26,4 +26,5 @@ Skin enhancement for portraits with multiple processing modes. [api node/image/M
 
 - `id` (String) Unique identifier for this node instance.
 - `image_output` (String) Output: IMAGE (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

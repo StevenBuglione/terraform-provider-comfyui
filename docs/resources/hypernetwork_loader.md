@@ -25,4 +25,5 @@ ComfyUI HypernetworkLoader node [loaders] Source: comfy_extras/nodes_hypernetwor
 
 - `id` (String) Unique identifier for this node instance.
 - `model_output` (String) Output: MODEL (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

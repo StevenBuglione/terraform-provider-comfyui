@@ -23,4 +23,5 @@ ComfyUI LatentUpscaleModelLoader node — Load Latent Upscale Model [loaders] So
 
 - `id` (String) Unique identifier for this node instance.
 - `latent_upscale_model_output` (String) Output: LATENT_UPSCALE_MODEL (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

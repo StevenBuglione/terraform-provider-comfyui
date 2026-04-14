@@ -23,4 +23,5 @@ ComfyUI CreateList node — Create List [logic] Source: comfy_extras/nodes_toolk
 
 - `id` (String) Unique identifier for this node instance.
 - `list_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

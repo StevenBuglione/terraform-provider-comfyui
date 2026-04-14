@@ -23,4 +23,5 @@ ComfyUI SaveLatent node — SaveLatent [_for_testing] Hidden runtime inputs: pro
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

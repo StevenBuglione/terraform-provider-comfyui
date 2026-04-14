@@ -25,5 +25,6 @@ This only affects results at 0.0 and 1.0.
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `sigma_value_output` (String) Output: FLOAT (slot 0).

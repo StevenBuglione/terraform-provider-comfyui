@@ -24,5 +24,6 @@ ComfyUI SamplerLCMUpscale node [sampling/custom_sampling/samplers] Source: comfy
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `sampler_output` (String) Output: SAMPLER (slot 0).

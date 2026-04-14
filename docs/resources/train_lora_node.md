@@ -43,5 +43,6 @@ description: |-
 - `id` (String) Unique identifier for this node instance.
 - `lora_output` (String) Output: LORA_MODEL (slot 0).
 - `loss_map_output` (String) Output: LOSS_MAP (slot 1).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `steps_output` (String) Output: INT (slot 2).

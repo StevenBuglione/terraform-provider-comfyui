@@ -24,4 +24,5 @@ ComfyUI VoxelToMeshBasic node [3d] Source: comfy_extras/nodes_hunyuan3d.py:422 (
 
 - `id` (String) Unique identifier for this node instance.
 - `mesh_output` (String) Output: MESH (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

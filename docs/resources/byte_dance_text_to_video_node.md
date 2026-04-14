@@ -33,5 +33,6 @@ Generate video using ByteDance models via api based on prompt [api node/video/By
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).

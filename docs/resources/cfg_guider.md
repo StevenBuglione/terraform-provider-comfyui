@@ -26,4 +26,5 @@ ComfyUI CFGGuider node [sampling/custom_sampling/guiders] Source: comfy_extras/n
 
 - `guider_output` (String) Output: GUIDER (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

@@ -26,5 +26,6 @@ When eta=0, it reduces to deterministic ODE. This setting doesn't apply to ER-SD
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `sampler_output` (String) Output: SAMPLER (slot 0).

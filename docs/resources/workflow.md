@@ -11,7 +11,9 @@ Assembles ComfyUI node definitions into an executable workflow, submits it to th
 
 `comfyui_workflow` is the execution boundary for Terraform-authored ComfyUI graphs. Use `node_ids` when the workflow is modeled from generated node resources, or use `workflow_json` when you are importing an existing prompt artifact.
 
-When a workflow is assembled from `node_ids`, generated node resources re-register their virtual node state during `Read`, so the assembly path survives normal refresh/apply cycles instead of only working in the same apply that created the nodes.
+For durable node-per-resource assembly, pair `node_ids` with `node_definition_jsons`. Each generated node resource now exposes a computed `node_definition_json` snapshot, and `comfyui_workflow` can use the aligned `node_definition_jsons` list to reconstruct missing node state without relying solely on the process-local registry.
+
+If `node_definition_jsons` is omitted, `node_ids` continues to use the compatibility path backed by the in-memory node registry. That path still works well within a single Terraform run, but it is not the durable option for cross-process or cold-registry updates.
 
 ## Example Usage
 
@@ -87,6 +89,7 @@ output "workflow_execution_status_json" {
 - `execute = true` submits the assembled prompt to ComfyUI.
 - `wait_for_completion = true` keeps the resource blocked until execution reaches a terminal state or the timeout expires.
 - `validate_before_execute = true` uses live `/object_info` metadata to catch provider-known issues before queueing.
+- runtime-backed dynamic inputs such as `LoadImage.image` now honor the provider-level `unsupported_dynamic_validation_mode` during both generated-node plan validation and workflow preflight.
 - provider-level workflow `extra_data` defaults, including `comfy_org` partner credentials, are merged into each `/prompt` submission before resource-level `extra_data_json` overrides are applied.
 - `output_file` writes the assembled prompt JSON to disk for debugging, sharing, or downstream artifact flows.
 
@@ -102,6 +105,7 @@ output "workflow_execution_status_json" {
 - `execute` (Boolean) Whether to submit the workflow for execution. Defaults to true.
 - `extra_data_json` (String) Optional JSON object to include as extra_data in the /prompt request wrapper.
 - `name` (String) Human-readable name for this workflow.
+- `node_definition_jsons` (List of String) Optional durable serialized node definitions aligned with node_ids. When provided, workflow assembly can reconstruct missing node state without relying solely on the process-local registry.
 - `node_ids` (List of String) List of node resource IDs to include when assembling a workflow from virtual node resources.
 - `output_file` (String) File path to write the assembled workflow JSON. The file is in ComfyUI API format and can be loaded by ComfyUI.
 - `partial_execution_targets` (List of String) Optional list of node IDs to send as partial_execution_targets in the /prompt request wrapper.
@@ -130,5 +134,5 @@ output "workflow_execution_status_json" {
 - `outputs_structured` (Dynamic) Structured outputs (from /api/jobs).
 - `preview_output` (Dynamic) Structured preview output (from /api/jobs).
 - `preview_output_json` (String) Preview output as JSON string (from /api/jobs).
-- `validation_summary_json` (String) Structured JSON summary of semantic validation results when workflow preflight validation runs.
+- `validation_summary_json` (String) Structured JSON summary of semantic validation results when workflow preflight validation runs. When validation is disabled, this remains the stable disabled-validation contract JSON.
 - `workflow_id` (String) Workflow ID associated with this execution (from /api/jobs).

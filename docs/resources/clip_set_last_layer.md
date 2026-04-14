@@ -24,4 +24,5 @@ ComfyUI CLIPSetLastLayer node — CLIP Set Last Layer [conditioning] Source: nod
 
 - `clip_output` (String) Output: CLIP (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

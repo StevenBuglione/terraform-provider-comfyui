@@ -26,5 +26,6 @@ Loads and prepares input files (text, pdf, etc.) to include as inputs for the Op
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `openai_input_files_output` (String) Output: OPENAI_INPUT_FILES (slot 0).

@@ -25,4 +25,5 @@ Concatenates the audio1 to audio2 in the specified direction. [audio] Source: co
 
 - `audio_output` (String) Output: AUDIO (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

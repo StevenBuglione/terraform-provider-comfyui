@@ -27,4 +27,5 @@ ComfyUI RegexMatch node — Regex Match [utils/string] Source: comfy_extras/node
 
 - `id` (String) Unique identifier for this node instance.
 - `matches_output` (String) Output: BOOLEAN (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

@@ -23,5 +23,6 @@ Create Recraft Controls for customizing Recraft generation. [api node/image/Recr
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `recraft_controls_output` (String) Output: RecraftIO.CONTROLS (slot 0).

@@ -22,5 +22,6 @@ Choose style based on preexisting UUID from Recraft's Infinite Style Library. [a
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `recraft_style_output` (String) Output: RecraftIO.STYLEV3 (slot 0).

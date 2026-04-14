@@ -31,5 +31,6 @@ ComfyUI StableZero123_Conditioning node [conditioning/3d_models] Source: comfy_e
 - `id` (String) Unique identifier for this node instance.
 - `latent_output` (String) Output: LATENT (slot 2).
 - `negative_output` (String) Output: CONDITIONING (slot 1).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `positive_output` (String) Output: CONDITIONING (slot 0).

@@ -24,5 +24,6 @@ Calculate width and height from aspect ratio and megapixel target. Useful for se
 
 - `height_output` (String) Output: INT (slot 1).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `width_output` (String) Output: INT (slot 0).

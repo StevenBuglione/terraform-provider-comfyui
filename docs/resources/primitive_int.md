@@ -23,4 +23,5 @@ ComfyUI Int node — Int [utils/primitive] Source: comfy_extras/nodes_primitive.
 
 - `id` (String) Unique identifier for this node instance.
 - `int_output` (String) Output: INT (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

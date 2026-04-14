@@ -29,4 +29,5 @@ Allows specifying configuration options for Kling Camera Controls and motion con
 
 - `camera_control_output` (String) Output: CAMERA_CONTROL (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

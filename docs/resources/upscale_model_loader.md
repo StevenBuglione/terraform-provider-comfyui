@@ -22,5 +22,6 @@ ComfyUI UpscaleModelLoader node — Load Upscale Model [loaders] Source: comfy_e
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `upscale_model_output` (String) Output: UPSCALE_MODEL (slot 0).

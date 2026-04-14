@@ -25,4 +25,5 @@ ComfyUI ComboOutputTestNode node — ComboOptionTest [logic] Source: comfy_extra
 - `combo_output` (String) Output: COMBO (slot 0).
 - `combo_output_2` (String) Output: COMBO (slot 1).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

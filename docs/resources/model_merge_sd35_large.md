@@ -68,4 +68,5 @@ ComfyUI ModelMergeSD35_Large node — ModelMergeSD35_Large [advanced/model_mergi
 
 - `id` (String) Unique identifier for this node instance.
 - `model_output` (String) Output: MODEL (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

@@ -42,4 +42,5 @@ newbie: gemma-3-4b-it, jina clip v2 [advanced/loaders] Source: nodes.py:1003 (v1
 
 - `clip_output` (String) Output: CLIP (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

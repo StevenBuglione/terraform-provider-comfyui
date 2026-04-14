@@ -23,5 +23,6 @@ LTXV Separate AV Latent [latent/video/ltxv] Source: comfy_extras/nodes_lt.py:653
 
 - `audio_latent_output` (String) Output: LATENT (slot 1).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `video_latent_output` (String) Output: LATENT (slot 0).

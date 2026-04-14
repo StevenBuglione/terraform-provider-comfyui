@@ -34,6 +34,7 @@ ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/
 - `glb_output` (String) Output: FILE_3D_GLB (slot 1).
 - `id` (String) Unique identifier for this node instance.
 - `model_file_output` (String) Output: STRING (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `obj_output` (String) Output: FILE_3D_OBJ (slot 2).
 - `optional_metallic_output` (String) Output: IMAGE (slot 4).

@@ -30,5 +30,6 @@ Generates SVG using Recraft V4 or V4 Pro models. [api node/image/Recraft] Hidden
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `svg_output` (String) Output: SVG (slot 0).

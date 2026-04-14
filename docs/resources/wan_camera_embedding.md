@@ -36,5 +36,6 @@ ComfyUI WanCameraEmbedding node [camera] Source: comfy_extras/nodes_camera_traje
 - `height_output` (String) Output: INT (slot 2).
 - `id` (String) Unique identifier for this node instance.
 - `length_output` (String) Output: INT (slot 3).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `width_output` (String) Output: INT (slot 1).

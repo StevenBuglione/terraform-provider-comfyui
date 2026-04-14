@@ -28,4 +28,5 @@ sd3: clip-l, clip-g, t5 [advanced/loaders] Source: comfy_extras/nodes_sd3.py:11 
 
 - `clip_output` (String) Output: CLIP (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

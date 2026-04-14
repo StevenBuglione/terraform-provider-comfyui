@@ -22,4 +22,5 @@ Saves the input images to your ComfyUI output directory. [mask] Hidden runtime i
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

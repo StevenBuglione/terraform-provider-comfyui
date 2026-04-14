@@ -22,5 +22,6 @@ Select a predefined ElevenLabs voice for text-to-speech generation. [api node/au
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `voice_output` (String) Output: ELEVENLABS_VOICE (slot 0).

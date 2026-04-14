@@ -27,4 +27,5 @@ Loads and prepares input files to include as inputs for Gemini LLM nodes. The fi
 
 - `gemini_input_files_output` (String) Output: GEMINI_INPUT_FILES (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

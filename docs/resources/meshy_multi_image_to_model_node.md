@@ -32,4 +32,5 @@ ComfyUI MeshyMultiImageToModelNode node — Meshy: Multi-Image to Model [api nod
 - `id` (String) Unique identifier for this node instance.
 - `meshy_task_id_output` (String) Output: MESHY_TASK_ID (slot 1).
 - `model_file_output` (String) Output: STRING (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

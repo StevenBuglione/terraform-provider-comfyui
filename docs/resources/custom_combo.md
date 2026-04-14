@@ -23,5 +23,6 @@ description: |-
 
 - `id` (String) Unique identifier for this node instance.
 - `index_output` (String) Output: INT (slot 1).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `string_output` (String) Output: STRING (slot 0).

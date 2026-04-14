@@ -135,11 +135,16 @@ That last point matters for loader-style resources. If a built-in dynamic input 
 
 Use [comfyui_inventory](../data-sources/inventory.md) to inspect those live values directly.
 
-For unsupported dynamic-expression inputs that cannot be proved at plan time, the provider defaults to `error` but can be downgraded to `warning` or `ignore` with `unsupported_dynamic_validation_mode` when you intentionally accept runtime-only validation.
+For unsupported dynamic-expression inputs that cannot be proved at plan time, the provider defaults to `error` but can be downgraded to `warning` or `ignore` with `unsupported_dynamic_validation_mode` when you intentionally accept runtime-only validation. That policy now applies consistently during generated-node plan validation and `comfyui_workflow` preflight.
 
 ## What `terraform apply` Does
 
 `terraform apply` stores virtual node resources in state, assembles them into ComfyUI API-format JSON, and then lets `comfyui_workflow` decide what to do next.
+
+When you author workflows from generated node resources, there are now two assembly options:
+
+- `node_ids` alone keeps the older compatibility path backed by the process-local node registry.
+- `node_ids` plus `node_definition_jsons` is the durable path for cold-registry or cross-process updates. Each generated node resource exposes a computed `node_definition_json` snapshot that you can pass straight into the matching workflow list.
 
 Typical `comfyui_workflow` modes are:
 

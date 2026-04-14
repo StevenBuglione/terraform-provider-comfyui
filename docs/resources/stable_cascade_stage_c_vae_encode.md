@@ -24,6 +24,7 @@ ComfyUI StableCascade_StageC_VAEEncode node [latent/stable_cascade] Source: comf
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `stage_b_output` (String) Output: LATENT (slot 1).
 - `stage_c_output` (String) Output: LATENT (slot 0).

@@ -24,4 +24,5 @@ ComfyUI LatentRotate node — Rotate Latent [latent/transform] Source: nodes.py:
 
 - `id` (String) Unique identifier for this node instance.
 - `latent_output` (String) Output: LATENT (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

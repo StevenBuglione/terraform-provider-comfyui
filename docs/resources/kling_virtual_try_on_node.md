@@ -25,4 +25,5 @@ Kling Virtual Try On Node. Input a human image and a cloth image to try on the c
 
 - `id` (String) Unique identifier for this node instance.
 - `image_output` (String) Output: IMAGE (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

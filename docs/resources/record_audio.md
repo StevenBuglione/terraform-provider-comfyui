@@ -23,4 +23,5 @@ ComfyUI RecordAudio node — Record Audio [audio] Source: comfy_extras/nodes_aud
 
 - `audio_output` (String) Output: AUDIO (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

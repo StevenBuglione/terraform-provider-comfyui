@@ -24,4 +24,5 @@ ComfyUI SetUnionControlNetType node [conditioning/controlnet] Source: comfy_extr
 
 - `control_net_output` (String) Output: CONTROL_NET (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

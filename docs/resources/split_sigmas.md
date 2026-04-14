@@ -25,4 +25,5 @@ ComfyUI SplitSigmas node [sampling/custom_sampling/sigmas] Source: comfy_extras/
 - `high_sigmas_output` (String) Output: SIGMAS (slot 0).
 - `id` (String) Unique identifier for this node instance.
 - `low_sigmas_output` (String) Output: SIGMAS (slot 1).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

@@ -23,4 +23,5 @@ ComfyUI BatchMasksNode node — Batch Masks [mask] Source: comfy_extras/nodes_po
 
 - `id` (String) Unique identifier for this node instance.
 - `mask_output` (String) Output: MASK (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

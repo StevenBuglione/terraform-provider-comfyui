@@ -30,6 +30,7 @@ description: |-
 - `mask_output` (String) Output: MASK (slot 1).
 - `mesh_path_output` (String) Output: STRING (slot 2).
 - `model_3d_output` (String) Output: FILE_3D (slot 6).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `normal_output` (String) Output: IMAGE (slot 3).
 - `recording_video_output` (String) Output: VIDEO (slot 5).

@@ -11,7 +11,9 @@ description: |-
 
 `comfyui_workflow` is the execution boundary for Terraform-authored ComfyUI graphs. Use `node_ids` when the workflow is modeled from generated node resources, or use `workflow_json` when you are importing an existing prompt artifact.
 
-When a workflow is assembled from `node_ids`, generated node resources re-register their virtual node state during `Read`, so the assembly path survives normal refresh/apply cycles instead of only working in the same apply that created the nodes.
+For durable node-per-resource assembly, pair `node_ids` with `node_definition_jsons`. Each generated node resource now exposes a computed `node_definition_json` snapshot, and `comfyui_workflow` can use the aligned `node_definition_jsons` list to reconstruct missing node state without relying solely on the process-local registry.
+
+If `node_definition_jsons` is omitted, `node_ids` continues to use the compatibility path backed by the in-memory node registry. That path still works well within a single Terraform run, but it is not the durable option for cross-process or cold-registry updates.
 
 {{ if .HasExample -}}
 ## Example Usage
@@ -24,6 +26,7 @@ When a workflow is assembled from `node_ids`, generated node resources re-regist
 - `execute = true` submits the assembled prompt to ComfyUI.
 - `wait_for_completion = true` keeps the resource blocked until execution reaches a terminal state or the timeout expires.
 - `validate_before_execute = true` uses live `/object_info` metadata to catch provider-known issues before queueing.
+- runtime-backed dynamic inputs such as `LoadImage.image` now honor the provider-level `unsupported_dynamic_validation_mode` during both generated-node plan validation and workflow preflight.
 - provider-level workflow `extra_data` defaults, including `comfy_org` partner credentials, are merged into each `/prompt` submission before resource-level `extra_data_json` overrides are applied.
 - `output_file` writes the assembled prompt JSON to disk for debugging, sharing, or downstream artifact flows.
 

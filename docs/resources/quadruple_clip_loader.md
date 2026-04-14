@@ -29,4 +29,5 @@ hidream: long clip-l, long clip-g, t5xxl, llama_8b_3.1_instruct [advanced/loader
 
 - `clip_output` (String) Output: CLIP (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

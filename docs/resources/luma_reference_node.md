@@ -28,4 +28,5 @@ Holds an image and weight for use with Luma Generate Image node. [api node/image
 
 - `id` (String) Unique identifier for this node instance.
 - `luma_ref_output` (String) Output: LumaIO.LUMA_REF (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

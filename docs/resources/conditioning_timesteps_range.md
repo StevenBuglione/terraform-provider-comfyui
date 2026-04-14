@@ -25,5 +25,6 @@ description: |-
 - `after_range_output` (String) Output: TIMESTEPS_RANGE (slot 2).
 - `before_range_output` (String) Output: TIMESTEPS_RANGE (slot 1).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `timesteps_range_output` (String) Output: TIMESTEPS_RANGE (slot 0).

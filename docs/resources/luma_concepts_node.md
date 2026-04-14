@@ -30,4 +30,5 @@ Camera Concepts for use with Luma Text to Video and Luma Image to Video nodes. [
 
 - `id` (String) Unique identifier for this node instance.
 - `luma_concepts_output` (String) Output: LumaIO.LUMA_CONCEPTS (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

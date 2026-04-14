@@ -25,5 +25,6 @@ Perform smart retopology on a 3D model. Supports GLB/OBJ formats; max 200MB; rec
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `obj_output` (String) Output: FILE_3D_OBJ (slot 0).

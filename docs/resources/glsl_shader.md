@@ -30,4 +30,5 @@ Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always availabl
 - `image1_output` (String) Output: IMAGE (slot 1).
 - `image2_output` (String) Output: IMAGE (slot 2).
 - `image3_output` (String) Output: IMAGE (slot 3).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

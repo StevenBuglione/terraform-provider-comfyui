@@ -23,4 +23,5 @@ ComfyUI Boolean node — Boolean [utils/primitive] Source: comfy_extras/nodes_pr
 
 - `boolean_output` (String) Output: BOOLEAN (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

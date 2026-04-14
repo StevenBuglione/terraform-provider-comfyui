@@ -24,4 +24,5 @@ ComfyUI Rodin3D_Smooth node — Rodin 3D Generate - Smooth Generate [api node/3d
 - `_3d_model_path_output` (String) Output: STRING (slot 0).
 - `glb_output` (String) Output: FILE_3D_GLB (slot 1).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.

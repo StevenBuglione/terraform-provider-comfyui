@@ -27,5 +27,6 @@ Allows specifying advanced configuration options for the OpenAI Chat Nodes. [api
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `openai_chat_config_output` (String) Output: OPENAI_CHAT_CONFIG (slot 0).

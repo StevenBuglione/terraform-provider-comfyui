@@ -26,6 +26,7 @@ Kling Lip Sync Text to Video Node. Syncs mouth movements in a video file to a te
 
 - `duration_output` (String) Output: STRING (slot 2).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `video_id_output` (String) Output: STRING (slot 1).
 - `video_output` (String) Output: VIDEO (slot 0).

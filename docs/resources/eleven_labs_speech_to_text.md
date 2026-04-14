@@ -27,6 +27,7 @@ Transcribe audio to text. Supports automatic language detection, speaker diariza
 
 - `id` (String) Unique identifier for this node instance.
 - `language_code_output` (String) Output: STRING (slot 1).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `text_output` (String) Output: STRING (slot 0).
 - `words_json_output` (String) Output: STRING (slot 2).

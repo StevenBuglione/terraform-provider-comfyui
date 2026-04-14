@@ -23,5 +23,6 @@ Create a cloned voice from audio samples. Provide 1-8 audio recordings of the vo
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `voice_output` (String) Output: ELEVENLABS_VOICE (slot 0).

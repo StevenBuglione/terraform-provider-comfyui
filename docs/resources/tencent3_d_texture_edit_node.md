@@ -25,6 +25,7 @@ After inputting the 3D model, perform 3D model texture redrawing. [api node/3d/T
 
 - `glb_output` (String) Output: FILE_3D_GLB (slot 0).
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `obj_output` (String) Output: FILE_3D_OBJ (slot 1).
 - `texture_image_output` (String) Output: IMAGE (slot 2).

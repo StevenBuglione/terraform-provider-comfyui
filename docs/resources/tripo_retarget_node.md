@@ -25,5 +25,6 @@ ComfyUI TripoRetargetNode node — Tripo: Retarget rigged model [api node/3d/Tri
 - `glb_output` (String) Output: FILE_3D_GLB (slot 2).
 - `id` (String) Unique identifier for this node instance.
 - `model_file_output` (String) Output: STRING (slot 0).
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `retarget_task_id_output` (String) Output: RETARGET_TASK_ID (slot 1).

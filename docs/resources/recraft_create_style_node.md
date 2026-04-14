@@ -23,5 +23,6 @@ Create a custom style from reference images. Upload 1-5 images to use as style r
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `style_id_output` (String) Output: STRING (slot 0).

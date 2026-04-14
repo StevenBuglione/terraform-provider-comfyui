@@ -25,5 +25,6 @@ ComfyUI VAEDecodeHunyuan3D node [latent/3d] Source: comfy_extras/nodes_hunyuan3d
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
+- `node_definition_json` (String) Serialized durable node definition used by comfyui_workflow fallback assembly.
 - `node_id` (String) ComfyUI node class type.
 - `voxel_output` (String) Output: VOXEL (slot 0).
