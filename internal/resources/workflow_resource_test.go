@@ -16,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	resourceschema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
 )
@@ -348,6 +349,37 @@ func mustValidationSummaryJSON(t *testing.T, report validation.Report) string {
 	return summary
 }
 
+func workflowTestSchema(t *testing.T, r *WorkflowResource) resourceschema.Schema {
+	t.Helper()
+
+	var resp resource.SchemaResponse
+	r.Schema(context.Background(), resource.SchemaRequest{}, &resp)
+	if resp.Diagnostics.HasError() {
+		t.Fatalf("failed to load workflow schema: %v", resp.Diagnostics)
+	}
+	return resp.Schema
+}
+
+func workflowTestPlanFromModel(t *testing.T, schema resourceschema.Schema, data WorkflowModel) tfsdk.Plan {
+	t.Helper()
+
+	plan := tfsdk.Plan{Schema: schema}
+	if diags := plan.Set(context.Background(), &data); diags.HasError() {
+		t.Fatalf("failed to encode workflow plan: %v", diags)
+	}
+	return plan
+}
+
+func workflowTestStateFromModel(t *testing.T, schema resourceschema.Schema, data WorkflowModel) tfsdk.State {
+	t.Helper()
+
+	state := tfsdk.State{Schema: schema}
+	if diags := state.Set(context.Background(), &data); diags.HasError() {
+		t.Fatalf("failed to encode workflow state: %v", diags)
+	}
+	return state
+}
+
 func TestExecuteWorkflow_ValidationFailureBlocksQueueing(t *testing.T) {
 	objectInfoHits := 0
 	promptHits := 0
@@ -615,11 +647,12 @@ func TestExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidationMod
 	}
 }
 
-func TestExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testing.T) {
+// TDD (intentionally red): helper-level coverage for the disabled-validation
+// summary contract. Create/update-facing coverage lives in the resource-path
+// tests below so apply/update regressions fail at the entrypoints Terraform uses.
+func TestTDDExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testing.T) {
 	t.Parallel()
 
-	// Create and Update both route through executeWorkflow, so exercising this helper
-	// documents the disabled-validation state contract across apply/update paths.
 	expectedSummary := mustValidationSummaryJSON(t, validation.NewReport(0))
 	testCases := []struct {
 		name        string
@@ -690,6 +723,135 @@ func TestExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testing.
 				t.Fatalf("validation_summary_json = %q, want %q", got, expectedSummary)
 			}
 		})
+	}
+}
+
+// TDD (intentionally red): apply should preserve a stable JSON summary contract
+// even when validation is disabled, because create is the path Terraform uses.
+func TestTDDWorkflowCreate_DisabledValidationUsesStableSummaryContract(t *testing.T) {
+	t.Parallel()
+
+	expectedSummary := mustValidationSummaryJSON(t, validation.NewReport(0))
+	promptHits := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/prompt":
+			promptHits++
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "queued-create",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	schema := workflowTestSchema(t, r)
+	planData := WorkflowModel{
+		WorkflowJSON:          types.StringValue(`{"1":{"class_type":"SaveImage","inputs":{"filename_prefix":"ComfyUI"}}}`),
+		NodeIDs:               types.ListNull(types.StringType),
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(false),
+		PartialTargets:        types.ListNull(types.StringType),
+		Tags:                  types.ListNull(types.StringType),
+	}
+
+	req := resource.CreateRequest{
+		Plan: workflowTestPlanFromModel(t, schema, planData),
+	}
+	resp := resource.CreateResponse{
+		State: tfsdk.State{Schema: schema},
+	}
+
+	r.Create(context.Background(), req, &resp)
+	if resp.Diagnostics.HasError() {
+		t.Fatalf("expected create to skip validation cleanly, got diagnostics %v", resp.Diagnostics)
+	}
+	if promptHits != 1 {
+		t.Fatalf("expected /prompt to be called once during create, got %d", promptHits)
+	}
+
+	var state WorkflowModel
+	if diags := resp.State.Get(context.Background(), &state); diags.HasError() {
+		t.Fatalf("failed to decode create state: %v", diags)
+	}
+	if state.ValidationSummaryJSON.IsNull() {
+		t.Fatal("expected create to persist validation_summary_json as a JSON string when validation is disabled")
+	}
+	if got := state.ValidationSummaryJSON.ValueString(); got != expectedSummary {
+		t.Fatalf("create validation_summary_json = %q, want %q", got, expectedSummary)
+	}
+}
+
+// TDD (intentionally red): update should keep the same disabled-validation
+// summary contract users rely on during in-place apply operations.
+func TestTDDWorkflowUpdate_DisabledValidationUsesStableSummaryContract(t *testing.T) {
+	t.Parallel()
+
+	expectedSummary := mustValidationSummaryJSON(t, validation.NewReport(0))
+	promptHits := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/prompt":
+			promptHits++
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "queued-update",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	schema := workflowTestSchema(t, r)
+	currentState := WorkflowModel{
+		ID:                    types.StringValue("workflow-123"),
+		WorkflowJSON:          types.StringValue(`{"1":{"class_type":"SaveImage","inputs":{"filename_prefix":"ComfyUI"}}}`),
+		NodeIDs:               types.ListNull(types.StringType),
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(false),
+		PromptID:              types.StringValue("queued-previous"),
+		PartialTargets:        types.ListNull(types.StringType),
+		Tags:                  types.ListNull(types.StringType),
+		ValidationSummaryJSON: types.StringValue(expectedSummary),
+	}
+	planData := currentState
+
+	req := resource.UpdateRequest{
+		Plan:  workflowTestPlanFromModel(t, schema, planData),
+		State: workflowTestStateFromModel(t, schema, currentState),
+	}
+	resp := resource.UpdateResponse{
+		State: tfsdk.State{Schema: schema},
+	}
+
+	r.Update(context.Background(), req, &resp)
+	if resp.Diagnostics.HasError() {
+		t.Fatalf("expected update to skip validation cleanly, got diagnostics %v", resp.Diagnostics)
+	}
+	if promptHits != 1 {
+		t.Fatalf("expected /prompt to be called once during update, got %d", promptHits)
+	}
+
+	var state WorkflowModel
+	if diags := resp.State.Get(context.Background(), &state); diags.HasError() {
+		t.Fatalf("failed to decode update state: %v", diags)
+	}
+	if state.ValidationSummaryJSON.IsNull() {
+		t.Fatal("expected update to persist validation_summary_json as a JSON string when validation is disabled")
+	}
+	if got := state.ValidationSummaryJSON.ValueString(); got != expectedSummary {
+		t.Fatalf("update validation_summary_json = %q, want %q", got, expectedSummary)
 	}
 }
 
