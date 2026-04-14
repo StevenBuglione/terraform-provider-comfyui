@@ -586,6 +586,104 @@ func TestExecuteWorkflow_ValidationFailureBlocksQueueing(t *testing.T) {
 	}
 }
 
+func TestExecuteWorkflow_ValidationWarningsDoNotClaimSuccessWhenValidationFails(t *testing.T) {
+	objectInfoHits := 0
+	promptHits := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/object_info":
+			objectInfoHits++
+			mustEncodeResourceJSON(t, w, map[string]client.NodeInfo{
+				"LoadImage": {
+					Input: client.NodeInputInfo{
+						Required: map[string]interface{}{
+							"image": []interface{}{"COMBO"},
+						},
+					},
+					InputOrder: map[string][]string{
+						"required": {"image"},
+					},
+					Output:     []string{"IMAGE", "MASK"},
+					OutputName: []string{"IMAGE", "MASK"},
+				},
+				"SaveImage": {
+					Input: client.NodeInputInfo{
+						Required: map[string]interface{}{
+							"images": []interface{}{"IMAGE"},
+						},
+						Hidden: map[string]interface{}{
+							"prompt": "PROMPT",
+						},
+					},
+					InputOrder: map[string][]string{
+						"required": {"images"},
+					},
+					OutputNode: true,
+				},
+			})
+		case "/prompt":
+			promptHits++
+			mustEncodeResourceJSON(t, w, client.QueueResponse{
+				PromptID:   "should-not-run",
+				Number:     1,
+				NodeErrors: map[string]interface{}{},
+			})
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: &client.Client{
+		HTTPClient:                       server.Client(),
+		BaseURL:                          server.URL,
+		UnsupportedDynamicValidationMode: "warning",
+	}}
+	data := WorkflowModel{
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(true),
+	}
+	prompt := map[string]interface{}{
+		"1": map[string]interface{}{
+			"class_type": "LoadImage",
+			"inputs": map[string]interface{}{
+				"image": "reference.png",
+			},
+		},
+		"2": map[string]interface{}{
+			"class_type": "SaveImage",
+			"inputs": map[string]interface{}{
+				"filename_prefix": "ComfyUI",
+			},
+		},
+	}
+
+	var diags diag.Diagnostics
+	r.executeWorkflow(context.Background(), prompt, &data, &diags)
+	if !diags.HasError() {
+		t.Fatal("expected semantic validation failure to add diagnostics")
+	}
+	if diags.WarningsCount() != 1 {
+		t.Fatalf("WarningsCount() = %d, want 1; diagnostics: %v", diags.WarningsCount(), diags)
+	}
+	if objectInfoHits != 1 {
+		t.Fatalf("expected /object_info to be called once, got %d", objectInfoHits)
+	}
+	if promptHits != 0 {
+		t.Fatalf("expected /prompt not to be called after validation failure, got %d", promptHits)
+	}
+
+	warning := diags.Warnings()[0]
+	if warning.Summary() != "Workflow validation warnings" {
+		t.Fatalf("unexpected warning summary: %q", warning.Summary())
+	}
+	if strings.Contains(warning.Detail(), "passed semantic validation") {
+		t.Fatalf("warning detail should not claim validation passed when errors exist, got %q", warning.Detail())
+	}
+}
+
 func TestExecuteWorkflow_DisabledValidationSkipsPreflight(t *testing.T) {
 	objectInfoHits := 0
 	promptHits := 0

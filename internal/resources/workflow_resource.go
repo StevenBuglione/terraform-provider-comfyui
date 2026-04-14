@@ -473,7 +473,7 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 		if len(report.Warnings) > 0 {
 			diags.AddWarning(
 				"Workflow validation warnings",
-				fmt.Sprintf("The workflow passed semantic validation with warnings:\n- %s", strings.Join(report.Warnings, "\n- ")),
+				fmt.Sprintf("Semantic validation reported warnings for the workflow:\n- %s", strings.Join(report.Warnings, "\n- ")),
 			)
 		}
 
