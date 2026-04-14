@@ -94,7 +94,7 @@ func (p *ComfyUIProvider) Schema(_ context.Context, _ provider.SchemaRequest, re
 				Optional:    true,
 			},
 			"unsupported_dynamic_validation_mode": schema.StringAttribute{
-				Description: "How unsupported dynamic-expression plan validation should behave for generated node resources: error, warning, or ignore. Can also be set with COMFYUI_UNSUPPORTED_DYNAMIC_VALIDATION_MODE. Defaults to error.",
+				Description: "How unsupported dynamic-expression validation should behave for generated node resource planning and comfyui_workflow preflight: error, warning, or ignore. Can also be set with COMFYUI_UNSUPPORTED_DYNAMIC_VALIDATION_MODE. Defaults to error.",
 				Optional:    true,
 			},
 		},

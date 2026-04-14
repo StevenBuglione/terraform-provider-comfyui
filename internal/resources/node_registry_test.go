@@ -217,9 +217,10 @@ func TestAssembleWorkflowFromNodeIDsWithDefinitions_RejectsMismatchedPairingEven
 	swappedDefinitions := make([]string, len(nodes))
 	for i, node := range nodes {
 		target := node
-		if i == 0 {
+		switch i {
+		case 0:
 			target = nodes[1]
-		} else if i == 1 {
+		case 1:
 			target = nodes[0]
 		}
 
