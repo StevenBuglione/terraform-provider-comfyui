@@ -349,6 +349,97 @@ func mustValidationSummaryJSON(t *testing.T, report validation.Report) string {
 	return summary
 }
 
+func TestValidationSummaryWarningHelpers(t *testing.T) {
+	t.Parallel()
+
+	t.Run("extract warning count", func(t *testing.T) {
+		t.Parallel()
+
+		got, err := validationSummaryWarningCount(map[string]interface{}{
+			"warning_count": float64(2),
+		})
+		if err != nil {
+			t.Fatalf("validationSummaryWarningCount returned error: %v", err)
+		}
+		if got != 2 {
+			t.Fatalf("validationSummaryWarningCount = %d, want 2", got)
+		}
+	})
+
+	t.Run("reject invalid warning count shape", func(t *testing.T) {
+		t.Parallel()
+
+		_, err := validationSummaryWarningCount(map[string]interface{}{
+			"warning_count": "2",
+		})
+		if err == nil {
+			t.Fatal("expected validationSummaryWarningCount to reject non-numeric warning_count")
+		}
+	})
+
+	t.Run("extract warning entry", func(t *testing.T) {
+		t.Parallel()
+
+		got, err := validationSummaryWarningAt(map[string]interface{}{
+			"warnings": []interface{}{"first warning"},
+		}, 0)
+		if err != nil {
+			t.Fatalf("validationSummaryWarningAt returned error: %v", err)
+		}
+		if got != "first warning" {
+			t.Fatalf("validationSummaryWarningAt = %q, want %q", got, "first warning")
+		}
+	})
+
+	t.Run("reject invalid warning entry shape", func(t *testing.T) {
+		t.Parallel()
+
+		_, err := validationSummaryWarningAt(map[string]interface{}{
+			"warnings": []interface{}{map[string]interface{}{"message": "wrong"}},
+		}, 0)
+		if err == nil {
+			t.Fatal("expected validationSummaryWarningAt to reject non-string warnings")
+		}
+	})
+}
+
+func validationSummaryWarningCount(summary map[string]interface{}) (int, error) {
+	raw, ok := summary["warning_count"]
+	if !ok {
+		return 0, fmt.Errorf("validation summary missing warning_count: %#v", summary)
+	}
+
+	value, ok := raw.(float64)
+	if !ok {
+		return 0, fmt.Errorf("validation summary warning_count = %#v (%T), want number", raw, raw)
+	}
+
+	return int(value), nil
+}
+
+func validationSummaryWarningAt(summary map[string]interface{}, index int) (string, error) {
+	raw, ok := summary["warnings"]
+	if !ok {
+		return "", fmt.Errorf("validation summary missing warnings: %#v", summary)
+	}
+
+	warnings, ok := raw.([]interface{})
+	if !ok {
+		return "", fmt.Errorf("validation summary warnings = %#v (%T), want array", raw, raw)
+	}
+
+	if index < 0 || index >= len(warnings) {
+		return "", fmt.Errorf("validation summary warnings = %#v, index %d out of range", warnings, index)
+	}
+
+	warning, ok := warnings[index].(string)
+	if !ok {
+		return "", fmt.Errorf("validation summary warnings[%d] = %#v (%T), want string", index, warnings[index], warnings[index])
+	}
+
+	return warning, nil
+}
+
 func workflowTestSchema(t *testing.T, r *WorkflowResource) resourceschema.Schema {
 	t.Helper()
 
@@ -633,16 +724,24 @@ func TestTDDExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidation
 			if summary["valid"] != true {
 				t.Fatalf("expected validation summary to remain valid in %q mode, got %#v", tc.mode, summary["valid"])
 			}
-			if got := int(summary["warning_count"].(float64)); got != tc.wantWarningCount {
-				t.Fatalf("warning_count = %d, want %d", got, tc.wantWarningCount)
+			gotWarningCount, err := validationSummaryWarningCount(summary)
+			if err != nil {
+				t.Fatalf("failed to read warning_count: %v", err)
+			}
+			if gotWarningCount != tc.wantWarningCount {
+				t.Fatalf("warning_count = %d, want %d", gotWarningCount, tc.wantWarningCount)
 			}
 			if tc.wantValidationMsg != "" {
 				warnings, ok := summary["warnings"].([]interface{})
 				if !ok || len(warnings) != tc.wantWarningCount {
 					t.Fatalf("warnings = %#v, want %d warnings", summary["warnings"], tc.wantWarningCount)
 				}
-				if !strings.Contains(warnings[0].(string), tc.wantValidationMsg) {
-					t.Fatalf("warning = %q, want substring %q", warnings[0].(string), tc.wantValidationMsg)
+				warning, err := validationSummaryWarningAt(summary, 0)
+				if err != nil {
+					t.Fatalf("failed to read warning: %v", err)
+				}
+				if !strings.Contains(warning, tc.wantValidationMsg) {
+					t.Fatalf("warning = %q, want substring %q", warning, tc.wantValidationMsg)
 				}
 			}
 		})
