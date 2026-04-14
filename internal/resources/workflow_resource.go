@@ -35,6 +35,8 @@ var (
 	_ resource.ResourceWithConfigure = &WorkflowResource{}
 )
 
+const disabledValidationSummaryContractJSON = `{"valid":true,"errors":[],"warnings":[],"validated_node_count":0,"error_count":0,"warning_count":0}`
+
 type WorkflowResource struct {
 	client *client.Client
 }
@@ -169,9 +171,6 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"validation_summary_json": schema.StringAttribute{
 				Computed:    true,
 				Description: "Structured JSON summary of semantic validation results when workflow preflight validation runs.",
-				PlanModifiers: []planmodifier.String{
-					stringplanmodifier.UseStateForUnknown(),
-				},
 			},
 			"name": schema.StringAttribute{
 				Optional:    true,
@@ -316,7 +315,7 @@ func (r *WorkflowResource) Create(ctx context.Context, req resource.CreateReques
 
 	if !data.Execute.ValueBool() {
 		data.PromptID = types.StringValue("")
-		data.ValidationSummaryJSON = types.StringValue("")
+		applyValidationSummaryContract(&data)
 		clearWorkflowExecutionFields(&data)
 		resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 		return
@@ -347,6 +346,7 @@ func (r *WorkflowResource) Read(ctx context.Context, req resource.ReadRequest, r
 		}
 	}
 
+	applyValidationSummaryContract(&data)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -379,7 +379,7 @@ func (r *WorkflowResource) Update(ctx context.Context, req resource.UpdateReques
 
 	if !data.Execute.ValueBool() {
 		data.PromptID = types.StringValue("")
-		data.ValidationSummaryJSON = types.StringValue("")
+		applyValidationSummaryContract(&data)
 		clearWorkflowExecutionFields(&data)
 		resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 		return
@@ -485,7 +485,7 @@ func (r *WorkflowResource) executeWorkflow(ctx context.Context, prompt map[strin
 			return
 		}
 	} else {
-		data.ValidationSummaryJSON = types.StringValue("")
+		data.ValidationSummaryJSON = types.StringValue(disabledValidationSummaryContractJSON)
 	}
 
 	tflog.Info(ctx, "Submitting workflow to ComfyUI", map[string]interface{}{
@@ -588,6 +588,12 @@ func (r *WorkflowResource) validatePromptForExecution(prompt map[string]interfac
 
 func validationEnabled(value types.Bool) bool {
 	return value.IsNull() || value.IsUnknown() || value.ValueBool()
+}
+
+func applyValidationSummaryContract(data *WorkflowModel) {
+	if !validationEnabled(data.ValidateBeforeExecute) {
+		data.ValidationSummaryJSON = types.StringValue(disabledValidationSummaryContractJSON)
+	}
 }
 
 func buildQueuePromptRequest(prompt map[string]interface{}, config workflowExecutionRequestConfig) (client.QueuePromptRequest, error) {

@@ -320,8 +320,8 @@ func TestWorkflowSchema_ValidationPreflightAttributes(t *testing.T) {
 	if !summaryAttr.Computed {
 		t.Fatalf("expected validation_summary_json to be computed, got %#v", summaryAttr)
 	}
-	if len(summaryAttr.PlanModifiers) != 1 {
-		t.Fatalf("expected validation_summary_json to keep prior state when unknown, got %#v", summaryAttr.PlanModifiers)
+	if len(summaryAttr.PlanModifiers) != 0 {
+		t.Fatalf("expected validation_summary_json to avoid state-reuse plan modifiers, got %#v", summaryAttr.PlanModifiers)
 	}
 }
 
@@ -1087,6 +1087,54 @@ func TestTDDWorkflowUpdate_DisabledValidationUsesStableSummaryContract(t *testin
 	}
 	if state.ValidationSummaryJSON.IsNull() {
 		t.Fatal("expected update to persist validation_summary_json as a JSON string when validation is disabled")
+	}
+	assertDisabledValidationSummaryContract(t, state.ValidationSummaryJSON.ValueString())
+}
+
+// TDD (intentionally red): read should normalize legacy disabled-validation state
+// so refreshes converge on the same JSON contract as create/update/apply.
+func TestTDDWorkflowRead_DisabledValidationUsesStableSummaryContract(t *testing.T) {
+	t.Parallel()
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.NotFound(w, r)
+	}))
+	defer server.Close()
+
+	r := &WorkflowResource{client: newWorkflowTestClient(server)}
+	schema := workflowTestSchema(t, r)
+	currentState := WorkflowModel{
+		ID:                    types.StringValue("workflow-123"),
+		WorkflowJSON:          types.StringValue(`{"1":{"class_type":"SaveImage","inputs":{"filename_prefix":"ComfyUI"}}}`),
+		NodeIDs:               types.ListNull(types.StringType),
+		Execute:               types.BoolValue(true),
+		WaitForCompletion:     types.BoolValue(false),
+		TimeoutSeconds:        types.Int64Value(30),
+		ValidateBeforeExecute: types.BoolValue(false),
+		PromptID:              types.StringValue(""),
+		PartialTargets:        types.ListNull(types.StringType),
+		Tags:                  types.ListNull(types.StringType),
+		ValidationSummaryJSON: types.StringValue(""),
+	}
+
+	req := resource.ReadRequest{
+		State: workflowTestStateFromModel(t, schema, currentState),
+	}
+	resp := resource.ReadResponse{
+		State: tfsdk.State{Schema: schema},
+	}
+
+	r.Read(context.Background(), req, &resp)
+	if resp.Diagnostics.HasError() {
+		t.Fatalf("expected read to normalize disabled validation summary cleanly, got diagnostics %v", resp.Diagnostics)
+	}
+
+	var state WorkflowModel
+	if diags := resp.State.Get(context.Background(), &state); diags.HasError() {
+		t.Fatalf("failed to decode read state: %v", diags)
+	}
+	if state.ValidationSummaryJSON.IsNull() {
+		t.Fatal("expected read to persist validation_summary_json as a JSON string when validation is disabled")
 	}
 	assertDisabledValidationSummaryContract(t, state.ValidationSummaryJSON.ValueString())
 }
