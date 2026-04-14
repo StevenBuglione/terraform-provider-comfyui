@@ -162,6 +162,10 @@ For recognized built-in inventory-backed inputs:
 - `terraform plan` validates chosen values against the live ComfyUI inventory
 - [comfyui_inventory](../data-sources/inventory.md) lets you inspect available values directly
 
+For runtime-backed dynamic inputs, `unsupported_dynamic_validation_mode` applies during
+`comfyui_workflow` preflight as well as generated-node plan validation, so the same
+error/warning/ignore policy covers both paths.
+
 This is the preferred way to keep authored workflows aligned with the real server state.
 
 ## Recommended Patterns
