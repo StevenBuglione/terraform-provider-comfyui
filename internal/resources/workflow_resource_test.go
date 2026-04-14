@@ -509,7 +509,9 @@ func TestExecuteWorkflow_DisabledValidationSkipsPreflight(t *testing.T) {
 	}
 }
 
-func TestExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidationMode(t *testing.T) {
+// TDD (intentionally red): workflow execution preflight should match the
+// generated-node plan-time policy for runtime-backed LoadImage inputs.
+func TestTDDExecuteWorkflow_RuntimeBackedInputsHonorUnsupportedDynamicValidationMode(t *testing.T) {
 	t.Parallel()
 
 	// Plan-time generated-node validation already respects unsupported_dynamic_validation_mode.

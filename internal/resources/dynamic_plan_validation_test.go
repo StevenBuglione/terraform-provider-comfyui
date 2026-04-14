@@ -150,8 +150,13 @@ func TestValidateDynamicInputs_LoadImageUsesUnsupportedDynamicValidationPolicy(t
 			if diags.WarningsCount() != tc.wantWarnings {
 				t.Fatalf("WarningsCount() = %d, want %d; diagnostics: %v", diags.WarningsCount(), tc.wantWarnings, diags)
 			}
-			if tc.wantSummary != "" && !strings.Contains(diags[0].Summary(), tc.wantSummary) {
-				t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
+			if tc.wantSummary != "" {
+				if len(diags) == 0 {
+					t.Fatalf("expected diagnostics containing %q, got none", tc.wantSummary)
+				}
+				if !strings.Contains(diags[0].Summary(), tc.wantSummary) {
+					t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
+				}
 			}
 		})
 	}
