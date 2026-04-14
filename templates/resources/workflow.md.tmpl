@@ -13,7 +13,7 @@ description: |-
 
 For durable node-per-resource assembly, pair `node_ids` with `node_definition_jsons`. Each generated node resource now exposes a computed `node_definition_json` snapshot, and `comfyui_workflow` can use the aligned `node_definition_jsons` list to reconstruct missing node state without relying solely on the process-local registry.
 
-If `node_definition_jsons` is omitted, `node_ids` continues to use the compatibility path backed by the in-memory node registry. That path still works well within a single Terraform run, but it is not the durable option for cross-process or cold-registry updates.
+If `node_definition_jsons` is omitted, `node_ids` continues to use the compatibility path backed by the in-memory node registry. Normal refresh/apply cycles still work because generated nodes re-register during `Read`, but this path is not the durable option for cold-start or cross-process registry gaps.
 
 {{ if .HasExample -}}
 ## Example Usage

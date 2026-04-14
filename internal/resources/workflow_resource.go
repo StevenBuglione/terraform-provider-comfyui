@@ -130,7 +130,7 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"node_definition_jsons": schema.ListAttribute{
 				Optional:    true,
 				ElementType: types.StringType,
-				Description: "Optional durable serialized node definitions aligned with node_ids. When provided, workflow assembly can reconstruct missing node state without relying solely on the process-local registry.",
+				Description: "Optional durable serialized node definitions aligned with node_ids. The list must have the same length as node_ids, and each entry must correspond by position to the matching node ID. When provided, workflow assembly can reconstruct missing node state without relying solely on the process-local registry.",
 			},
 			"execute": schema.BoolAttribute{
 				Optional:    true,
