@@ -324,14 +324,33 @@ func TestBuildResourceDataSurfacesSchemaMetadata(t *testing.T) {
 	}
 }
 
-func TestResourceTemplateReregistersNodeStateDuringRead(t *testing.T) {
+func TestResourceTemplateReregistersNodeStateAndDefinitionDuringRead(t *testing.T) {
 	readIndex := strings.Index(resourceTemplate, "func (r *{{ .StructName }}Resource) Read")
 	if readIndex == -1 {
 		t.Fatal("expected Read function in resource template")
 	}
 	readSection := resourceTemplate[readIndex:]
-	if !strings.Contains(readSection, "resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)") {
-		t.Fatal("expected Read template to re-register node state from state")
+	if !strings.Contains(readSection, "resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)") {
+		t.Fatal("expected Read template to re-register node state and definition from state")
+	}
+}
+
+func TestResourceTemplateIncludesNodeDefinitionJSON(t *testing.T) {
+	if !strings.Contains(resourceTemplate, `NodeDefinitionJSON types.String `+"`tfsdk:\"node_definition_json\"`") {
+		t.Fatal("expected resource model to include computed node_definition_json")
+	}
+	if !strings.Contains(resourceTemplate, `"node_definition_json": schema.StringAttribute{`) {
+		t.Fatal("expected resource schema to include node_definition_json attribute")
+	}
+}
+
+func TestResourceTemplatePopulatesNodeDefinitionJSONDuringLifecycle(t *testing.T) {
+	expectedHelperCall := "resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)"
+	if count := strings.Count(resourceTemplate, expectedHelperCall); count != 3 {
+		t.Fatalf("expected node definition helper to be called in create/read/update, got %d", count)
+	}
+	if count := strings.Count(resourceTemplate, "data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)"); count != 3 {
+		t.Fatalf("expected node_definition_json to be assigned in create/read/update, got %d", count)
 	}
 }
 

@@ -2,6 +2,7 @@ package resources
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"strings"
@@ -26,25 +27,82 @@ func RegisterNodeState(node NodeState) {
 }
 
 func RegisterNodeStateFromModel(id, classType string, model any) error {
-	if id == "" {
-		return fmt.Errorf("cannot register node state with empty id")
-	}
-	if classType == "" {
-		return fmt.Errorf("cannot register node state with empty class type")
-	}
-
-	inputs, err := extractInputsFromModel(model)
+	node, err := nodeStateFromModel(id, classType, model)
 	if err != nil {
 		return err
 	}
 
-	RegisterNodeState(NodeState{
+	RegisterNodeState(node)
+	return nil
+}
+
+func RegisterNodeStateAndDefinitionFromModel(id, classType string, model any) (string, error) {
+	node, err := nodeStateFromModel(id, classType, model)
+	if err != nil {
+		return "", err
+	}
+
+	RegisterNodeState(node)
+	return marshalNodeDefinitionJSON(node)
+}
+
+func NodeDefinitionJSONFromModel(id, classType string, model any) (string, error) {
+	node, err := nodeStateFromModel(id, classType, model)
+	if err != nil {
+		return "", err
+	}
+
+	return marshalNodeDefinitionJSON(node)
+}
+
+func ParseNodeDefinitionJSON(raw string) (NodeState, error) {
+	if strings.TrimSpace(raw) == "" {
+		return NodeState{}, fmt.Errorf("node definition JSON cannot be empty")
+	}
+
+	var node NodeState
+	if err := json.Unmarshal([]byte(raw), &node); err != nil {
+		return NodeState{}, err
+	}
+	if node.ID == "" {
+		return NodeState{}, fmt.Errorf("node definition JSON must include id")
+	}
+	if node.ClassType == "" {
+		return NodeState{}, fmt.Errorf("node definition JSON must include class_type")
+	}
+	if node.Inputs == nil {
+		node.Inputs = make(map[string]interface{})
+	}
+
+	return node, nil
+}
+
+func nodeStateFromModel(id, classType string, model any) (NodeState, error) {
+	if id == "" {
+		return NodeState{}, fmt.Errorf("cannot register node state with empty id")
+	}
+	if classType == "" {
+		return NodeState{}, fmt.Errorf("cannot register node state with empty class type")
+	}
+
+	inputs, err := extractInputsFromModel(model)
+	if err != nil {
+		return NodeState{}, err
+	}
+
+	return NodeState{
 		ID:        id,
 		ClassType: classType,
 		Inputs:    inputs,
-	})
+	}, nil
+}
 
-	return nil
+func marshalNodeDefinitionJSON(node NodeState) (string, error) {
+	raw, err := json.Marshal(node)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal node definition JSON: %w", err)
+	}
+	return string(raw), nil
 }
 
 func LookupNodeState(id string) (NodeState, bool) {
@@ -68,17 +126,43 @@ func resetNodeStateRegistry() {
 }
 
 func AssembleWorkflowFromNodeIDs(ids []string) (*AssembledWorkflow, error) {
+	return AssembleWorkflowFromNodeIDsWithDefinitions(ids, nil)
+}
+
+func AssembleWorkflowFromNodeIDsWithDefinitions(ids []string, definitionJSONs []string) (*AssembledWorkflow, error) {
 	if len(ids) == 0 {
 		return nil, fmt.Errorf("cannot assemble workflow: no node_ids provided")
 	}
+	if len(definitionJSONs) > 0 && len(definitionJSONs) != len(ids) {
+		return nil, fmt.Errorf("node_definition_jsons must have the same length as node_ids")
+	}
 
 	nodes := make([]NodeState, 0, len(ids))
-	for _, id := range ids {
+	for i, id := range ids {
+		var fallbackNode NodeState
+		hasFallbackNode := false
+		if len(definitionJSONs) > 0 {
+			var err error
+			fallbackNode, err = ParseNodeDefinitionJSON(definitionJSONs[i])
+			if err != nil {
+				return nil, fmt.Errorf("node_definition_jsons[%d] for node %q must be valid JSON: %w", i, id, err)
+			}
+			if fallbackNode.ID != id {
+				return nil, fmt.Errorf("node_definition_jsons[%d] id %q does not match node_ids[%d] %q", i, fallbackNode.ID, i, id)
+			}
+			hasFallbackNode = true
+		}
+
 		node, ok := LookupNodeState(id)
-		if !ok {
+		if ok {
+			nodes = append(nodes, node)
+			continue
+		}
+		if !hasFallbackNode {
 			return nil, fmt.Errorf("node %q is not registered; node resources must be created before comfyui_workflow", id)
 		}
-		nodes = append(nodes, node)
+
+		nodes = append(nodes, fallbackNode)
 	}
 
 	if errs := ValidateWorkflow(nodes); len(errs) > 0 {
@@ -108,7 +192,7 @@ func extractInputsFromModel(model any) (map[string]interface{}, error) {
 	for i := 0; i < value.NumField(); i++ {
 		fieldType := modelType.Field(i)
 		attrName := fieldType.Tag.Get("tfsdk")
-		if attrName == "" || attrName == "id" || attrName == "node_id" || strings.HasSuffix(attrName, "_output") {
+		if attrName == "" || attrName == "id" || attrName == "node_id" || attrName == "node_definition_json" || strings.HasSuffix(attrName, "_output") {
 			continue
 		}
 

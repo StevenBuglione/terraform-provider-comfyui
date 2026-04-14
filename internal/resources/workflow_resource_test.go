@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	resourceschema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
@@ -328,6 +329,81 @@ func TestWorkflowSchema_ValidationPreflightAttributes(t *testing.T) {
 	}
 }
 
+func TestParseWorkflow_UsesNodeDefinitionJSONFallbackWhenRegistryEmpty(t *testing.T) {
+	resetNodeStateRegistry()
+
+	nodes := fullPipeline()
+	nodeIDs := []attr.Value{
+		types.StringValue(uuidCheckpoint),
+		types.StringValue(uuidCLIP),
+		types.StringValue(uuidKSampler),
+		types.StringValue(uuidVAEDecode),
+		types.StringValue(uuidSaveImage),
+	}
+	nodeDefinitions := make([]attr.Value, 0, len(nodes))
+	for _, node := range nodes {
+		raw, err := json.Marshal(node)
+		if err != nil {
+			t.Fatalf("failed to marshal node definition: %v", err)
+		}
+		nodeDefinitions = append(nodeDefinitions, types.StringValue(string(raw)))
+	}
+
+	r := NewWorkflowResource().(*WorkflowResource)
+	prompt, err := r.parseWorkflow(context.Background(), WorkflowModel{
+		NodeIDs:             types.ListValueMust(types.StringType, nodeIDs),
+		NodeDefinitionJSONs: types.ListValueMust(types.StringType, nodeDefinitions),
+	})
+	if err != nil {
+		t.Fatalf("parseWorkflow returned error: %v", err)
+	}
+
+	if len(prompt) != 5 {
+		t.Fatalf("assembled prompt has %d nodes, want 5", len(prompt))
+	}
+}
+
+func TestParseWorkflow_RejectsInvalidNodeDefinitionJSONFallback(t *testing.T) {
+	resetNodeStateRegistry()
+
+	r := NewWorkflowResource().(*WorkflowResource)
+	_, err := r.parseWorkflow(context.Background(), WorkflowModel{
+		NodeIDs: types.ListValueMust(types.StringType, []attr.Value{
+			types.StringValue(uuidCheckpoint),
+		}),
+		NodeDefinitionJSONs: types.ListValueMust(types.StringType, []attr.Value{
+			types.StringValue("{not-json}"),
+		}),
+	})
+	if err == nil {
+		t.Fatal("expected invalid node_definition_jsons fallback to fail")
+	}
+	if !strings.Contains(err.Error(), "node_definition_jsons[0]") {
+		t.Fatalf("expected error to identify failing fallback entry, got %v", err)
+	}
+}
+
+func TestParseWorkflow_RejectsMismatchedNodeDefinitionJSONFallbackLength(t *testing.T) {
+	resetNodeStateRegistry()
+
+	r := NewWorkflowResource().(*WorkflowResource)
+	_, err := r.parseWorkflow(context.Background(), WorkflowModel{
+		NodeIDs: types.ListValueMust(types.StringType, []attr.Value{
+			types.StringValue(uuidCheckpoint),
+			types.StringValue(uuidKSampler),
+		}),
+		NodeDefinitionJSONs: types.ListValueMust(types.StringType, []attr.Value{
+			types.StringValue(`{"id":"` + uuidCheckpoint + `","class_type":"CheckpointLoaderSimple","inputs":{"ckpt_name":"v1-5-pruned-emaonly.safetensors"}}`),
+		}),
+	})
+	if err == nil {
+		t.Fatal("expected mismatched node_definition_jsons length to fail")
+	}
+	if !strings.Contains(err.Error(), "same length as node_ids") {
+		t.Fatalf("expected length mismatch error, got %v", err)
+	}
+}
+
 func newWorkflowTestClient(server *httptest.Server) *client.Client {
 	return &client.Client{
 		HTTPClient: server.Client(),
@@ -505,6 +581,7 @@ func workflowTestSchema(t *testing.T, r *WorkflowResource) resourceschema.Schema
 func workflowTestPlanFromModel(t *testing.T, schema resourceschema.Schema, data WorkflowModel) tfsdk.Plan {
 	t.Helper()
 
+	data = normalizeWorkflowTestModel(data)
 	plan := tfsdk.Plan{Schema: schema}
 	if diags := plan.Set(context.Background(), &data); diags.HasError() {
 		t.Fatalf("failed to encode workflow plan: %v", diags)
@@ -515,11 +592,19 @@ func workflowTestPlanFromModel(t *testing.T, schema resourceschema.Schema, data 
 func workflowTestStateFromModel(t *testing.T, schema resourceschema.Schema, data WorkflowModel) tfsdk.State {
 	t.Helper()
 
+	data = normalizeWorkflowTestModel(data)
 	state := tfsdk.State{Schema: schema}
 	if diags := state.Set(context.Background(), &data); diags.HasError() {
 		t.Fatalf("failed to encode workflow state: %v", diags)
 	}
 	return state
+}
+
+func normalizeWorkflowTestModel(data WorkflowModel) WorkflowModel {
+	if data.NodeDefinitionJSONs.ElementType(context.Background()) == nil {
+		data.NodeDefinitionJSONs = types.ListNull(types.StringType)
+	}
+	return data
 }
 
 func TestExecuteWorkflow_ValidationFailureBlocksQueueing(t *testing.T) {

@@ -54,6 +54,7 @@ type {{ .StructName }}Resource struct{
 type {{ .StructName }}Model struct {
 	ID     types.String ` + "`" + `tfsdk:"id"` + "`" + `
 	NodeID types.String ` + "`" + `tfsdk:"node_id"` + "`" + `
+	NodeDefinitionJSON types.String ` + "`" + `tfsdk:"node_definition_json"` + "`" + `
 {{- range .Fields }}
 	{{ .GoName }} {{ .GoType }} ` + "`" + `tfsdk:"{{ .TFName }}"` + "`" + `
 {{- end }}
@@ -102,6 +103,13 @@ func (r *{{ .StructName }}Resource) Schema(_ context.Context, _ resource.SchemaR
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
+			"node_definition_json": schema.StringAttribute{
+				Computed:    true,
+				MarkdownDescription: "Serialized durable node definition used by comfyui_workflow fallback assembly.",
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
 {{- range .Attributes }}
 			{{ .Definition }}
 {{- end }}
@@ -137,10 +145,12 @@ func (r *{{ .StructName }}Resource) Create(ctx context.Context, req resource.Cre
 	data.{{ .GoName }} = types.StringValue(fmt.Sprintf("%s:{{ .SlotIndex }}", data.ID.ValueString()))
 {{- end }}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
@@ -151,10 +161,12 @@ func (r *{{ .StructName }}Resource) Read(ctx context.Context, req resource.ReadR
 	if resp.Diagnostics.HasError() {
 		return
 	}
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
 
@@ -165,10 +177,12 @@ func (r *{{ .StructName }}Resource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
-	if err := resources.RegisterNodeStateFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data); err != nil {
+	nodeDefinitionJSON, err := resources.RegisterNodeStateAndDefinitionFromModel(data.ID.ValueString(), data.NodeID.ValueString(), data)
+	if err != nil {
 		resp.Diagnostics.AddError("Failed to register node state", err.Error())
 		return
 	}
+	data.NodeDefinitionJSON = types.StringValue(nodeDefinitionJSON)
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }

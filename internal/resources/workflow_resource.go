@@ -45,6 +45,7 @@ type WorkflowModel struct {
 	ID                    types.String `tfsdk:"id"`
 	WorkflowJSON          types.String `tfsdk:"workflow_json"`
 	NodeIDs               types.List   `tfsdk:"node_ids"`
+	NodeDefinitionJSONs   types.List   `tfsdk:"node_definition_jsons"`
 	Execute               types.Bool   `tfsdk:"execute"`
 	WaitForCompletion     types.Bool   `tfsdk:"wait_for_completion"`
 	TimeoutSeconds        types.Int64  `tfsdk:"timeout_seconds"`
@@ -125,6 +126,11 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Optional:    true,
 				ElementType: types.StringType,
 				Description: "List of node resource IDs to include when assembling a workflow from virtual node resources.",
+			},
+			"node_definition_jsons": schema.ListAttribute{
+				Optional:    true,
+				ElementType: types.StringType,
+				Description: "Optional durable serialized node definitions aligned with node_ids. When provided, workflow assembly can reconstruct missing node state without relying solely on the process-local registry.",
 			},
 			"execute": schema.BoolAttribute{
 				Optional:    true,
@@ -437,7 +443,15 @@ func (r *WorkflowResource) parseWorkflow(ctx context.Context, data WorkflowModel
 		return nil, fmt.Errorf("node_ids must be a list of strings")
 	}
 
-	assembled, err := AssembleWorkflowFromNodeIDs(nodeIDs)
+	var nodeDefinitionJSONs []string
+	if !data.NodeDefinitionJSONs.IsNull() && !data.NodeDefinitionJSONs.IsUnknown() {
+		nodeDefinitionJSONs, diags = listValueToStrings(ctx, data.NodeDefinitionJSONs)
+		if diags.HasError() {
+			return nil, fmt.Errorf("node_definition_jsons must be a list of strings")
+		}
+	}
+
+	assembled, err := AssembleWorkflowFromNodeIDsWithDefinitions(nodeIDs, nodeDefinitionJSONs)
 	if err != nil {
 		return nil, err
 	}

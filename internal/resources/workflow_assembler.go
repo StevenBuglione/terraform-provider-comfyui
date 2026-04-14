@@ -13,9 +13,9 @@ var connectionRefPattern = regexp.MustCompile(`^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]
 
 // NodeState represents a single virtual node resource's state.
 type NodeState struct {
-	ID        string                 // Terraform resource UUID
-	ClassType string                 // ComfyUI node class (e.g., "KSampler")
-	Inputs    map[string]interface{} // Input values — strings, ints, floats, bools, or connection refs
+	ID        string                 `json:"id"`         // Terraform resource UUID
+	ClassType string                 `json:"class_type"` // ComfyUI node class (e.g., "KSampler")
+	Inputs    map[string]interface{} `json:"inputs"`     // Input values — strings, ints, floats, bools, or connection refs
 }
 
 // AssembledWorkflow is the output of assembly.
