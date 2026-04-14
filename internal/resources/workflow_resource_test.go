@@ -323,6 +323,9 @@ func TestWorkflowSchema_ValidationPreflightAttributes(t *testing.T) {
 	if len(summaryAttr.PlanModifiers) != 0 {
 		t.Fatalf("expected validation_summary_json to avoid state-reuse plan modifiers, got %#v", summaryAttr.PlanModifiers)
 	}
+	if !strings.Contains(summaryAttr.Description, "validation is disabled") {
+		t.Fatalf("expected validation_summary_json description to mention disabled validation contract, got %q", summaryAttr.Description)
+	}
 }
 
 func newWorkflowTestClient(server *httptest.Server) *client.Client {
@@ -338,8 +341,6 @@ func mustEncodeResourceJSON(t *testing.T, w http.ResponseWriter, v any) {
 		t.Fatalf("failed to encode JSON response: %v", err)
 	}
 }
-
-const disabledValidationSummaryJSON = `{"valid":true,"errors":[],"warnings":[],"validated_node_count":0,"error_count":0,"warning_count":0}`
 
 func mustDecodeValidationSummaryJSON(t *testing.T, raw string) map[string]interface{} {
 	t.Helper()
@@ -918,7 +919,7 @@ func TestTDDExecuteWorkflow_DisabledValidationUsesStableSummaryContract(t *testi
 				WaitForCompletion:     types.BoolValue(false),
 				TimeoutSeconds:        types.Int64Value(30),
 				ValidateBeforeExecute: types.BoolValue(false),
-				ValidationSummaryJSON: types.StringValue(disabledValidationSummaryJSON),
+				ValidationSummaryJSON: types.StringValue(disabledValidationSummaryContractJSON),
 			},
 		},
 	}
@@ -1061,7 +1062,7 @@ func TestTDDWorkflowUpdate_DisabledValidationUsesStableSummaryContract(t *testin
 		PromptID:              types.StringValue("queued-previous"),
 		PartialTargets:        types.ListNull(types.StringType),
 		Tags:                  types.ListNull(types.StringType),
-		ValidationSummaryJSON: types.StringValue(disabledValidationSummaryJSON),
+		ValidationSummaryJSON: types.StringValue(disabledValidationSummaryContractJSON),
 	}
 	planData := currentState
 

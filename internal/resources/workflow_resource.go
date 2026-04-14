@@ -170,7 +170,7 @@ func (r *WorkflowResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			},
 			"validation_summary_json": schema.StringAttribute{
 				Computed:    true,
-				Description: "Structured JSON summary of semantic validation results when workflow preflight validation runs.",
+				Description: "Structured JSON summary of semantic validation results when workflow preflight validation runs. When validation is disabled, this remains the stable disabled-validation contract JSON.",
 			},
 			"name": schema.StringAttribute{
 				Optional:    true,
