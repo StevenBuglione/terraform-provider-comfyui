@@ -18,6 +18,10 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
+## [0.18.9] - 2026-04-15
+
+Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
+
 ### BREAKING CHANGES
 
 * Generated DynamicCombo node inputs that were previously authored as plain strings are now nested objects with a required `selection` field plus typed child inputs where ComfyUI exposes them. Existing configs must move the prior string value into `<input>.selection`.
@@ -29,6 +33,11 @@ Provider versions follow the **ComfyUI compatibility line** model:
 ### BUG FIXES
 
 * Reject DynamicCombo child fields that are not valid for the selected option during plan-time validation instead of silently passing them through to assembled workflows
+
+### NOTES
+
+* Maintains ComfyUI `v0.18.5` compatibility
+* Includes a breaking schema change for affected generated DynamicCombo resources in the `0.18.x` line
 
 ## [0.18.8] - 2026-04-13
 
@@ -134,7 +143,8 @@ Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5
 * Built with Terraform Plugin Framework (not SDKv2)
 * Generated node resources are virtual/plan-only - execution happens through `comfyui_workflow`
 
-[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.8...HEAD
+[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.9...HEAD
+[0.18.9]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.9
 [0.18.8]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.8
 [0.18.7]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.7
 [0.18.6]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.6
