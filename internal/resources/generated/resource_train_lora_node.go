@@ -147,7 +147,7 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"optimizer": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"AdamW\". Tooltip: The optimizer to use for training.",
+				MarkdownDescription: "Input: COMBO. Default: \"AdamW\". Options: \"AdamW\", \"Adam\", \"SGD\", \"RMSprop\". Tooltip: The optimizer to use for training.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -159,7 +159,7 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"loss_function": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"MSE\". Tooltip: The loss function to use for training.",
+				MarkdownDescription: "Input: COMBO. Default: \"MSE\". Options: \"MSE\", \"L1\", \"Huber\", \"SmoothL1\". Tooltip: The loss function to use for training.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -178,7 +178,7 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"training_dtype": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"bf16\". Tooltip: The dtype to use for training. 'none' preserves the model's native compute dtype instead of overriding it. For fp16 models, GradScaler is automatically enabled.",
+				MarkdownDescription: "Input: COMBO. Default: \"bf16\". Options: \"bf16\", \"fp32\", \"none\". Tooltip: The dtype to use for training. 'none' preserves the model's native compute dtype instead of overriding it. For fp16 models, GradScaler is automatically enabled.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -189,7 +189,7 @@ func (r *TrainLoraNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"lora_dtype": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"bf16\". Tooltip: The dtype to use for lora.",
+				MarkdownDescription: "Input: COMBO. Default: \"bf16\". Options: \"bf16\", \"fp32\". Tooltip: The dtype to use for lora.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

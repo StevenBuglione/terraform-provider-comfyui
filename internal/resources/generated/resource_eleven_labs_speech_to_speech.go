@@ -34,7 +34,7 @@ type ElevenLabsSpeechToSpeechModel struct {
 	Voice                 types.String  `tfsdk:"voice"`
 	Audio                 types.String  `tfsdk:"audio"`
 	Stability             types.Float64 `tfsdk:"stability"`
-	Model                 types.String  `tfsdk:"model"`
+	Model                 types.Object  `tfsdk:"model"`
 	OutputFormat          types.String  `tfsdk:"output_format"`
 	Seed                  types.Int64   `tfsdk:"seed"`
 	RemoveBackgroundNoise types.Bool    `tfsdk:"remove_background_noise"`
@@ -99,12 +99,18 @@ func (r *ElevenLabsSpeechToSpeechResource) Schema(_ context.Context, _ resource.
 					float64validator.Between(0, 1),
 				},
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for speech-to-speech transformation.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+				},
 			},
 			"output_format": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Audio output format.",
+				MarkdownDescription: "Input: COMBO. Options: \"mp3_44100_192\", \"opus_48000_192\". Tooltip: Audio output format.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

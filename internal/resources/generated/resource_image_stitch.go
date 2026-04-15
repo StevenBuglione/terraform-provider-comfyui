@@ -87,7 +87,7 @@ func (r *ImageStitchResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Required:            true,
 			},
 			"direction": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"right\".",
+				MarkdownDescription: "Input: COMBO. Default: \"right\". Options: \"right\", \"down\", \"left\", \"up\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -110,7 +110,7 @@ func (r *ImageStitchResource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"spacing_color": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"white\".",
+				MarkdownDescription: "Input: COMBO. Default: \"white\". Options: \"white\", \"black\", \"red\", \"green\", \"blue\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

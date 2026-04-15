@@ -134,7 +134,7 @@ func (r *TripoMultiviewToModelNodeResource) Schema(_ context.Context, _ resource
 				Optional:            true,
 			},
 			"texture_quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"standard\".",
+				MarkdownDescription: "Input: COMBO. Default: \"standard\". Options: \"standard\", \"detailed\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -144,7 +144,7 @@ func (r *TripoMultiviewToModelNodeResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"texture_alignment": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"original_image\".",
+				MarkdownDescription: "Input: COMBO. Default: \"original_image\". Options: \"original_image\", \"geometry\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -165,7 +165,7 @@ func (r *TripoMultiviewToModelNodeResource) Schema(_ context.Context, _ resource
 				Optional:            true,
 			},
 			"geometry_quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"standard\".",
+				MarkdownDescription: "Input: COMBO. Default: \"standard\". Options: \"standard\", \"detailed\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

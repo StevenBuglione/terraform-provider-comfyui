@@ -89,7 +89,7 @@ func (r *MinimaxImageToVideoNodeResource) Schema(_ context.Context, _ resource.S
 				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"I2V-01\". Tooltip: Model to use for video generation.",
+				MarkdownDescription: "Input: COMBO. Default: \"I2V-01\". Options: \"I2V-01-Director\", \"I2V-01\", \"I2V-01-live\". Tooltip: Model to use for video generation.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

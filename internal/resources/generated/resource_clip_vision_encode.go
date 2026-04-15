@@ -87,7 +87,7 @@ func (r *CLIPVisionEncodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				Required:            true,
 			},
 			"crop": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"center\", \"none\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

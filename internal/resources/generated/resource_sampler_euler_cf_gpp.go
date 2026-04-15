@@ -77,7 +77,7 @@ func (r *SamplerEulerCfGppResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"version": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"regular\", \"alternative\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

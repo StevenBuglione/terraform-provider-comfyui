@@ -30,7 +30,7 @@ type Wan2VideoEditAPIResource struct {
 type Wan2VideoEditAPIModel struct {
 	ID           types.String `tfsdk:"id"`
 	NodeID       types.String `tfsdk:"node_id"`
-	Model        types.String `tfsdk:"model"`
+	Model        types.Object `tfsdk:"model"`
 	Video        types.String `tfsdk:"video"`
 	Seed         types.Int64  `tfsdk:"seed"`
 	AudioSetting types.String `tfsdk:"audio_setting"`
@@ -81,9 +81,35 @@ func (r *Wan2VideoEditAPIResource) Schema(_ context.Context, _ resource.SchemaRe
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"duration": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Default: \"auto\". Options: \"auto\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\". Tooltip: Output duration in seconds. 'auto' matches the input video duration. A specific value truncates from the start of the video.",
+						Optional:            true,
+					},
+					"prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Editing instructions or style transfer requirements.",
+						Optional:            true,
+					},
+					"ratio": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\", \"4:3\", \"3:4\". Tooltip: Aspect ratio. If not changed, approximates the input video ratio.",
+						Optional:            true,
+					},
+					"reference_images": schema.StringAttribute{
+						MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"720P\", \"1080P\".",
+						Optional:            true,
+					},
+				},
 			},
 			"video": schema.StringAttribute{
 				MarkdownDescription: "Input: VIDEO. Link input. Tooltip: The video to edit.",
@@ -97,7 +123,7 @@ func (r *Wan2VideoEditAPIResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"audio_setting": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: 'auto': model decides whether to regenerate audio based on the prompt. 'origin': preserve the original audio from the input video.",
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Options: \"auto\", \"origin\". Tooltip: 'auto': model decides whether to regenerate audio based on the prompt. 'origin': preserve the original audio from the input video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

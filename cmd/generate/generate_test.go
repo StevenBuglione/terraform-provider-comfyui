@@ -435,6 +435,302 @@ func TestBuildNodeSchemaTemplateData_PreservesStructuredContracts(t *testing.T) 
 	}
 }
 
+func TestBuildResourceData_DynamicComboUsesObjectSchema(t *testing.T) {
+	node := Node{
+		NodeID:                "BriaImageEditNode",
+		ClassName:             "BriaImageEditNode",
+		TerraformResourceName: "comfyui_bria_image_edit_node",
+		Inputs: []Input{
+			{
+				Name:     "moderation",
+				Type:     "COMFY_DYNAMICCOMBO_V3",
+				Required: true,
+				DynamicComboOptions: []DynamicComboOption{
+					{Key: "false"},
+					{
+						Key: "true",
+						Inputs: []Input{
+							{Name: "prompt_content_moderation", Type: "BOOLEAN", Required: true},
+							{Name: "threshold", Type: "FLOAT", Required: true, Min: numberPtr(0.1), Max: numberPtr(0.9)},
+							{Name: "mode", Type: "COMBO", Required: true, RawOptions: []interface{}{"safe", "strict"}},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	rd, warnings := buildResourceData(node)
+	if len(warnings) != 0 {
+		t.Fatalf("buildResourceData returned warnings: %v", warnings)
+	}
+	if len(rd.Fields) != 1 {
+		t.Fatalf("expected one field, got %d", len(rd.Fields))
+	}
+	if rd.Fields[0].GoType != "types.Object" {
+		t.Fatalf("expected dynamic combo field to use types.Object, got %q", rd.Fields[0].GoType)
+	}
+
+	attrDefs := strings.Join(extractAttrDefinitions(rd.Attributes), "\n")
+	if !strings.Contains(attrDefs, `"moderation": schema.SingleNestedAttribute{`) {
+		t.Fatalf("expected dynamic combo input to be emitted as SingleNestedAttribute, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, `"selection": schema.StringAttribute{`) {
+		t.Fatalf("expected dynamic combo selection attribute, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, `"prompt_content_moderation": schema.BoolAttribute{`) {
+		t.Fatalf("expected nested boolean option attribute, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, `"threshold": schema.Float64Attribute{`) {
+		t.Fatalf("expected nested float option attribute, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, `"mode": schema.StringAttribute{`) {
+		t.Fatalf("expected nested combo option attribute, got: %s", attrDefs)
+	}
+	if strings.Contains(attrDefs, "Validators:") {
+		t.Fatalf("expected dynamic combo nested schema to omit generator-side validators, got: %s", attrDefs)
+	}
+}
+
+func TestBuildResourceData_OptionalDynamicComboUsesOptionalNestedSchema(t *testing.T) {
+	node := Node{
+		NodeID:                "OptionalDynamicComboNode",
+		ClassName:             "OptionalDynamicComboNode",
+		TerraformResourceName: "comfyui_optional_dynamic_combo_node",
+		Inputs: []Input{
+			{
+				Name:                 "moderation",
+				Type:                 "COMFY_DYNAMICCOMBO_V3",
+				Required:             false,
+				DynamicComboOptions:  []DynamicComboOption{},
+				DynamicOptions:       boolPtr(true),
+				DynamicOptionsSource: stringPtr("folder_paths.get_filename_list('moderation_profiles')"),
+			},
+		},
+	}
+
+	rd, warnings := buildResourceData(node)
+	if len(warnings) != 0 {
+		t.Fatalf("buildResourceData returned warnings: %v", warnings)
+	}
+
+	attrDefs := strings.Join(extractAttrDefinitions(rd.Attributes), "\n")
+	if !strings.Contains(attrDefs, `"moderation": schema.SingleNestedAttribute{`) {
+		t.Fatalf("expected dynamic combo input to be emitted as SingleNestedAttribute, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, "Optional: true,") {
+		t.Fatalf("expected optional dynamic combo attribute, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, `"selection": schema.StringAttribute{`) {
+		t.Fatalf("expected discriminator attribute even when no options are present, got: %s", attrDefs)
+	}
+}
+
+func TestBuildResourceData_DynamicComboChildDescriptionsAggregateMetadata(t *testing.T) {
+	node := Node{
+		NodeID:                "DynamicComboMetadataNode",
+		ClassName:             "DynamicComboMetadataNode",
+		TerraformResourceName: "comfyui_dynamic_combo_metadata_node",
+		Inputs: []Input{
+			{
+				Name:     "profile",
+				Type:     "COMFY_DYNAMICCOMBO_V3",
+				Required: true,
+				DynamicComboOptions: []DynamicComboOption{
+					{
+						Key: "balanced",
+						Inputs: []Input{
+							{
+								Name:    "threshold",
+								Type:    "FLOAT",
+								Default: 0.25,
+								Min:     numberPtr(0.1),
+								Max:     numberPtr(0.5),
+							},
+							{
+								Name:       "mode",
+								Type:       "COMBO",
+								Default:    "safe",
+								RawOptions: []interface{}{"safe", "balanced"},
+							},
+						},
+					},
+					{
+						Key: "strict",
+						Inputs: []Input{
+							{
+								Name:    "threshold",
+								Type:    "FLOAT",
+								Default: 0.75,
+								Min:     numberPtr(0.6),
+								Max:     numberPtr(1.0),
+							},
+							{
+								Name:                 "mode",
+								Type:                 "COMBO",
+								Default:              "strict",
+								RawOptions:           []interface{}{"strict"},
+								DynamicOptions:       boolPtr(true),
+								DynamicOptionsSource: stringPtr("folder_paths.get_filename_list('strict_modes')"),
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	rd, warnings := buildResourceData(node)
+	if len(warnings) != 0 {
+		t.Fatalf("buildResourceData returned warnings: %v", warnings)
+	}
+
+	attrDefs := strings.Join(extractAttrDefinitions(rd.Attributes), "\n")
+	if !strings.Contains(attrDefs, `Defaults vary by selection: 0.25, 0.75.`) {
+		t.Fatalf("expected merged numeric defaults in description, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, `Allowed ranges vary by selection: 0.1 to 0.5; 0.6 to 1.`) {
+		t.Fatalf("expected merged numeric ranges in description, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, `Options: \"safe\", \"balanced\", \"strict\".`) {
+		t.Fatalf("expected merged static options in description, got: %s", attrDefs)
+	}
+	if !strings.Contains(attrDefs, `Dynamic options are resolved by ComfyUI at runtime from one of: folder_paths.get_filename_list('strict_modes').`) {
+		t.Fatalf("expected merged dynamic option sources in description, got: %s", attrDefs)
+	}
+}
+
+func TestBuildResourceData_DynamicComboChildSelectionNameCollisionIsRenamed(t *testing.T) {
+	node := Node{
+		NodeID:                "SelectionCollisionNode",
+		ClassName:             "SelectionCollisionNode",
+		TerraformResourceName: "comfyui_selection_collision_node",
+		Inputs: []Input{
+			{
+				Name:     "profile",
+				Type:     "COMFY_DYNAMICCOMBO_V3",
+				Required: true,
+				DynamicComboOptions: []DynamicComboOption{
+					{
+						Key: "true",
+						Inputs: []Input{
+							{Name: "selection", Type: "STRING", Required: true},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	rd, warnings := buildResourceData(node)
+	if len(warnings) != 0 {
+		t.Fatalf("buildResourceData returned warnings: %v", warnings)
+	}
+
+	attrDefs := strings.Join(extractAttrDefinitions(rd.Attributes), "\n")
+	if !strings.Contains(attrDefs, `"selection_value": schema.StringAttribute{`) {
+		t.Fatalf("expected colliding child name to be renamed away from discriminator key, got: %s", attrDefs)
+	}
+}
+
+func TestBuildResourceData_DynamicComboChildrenAreSeparatedByNewlines(t *testing.T) {
+	node := Node{
+		NodeID:                "DynamicComboFormattingNode",
+		ClassName:             "DynamicComboFormattingNode",
+		TerraformResourceName: "comfyui_dynamic_combo_formatting_node",
+		Inputs: []Input{
+			{
+				Name:     "profile",
+				Type:     "COMFY_DYNAMICCOMBO_V3",
+				Required: true,
+				DynamicComboOptions: []DynamicComboOption{
+					{
+						Key: "true",
+						Inputs: []Input{
+							{Name: "first", Type: "BOOLEAN", Required: true},
+							{Name: "second", Type: "BOOLEAN", Required: true},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	rd, warnings := buildResourceData(node)
+	if len(warnings) != 0 {
+		t.Fatalf("buildResourceData returned warnings: %v", warnings)
+	}
+
+	attrDefs := strings.Join(extractAttrDefinitions(rd.Attributes), "\n")
+	if strings.Contains(attrDefs, `},"second": schema.BoolAttribute{`) {
+		t.Fatalf("expected nested child attributes to be separated by a newline, got: %s", attrDefs)
+	}
+}
+
+func TestBuildNodeSchemaTemplateData_PreservesStructuredDynamicComboOptions(t *testing.T) {
+	specs := NodeSpecs{
+		Version:        "1.0.0",
+		ExtractedAt:    "2026-04-12T00:00:00Z",
+		ComfyUIVersion: "v0-test",
+		Nodes: []Node{
+			{
+				NodeID:      "BriaImageEditNode",
+				ClassName:   "BriaImageEditNode",
+				DisplayName: stringPtr("Bria Image Edit"),
+				Category:    "api node/image",
+				Inputs: []Input{
+					{
+						Name:     "moderation",
+						Type:     "COMFY_DYNAMICCOMBO_V3",
+						Required: true,
+						DynamicComboOptions: []DynamicComboOption{
+							{Key: "false"},
+							{
+								Key: "true",
+								Inputs: []Input{
+									{Name: "prompt_content_moderation", Type: "BOOLEAN", Required: true},
+									{
+										Name:     "provider_settings",
+										Type:     "COMFY_DYNAMICCOMBO_V3",
+										Required: true,
+										DynamicComboOptions: []DynamicComboOption{
+											{
+												Key: "basic",
+												Inputs: []Input{
+													{Name: "temperature", Type: "FLOAT", Required: true, Default: 0.4},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	data := buildNodeSchemaTemplateData(specs)
+	input := data.Nodes[0].RequiredInputs[0]
+	if len(input.DynamicComboOptions) != 2 {
+		t.Fatalf("expected two dynamic combo options, got %#v", input.DynamicComboOptions)
+	}
+	if input.DynamicComboOptions[1].Key != "true" {
+		t.Fatalf("expected second option key to be preserved, got %#v", input.DynamicComboOptions[1])
+	}
+	if len(input.DynamicComboOptions[1].Inputs) != 2 {
+		t.Fatalf("expected nested inputs for selected option, got %#v", input.DynamicComboOptions[1].Inputs)
+	}
+	nested := input.DynamicComboOptions[1].Inputs[1]
+	if nested.Type != "COMFY_DYNAMICCOMBO_V3" {
+		t.Fatalf("expected nested dynamic combo type, got %#v", nested)
+	}
+	if len(nested.DynamicComboOptions) != 1 || nested.DynamicComboOptions[0].Key != "basic" {
+		t.Fatalf("expected recursive dynamic combo options to be preserved, got %#v", nested.DynamicComboOptions)
+	}
+}
+
 func TestBuildInputDescriptionCollapsesVerboseDynamicOptionSources(t *testing.T) {
 	inp := Input{
 		Name:                 "moderation",

@@ -37,7 +37,7 @@ type MagnificImageRelightNodeModel struct {
 	InterpolateFromOriginal types.Bool   `tfsdk:"interpolate_from_original"`
 	ChangeBackground        types.Bool   `tfsdk:"change_background"`
 	PreserveDetails         types.Bool   `tfsdk:"preserve_details"`
-	AdvancedSettings        types.String `tfsdk:"advanced_settings"`
+	AdvancedSettings        types.Object `tfsdk:"advanced_settings"`
 	ReferenceImage          types.String `tfsdk:"reference_image"`
 	ImageOutput             types.String `tfsdk:"image_output"`
 }
@@ -101,7 +101,7 @@ func (r *MagnificImageRelightNodeResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"style": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Stylistic output preference.",
+				MarkdownDescription: "Input: COMBO. Options: \"standard\", \"darker_but_realistic\", \"clean\", \"smooth\", \"brighter\", \"contrasted_n_hdr\", \"just_composition\". Tooltip: Stylistic output preference.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -127,9 +127,51 @@ func (r *MagnificImageRelightNodeResource) Schema(_ context.Context, _ resource.
 				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Maintains texture and fine details from original.",
 				Required:            true,
 			},
-			"advanced_settings": schema.StringAttribute{
+			"advanced_settings": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Fine-tuning options for advanced lighting control.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"blacks": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Adjusts the darkest tones in the image.",
+						Optional:            true,
+					},
+					"brightness": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Overall brightness adjustment.",
+						Optional:            true,
+					},
+					"contrast": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Contrast adjustment.",
+						Optional:            true,
+					},
+					"engine": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"automatic\", \"balanced\", \"cool\", \"real\", \"illusio\", \"fairy\", \"colorful_anime\", \"hard_transform\", \"softy\". Tooltip: Processing engine selection.",
+						Optional:            true,
+					},
+					"fixed_generation": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: Ensures consistent output with the same settings.",
+						Optional:            true,
+					},
+					"saturation": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Color saturation adjustment.",
+						Optional:            true,
+					},
+					"transfer_light_a": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"automatic\", \"low\", \"medium\", \"normal\", \"high\", \"high_on_faces\". Tooltip: The intensity of light transfer.",
+						Optional:            true,
+					},
+					"transfer_light_b": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"automatic\", \"composition\", \"straight\", \"smooth_in\", \"smooth_out\", \"smooth_both\", \"reverse_both\", \"soft_in\", \"soft_out\", \"soft_mid\", \"style_shift\", \"strong_shift\". Tooltip: Also modifies light transfer intensity. Can be combined with the previous control for varied effects.",
+						Optional:            true,
+					},
+					"whites": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Adjusts the brightest tones in the image.",
+						Optional:            true,
+					},
+				},
 			},
 			"reference_image": schema.StringAttribute{
 				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Optional reference image to transfer lighting from.",

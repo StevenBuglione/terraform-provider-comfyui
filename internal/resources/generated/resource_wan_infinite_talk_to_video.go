@@ -30,7 +30,7 @@ type WanInfiniteTalkToVideoResource struct {
 type WanInfiniteTalkToVideoModel struct {
 	ID                  types.String  `tfsdk:"id"`
 	NodeID              types.String  `tfsdk:"node_id"`
-	Mode                types.String  `tfsdk:"mode"`
+	Mode                types.Object  `tfsdk:"mode"`
 	Model               types.String  `tfsdk:"model"`
 	ModelPatch          types.String  `tfsdk:"model_patch"`
 	Positive            types.String  `tfsdk:"positive"`
@@ -95,9 +95,27 @@ func (r *WanInfiniteTalkToVideoResource) Schema(_ context.Context, _ resource.Sc
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"mode": schema.StringAttribute{
+			"mode": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"audio_encoder_output_2": schema.StringAttribute{
+						MarkdownDescription: "Input: AUDIO_ENCODER_OUTPUT. Link input.",
+						Optional:            true,
+					},
+					"mask_1": schema.StringAttribute{
+						MarkdownDescription: "Input: MASK. Link input. Tooltip: Mask for the first speaker, required if using two audio inputs.",
+						Optional:            true,
+					},
+					"mask_2": schema.StringAttribute{
+						MarkdownDescription: "Input: MASK. Link input. Tooltip: Mask for the second speaker, required if using two audio inputs.",
+						Optional:            true,
+					},
+				},
 			},
 			"model": schema.StringAttribute{
 				MarkdownDescription: "Input: MODEL. Link input.",

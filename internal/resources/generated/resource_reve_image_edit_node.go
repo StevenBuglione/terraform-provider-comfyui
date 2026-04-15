@@ -31,7 +31,7 @@ type ReveImageEditNodeModel struct {
 	NodeID          types.String `tfsdk:"node_id"`
 	Image           types.String `tfsdk:"image"`
 	EditInstruction types.String `tfsdk:"edit_instruction"`
-	Model           types.String `tfsdk:"model"`
+	Model           types.Object `tfsdk:"model"`
 	Seed            types.Int64  `tfsdk:"seed"`
 	ImageOutput     types.String `tfsdk:"image_output"`
 }
@@ -87,9 +87,15 @@ func (r *ReveImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text description of how to edit the image. Maximum 2560 characters.",
 				Required:            true,
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model version to use for editing.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",

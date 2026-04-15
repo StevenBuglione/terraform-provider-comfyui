@@ -90,7 +90,7 @@ func (r *KlingAvatarNodeResource) Schema(_ context.Context, _ resource.SchemaReq
 				Required:            true,
 			},
 			"mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"std\", \"pro\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

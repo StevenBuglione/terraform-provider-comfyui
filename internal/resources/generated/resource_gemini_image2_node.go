@@ -91,7 +91,7 @@ func (r *GeminiImage2NodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"gemini-3-pro-image-preview\", \"Nano Banana 2 (Gemini 3.1 Flash Image)\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -108,7 +108,7 @@ func (r *GeminiImage2NodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: If set to 'auto', matches your input image's aspect ratio; if no image is provided, a 16:9 square is usually generated.",
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Options: \"auto\", \"1:1\", \"2:3\", \"3:2\", \"3:4\", \"4:3\", \"4:5\", \"5:4\", \"9:16\", \"16:9\", \"21:9\". Tooltip: If set to 'auto', matches your input image's aspect ratio; if no image is provided, a 16:9 square is usually generated.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -127,7 +127,7 @@ func (r *GeminiImage2NodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Target output resolution. For 2K/4K the native Gemini upscaler is used.",
+				MarkdownDescription: "Input: COMBO. Options: \"1K\", \"2K\", \"4K\". Tooltip: Target output resolution. For 2K/4K the native Gemini upscaler is used.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -138,7 +138,7 @@ func (r *GeminiImage2NodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"response_modalities": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.",
+				MarkdownDescription: "Input: COMBO. Options: \"IMAGE+TEXT\", \"IMAGE\". Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

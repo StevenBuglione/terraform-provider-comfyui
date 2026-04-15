@@ -31,7 +31,7 @@ type ReveImageRemixNodeModel struct {
 	NodeID          types.String `tfsdk:"node_id"`
 	ReferenceImages types.String `tfsdk:"reference_images"`
 	Prompt          types.String `tfsdk:"prompt"`
-	Model           types.String `tfsdk:"model"`
+	Model           types.Object `tfsdk:"model"`
 	Seed            types.Int64  `tfsdk:"seed"`
 	ImageOutput     types.String `tfsdk:"image_output"`
 }
@@ -87,9 +87,15 @@ func (r *ReveImageRemixNodeResource) Schema(_ context.Context, _ resource.Schema
 				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text description of the desired image. May include XML img tags to reference specific images by index, e.g. <img>0</img>, <img>1</img>, etc.",
 				Required:            true,
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model version to use for remixing.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",

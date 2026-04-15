@@ -32,7 +32,7 @@ type MagnificImageSkinEnhancerNodeModel struct {
 	Image       types.String `tfsdk:"image"`
 	Sharpen     types.Int64  `tfsdk:"sharpen"`
 	SmartGrain  types.Int64  `tfsdk:"smart_grain"`
-	Mode        types.String `tfsdk:"mode"`
+	Mode        types.Object `tfsdk:"mode"`
 	ImageOutput types.String `tfsdk:"image_output"`
 }
 
@@ -97,9 +97,23 @@ func (r *MagnificImageSkinEnhancerNodeResource) Schema(_ context.Context, _ reso
 					int64validator.Between(0, 100),
 				},
 			},
-			"mode": schema.StringAttribute{
+			"mode": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Processing mode: creative for artistic enhancement, faithful for preserving original appearance, flexible for targeted optimization.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"optimized_for": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"enhance_skin\", \"improve_lighting\", \"enhance_everything\", \"transform_to_real\", \"no_make_up\". Tooltip: Enhancement optimization target.",
+						Optional:            true,
+					},
+					"skin_detail": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 80. Allowed range: 0 to 100. Tooltip: Skin detail enhancement level.",
+						Optional:            true,
+					},
+				},
 			},
 			"image_output": schema.StringAttribute{
 				MarkdownDescription: "Output: IMAGE (slot 0).",

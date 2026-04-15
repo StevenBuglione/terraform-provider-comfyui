@@ -89,7 +89,7 @@ func (r *OpenAiDalle3Resource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:            true,
 			},
 			"quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"standard\". Tooltip: Image quality.",
+				MarkdownDescription: "Input: COMBO. Default: \"standard\". Options: \"standard\", \"hd\". Tooltip: Image quality.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -99,7 +99,7 @@ func (r *OpenAiDalle3Resource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"style": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"natural\". Tooltip: Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images.",
+				MarkdownDescription: "Input: COMBO. Default: \"natural\". Options: \"natural\", \"vivid\". Tooltip: Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -109,7 +109,7 @@ func (r *OpenAiDalle3Resource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"size": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"1024x1024\". Tooltip: Image size.",
+				MarkdownDescription: "Input: COMBO. Default: \"1024x1024\". Options: \"1024x1024\", \"1024x1792\", \"1792x1024\". Tooltip: Image size.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

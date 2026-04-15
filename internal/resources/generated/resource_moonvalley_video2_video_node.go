@@ -103,7 +103,7 @@ func (r *MoonvalleyVideo2VideoNodeResource) Schema(_ context.Context, _ resource
 				Required:            true,
 			},
 			"control_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"Motion Transfer\".",
+				MarkdownDescription: "Input: COMBO. Default: \"Motion Transfer\". Options: \"Motion Transfer\", \"Pose Transfer\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

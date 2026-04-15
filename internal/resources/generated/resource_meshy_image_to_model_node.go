@@ -32,9 +32,9 @@ type MeshyImageToModelNodeModel struct {
 	NodeID            types.String `tfsdk:"node_id"`
 	Model             types.String `tfsdk:"model"`
 	Image             types.String `tfsdk:"image"`
-	ShouldRemesh      types.String `tfsdk:"should_remesh"`
+	ShouldRemesh      types.Object `tfsdk:"should_remesh"`
 	SymmetryMode      types.String `tfsdk:"symmetry_mode"`
-	ShouldTexture     types.String `tfsdk:"should_texture"`
+	ShouldTexture     types.Object `tfsdk:"should_texture"`
 	PoseMode          types.String `tfsdk:"pose_mode"`
 	Seed              types.Int64  `tfsdk:"seed"`
 	ModelFileOutput   types.String `tfsdk:"model_file_output"`
@@ -87,7 +87,7 @@ func (r *MeshyImageToModelNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"latest\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -99,12 +99,26 @@ func (r *MeshyImageToModelNodeResource) Schema(_ context.Context, _ resource.Sch
 				MarkdownDescription: "Input: IMAGE. Link input.",
 				Required:            true,
 			},
-			"should_remesh": schema.StringAttribute{
+			"should_remesh": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: When set to false, returns an unprocessed triangular mesh.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"target_polycount": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 300000. Allowed range: 100 to 300000.",
+						Optional:            true,
+					},
+					"topology": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"triangle\", \"quad\".",
+						Optional:            true,
+					},
+				},
 			},
 			"symmetry_mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"auto\", \"on\", \"off\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -114,12 +128,30 @@ func (r *MeshyImageToModelNodeResource) Schema(_ context.Context, _ resource.Sch
 					),
 				},
 			},
-			"should_texture": schema.StringAttribute{
+			"should_texture": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Determines whether textures are generated. Setting it to false skips the texture phase and returns a mesh without textures.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"enable_pbr": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Generate PBR Maps (metallic, roughness, normal) in addition to the base color.",
+						Optional:            true,
+					},
+					"texture_image": schema.StringAttribute{
+						MarkdownDescription: "Input: IMAGE. Link input. Tooltip: Only one of 'texture_image' or 'texture_prompt' may be used at the same time.",
+						Optional:            true,
+					},
+					"texture_prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Provide a text prompt to guide the texturing process. Maximum 600 characters. Cannot be used at the same time as 'texture_image'.",
+						Optional:            true,
+					},
+				},
 			},
 			"pose_mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Specify the pose mode for the generated model.",
+				MarkdownDescription: "Input: COMBO. Options: \"\", \"A-pose\", \"T-pose\". Tooltip: Specify the pose mode for the generated model.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

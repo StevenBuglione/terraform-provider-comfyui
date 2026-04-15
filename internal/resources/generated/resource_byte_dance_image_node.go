@@ -86,7 +86,7 @@ func (r *ByteDanceImageNodeResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"seedream-3-0-t2i-250415\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

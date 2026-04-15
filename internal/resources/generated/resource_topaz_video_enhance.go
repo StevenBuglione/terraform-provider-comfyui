@@ -102,7 +102,7 @@ func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"upscaler_resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"FullHD (1080p)\", \"4K (2160p)\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -112,7 +112,7 @@ func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"upscaler_creativity": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"low\". Tooltip: Creativity level (applies only to Starlight (Astra) Creative).",
+				MarkdownDescription: "Input: COMBO. Default: \"low\". Options: \"low\", \"middle\", \"high\". Tooltip: Creativity level (applies only to Starlight (Astra) Creative).",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -127,7 +127,7 @@ func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				Optional:            true,
 			},
 			"interpolation_model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"apo-8\".",
+				MarkdownDescription: "Input: COMBO. Default: \"apo-8\". Options: \"apo-8\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -161,7 +161,7 @@ func (r *TopazVideoEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"dynamic_compression_level": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"Low\". Tooltip: CQP level.",
+				MarkdownDescription: "Input: COMBO. Default: \"Low\". Options: \"Low\", \"Mid\", \"High\". Tooltip: CQP level.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

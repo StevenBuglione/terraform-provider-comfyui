@@ -96,7 +96,7 @@ func (r *ImageBlendResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"blend_mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"normal\", \"multiply\", \"screen\", \"overlay\", \"soft_light\", \"difference\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

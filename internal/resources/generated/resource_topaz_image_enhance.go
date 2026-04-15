@@ -91,7 +91,7 @@ func (r *TopazImageEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"Reimagine\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -108,7 +108,7 @@ func (r *TopazImageEnhanceResource) Schema(_ context.Context, _ resource.SchemaR
 				Optional:            true,
 			},
 			"subject_detection": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"All\", \"Foreground\", \"Background\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -94,7 +94,7 @@ func (r *SamplerDpmpp3MSdeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"noise_device": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"gpu\", \"cpu\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

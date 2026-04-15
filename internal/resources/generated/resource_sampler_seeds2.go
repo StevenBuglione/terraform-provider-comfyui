@@ -81,7 +81,7 @@ func (r *SamplerSeeds2Resource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"solver_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"phi_1\", \"phi_2\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -78,7 +78,7 @@ func (r *RecraftCreateStyleNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"style": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The base style of the generated images.",
+				MarkdownDescription: "Input: COMBO. Options: \"realistic_image\", \"digital_illustration\". Tooltip: The base style of the generated images.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

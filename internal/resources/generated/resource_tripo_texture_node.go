@@ -100,7 +100,7 @@ func (r *TripoTextureNodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				Optional:            true,
 			},
 			"texture_quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"standard\".",
+				MarkdownDescription: "Input: COMBO. Default: \"standard\". Options: \"standard\", \"detailed\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -110,7 +110,7 @@ func (r *TripoTextureNodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"texture_alignment": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"original_image\".",
+				MarkdownDescription: "Input: COMBO. Default: \"original_image\". Options: \"original_image\", \"geometry\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

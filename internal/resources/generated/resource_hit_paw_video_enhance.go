@@ -27,7 +27,7 @@ type HitPawVideoEnhanceResource struct {
 type HitPawVideoEnhanceModel struct {
 	ID          types.String `tfsdk:"id"`
 	NodeID      types.String `tfsdk:"node_id"`
-	Model       types.String `tfsdk:"model"`
+	Model       types.Object `tfsdk:"model"`
 	Video       types.String `tfsdk:"video"`
 	VideoOutput types.String `tfsdk:"video_output"`
 }
@@ -75,9 +75,15 @@ func (r *HitPawVideoEnhanceResource) Schema(_ context.Context, _ resource.Schema
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime from: model_options.",
+			"model": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+				},
 			},
 			"video": schema.StringAttribute{
 				MarkdownDescription: "Input: VIDEO. Link input.",

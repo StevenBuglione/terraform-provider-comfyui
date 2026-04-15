@@ -82,7 +82,7 @@ func (r *StringTrimResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"Both\", \"Left\", \"Right\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

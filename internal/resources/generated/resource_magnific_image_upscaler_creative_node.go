@@ -95,7 +95,7 @@ func (r *MagnificImageUpscalerCreativeNodeResource) Schema(_ context.Context, _ 
 				Required:            true,
 			},
 			"scale_factor": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"2x\", \"4x\", \"8x\", \"16x\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -107,7 +107,7 @@ func (r *MagnificImageUpscalerCreativeNodeResource) Schema(_ context.Context, _ 
 				},
 			},
 			"optimized_for": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"standard\", \"soft_portraits\", \"hard_portraits\", \"art_n_illustration\", \"videogame_assets\", \"nature_n_landscapes\", \"films_n_photography\", \"3d_renders\", \"science_fiction_n_horror\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -152,7 +152,7 @@ func (r *MagnificImageUpscalerCreativeNodeResource) Schema(_ context.Context, _ 
 				},
 			},
 			"engine": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"automatic\", \"magnific_illusio\", \"magnific_sharpy\", \"magnific_sparkle\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

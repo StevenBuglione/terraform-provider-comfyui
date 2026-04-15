@@ -79,7 +79,7 @@ func (r *ComboOptionTestNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"combo": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"option1\", \"option2\", \"option3\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -90,7 +90,7 @@ func (r *ComboOptionTestNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"combo2": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"option4\", \"option5\", \"option6\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -84,7 +84,7 @@ func (r *TripoRetargetNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"animation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"preset:idle\", \"preset:walk\", \"preset:run\", \"preset:dive\", \"preset:climb\", \"preset:jump\", \"preset:slash\", \"preset:shoot\", \"preset:hurt\", \"preset:fall\", \"preset:turn\", \"preset:quadruped:walk\", \"preset:hexapod:walk\", \"preset:octopod:walk\", \"preset:serpentine:march\", \"preset:aquatic:march\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -97,7 +97,7 @@ func (r *MaskCompositeResource) Schema(_ context.Context, _ resource.SchemaReque
 				Required:            true,
 			},
 			"operation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"multiply\", \"add\", \"subtract\", \"and\", \"or\", \"xor\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

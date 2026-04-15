@@ -35,7 +35,7 @@ type KlingOmniProTextToVideoNodeModel struct {
 	AspectRatio   types.String `tfsdk:"aspect_ratio"`
 	Duration      types.Int64  `tfsdk:"duration"`
 	Resolution    types.String `tfsdk:"resolution"`
-	Storyboards   types.String `tfsdk:"storyboards"`
+	Storyboards   types.Object `tfsdk:"storyboards"`
 	GenerateAudio types.Bool   `tfsdk:"generate_audio"`
 	Seed          types.Int64  `tfsdk:"seed"`
 	VideoOutput   types.String `tfsdk:"video_output"`
@@ -85,7 +85,7 @@ func (r *KlingOmniProTextToVideoNodeResource) Schema(_ context.Context, _ resour
 				},
 			},
 			"model_name": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"kling-v3-omni\", \"kling-video-o1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -99,7 +99,7 @@ func (r *KlingOmniProTextToVideoNodeResource) Schema(_ context.Context, _ resour
 				Required:            true,
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -117,7 +117,7 @@ func (r *KlingOmniProTextToVideoNodeResource) Schema(_ context.Context, _ resour
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"1080p\", \"720p\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -126,9 +126,15 @@ func (r *KlingOmniProTextToVideoNodeResource) Schema(_ context.Context, _ resour
 					),
 				},
 			},
-			"storyboards": schema.StringAttribute{
+			"storyboards": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Ignored for o1 model.",
 				Optional:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+				},
 			},
 			"generate_audio": schema.BoolAttribute{
 				MarkdownDescription: "Input: BOOLEAN. Default: false.",

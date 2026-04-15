@@ -95,6 +95,7 @@ type GeneratedNodeSchema struct {
 type GeneratedNodeSchemaInput struct {
 	Name                         string
 	Type                         string
+	Required                     bool
 	IsLinkType                   bool
 	ValidationKind               string
 	InventoryKind                string
@@ -111,8 +112,14 @@ type GeneratedNodeSchemaInput struct {
 	Multiline                    bool
 	DynamicOptions               bool
 	DynamicOptionsSource         string
+	DynamicComboOptions          []GeneratedDynamicComboOption
 	Tooltip                      string
 	DisplayName                  string
+}
+
+type GeneratedDynamicComboOption struct {
+	Key    string
+	Inputs []GeneratedNodeSchemaInput
 }
 
 type GeneratedNodeSchemaHiddenInput struct {
@@ -156,8 +163,15 @@ func tfAttributeType(t string) string {
 	}
 }
 
+func isDynamicComboType(t string) bool {
+	return strings.HasPrefix(t, "COMFY_DYNAMICCOMBO")
+}
+
 // goFieldType returns the Go types.* type for a ComfyUI type.
 func goFieldType(t string) string {
+	if isDynamicComboType(t) {
+		return "types.Object"
+	}
 	switch t {
 	case "INT":
 		return "types.Int64"

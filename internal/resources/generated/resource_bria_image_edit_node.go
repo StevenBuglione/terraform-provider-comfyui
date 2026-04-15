@@ -39,7 +39,7 @@ type BriaImageEditNodeModel struct {
 	Seed                   types.Int64   `tfsdk:"seed"`
 	GuidanceScale          types.Float64 `tfsdk:"guidance_scale"`
 	Steps                  types.Int64   `tfsdk:"steps"`
-	Moderation             types.String  `tfsdk:"moderation"`
+	Moderation             types.Object  `tfsdk:"moderation"`
 	Mask                   types.String  `tfsdk:"mask"`
 	ImageOutput            types.String  `tfsdk:"image_output"`
 	StructuredPromptOutput types.String  `tfsdk:"structured_prompt_output"`
@@ -89,7 +89,7 @@ func (r *BriaImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"FIBO\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -134,9 +134,27 @@ func (r *BriaImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 					int64validator.Between(20, 50),
 				},
 			},
-			"moderation": schema.StringAttribute{
+			"moderation": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"prompt_content_moderation": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false.",
+						Optional:            true,
+					},
+					"visual_input_moderation": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false.",
+						Optional:            true,
+					},
+					"visual_output_moderation": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: true.",
+						Optional:            true,
+					},
+				},
 			},
 			"mask": schema.StringAttribute{
 				MarkdownDescription: "Input: MASK. Link input. Tooltip: If omitted, the edit applies to the entire image.",

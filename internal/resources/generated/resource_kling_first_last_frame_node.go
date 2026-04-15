@@ -34,7 +34,7 @@ type KlingFirstLastFrameNodeModel struct {
 	FirstFrame    types.String `tfsdk:"first_frame"`
 	EndFrame      types.String `tfsdk:"end_frame"`
 	GenerateAudio types.Bool   `tfsdk:"generate_audio"`
-	Model         types.String `tfsdk:"model"`
+	Model         types.Object `tfsdk:"model"`
 	Seed          types.Int64  `tfsdk:"seed"`
 	VideoOutput   types.String `tfsdk:"video_output"`
 }
@@ -105,9 +105,19 @@ func (r *KlingFirstLastFrameNodeResource) Schema(_ context.Context, _ resource.S
 				MarkdownDescription: "Input: BOOLEAN. Default: true.",
 				Required:            true,
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model and generation settings.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"1080p\", \"720p\".",
+						Optional:            true,
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",

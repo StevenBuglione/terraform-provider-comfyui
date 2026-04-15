@@ -94,7 +94,7 @@ func (r *Rodin3DGen2Resource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"material_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"PBR\".",
+				MarkdownDescription: "Input: COMBO. Default: \"PBR\". Options: \"PBR\", \"Shaded\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -104,7 +104,7 @@ func (r *Rodin3DGen2Resource) Schema(_ context.Context, _ resource.SchemaRequest
 				},
 			},
 			"polygon_count": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"500K-Triangle\".",
+				MarkdownDescription: "Input: COMBO. Default: \"500K-Triangle\". Options: \"4K-Quad\", \"8K-Quad\", \"18K-Quad\", \"50K-Quad\", \"2K-Triangle\", \"20K-Triangle\", \"150K-Triangle\", \"500K-Triangle\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

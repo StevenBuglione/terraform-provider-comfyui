@@ -174,7 +174,7 @@ func (r *GenerateTracksResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"interpolation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Controls the timing/speed of movement along the path.",
+				MarkdownDescription: "Input: COMBO. Options: \"linear\", \"ease_in\", \"ease_out\", \"ease_in_out\", \"constant\". Tooltip: Controls the timing/speed of movement along the path.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

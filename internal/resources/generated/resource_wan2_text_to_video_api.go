@@ -29,7 +29,7 @@ type Wan2TextToVideoAPIResource struct {
 type Wan2TextToVideoAPIModel struct {
 	ID           types.String `tfsdk:"id"`
 	NodeID       types.String `tfsdk:"node_id"`
-	Model        types.String `tfsdk:"model"`
+	Model        types.Object `tfsdk:"model"`
 	Audio        types.String `tfsdk:"audio"`
 	Seed         types.Int64  `tfsdk:"seed"`
 	PromptExtend types.Bool   `tfsdk:"prompt_extend"`
@@ -80,9 +80,35 @@ func (r *Wan2TextToVideoAPIResource) Schema(_ context.Context, _ resource.Schema
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 5. Allowed range: 2 to 15. Step: 1.",
+						Optional:            true,
+					},
+					"negative_prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Negative prompt describing what to avoid.",
+						Optional:            true,
+					},
+					"prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.",
+						Optional:            true,
+					},
+					"ratio": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\", \"4:3\", \"3:4\".",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"720P\", \"1080P\".",
+						Optional:            true,
+					},
+				},
 			},
 			"audio": schema.StringAttribute{
 				MarkdownDescription: "Input: AUDIO. Link input. Tooltip: Audio for driving video generation (e.g., lip sync, beat-matched motion). Duration: 3s-30s. If not provided, the model automatically generates matching background music or sound effects.",

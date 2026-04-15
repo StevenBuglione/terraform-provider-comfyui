@@ -102,7 +102,7 @@ func (r *IdeogramV2Resource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Optional:            true,
 			},
 			"magic_prompt_option": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"AUTO\". Tooltip: Determine if MagicPrompt should be used in generation.",
+				MarkdownDescription: "Input: COMBO. Default: \"AUTO\". Options: \"AUTO\", \"ON\", \"OFF\". Tooltip: Determine if MagicPrompt should be used in generation.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -120,7 +120,7 @@ func (r *IdeogramV2Resource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"style_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"NONE\". Tooltip: Style type for generation (V2 only).",
+				MarkdownDescription: "Input: COMBO. Default: \"NONE\". Options: \"AUTO\", \"GENERAL\", \"REALISTIC\", \"DESIGN\", \"RENDER_3D\", \"ANIME\". Tooltip: Style type for generation (V2 only).",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

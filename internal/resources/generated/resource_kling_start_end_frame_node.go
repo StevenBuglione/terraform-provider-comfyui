@@ -109,7 +109,7 @@ func (r *KlingStartEndFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

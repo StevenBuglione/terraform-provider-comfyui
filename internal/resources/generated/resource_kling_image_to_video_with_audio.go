@@ -82,7 +82,7 @@ func (r *KlingImageToVideoWithAudioResource) Schema(_ context.Context, _ resourc
 				},
 			},
 			"model_name": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"kling-v2-6\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -99,7 +99,7 @@ func (r *KlingImageToVideoWithAudioResource) Schema(_ context.Context, _ resourc
 				Required:            true,
 			},
 			"mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"pro\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -108,7 +108,7 @@ func (r *KlingImageToVideoWithAudioResource) Schema(_ context.Context, _ resourc
 				},
 			},
 			"duration": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"5\", \"10\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

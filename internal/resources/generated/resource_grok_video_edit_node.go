@@ -81,7 +81,7 @@ func (r *GrokVideoEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"grok-imagine-video\", \"grok-imagine-video-beta\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

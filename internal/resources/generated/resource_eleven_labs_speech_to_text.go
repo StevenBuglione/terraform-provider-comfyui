@@ -30,7 +30,7 @@ type ElevenLabsSpeechToTextModel struct {
 	ID                 types.String `tfsdk:"id"`
 	NodeID             types.String `tfsdk:"node_id"`
 	Audio              types.String `tfsdk:"audio"`
-	Model              types.String `tfsdk:"model"`
+	Model              types.Object `tfsdk:"model"`
 	LanguageCode       types.String `tfsdk:"language_code"`
 	NumSpeakers        types.Int64  `tfsdk:"num_speakers"`
 	Seed               types.Int64  `tfsdk:"seed"`
@@ -86,9 +86,35 @@ func (r *ElevenLabsSpeechToTextResource) Schema(_ context.Context, _ resource.Sc
 				MarkdownDescription: "Input: AUDIO. Link input. Tooltip: Audio to transcribe.",
 				Required:            true,
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for transcription.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"diarization_threshold": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.22. Allowed range: 0.1 to 0.4. Step: 0.01. Tooltip: Speaker separation sensitivity. Lower values are more sensitive to speaker changes.",
+						Optional:            true,
+					},
+					"diarize": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Annotate which speaker is talking.",
+						Optional:            true,
+					},
+					"tag_audio_events": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Annotate sounds like (laughter), (music), etc. in transcript.",
+						Optional:            true,
+					},
+					"temperature": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 2.0. Step: 0.01. Tooltip: Randomness control. 0.0 uses model default. Higher values increase randomness.",
+						Optional:            true,
+					},
+					"timestamps_granularity": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Default: \"word\". Options: \"word\", \"character\", \"none\". Tooltip: Timing precision for transcript words.",
+						Optional:            true,
+					},
+				},
 			},
 			"language_code": schema.StringAttribute{
 				MarkdownDescription: "Input: STRING. Default: \"\". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.",

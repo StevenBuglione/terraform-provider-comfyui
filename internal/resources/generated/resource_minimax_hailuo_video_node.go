@@ -102,7 +102,7 @@ func (r *MinimaxHailuoVideoNodeResource) Schema(_ context.Context, _ resource.Sc
 				Optional:            true,
 			},
 			"duration": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: 6. Tooltip: The length of the output video in seconds.",
+				MarkdownDescription: "Input: COMBO. Default: 6. Options: \"6\", \"10\". Tooltip: The length of the output video in seconds.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -112,7 +112,7 @@ func (r *MinimaxHailuoVideoNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"768P\". Tooltip: The dimensions of the video display. 1080p is 1920x1080, 768p is 1366x768.",
+				MarkdownDescription: "Input: COMBO. Default: \"768P\". Options: \"768P\", \"1080P\". Tooltip: The dimensions of the video display. 1080p is 1920x1080, 768p is 1366x768.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

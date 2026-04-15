@@ -33,7 +33,7 @@ type TencentTextToModelNodeModel struct {
 	Model              types.String `tfsdk:"model"`
 	Prompt             types.String `tfsdk:"prompt"`
 	FaceCount          types.Int64  `tfsdk:"face_count"`
-	GenerateType       types.String `tfsdk:"generate_type"`
+	GenerateType       types.Object `tfsdk:"generate_type"`
 	Seed               types.Int64  `tfsdk:"seed"`
 	ModelFileOutput    types.String `tfsdk:"model_file_output"`
 	GlbOutput          types.String `tfsdk:"glb_output"`
@@ -85,7 +85,7 @@ func (r *TencentTextToModelNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The LowPoly option is unavailable for the `3.1` model.",
+				MarkdownDescription: "Input: COMBO. Options: \"3.0\", \"3.1\". Tooltip: The LowPoly option is unavailable for the `3.1` model.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -105,9 +105,23 @@ func (r *TencentTextToModelNodeResource) Schema(_ context.Context, _ resource.Sc
 					int64validator.Between(40000, 1500000),
 				},
 			},
-			"generate_type": schema.StringAttribute{
+			"generate_type": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"pbr": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false.",
+						Optional:            true,
+					},
+					"polygon_type": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"triangle\", \"quadrilateral\".",
+						Optional:            true,
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",

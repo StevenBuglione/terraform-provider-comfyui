@@ -82,7 +82,7 @@ func (r *SamplerErSdeResource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"solver_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"ER-SDE\", \"Reverse-time SDE\", \"ODE\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

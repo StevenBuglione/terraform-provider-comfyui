@@ -95,7 +95,7 @@ func (r *Veo3FirstLastFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -105,7 +105,7 @@ func (r *Veo3FirstLastFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"16:9\". Tooltip: Aspect ratio of the output video.",
+				MarkdownDescription: "Input: COMBO. Default: \"16:9\". Options: \"16:9\", \"9:16\". Tooltip: Aspect ratio of the output video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -137,7 +137,7 @@ func (r *Veo3FirstLastFrameNodeResource) Schema(_ context.Context, _ resource.Sc
 				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"veo-3.1-fast-generate\".",
+				MarkdownDescription: "Input: COMBO. Default: \"veo-3.1-fast-generate\". Options: \"veo-3.1-generate\", \"veo-3.1-fast-generate\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

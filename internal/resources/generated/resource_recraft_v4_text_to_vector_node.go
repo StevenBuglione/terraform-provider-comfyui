@@ -31,7 +31,7 @@ type RecraftV4TextToVectorNodeModel struct {
 	NodeID          types.String `tfsdk:"node_id"`
 	Prompt          types.String `tfsdk:"prompt"`
 	NegativePrompt  types.String `tfsdk:"negative_prompt"`
-	Model           types.String `tfsdk:"model"`
+	Model           types.Object `tfsdk:"model"`
 	N               types.Int64  `tfsdk:"n"`
 	Seed            types.Int64  `tfsdk:"seed"`
 	RecraftControls types.String `tfsdk:"recraft_controls"`
@@ -89,9 +89,19 @@ func (r *RecraftV4TextToVectorNodeResource) Schema(_ context.Context, _ resource
 				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: An optional text description of undesired elements on an image.",
 				Required:            true,
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for generation.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"size": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Defaults vary by selection: \"1024x1024\", \"2048x2048\". Dynamic options are resolved by ComfyUI at runtime from one of: RECRAFT_V4_SIZES; RECRAFT_V4_PRO_SIZES. Tooltip: The size of the generated image.",
+						Optional:            true,
+					},
+				},
 			},
 			"n": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 1. Allowed range: 1 to 6. Tooltip: The number of images to generate.",

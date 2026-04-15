@@ -29,7 +29,7 @@ type ViduExtendVideoNodeResource struct {
 type ViduExtendVideoNodeModel struct {
 	ID          types.String `tfsdk:"id"`
 	NodeID      types.String `tfsdk:"node_id"`
-	Model       types.String `tfsdk:"model"`
+	Model       types.Object `tfsdk:"model"`
 	Video       types.String `tfsdk:"video"`
 	Prompt      types.String `tfsdk:"prompt"`
 	Seed        types.Int64  `tfsdk:"seed"`
@@ -80,9 +80,23 @@ func (r *ViduExtendVideoNodeResource) Schema(_ context.Context, _ resource.Schem
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video extension.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 4. Allowed range: 1 to 7. Step: 1. Tooltip: Duration of the extended video in seconds.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\". Tooltip: Resolution of the output video.",
+						Optional:            true,
+					},
+				},
 			},
 			"video": schema.StringAttribute{
 				MarkdownDescription: "Input: VIDEO. Link input. Tooltip: The source video to extend.",

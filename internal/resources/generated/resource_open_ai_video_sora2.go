@@ -83,7 +83,7 @@ func (r *OpenAiVideoSora2Resource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"sora-2\".",
+				MarkdownDescription: "Input: COMBO. Default: \"sora-2\". Options: \"sora-2\", \"sora-2-pro\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -97,7 +97,7 @@ func (r *OpenAiVideoSora2Resource) Schema(_ context.Context, _ resource.SchemaRe
 				Required:            true,
 			},
 			"size": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"1280x720\".",
+				MarkdownDescription: "Input: COMBO. Default: \"1280x720\". Options: \"720x1280\", \"1280x720\", \"1024x1792\", \"1792x1024\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -109,7 +109,7 @@ func (r *OpenAiVideoSora2Resource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"duration": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: 8.",
+				MarkdownDescription: "Input: COMBO. Default: 8. Options: \"4\", \"8\", \"12\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -88,7 +88,7 @@ func (r *StringCompareResource) Schema(_ context.Context, _ resource.SchemaReque
 				Required:            true,
 			},
 			"mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"Starts With\", \"Ends With\", \"Equal\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

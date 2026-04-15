@@ -84,7 +84,7 @@ func (r *MorphologyResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"operation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"erode\", \"dilate\", \"open\", \"close\", \"gradient\", \"bottom_hat\", \"top_hat\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -82,7 +82,7 @@ func (r *LatentRotateResource) Schema(_ context.Context, _ resource.SchemaReques
 				Required:            true,
 			},
 			"rotation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"none\", \"90 degrees\", \"180 degrees\", \"270 degrees\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

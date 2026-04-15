@@ -84,7 +84,7 @@ func (r *BriaRemoveVideoBackgroundResource) Schema(_ context.Context, _ resource
 				Required:            true,
 			},
 			"background_color": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Background color for the output video.",
+				MarkdownDescription: "Input: COMBO. Options: \"Black\", \"White\", \"Gray\", \"Red\", \"Green\", \"Blue\", \"Yellow\", \"Cyan\", \"Magenta\", \"Orange\". Tooltip: Background color for the output video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

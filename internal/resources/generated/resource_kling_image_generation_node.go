@@ -114,7 +114,7 @@ func (r *KlingImageGenerationNodeResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"model_name": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"kling-v3\", \"kling-v2\", \"kling-v1-5\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -82,7 +82,7 @@ func (r *TorchCompileModelResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"backend": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"inductor\", \"cudagraphs\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

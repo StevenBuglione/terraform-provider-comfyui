@@ -82,7 +82,7 @@ func (r *StabilityTextToAudioResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"stable-audio-2.5\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

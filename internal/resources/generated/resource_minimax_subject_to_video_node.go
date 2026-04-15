@@ -89,7 +89,7 @@ func (r *MinimaxSubjectToVideoNodeResource) Schema(_ context.Context, _ resource
 				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"S2V-01\". Tooltip: Model to use for video generation.",
+				MarkdownDescription: "Input: COMBO. Default: \"S2V-01\". Options: \"S2V-01\". Tooltip: Model to use for video generation.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

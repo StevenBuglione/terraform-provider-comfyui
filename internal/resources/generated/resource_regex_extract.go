@@ -92,7 +92,7 @@ func (r *RegexExtractResource) Schema(_ context.Context, _ resource.SchemaReques
 				Required:            true,
 			},
 			"mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"First Match\", \"All Matches\", \"First Group\", \"All Groups\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

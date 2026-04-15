@@ -84,7 +84,7 @@ func (r *VoxelToMeshResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Required:            true,
 			},
 			"algorithm": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"surface net\", \"basic\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

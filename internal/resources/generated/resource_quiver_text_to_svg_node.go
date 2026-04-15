@@ -32,7 +32,7 @@ type QuiverTextToSvgNodeModel struct {
 	Prompt          types.String `tfsdk:"prompt"`
 	Instructions    types.String `tfsdk:"instructions"`
 	ReferenceImages types.String `tfsdk:"reference_images"`
-	Model           types.String `tfsdk:"model"`
+	Model           types.Object `tfsdk:"model"`
 	Seed            types.Int64  `tfsdk:"seed"`
 	SvgOutput       types.String `tfsdk:"svg_output"`
 }
@@ -92,9 +92,27 @@ func (r *QuiverTextToSvgNodeResource) Schema(_ context.Context, _ resource.Schem
 				MarkdownDescription: "Input: COMFY_AUTOGROW_V3. Tooltip: Up to 4 reference images to guide the generation.",
 				Optional:            true,
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for SVG generation.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"presence_penalty": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: -2.0 to 2.0. Step: 0.1. Tooltip: Token presence penalty.",
+						Optional:            true,
+					},
+					"temperature": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 2.0. Step: 0.1. Tooltip: Randomness control. Higher values increase randomness.",
+						Optional:            true,
+					},
+					"top_p": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.05 to 1.0. Step: 0.05. Tooltip: Nucleus sampling parameter.",
+						Optional:            true,
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",

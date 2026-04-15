@@ -95,7 +95,7 @@ func (r *LtxvAPIImageToVideoResource) Schema(_ context.Context, _ resource.Schem
 				Required:            true,
 			},
 			"duration": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: 8.",
+				MarkdownDescription: "Input: COMBO. Default: 8. Options: \"6\", \"8\", \"10\", \"12\", \"14\", \"16\", \"18\", \"20\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -111,7 +111,7 @@ func (r *LtxvAPIImageToVideoResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"1920x1080\", \"2560x1440\", \"3840x2160\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -122,7 +122,7 @@ func (r *LtxvAPIImageToVideoResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"fps": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: 25.",
+				MarkdownDescription: "Input: COMBO. Default: 25. Options: \"25\", \"50\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

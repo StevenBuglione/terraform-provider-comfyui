@@ -85,7 +85,7 @@ func (r *TencentSmartTopologyNodeResource) Schema(_ context.Context, _ resource.
 				Required:            true,
 			},
 			"polygon_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Surface composition type.",
+				MarkdownDescription: "Input: COMBO. Options: \"triangle\", \"quadrilateral\". Tooltip: Surface composition type.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -95,7 +95,7 @@ func (r *TencentSmartTopologyNodeResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"face_level": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Polygon reduction level.",
+				MarkdownDescription: "Input: COMBO. Options: \"medium\", \"high\", \"low\". Tooltip: Polygon reduction level.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

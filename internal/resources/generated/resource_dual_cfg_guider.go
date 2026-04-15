@@ -114,7 +114,7 @@ func (r *DualCfgGuiderResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"style": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"regular\", \"nested\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

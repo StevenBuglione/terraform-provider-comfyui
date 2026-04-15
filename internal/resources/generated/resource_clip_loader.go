@@ -83,7 +83,7 @@ func (r *CLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"stable_diffusion\", \"stable_cascade\", \"sd3\", \"stable_audio\", \"mochi\", \"ltxv\", \"pixart\", \"cosmos\", \"lumina2\", \"wan\", \"hidream\", \"chroma\", \"ace\", \"omnigen2\", \"qwen_image\", \"hunyuan_image\", \"flux2\", \"ovis\", \"longcat_image\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -110,7 +110,7 @@ func (r *CLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"device": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"default\", \"cpu\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

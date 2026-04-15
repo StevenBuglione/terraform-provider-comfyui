@@ -88,7 +88,7 @@ func (r *DualCLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRequ
 				Required:            true,
 			},
 			"type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"sdxl\", \"sd3\", \"flux\", \"hunyuan_video\", \"hidream\", \"hunyuan_image\", \"hunyuan_video_15\", \"kandinsky5\", \"kandinsky5_image\", \"ltxv\", \"newbie\", \"ace\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -108,7 +108,7 @@ func (r *DualCLIPLoaderResource) Schema(_ context.Context, _ resource.SchemaRequ
 				},
 			},
 			"device": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"default\", \"cpu\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

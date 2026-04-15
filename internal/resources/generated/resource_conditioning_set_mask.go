@@ -96,7 +96,7 @@ func (r *ConditioningSetMaskResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"set_cond_area": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"default\", \"mask bounds\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

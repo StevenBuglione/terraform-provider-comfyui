@@ -89,7 +89,7 @@ func (r *WanCameraEmbeddingResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"camera_pose": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"Static\".",
+				MarkdownDescription: "Input: COMBO. Default: \"Static\". Options: \"Static\", \"Pan Up\", \"Pan Down\", \"Pan Left\", \"Pan Right\", \"Zoom In\", \"Zoom Out\", \"Anti Clockwise (ACW)\", \"ClockWise (CW)\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -84,7 +84,7 @@ func (r *Vidu2ImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"viduq2-pro-fast\", \"viduq2-pro\", \"viduq2-turbo\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -117,7 +117,7 @@ func (r *Vidu2ImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -127,7 +127,7 @@ func (r *Vidu2ImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"movement_amplitude": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The movement amplitude of objects in the frame.",
+				MarkdownDescription: "Input: COMBO. Options: \"auto\", \"small\", \"medium\", \"large\". Tooltip: The movement amplitude of objects in the frame.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

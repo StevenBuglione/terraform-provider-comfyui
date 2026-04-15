@@ -43,23 +43,34 @@ type Node struct {
 }
 
 type Input struct {
-	Name                         string        `json:"name"`
-	Type                         string        `json:"type"`
-	Required                     bool          `json:"required"`
-	IsLinkType                   bool          `json:"is_link_type"`
-	ValidationKind               string        `json:"validation_kind"`
-	InventoryKind                string        `json:"inventory_kind"`
-	SupportsStrictPlanValidation bool          `json:"supports_strict_plan_validation"`
-	Default                      interface{}   `json:"default"`
-	Min                          *NumberValue  `json:"min"`
-	Max                          *NumberValue  `json:"max"`
-	Step                         *NumberValue  `json:"step"`
-	RawOptions                   []interface{} `json:"options"`
-	Multiline                    *bool         `json:"multiline"`
-	DynamicOptions               *bool         `json:"dynamic_options"`
-	DynamicOptionsSource         *string       `json:"dynamic_options_source"`
-	Tooltip                      *string       `json:"tooltip"`
-	DisplayName                  *string       `json:"display_name"`
+	Name                         string               `json:"name"`
+	Type                         string               `json:"type"`
+	Required                     bool                 `json:"required"`
+	IsLinkType                   bool                 `json:"is_link_type"`
+	ValidationKind               string               `json:"validation_kind"`
+	InventoryKind                string               `json:"inventory_kind"`
+	SupportsStrictPlanValidation bool                 `json:"supports_strict_plan_validation"`
+	Default                      interface{}          `json:"default"`
+	Min                          *NumberValue         `json:"min"`
+	Max                          *NumberValue         `json:"max"`
+	Step                         *NumberValue         `json:"step"`
+	RawOptions                   []interface{}        `json:"options"`
+	Multiline                    *bool                `json:"multiline"`
+	DynamicOptions               *bool                `json:"dynamic_options"`
+	DynamicOptionsSource         *string              `json:"dynamic_options_source"`
+	DynamicComboOptions          []DynamicComboOption `json:"dynamic_combo_options"`
+	Tooltip                      *string              `json:"tooltip"`
+	DisplayName                  *string              `json:"display_name"`
+
+	mergedDefaultValues        []string
+	mergedRangeHints           []string
+	mergedStepValues           []string
+	mergedDynamicOptionSources []string
+}
+
+type DynamicComboOption struct {
+	Key    string  `json:"key"`
+	Inputs []Input `json:"inputs"`
 }
 
 type NumberValue struct {
@@ -410,6 +421,7 @@ func buildGeneratedNodeSchemaInputs(inputs []Input, required bool) []GeneratedNo
 		filtered = append(filtered, GeneratedNodeSchemaInput{
 			Name:                         input.Name,
 			Type:                         input.Type,
+			Required:                     input.Required,
 			IsLinkType:                   input.IsLinkType,
 			ValidationKind:               input.ValidationKind,
 			InventoryKind:                input.InventoryKind,
@@ -426,11 +438,54 @@ func buildGeneratedNodeSchemaInputs(inputs []Input, required bool) []GeneratedNo
 			Multiline:                    boolValue(input.Multiline),
 			DynamicOptions:               boolValue(input.DynamicOptions),
 			DynamicOptionsSource:         stringValue(input.DynamicOptionsSource),
+			DynamicComboOptions:          buildGeneratedDynamicComboOptions(input.DynamicComboOptions),
 			Tooltip:                      stringValue(input.Tooltip),
 			DisplayName:                  stringValue(input.DisplayName),
 		})
 	}
 	return filtered
+}
+
+func buildGeneratedDynamicComboOptions(options []DynamicComboOption) []GeneratedDynamicComboOption {
+	if len(options) == 0 {
+		return nil
+	}
+
+	generated := make([]GeneratedDynamicComboOption, 0, len(options))
+	for _, option := range options {
+		inputs := make([]GeneratedNodeSchemaInput, 0, len(option.Inputs))
+		for _, input := range option.Inputs {
+			inputs = append(inputs, GeneratedNodeSchemaInput{
+				Name:                         input.Name,
+				Type:                         input.Type,
+				Required:                     input.Required,
+				IsLinkType:                   input.IsLinkType,
+				ValidationKind:               input.ValidationKind,
+				InventoryKind:                input.InventoryKind,
+				SupportsStrictPlanValidation: input.SupportsStrictPlanValidation,
+				DefaultValue:                 formatOptionalValue(input.Default),
+				HasDefaultValue:              input.Default != nil,
+				MinValue:                     formatOptionalNumber(input.Min),
+				HasMinValue:                  input.Min != nil,
+				MaxValue:                     formatOptionalNumber(input.Max),
+				HasMaxValue:                  input.Max != nil,
+				StepValue:                    formatOptionalNumber(input.Step),
+				HasStepValue:                 input.Step != nil,
+				EnumValues:                   input.StringOptions(),
+				Multiline:                    boolValue(input.Multiline),
+				DynamicOptions:               boolValue(input.DynamicOptions),
+				DynamicOptionsSource:         stringValue(input.DynamicOptionsSource),
+				DynamicComboOptions:          buildGeneratedDynamicComboOptions(input.DynamicComboOptions),
+				Tooltip:                      stringValue(input.Tooltip),
+				DisplayName:                  stringValue(input.DisplayName),
+			})
+		}
+		generated = append(generated, GeneratedDynamicComboOption{
+			Key:    option.Key,
+			Inputs: inputs,
+		})
+	}
+	return generated
 }
 
 func buildGeneratedNodeSchemaHiddenInputs(inputs []HiddenInput) []GeneratedNodeSchemaHiddenInput {
@@ -528,6 +583,14 @@ func buildResourceData(node Node) (ResourceData, []string) {
 }
 
 func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
+	return buildSchemaAttribute(inp, tfName, rd, inp.Required, true)
+}
+
+func buildSchemaAttribute(inp Input, tfName string, rd *ResourceData, required bool, emitValidators bool) string {
+	if isDynamicComboType(inp.Type) {
+		return buildDynamicComboAttribute(inp, tfName, rd, required, emitValidators)
+	}
+
 	var b strings.Builder
 
 	attrType := tfAttributeType(inp.Type)
@@ -536,26 +599,70 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 
 	fmt.Fprintf(&b, "\t\t\t\tMarkdownDescription: %q,\n", buildInputDescription(inp))
 
-	// Required/Optional
-	if inp.Required {
+	if required {
 		b.WriteString("\t\t\t\tRequired: true,\n")
 	} else {
 		b.WriteString("\t\t\t\tOptional: true,\n")
 	}
 
-	// Validators
+	appendInputValidators(&b, inp, rd, emitValidators)
+
+	b.WriteString("\t\t\t},")
+	return b.String()
+}
+
+func buildDynamicComboAttribute(inp Input, tfName string, rd *ResourceData, required bool, _ bool) string {
+	var b strings.Builder
+
+	fmt.Fprintf(&b, "%q: schema.SingleNestedAttribute{\n", tfName)
+	fmt.Fprintf(&b, "\t\t\t\tMarkdownDescription: %q,\n", buildInputDescription(inp))
+	if required {
+		b.WriteString("\t\t\t\tRequired: true,\n")
+	} else {
+		b.WriteString("\t\t\t\tOptional: true,\n")
+	}
+	b.WriteString("\t\t\t\tAttributes: map[string]schema.Attribute{\n")
+	b.WriteString(buildDynamicComboSelectionAttribute())
+	usedChildNames := map[string]bool{dynamicComboSelectionKey: true}
+	for _, child := range mergedDynamicComboInputs(inp.DynamicComboOptions) {
+		childName := nextDynamicComboChildName(child.Name, usedChildNames)
+		b.WriteString(indentSchemaAttribute(buildSchemaAttribute(child, childName, rd, false, false), "\t\t\t\t\t"))
+		b.WriteString("\n")
+	}
+	b.WriteString("\t\t\t\t},\n")
+	b.WriteString("\t\t\t},")
+	return b.String()
+}
+
+const dynamicComboSelectionKey = "selection"
+
+func buildDynamicComboSelectionAttribute() string {
+	var b strings.Builder
+
+	b.WriteString(fmt.Sprintf("%q: schema.StringAttribute{\n", dynamicComboSelectionKey))
+	b.WriteString("\t\t\t\tRequired: true,\n")
+	b.WriteString("\t\t\t\tMarkdownDescription: \"Selected DynamicCombo option key.\",\n")
+	b.WriteString("\t\t\t},\n")
+	return b.String()
+}
+
+func appendInputValidators(b *strings.Builder, inp Input, rd *ResourceData, emitValidators bool) {
+	if !emitValidators {
+		return
+	}
+
 	switch inp.Type {
 	case "INT":
 		if inp.Min != nil && inp.Max != nil {
 			rd.NeedsInt64Validator = true
 			minVal := clampInt64(inp.Min.Float64)
 			maxVal := clampInt64(inp.Max.Float64)
-			fmt.Fprintf(&b, "\t\t\t\tValidators: []validator.Int64{\n\t\t\t\t\tint64validator.Between(%d, %d),\n\t\t\t\t},\n", minVal, maxVal)
+			fmt.Fprintf(b, "\t\t\t\tValidators: []validator.Int64{\n\t\t\t\t\tint64validator.Between(%d, %d),\n\t\t\t\t},\n", minVal, maxVal)
 		}
 	case "FLOAT":
 		if inp.Min != nil && inp.Max != nil {
 			rd.NeedsFloat64Validator = true
-			fmt.Fprintf(&b, "\t\t\t\tValidators: []validator.Float64{\n\t\t\t\t\tfloat64validator.Between(%v, %v),\n\t\t\t\t},\n", inp.Min.Float64, inp.Max.Float64)
+			fmt.Fprintf(b, "\t\t\t\tValidators: []validator.Float64{\n\t\t\t\t\tfloat64validator.Between(%v, %v),\n\t\t\t\t},\n", inp.Min.Float64, inp.Max.Float64)
 		}
 	case "COMBO":
 		opts := inp.StringOptions()
@@ -563,14 +670,11 @@ func buildInputAttribute(inp Input, tfName string, rd *ResourceData) string {
 			rd.NeedsStringValidator = true
 			b.WriteString("\t\t\t\tValidators: []validator.String{\n\t\t\t\t\tstringvalidator.OneOf(\n")
 			for _, opt := range opts {
-				fmt.Fprintf(&b, "\t\t\t\t\t\t%q,\n", opt)
+				fmt.Fprintf(b, "\t\t\t\t\t\t%q,\n", opt)
 			}
 			b.WriteString("\t\t\t\t\t),\n\t\t\t\t},\n")
 		}
 	}
-
-	b.WriteString("\t\t\t},")
-	return b.String()
 }
 
 func buildOutputAttribute(out Output, tfName string) string {
@@ -581,6 +685,74 @@ func buildOutputAttribute(out Output, tfName string) string {
 	b.WriteString("\t\t\t\tPlanModifiers: []planmodifier.String{\n\t\t\t\t\tstringplanmodifier.UseStateForUnknown(),\n\t\t\t\t},\n")
 	b.WriteString("\t\t\t},")
 	return b.String()
+}
+
+func mergedDynamicComboInputs(options []DynamicComboOption) []Input {
+	if len(options) == 0 {
+		return nil
+	}
+
+	merged := make(map[string]Input)
+	order := make([]string, 0)
+	for _, option := range options {
+		for _, input := range option.Inputs {
+			key := sanitizeName(input.Name)
+			if existing, ok := merged[key]; ok {
+				merged[key] = mergeDynamicComboInput(existing, input)
+				continue
+			}
+			merged[key] = input
+			order = append(order, key)
+		}
+	}
+	sort.Strings(order)
+
+	result := make([]Input, 0, len(order))
+	for _, key := range order {
+		result = append(result, merged[key])
+	}
+	return result
+}
+
+func mergeDynamicComboInput(existing, next Input) Input {
+	merged := existing
+	merged.DynamicOptions = mergeBoolPointer(existing.DynamicOptions, next.DynamicOptions)
+	merged.DynamicOptionsSource = mergeStringPointer(existing.DynamicOptionsSource, next.DynamicOptionsSource)
+	merged.Default = mergePreferredValue(existing.Default, next.Default)
+	merged.Min = mergePreferredNumber(existing.Min, next.Min)
+	merged.Max = mergePreferredNumber(existing.Max, next.Max)
+	merged.Step = mergePreferredNumber(existing.Step, next.Step)
+	merged.RawOptions = mergeRawOptions(existing.RawOptions, next.RawOptions)
+	merged.mergedDefaultValues = mergeUniqueStrings(existing.mergedDefaultValues, defaultMetadataValues(existing), defaultMetadataValues(next))
+	merged.mergedRangeHints = mergeUniqueStrings(existing.mergedRangeHints, rangeMetadataValues(existing), rangeMetadataValues(next))
+	merged.mergedStepValues = mergeUniqueStrings(existing.mergedStepValues, stepMetadataValues(existing), stepMetadataValues(next))
+	merged.mergedDynamicOptionSources = mergeUniqueStrings(existing.mergedDynamicOptionSources, dynamicOptionSourceMetadataValues(existing), dynamicOptionSourceMetadataValues(next))
+	return merged
+}
+
+func mergeRawOptions(existing, next []interface{}) []interface{} {
+	if len(existing) == 0 {
+		return append([]interface{}(nil), next...)
+	}
+	if len(next) == 0 {
+		return append([]interface{}(nil), existing...)
+	}
+
+	values := make([]interface{}, 0, len(existing)+len(next))
+	seen := make(map[string]bool, len(existing)+len(next))
+	appendUnique := func(options []interface{}) {
+		for _, option := range options {
+			key := fmt.Sprintf("%v", option)
+			if seen[key] {
+				continue
+			}
+			seen[key] = true
+			values = append(values, option)
+		}
+	}
+	appendUnique(existing)
+	appendUnique(next)
+	return values
 }
 
 func buildNodeDescription(node Node) string {
@@ -614,17 +786,28 @@ func buildInputDescription(inp Input) string {
 	if inp.IsLinkType {
 		parts = append(parts, "Link input.")
 	}
-	if inp.Default != nil {
+	if len(inp.mergedDefaultValues) > 1 {
+		parts = append(parts, fmt.Sprintf("Defaults vary by selection: %s.", strings.Join(inp.mergedDefaultValues, ", ")))
+	} else if inp.Default != nil {
 		parts = append(parts, fmt.Sprintf("Default: %s.", formatValue(inp.Default)))
 	}
-	if rangeHint := formatRangeHint(inp.Min, inp.Max); rangeHint != "" {
+	if len(inp.mergedRangeHints) > 1 {
+		parts = append(parts, fmt.Sprintf("Allowed ranges vary by selection: %s.", strings.Join(inp.mergedRangeHints, "; ")))
+	} else if rangeHint := formatRangeHint(inp.Min, inp.Max); rangeHint != "" {
 		parts = append(parts, rangeHint)
 	}
-	if inp.Step != nil {
+	if len(inp.mergedStepValues) > 1 {
+		parts = append(parts, fmt.Sprintf("Steps vary by selection: %s.", strings.Join(inp.mergedStepValues, ", ")))
+	} else if inp.Step != nil {
 		parts = append(parts, fmt.Sprintf("Step: %s.", inp.Step.Raw))
 	}
+	if optionsHint := formatOptionsHint(inp.StringOptions()); optionsHint != "" {
+		parts = append(parts, optionsHint)
+	}
 	if inp.DynamicOptions != nil && *inp.DynamicOptions {
-		if inp.DynamicOptionsSource != nil && *inp.DynamicOptionsSource != "" {
+		if len(inp.mergedDynamicOptionSources) > 0 {
+			parts = append(parts, fmt.Sprintf("Dynamic options are resolved by ComfyUI at runtime from one of: %s.", strings.Join(inp.mergedDynamicOptionSources, "; ")))
+		} else if inp.DynamicOptionsSource != nil && *inp.DynamicOptionsSource != "" {
 			if source, ok := conciseDynamicOptionsSource(*inp.DynamicOptionsSource); ok {
 				parts = append(parts, fmt.Sprintf("Dynamic options are resolved by ComfyUI at runtime from: %s.", source))
 			} else {
@@ -688,6 +871,18 @@ func formatRangeHint(min, max *NumberValue) string {
 	}
 }
 
+func formatOptionsHint(options []string) string {
+	if len(options) == 0 {
+		return ""
+	}
+
+	quoted := make([]string, 0, len(options))
+	for _, option := range options {
+		quoted = append(quoted, strconv.Quote(option))
+	}
+	return fmt.Sprintf("Options: %s.", strings.Join(quoted, ", "))
+}
+
 func formatValue(value interface{}) string {
 	switch v := value.(type) {
 	case string:
@@ -748,6 +943,166 @@ func conciseDynamicOptionsSource(source string) (string, bool) {
 		return "", false
 	}
 	return trimmed, true
+}
+
+func nextDynamicComboChildName(name string, used map[string]bool) string {
+	candidate := sanitizeName(name)
+	if candidate == dynamicComboSelectionKey {
+		candidate += "_value"
+	}
+
+	base := candidate
+	suffix := 2
+	for used[candidate] {
+		candidate = fmt.Sprintf("%s_%d", base, suffix)
+		suffix++
+	}
+	used[candidate] = true
+	return candidate
+}
+
+func indentSchemaAttribute(definition, indent string) string {
+	if definition == "" {
+		return ""
+	}
+
+	lines := strings.Split(definition, "\n")
+	for i, line := range lines {
+		if line == "" {
+			continue
+		}
+		lines[i] = indent + line
+	}
+	return strings.Join(lines, "\n")
+}
+
+func mergeBoolPointer(existing, next *bool) *bool {
+	switch {
+	case existing == nil && next == nil:
+		return nil
+	case existing != nil && next == nil:
+		value := *existing
+		return &value
+	case existing == nil && next != nil:
+		value := *next
+		return &value
+	default:
+		value := *existing || *next
+		return &value
+	}
+}
+
+func mergeStringPointer(existing, next *string) *string {
+	if strings.TrimSpace(stringValue(next)) == "" {
+		return existing
+	}
+	if strings.TrimSpace(stringValue(existing)) == "" {
+		value := *next
+		return &value
+	}
+	if *existing == *next {
+		value := *existing
+		return &value
+	}
+	value := *existing
+	return &value
+}
+
+func mergePreferredValue(existing, next interface{}) interface{} {
+	switch {
+	case existing != nil:
+		return existing
+	default:
+		return next
+	}
+}
+
+func mergePreferredNumber(existing, next *NumberValue) *NumberValue {
+	switch {
+	case existing != nil:
+		value := *existing
+		return &value
+	case next != nil:
+		value := *next
+		return &value
+	default:
+		return nil
+	}
+}
+
+func mergeUniqueStrings(existing []string, groups ...[]string) []string {
+	seen := make(map[string]bool, len(existing))
+	values := make([]string, 0, len(existing))
+
+	for _, value := range existing {
+		if strings.TrimSpace(value) == "" || seen[value] {
+			continue
+		}
+		seen[value] = true
+		values = append(values, value)
+	}
+
+	for _, group := range groups {
+		for _, value := range group {
+			if strings.TrimSpace(value) == "" || seen[value] {
+				continue
+			}
+			seen[value] = true
+			values = append(values, value)
+		}
+	}
+
+	return values
+}
+
+func defaultMetadataValues(inp Input) []string {
+	if inp.Default == nil {
+		return nil
+	}
+	return []string{formatValue(inp.Default)}
+}
+
+func rangeMetadataValues(inp Input) []string {
+	if len(inp.mergedRangeHints) > 0 {
+		return inp.mergedRangeHints
+	}
+	if hint := rangeMetadataValue(inp.Min, inp.Max); hint != "" {
+		return []string{hint}
+	}
+	return nil
+}
+
+func rangeMetadataValue(min, max *NumberValue) string {
+	switch {
+	case min != nil && max != nil:
+		return fmt.Sprintf("%s to %s", min.Raw, max.Raw)
+	case min != nil:
+		return fmt.Sprintf("min %s", min.Raw)
+	case max != nil:
+		return fmt.Sprintf("max %s", max.Raw)
+	default:
+		return ""
+	}
+}
+
+func stepMetadataValues(inp Input) []string {
+	if inp.Step == nil {
+		return nil
+	}
+	return []string{inp.Step.Raw}
+}
+
+func dynamicOptionSourceMetadataValues(inp Input) []string {
+	if len(inp.mergedDynamicOptionSources) > 0 {
+		return inp.mergedDynamicOptionSources
+	}
+	if inp.DynamicOptionsSource == nil || strings.TrimSpace(*inp.DynamicOptionsSource) == "" {
+		return nil
+	}
+	if source, ok := conciseDynamicOptionsSource(*inp.DynamicOptionsSource); ok {
+		return []string{source}
+	}
+	return nil
 }
 
 func sentence(label, value string) string {

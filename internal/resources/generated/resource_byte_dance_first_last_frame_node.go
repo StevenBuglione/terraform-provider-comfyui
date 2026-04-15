@@ -88,7 +88,7 @@ func (r *ByteDanceFirstLastFrameNodeResource) Schema(_ context.Context, _ resour
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"seedance-1-0-lite-i2v-250428\".",
+				MarkdownDescription: "Input: COMBO. Default: \"seedance-1-0-lite-i2v-250428\". Options: \"seedance-1-5-pro-251215\", \"seedance-1-0-pro-250528\", \"seedance-1-0-lite-i2v-250428\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -111,7 +111,7 @@ func (r *ByteDanceFirstLastFrameNodeResource) Schema(_ context.Context, _ resour
 				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The resolution of the output video.",
+				MarkdownDescription: "Input: COMBO. Options: \"480p\", \"720p\", \"1080p\". Tooltip: The resolution of the output video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -122,7 +122,7 @@ func (r *ByteDanceFirstLastFrameNodeResource) Schema(_ context.Context, _ resour
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The aspect ratio of the output video.",
+				MarkdownDescription: "Input: COMBO. Options: \"adaptive\", \"16:9\", \"4:3\", \"1:1\", \"3:4\", \"9:16\", \"21:9\". Tooltip: The aspect ratio of the output video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

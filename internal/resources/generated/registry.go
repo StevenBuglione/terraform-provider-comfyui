@@ -11,7 +11,7 @@ const ComfyUIVersion = "v0.18.5"
 const NodeCount = 645
 
 // ExtractedAt is the timestamp when node specs were extracted.
-const ExtractedAt = "2026-04-12T05:18:13.161559+00:00"
+const ExtractedAt = "2026-04-15T01:52:09.242092+00:00"
 
 // AllResources returns constructor functions for all generated ComfyUI node resources.
 func AllResources() []func() resource.Resource {

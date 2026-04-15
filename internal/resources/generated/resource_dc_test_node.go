@@ -27,7 +27,7 @@ type DcTestNodeResource struct {
 type DcTestNodeModel struct {
 	ID            types.String `tfsdk:"id"`
 	NodeID        types.String `tfsdk:"node_id"`
-	Combo         types.String `tfsdk:"combo"`
+	Combo         types.Object `tfsdk:"combo"`
 	UnnamedOutput types.String `tfsdk:"unnamed_output"`
 }
 
@@ -74,9 +74,49 @@ func (r *DcTestNodeResource) Schema(_ context.Context, _ resource.SchemaRequest,
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"combo": schema.StringAttribute{
+			"combo": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"image": schema.StringAttribute{
+						MarkdownDescription: "Input: IMAGE. Link input.",
+						Optional:            true,
+					},
+					"integer": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT.",
+						Optional:            true,
+					},
+					"string": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING.",
+						Optional:            true,
+					},
+					"subcombo": schema.SingleNestedAttribute{
+						MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+						Optional:            true,
+						Attributes: map[string]schema.Attribute{
+							"selection": schema.StringAttribute{
+								Required:            true,
+								MarkdownDescription: "Selected DynamicCombo option key.",
+							},
+							"float_x": schema.Float64Attribute{
+								MarkdownDescription: "Input: FLOAT.",
+								Optional:            true,
+							},
+							"float_y": schema.Float64Attribute{
+								MarkdownDescription: "Input: FLOAT.",
+								Optional:            true,
+							},
+							"mask1": schema.StringAttribute{
+								MarkdownDescription: "Input: MASK. Link input.",
+								Optional:            true,
+							},
+						},
+					},
+				},
 			},
 			"unnamed_output": schema.StringAttribute{
 				MarkdownDescription: "Output: * (slot 0).",

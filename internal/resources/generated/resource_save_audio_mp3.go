@@ -86,7 +86,7 @@ func (r *SaveAudioMp3Resource) Schema(_ context.Context, _ resource.SchemaReques
 				Required:            true,
 			},
 			"quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"V0\".",
+				MarkdownDescription: "Input: COMBO. Default: \"V0\". Options: \"V0\", \"128k\", \"320k\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

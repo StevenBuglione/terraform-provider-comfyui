@@ -30,7 +30,7 @@ type ElevenLabsTextToSoundEffectsModel struct {
 	ID           types.String `tfsdk:"id"`
 	NodeID       types.String `tfsdk:"node_id"`
 	Text         types.String `tfsdk:"text"`
-	Model        types.String `tfsdk:"model"`
+	Model        types.Object `tfsdk:"model"`
 	OutputFormat types.String `tfsdk:"output_format"`
 	AudioOutput  types.String `tfsdk:"audio_output"`
 }
@@ -82,12 +82,30 @@ func (r *ElevenLabsTextToSoundEffectsResource) Schema(_ context.Context, _ resou
 				MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Text description of the sound effect to generate.",
 				Required:            true,
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for sound effect generation.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"duration": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 5.0. Allowed range: 0.5 to 30.0. Step: 0.1. Tooltip: Duration of generated sound in seconds.",
+						Optional:            true,
+					},
+					"loop": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Create a smoothly looping sound effect.",
+						Optional:            true,
+					},
+					"prompt_influence": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.3. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: How closely generation follows the prompt. Higher values make the sound follow the text more closely.",
+						Optional:            true,
+					},
+				},
 			},
 			"output_format": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Audio output format.",
+				MarkdownDescription: "Input: COMBO. Options: \"mp3_44100_192\", \"opus_48000_192\". Tooltip: Audio output format.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

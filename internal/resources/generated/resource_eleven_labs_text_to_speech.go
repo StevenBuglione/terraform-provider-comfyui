@@ -35,7 +35,7 @@ type ElevenLabsTextToSpeechModel struct {
 	Text                   types.String  `tfsdk:"text"`
 	Stability              types.Float64 `tfsdk:"stability"`
 	ApplyTextNormalization types.String  `tfsdk:"apply_text_normalization"`
-	Model                  types.String  `tfsdk:"model"`
+	Model                  types.Object  `tfsdk:"model"`
 	LanguageCode           types.String  `tfsdk:"language_code"`
 	Seed                   types.Int64   `tfsdk:"seed"`
 	OutputFormat           types.String  `tfsdk:"output_format"`
@@ -101,7 +101,7 @@ func (r *ElevenLabsTextToSpeechResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"apply_text_normalization": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Text normalization mode. 'auto' lets the system decide, 'on' always applies normalization, 'off' skips it.",
+				MarkdownDescription: "Input: COMBO. Options: \"auto\", \"on\", \"off\". Tooltip: Text normalization mode. 'auto' lets the system decide, 'on' always applies normalization, 'off' skips it.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -111,9 +111,31 @@ func (r *ElevenLabsTextToSpeechResource) Schema(_ context.Context, _ resource.Sc
 					),
 				},
 			},
-			"model": schema.StringAttribute{
+			"model": schema.SingleNestedAttribute{
 				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for text-to-speech.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"similarity_boost": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.75. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Similarity boost. Higher values make the voice more similar to the original.",
+						Optional:            true,
+					},
+					"speed": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.7 to 1.3. Step: 0.01. Tooltip: Speech speed. 1.0 is normal, <1.0 slower, >1.0 faster.",
+						Optional:            true,
+					},
+					"style": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 0.2. Step: 0.01. Tooltip: Style exaggeration. Higher values increase stylistic expression but may reduce stability.",
+						Optional:            true,
+					},
+					"use_speaker_boost": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Boost similarity to the original speaker voice.",
+						Optional:            true,
+					},
+				},
 			},
 			"language_code": schema.StringAttribute{
 				MarkdownDescription: "Input: STRING. Default: \"\". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.",
@@ -127,7 +149,7 @@ func (r *ElevenLabsTextToSpeechResource) Schema(_ context.Context, _ resource.Sc
 				},
 			},
 			"output_format": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Audio output format.",
+				MarkdownDescription: "Input: COMBO. Options: \"mp3_44100_192\", \"opus_48000_192\". Tooltip: Audio output format.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

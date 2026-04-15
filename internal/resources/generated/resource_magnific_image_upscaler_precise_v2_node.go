@@ -88,7 +88,7 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Schema(_ context.Context, _
 				Required:            true,
 			},
 			"scale_factor": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"2x\", \"4x\", \"8x\", \"16x\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -100,7 +100,7 @@ func (r *MagnificImageUpscalerPreciseV2NodeResource) Schema(_ context.Context, _
 				},
 			},
 			"flavor": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Processing style: sublime for general use, photo for photographs, photo_denoiser for noisy photos.",
+				MarkdownDescription: "Input: COMBO. Options: \"sublime\", \"photo\", \"photo_denoiser\". Tooltip: Processing style: sublime for general use, photo for photographs, photo_denoiser for noisy photos.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

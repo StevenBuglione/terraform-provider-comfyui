@@ -100,7 +100,7 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				Required:            true,
 			},
 			"format": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"GLTF\", \"USDZ\", \"FBX\", \"OBJ\", \"STL\", \"3MF\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -132,7 +132,7 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"texture_format": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"JPEG\".",
+				MarkdownDescription: "Input: COMBO. Default: \"JPEG\". Options: \"BMP\", \"DPX\", \"HDR\", \"JPEG\", \"OPEN_EXR\", \"PNG\", \"TARGA\", \"TIFF\", \"WEBP\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -188,7 +188,7 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				Optional:            true,
 			},
 			"fbx_preset": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"blender\".",
+				MarkdownDescription: "Input: COMBO. Default: \"blender\". Options: \"blender\", \"mixamo\", \"3dsmax\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -203,7 +203,7 @@ func (r *TripoConversionNodeResource) Schema(_ context.Context, _ resource.Schem
 				Optional:            true,
 			},
 			"export_orientation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"default\".",
+				MarkdownDescription: "Input: COMBO. Default: \"default\". Options: \"align_image\", \"default\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

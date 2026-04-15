@@ -85,7 +85,7 @@ func (r *MeshyTextureNodeResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"latest\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

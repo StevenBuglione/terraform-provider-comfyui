@@ -128,7 +128,7 @@ func (r *TripoTextToModelNodeResource) Schema(_ context.Context, _ resource.Sche
 				Optional:            true,
 			},
 			"texture_quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"standard\".",
+				MarkdownDescription: "Input: COMBO. Default: \"standard\". Options: \"standard\", \"detailed\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -149,7 +149,7 @@ func (r *TripoTextToModelNodeResource) Schema(_ context.Context, _ resource.Sche
 				Optional:            true,
 			},
 			"geometry_quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"standard\".",
+				MarkdownDescription: "Input: COMBO. Default: \"standard\". Options: \"standard\", \"detailed\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

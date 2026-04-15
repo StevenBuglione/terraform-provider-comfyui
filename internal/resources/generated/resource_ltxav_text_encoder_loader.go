@@ -87,7 +87,7 @@ func (r *LtxavTextEncoderLoaderResource) Schema(_ context.Context, _ resource.Sc
 				Required:            true,
 			},
 			"device": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"default\", \"cpu\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

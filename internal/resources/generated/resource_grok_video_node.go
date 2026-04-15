@@ -84,7 +84,7 @@ func (r *GrokVideoNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"grok-imagine-video\", \"grok-imagine-video-beta\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -98,7 +98,7 @@ func (r *GrokVideoNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The resolution of the output video.",
+				MarkdownDescription: "Input: COMBO. Options: \"480p\", \"720p\". Tooltip: The resolution of the output video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -108,7 +108,7 @@ func (r *GrokVideoNodeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The aspect ratio of the output video.",
+				MarkdownDescription: "Input: COMBO. Options: \"auto\", \"16:9\", \"4:3\", \"3:2\", \"1:1\", \"2:3\", \"3:4\", \"9:16\". Tooltip: The aspect ratio of the output video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

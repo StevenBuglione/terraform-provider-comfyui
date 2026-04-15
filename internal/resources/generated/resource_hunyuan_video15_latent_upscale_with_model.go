@@ -91,7 +91,7 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Schema(_ context.Context,
 				Required:            true,
 			},
 			"upscale_method": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"bilinear\".",
+				MarkdownDescription: "Input: COMBO. Default: \"bilinear\". Options: \"nearest-exact\", \"bilinear\", \"area\", \"bicubic\", \"bislerp\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -118,7 +118,7 @@ func (r *HunyuanVideo15LatentUpscaleWithModelResource) Schema(_ context.Context,
 				},
 			},
 			"crop": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"disabled\", \"center\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
