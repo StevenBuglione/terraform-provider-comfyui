@@ -22,7 +22,7 @@ ComfyUI TripoImageToModelNode node — Tripo: Image to Model [api node/3d/Tripo]
 ### Optional
 
 - `face_limit` (Number) Input: INT. Default: -1. Allowed range: -1 to 500000.
-- `geometry_quality` (String) Input: COMBO. Default: "standard".
+- `geometry_quality` (String) Input: COMBO. Default: "standard". Options: "standard", "detailed".
 - `model_seed` (Number) Input: INT. Default: 42.
 - `model_version` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: TripoModelVersion. Tooltip: The model version to use for generation.
 - `orientation` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: TripoOrientation.
@@ -30,8 +30,8 @@ ComfyUI TripoImageToModelNode node — Tripo: Image to Model [api node/3d/Tripo]
 - `quad` (Boolean) Input: BOOLEAN. Default: false.
 - `style` (String) Input: COMBO. Default: "None". Dynamic options are resolved by ComfyUI at runtime from: TripoStyle.
 - `texture` (Boolean) Input: BOOLEAN. Default: true.
-- `texture_alignment` (String) Input: COMBO. Default: "original_image".
-- `texture_quality` (String) Input: COMBO. Default: "standard".
+- `texture_alignment` (String) Input: COMBO. Default: "original_image". Options: "original_image", "geometry".
+- `texture_quality` (String) Input: COMBO. Default: "standard". Options: "standard", "detailed".
 - `texture_seed` (Number) Input: INT. Default: 42.
 
 ### Read-Only

@@ -81,7 +81,7 @@ func (r *ResizeImageMaskNodeResource) Schema(_ context.Context, _ resource.Schem
 				Required:            true,
 			},
 			"resize_type": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Select how to resize: by exact dimensions, scale factor, matching another image, etc.",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Select how to resize: by exact dimensions, scale factor, matching another image, etc. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{

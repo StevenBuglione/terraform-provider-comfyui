@@ -615,7 +615,7 @@ func buildDynamicComboAttribute(inp Input, tfName string, rd *ResourceData, requ
 	var b strings.Builder
 
 	fmt.Fprintf(&b, "%q: schema.SingleNestedAttribute{\n", tfName)
-	fmt.Fprintf(&b, "\t\t\t\tMarkdownDescription: %q,\n", buildInputDescription(inp))
+	fmt.Fprintf(&b, "\t\t\t\tMarkdownDescription: %q,\n", buildDynamicComboDescription(inp))
 	if required {
 		b.WriteString("\t\t\t\tRequired: true,\n")
 	} else {
@@ -644,6 +644,10 @@ func buildDynamicComboSelectionAttribute() string {
 	b.WriteString("\t\t\t\tMarkdownDescription: \"Selected DynamicCombo option key.\",\n")
 	b.WriteString("\t\t\t},\n")
 	return b.String()
+}
+
+func buildDynamicComboDescription(inp Input) string {
+	return buildInputDescription(inp) + " Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option."
 }
 
 func appendInputValidators(b *strings.Builder, inp Input, rd *ResourceData, emitValidators bool) {

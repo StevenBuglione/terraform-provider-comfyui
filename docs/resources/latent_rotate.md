@@ -17,7 +17,7 @@ ComfyUI LatentRotate node — Rotate Latent [latent/transform] Source: nodes.py:
 
 ### Required
 
-- `rotation` (String) Input: COMBO.
+- `rotation` (String) Input: COMBO. Options: "none", "90 degrees", "180 degrees", "270 degrees".
 - `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only

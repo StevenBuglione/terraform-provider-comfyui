@@ -17,7 +17,7 @@ Generates videos synchronously based on a prompt, and optional parameters. [api 
 
 ### Required
 
-- `model` (String) Input: COMBO. Default: "T2V-01". Tooltip: Model to use for video generation.
+- `model` (String) Input: COMBO. Default: "T2V-01". Options: "T2V-01", "T2V-01-Director". Tooltip: Model to use for video generation.
 - `prompt_text` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt to guide the video generation.
 
 ### Optional

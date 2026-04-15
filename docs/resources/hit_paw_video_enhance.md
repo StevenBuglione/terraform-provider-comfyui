@@ -17,7 +17,7 @@ Upscale low-resolution videos to high resolution, eliminate artifacts and noise.
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime from: model_options.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `video` (String) Input: VIDEO. Link input.
 
 ### Read-Only
@@ -25,3 +25,10 @@ Upscale low-resolution videos to high resolution, eliminate artifacts and noise.
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.

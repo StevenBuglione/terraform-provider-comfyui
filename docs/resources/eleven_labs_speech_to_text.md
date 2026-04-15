@@ -19,7 +19,7 @@ Transcribe audio to text. Supports automatic language detection, speaker diariza
 
 - `audio` (String) Input: AUDIO. Link input. Tooltip: Audio to transcribe.
 - `language_code` (String) Input: STRING. Default: "". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for transcription.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for transcription. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `num_speakers` (Number) Input: INT. Default: 0. Allowed range: 0 to 32. Tooltip: Maximum number of speakers to predict. Set to 0 for automatic detection.
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Tooltip: Seed for reproducibility (determinism not guaranteed).
 
@@ -30,3 +30,18 @@ Transcribe audio to text. Supports automatic language detection, speaker diariza
 - `node_id` (String) ComfyUI node class type.
 - `text_output` (String) Output: STRING (slot 0).
 - `words_json_output` (String) Output: STRING (slot 2).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `diarization_threshold` (Number) Input: FLOAT. Default: 0.22. Allowed range: 0.1 to 0.4. Step: 0.01. Tooltip: Speaker separation sensitivity. Lower values are more sensitive to speaker changes.
+- `diarize` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Annotate which speaker is talking.
+- `tag_audio_events` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Annotate sounds like (laughter), (music), etc. in transcript.
+- `temperature` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 2.0. Step: 0.01. Tooltip: Randomness control. 0.0 uses model default. Higher values increase randomness.
+- `timestamps_granularity` (String) Input: COMBO. Default: "word". Options: "word", "character", "none". Tooltip: Timing precision for transcript words.

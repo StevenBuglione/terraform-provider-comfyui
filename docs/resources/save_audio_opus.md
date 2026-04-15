@@ -19,7 +19,7 @@ ComfyUI SaveAudioOpus node — Save Audio (Opus) [audio] Hidden runtime inputs: 
 
 - `audio` (String) Input: AUDIO. Link input.
 - `filename_prefix` (String) Input: STRING. Default: "audio/ComfyUI".
-- `quality` (String) Input: COMBO. Default: "128k".
+- `quality` (String) Input: COMBO. Default: "128k". Options: "64k", "96k", "128k", "192k", "320k".
 
 ### Read-Only
 

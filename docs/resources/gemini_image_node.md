@@ -23,10 +23,10 @@ Edit images synchronously via Google API. [api node/image/Gemini] Hidden runtime
 
 ### Optional
 
-- `aspect_ratio` (String) Input: COMBO. Default: "auto". Tooltip: Defaults to matching the output image size to that of your input image, or otherwise generates 1:1 squares.
+- `aspect_ratio` (String) Input: COMBO. Default: "auto". Options: "auto", "1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9". Tooltip: Defaults to matching the output image size to that of your input image, or otherwise generates 1:1 squares.
 - `files` (String) Input: GEMINI_INPUT_FILES. Link input. Tooltip: Optional file(s) to use as context for the model. Accepts inputs from the Gemini Generate Content Input Files node.
 - `images` (String) Input: IMAGE. Link input. Tooltip: Optional image(s) to use as context for the model. To include multiple images, you can use the Batch Images node.
-- `response_modalities` (String) Input: COMBO. Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.
+- `response_modalities` (String) Input: COMBO. Options: "IMAGE+TEXT", "IMAGE". Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.
 - `system_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Foundational instructions that dictate an AI's behavior.
 
 ### Read-Only

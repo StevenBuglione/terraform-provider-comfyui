@@ -98,7 +98,7 @@ func (r *MagnificImageSkinEnhancerNodeResource) Schema(_ context.Context, _ reso
 				},
 			},
 			"mode": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Processing mode: creative for artistic enhancement, faithful for preserving original appearance, flexible for targeted optimization.",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Processing mode: creative for artistic enhancement, faithful for preserving original appearance, flexible for targeted optimization. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{

@@ -18,8 +18,8 @@ ComfyUI ResizeAndPadImage node [image/transform] Source: comfy_extras/nodes_imag
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `interpolation` (String) Input: COMBO.
-- `padding_color` (String) Input: COMBO.
+- `interpolation` (String) Input: COMBO. Options: "area", "bicubic", "nearest-exact", "bilinear", "lanczos".
+- `padding_color` (String) Input: COMBO. Options: "white", "black".
 - `target_height` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
 - `target_width` (Number) Input: INT. Default: 512. Minimum value: 1. Step: 1.
 

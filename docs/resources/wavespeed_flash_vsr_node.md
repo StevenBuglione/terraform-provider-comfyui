@@ -17,7 +17,7 @@ Fast, high-quality video upscaler that boosts resolution and restores clarity fo
 
 ### Required
 
-- `target_resolution` (String) Input: COMBO.
+- `target_resolution` (String) Input: COMBO. Options: "720p", "1080p", "2K", "4K".
 - `video` (String) Input: VIDEO. Link input.
 
 ### Read-Only

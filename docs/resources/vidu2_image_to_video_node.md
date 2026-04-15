@@ -19,10 +19,10 @@ Generate a video from an image and an optional prompt. [api node/video/Vidu] Hid
 
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 1 to 10. Step: 1.
 - `image` (String) Input: IMAGE. Link input. Tooltip: An image to be used as the start frame of the generated video.
-- `model` (String) Input: COMBO.
-- `movement_amplitude` (String) Input: COMBO. Tooltip: The movement amplitude of objects in the frame.
+- `model` (String) Input: COMBO. Options: "viduq2-pro-fast", "viduq2-pro", "viduq2-turbo".
+- `movement_amplitude` (String) Input: COMBO. Options: "auto", "small", "medium", "large". Tooltip: The movement amplitude of objects in the frame.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: An optional text prompt for video generation (max 2000 characters).
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p".
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 
 ### Read-Only

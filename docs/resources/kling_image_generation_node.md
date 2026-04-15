@@ -21,7 +21,7 @@ Kling Image Generation Node. Generate an image from a text prompt with an option
 - `human_fidelity` (Number) Input: FLOAT. Default: 0.45. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Subject reference similarity.
 - `image_fidelity` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Reference intensity for user-uploaded images.
 - `image_type` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
-- `model_name` (String) Input: COMBO.
+- `model_name` (String) Input: COMBO. Options: "kling-v3", "kling-v2", "kling-v1-5".
 - `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 9. Tooltip: Number of generated images.
 - `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: Negative text prompt.
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.

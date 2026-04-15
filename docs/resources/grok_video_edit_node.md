@@ -17,7 +17,7 @@ Edit an existing video based on a text prompt. [api node/video/Grok] Hidden runt
 
 ### Required
 
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "grok-imagine-video", "grok-imagine-video-beta".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Text description of the desired video.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 - `video` (String) Input: VIDEO. Link input. Tooltip: Maximum supported duration is 8.7 seconds and 50MB file size.

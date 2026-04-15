@@ -19,7 +19,7 @@ ComfyUI SaveAudioMP3 node — Save Audio (MP3) [audio] Hidden runtime inputs: pr
 
 - `audio` (String) Input: AUDIO. Link input.
 - `filename_prefix` (String) Input: STRING. Default: "audio/ComfyUI".
-- `quality` (String) Input: COMBO. Default: "V0".
+- `quality` (String) Input: COMBO. Default: "V0". Options: "V0", "128k", "320k".
 
 ### Read-Only
 

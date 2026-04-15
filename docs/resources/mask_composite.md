@@ -18,7 +18,7 @@ ComfyUI MaskComposite node [mask] Source: comfy_extras/nodes_mask.py:244 (v3_ext
 ### Required
 
 - `destination` (String) Input: MASK. Link input.
-- `operation` (String) Input: COMBO.
+- `operation` (String) Input: COMBO. Options: "multiply", "add", "subtract", "and", "or", "xor".
 - `source` (String) Input: MASK. Link input.
 - `x` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.
 - `y` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1.

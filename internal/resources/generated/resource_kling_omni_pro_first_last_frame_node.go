@@ -130,7 +130,7 @@ func (r *KlingOmniProFirstLastFrameNodeResource) Schema(_ context.Context, _ res
 				},
 			},
 			"storyboards": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Only supported for kling-v3-omni.",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Only supported for kling-v3-omni. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Optional:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{

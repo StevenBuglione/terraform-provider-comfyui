@@ -19,7 +19,7 @@ Concatenates the audio1 to audio2 in the specified direction. [audio] Source: co
 
 - `audio1` (String) Input: AUDIO. Link input.
 - `audio2` (String) Input: AUDIO. Link input.
-- `direction` (String) Input: COMBO. Default: "after". Tooltip: Whether to append audio2 after or before audio1.
+- `direction` (String) Input: COMBO. Default: "after". Options: "after", "before". Tooltip: Whether to append audio2 after or before audio1.
 
 ### Read-Only
 

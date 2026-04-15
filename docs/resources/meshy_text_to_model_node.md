@@ -17,13 +17,13 @@ ComfyUI MeshyTextToModelNode node — Meshy: Text to Model [api node/3d/Meshy] H
 
 ### Required
 
-- `model` (String) Input: COMBO.
-- `pose_mode` (String) Input: COMBO. Tooltip: Specify the pose mode for the generated model.
+- `model` (String) Input: COMBO. Options: "latest".
+- `pose_mode` (String) Input: COMBO. Options: "", "A-pose", "T-pose". Tooltip: Specify the pose mode for the generated model.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
-- `should_remesh` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: When set to false, returns an unprocessed triangular mesh.
-- `style` (String) Input: COMBO.
-- `symmetry_mode` (String) Input: COMBO.
+- `should_remesh` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: When set to false, returns an unprocessed triangular mesh. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--should_remesh))
+- `style` (String) Input: COMBO. Options: "realistic", "sculpture".
+- `symmetry_mode` (String) Input: COMBO. Options: "auto", "on", "off".
 
 ### Read-Only
 
@@ -33,3 +33,15 @@ ComfyUI MeshyTextToModelNode node — Meshy: Text to Model [api node/3d/Meshy] H
 - `meshy_task_id_output` (String) Output: MESHY_TASK_ID (slot 1).
 - `model_file_output` (String) Output: STRING (slot 0).
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--should_remesh"></a>
+### Nested Schema for `should_remesh`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `target_polycount` (Number) Input: INT. Default: 300000. Allowed range: 100 to 300000.
+- `topology` (String) Input: COMBO. Options: "triangle", "quad".

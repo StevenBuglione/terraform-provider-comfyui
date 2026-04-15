@@ -23,12 +23,12 @@ Generates images using the Ideogram V2 model. [api node/image/Ideogram] Hidden r
 ### Optional
 
 - `aspect_ratio` (String) Input: COMBO. Default: "1:1". Dynamic options are resolved by ComfyUI at runtime from: list(V1_V2_RATIO_MAP.keys()). Tooltip: The aspect ratio for image generation. Ignored if resolution is not set to AUTO.
-- `magic_prompt_option` (String) Input: COMBO. Default: "AUTO". Tooltip: Determine if MagicPrompt should be used in generation.
+- `magic_prompt_option` (String) Input: COMBO. Default: "AUTO". Options: "AUTO", "ON", "OFF". Tooltip: Determine if MagicPrompt should be used in generation.
 - `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Description of what to exclude from the image.
 - `num_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1.
 - `resolution` (String) Input: COMBO. Default: "Auto". Dynamic options are resolved by ComfyUI at runtime from: list(V1_V1_RES_MAP.keys()). Tooltip: The resolution for image generation. If not set to AUTO, this overrides the aspect_ratio setting.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1.
-- `style_type` (String) Input: COMBO. Default: "NONE". Tooltip: Style type for generation (V2 only).
+- `style_type` (String) Input: COMBO. Default: "NONE". Options: "AUTO", "GENERAL", "REALISTIC", "DESIGN", "RENDER_3D", "ANIME". Tooltip: Style type for generation (V2 only).
 
 ### Read-Only
 

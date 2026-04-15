@@ -17,7 +17,7 @@ ComfyUI TripoRetargetNode node — Tripo: Retarget rigged model [api node/3d/Tri
 
 ### Required
 
-- `animation` (String) Input: COMBO.
+- `animation` (String) Input: COMBO. Options: "preset:idle", "preset:walk", "preset:run", "preset:dive", "preset:climb", "preset:jump", "preset:slash", "preset:shoot", "preset:hurt", "preset:fall", "preset:turn", "preset:quadruped:walk", "preset:hexapod:walk", "preset:octopod:walk", "preset:serpentine:march", "preset:aquatic:march".
 - `original_model_task_id` (String) Input: RIG_TASK_ID. Link input.
 
 ### Read-Only

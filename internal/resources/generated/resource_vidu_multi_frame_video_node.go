@@ -113,7 +113,7 @@ func (r *ViduMultiFrameVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"frames": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of keyframe transitions (2-9).",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of keyframe transitions (2-9). Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{

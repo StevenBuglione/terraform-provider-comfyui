@@ -88,7 +88,7 @@ func (r *ReveImageRemixNodeResource) Schema(_ context.Context, _ resource.Schema
 				Required:            true,
 			},
 			"model": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model version to use for remixing.",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model version to use for remixing. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{

@@ -75,7 +75,7 @@ func (r *DcTestNodeResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				},
 			},
 			"combo": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{
@@ -95,7 +95,7 @@ func (r *DcTestNodeResource) Schema(_ context.Context, _ resource.SchemaRequest,
 						Optional:            true,
 					},
 					"subcombo": schema.SingleNestedAttribute{
-						MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+						MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 						Optional:            true,
 						Attributes: map[string]schema.Attribute{
 							"selection": schema.StringAttribute{

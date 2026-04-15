@@ -21,7 +21,7 @@ ltxav: gemma 3 12B [advanced/loaders] Source: comfy_extras/nodes_lt_audio.py:172
 ### Required
 
 - `ckpt_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('checkpoints').
-- `device` (String) Input: COMBO.
+- `device` (String) Input: COMBO. Options: "default", "cpu".
 - `text_encoder` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
 
 ### Read-Only

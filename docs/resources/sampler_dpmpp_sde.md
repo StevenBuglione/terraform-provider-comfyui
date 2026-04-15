@@ -18,7 +18,7 @@ ComfyUI SamplerDPMPP_SDE node [sampling/custom_sampling/samplers] Source: comfy_
 ### Required
 
 - `eta` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
-- `noise_device` (String) Input: COMBO.
+- `noise_device` (String) Input: COMBO. Options: "gpu", "cpu".
 - `r` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 100.0. Step: 0.01.
 - `s_noise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
 

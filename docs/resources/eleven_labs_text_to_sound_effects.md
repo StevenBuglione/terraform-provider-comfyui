@@ -17,8 +17,8 @@ Generate sound effects from text descriptions. [api node/audio/ElevenLabs] Hidde
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for sound effect generation.
-- `output_format` (String) Input: COMBO. Tooltip: Audio output format.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for sound effect generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
+- `output_format` (String) Input: COMBO. Options: "mp3_44100_192", "opus_48000_192". Tooltip: Audio output format.
 - `text` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of the sound effect to generate.
 
 ### Read-Only
@@ -26,3 +26,16 @@ Generate sound effects from text descriptions. [api node/audio/ElevenLabs] Hidde
 - `audio_output` (String) Output: AUDIO (slot 0).
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `duration` (Number) Input: FLOAT. Default: 5.0. Allowed range: 0.5 to 30.0. Step: 0.1. Tooltip: Duration of generated sound in seconds.
+- `loop` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Create a smoothly looping sound effect.
+- `prompt_influence` (Number) Input: FLOAT. Default: 0.3. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: How closely generation follows the prompt. Higher values make the sound follow the text more closely.

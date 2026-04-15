@@ -19,8 +19,8 @@ ComfyUI HitPawGeneralImageEnhance node — HitPaw General Image Enhance [api nod
 
 - `auto_downscale` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Automatically downscale input image if output would exceed the limit.
 - `image` (String) Input: IMAGE. Link input.
-- `model` (String) Input: COMBO.
-- `upscale_factor` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "generative_portrait", "generative".
+- `upscale_factor` (String) Input: COMBO. Options: "1", "2", "4".
 
 ### Read-Only
 

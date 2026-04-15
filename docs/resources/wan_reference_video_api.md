@@ -18,13 +18,13 @@ Use the character and voice from input videos, combined with a prompt, to genera
 ### Required
 
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 5 to 10. Step: 5.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "wan2.6-r2v".
 - `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative prompt describing what to avoid.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese. Use identifiers such as `character1` and `character2` to refer to the reference characters.
 - `reference_videos` (String) Input: COMFY_AUTOGROW_V3.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1.
-- `shot_type` (String) Input: COMBO. Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts.
-- `size` (String) Input: COMBO.
+- `shot_type` (String) Input: COMBO. Options: "single", "multi". Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts.
+- `size` (String) Input: COMBO. Options: "720p: 1:1 (960x960)", "720p: 16:9 (1280x720)", "720p: 9:16 (720x1280)", "720p: 4:3 (1088x832)", "720p: 3:4 (832x1088)", "1080p: 1:1 (1440x1440)", "1080p: 16:9 (1920x1080)", "1080p: 9:16 (1080x1920)", "1080p: 4:3 (1632x1248)", "1080p: 3:4 (1248x1632)".
 - `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
 ### Read-Only

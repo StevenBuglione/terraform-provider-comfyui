@@ -17,7 +17,7 @@ Generate a video featuring a person or object from reference materials. Supports
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
 - `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
@@ -26,3 +26,20 @@ Generate a video featuring a person or object from reference materials. Supports
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 2 to 10. Step: 1.
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative prompt describing what to avoid.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the video. Use identifiers such as 'character1' and 'character2' to refer to the reference characters.
+- `ratio` (String) Input: COMBO. Options: "16:9", "9:16", "1:1", "4:3", "3:4".
+- `reference_images` (String) Input: COMFY_AUTOGROW_V3.
+- `reference_videos` (String) Input: COMFY_AUTOGROW_V3.
+- `resolution` (String) Input: COMBO. Options: "720P", "1080P".

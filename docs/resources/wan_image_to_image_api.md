@@ -18,7 +18,7 @@ Generates an image from one or two input images and a text prompt. The output im
 ### Required
 
 - `image` (String) Input: IMAGE. Link input. Tooltip: Single-image editing or multi-image fusion. Maximum 2 images.
-- `model` (String) Input: COMBO. Default: "wan2.5-i2i-preview". Tooltip: Model to use.
+- `model` (String) Input: COMBO. Default: "wan2.5-i2i-preview". Options: "wan2.5-i2i-preview". Tooltip: Model to use.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.
 
 ### Optional

@@ -17,7 +17,7 @@ ComfyUI LatentCutToBatch node [latent/advanced] Source: comfy_extras/nodes_laten
 
 ### Required
 
-- `dim` (String) Input: COMBO.
+- `dim` (String) Input: COMBO. Options: "t", "x", "y".
 - `samples` (String) Input: LATENT. Link input.
 - `slice_size` (Number) Input: INT. Default: 1. Minimum value: 1. Step: 1.
 

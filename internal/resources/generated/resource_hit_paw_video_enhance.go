@@ -76,7 +76,7 @@ func (r *HitPawVideoEnhanceResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"model": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3.",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{

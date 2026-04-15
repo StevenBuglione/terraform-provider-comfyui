@@ -17,7 +17,7 @@ ComfyUI LatentConcat node [latent/advanced] Source: comfy_extras/nodes_latent.py
 
 ### Required
 
-- `dim` (String) Input: COMBO.
+- `dim` (String) Input: COMBO. Options: "x", "-x", "y", "-y", "t", "-t".
 - `samples1` (String) Input: LATENT. Link input.
 - `samples2` (String) Input: LATENT. Link input.
 

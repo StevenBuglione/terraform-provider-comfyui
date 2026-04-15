@@ -18,7 +18,7 @@ ComfyUI ModelSamplingDiscrete node — ModelSamplingDiscrete [advanced/model] So
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `sampling` (String) Input: COMBO.
+- `sampling` (String) Input: COMBO. Options: "eps", "v_prediction", "lcm", "x0", "img_to_img", "img_to_img_flow".
 - `zsnr` (Boolean) Input: BOOLEAN. Default: false.
 
 ### Read-Only

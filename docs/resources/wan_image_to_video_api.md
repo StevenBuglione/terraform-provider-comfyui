@@ -18,7 +18,7 @@ Generates a video from the first frame and a text prompt. [api node/video/Wan] H
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `model` (String) Input: COMBO. Default: "wan2.6-i2v". Tooltip: Model to use.
+- `model` (String) Input: COMBO. Default: "wan2.6-i2v". Options: "wan2.5-i2v-preview", "wan2.6-i2v". Tooltip: Model to use.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.
 
 ### Optional
@@ -28,9 +28,9 @@ Generates a video from the first frame and a text prompt. [api node/video/Wan] H
 - `generate_audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: If no audio input is provided, generate audio automatically.
 - `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative prompt describing what to avoid.
 - `prompt_extend` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.
-- `resolution` (String) Input: COMBO. Default: "720P".
+- `resolution` (String) Input: COMBO. Default: "720P". Options: "480P", "720P", "1080P".
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
-- `shot_type` (String) Input: COMBO. Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts. This parameter takes effect only when prompt_extend is True.
+- `shot_type` (String) Input: COMBO. Options: "single", "multi". Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts. This parameter takes effect only when prompt_extend is True.
 - `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
 ### Read-Only

@@ -23,13 +23,13 @@ ComfyUI TextEncodeAceStepAudio15 node [conditioning] Source: comfy_extras/nodes_
 - `duration` (Number) Input: FLOAT. Default: 120.0. Allowed range: 0.0 to 2000.0. Step: 0.1.
 - `generate_audio_codes` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Enable the LLM that generates audio codes. This can be slow but will increase the quality of the generated audio. Turn this off if you are giving the model an audio reference.
 - `keyscale` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime.
-- `language` (String) Input: COMBO.
+- `language` (String) Input: COMBO. Options: "en", "ja", "zh", "es", "de", "fr", "pt", "ru", "it", "nl", "pl", "tr", "vi", "cs", "fa", "id", "ko", "uk", "hu", "ar", "sv", "ro", "el".
 - `lyrics` (String) Input: STRING. Supports multiline text.
 - `min_p` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0. Step: 0.001.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.
 - `tags` (String) Input: STRING. Supports multiline text.
 - `temperature` (Number) Input: FLOAT. Default: 0.85. Allowed range: 0.0 to 2.0. Step: 0.01.
-- `timesignature` (String) Input: COMBO.
+- `timesignature` (String) Input: COMBO. Options: "2", "3", "4", "6".
 - `top_k` (Number) Input: INT. Default: 0. Allowed range: 0 to 100.
 - `top_p` (Number) Input: FLOAT. Default: 0.9. Allowed range: 0.0 to 2000.0. Step: 0.01.
 

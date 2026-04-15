@@ -100,7 +100,7 @@ func (r *TextGenerateResource) Schema(_ context.Context, _ resource.SchemaReques
 				},
 			},
 			"sampling_mode": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Display name: Sampling Mode. Dynamic options are resolved by ComfyUI at runtime from: sampling_options.",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Display name: Sampling Mode. Dynamic options are resolved by ComfyUI at runtime from: sampling_options. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{

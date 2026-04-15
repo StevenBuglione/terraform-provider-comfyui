@@ -19,7 +19,7 @@ Combine two audio tracks by overlaying their waveforms. [audio] Source: comfy_ex
 
 - `audio1` (String) Input: AUDIO. Link input.
 - `audio2` (String) Input: AUDIO. Link input.
-- `merge_method` (String) Input: COMBO. Tooltip: The method used to combine the audio waveforms.
+- `merge_method` (String) Input: COMBO. Options: "add", "mean", "subtract", "multiply". Tooltip: The method used to combine the audio waveforms.
 
 ### Read-Only
 

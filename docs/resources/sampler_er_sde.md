@@ -21,7 +21,7 @@ ComfyUI SamplerER_SDE node [sampling/custom_sampling/samplers] Source: comfy_ext
 When eta=0, it reduces to deterministic ODE. This setting doesn't apply to ER-SDE solver type.
 - `max_stage` (Number) Input: INT. Default: 3. Allowed range: 1 to 3.
 - `s_noise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01.
-- `solver_type` (String) Input: COMBO.
+- `solver_type` (String) Input: COMBO. Options: "ER-SDE", "Reverse-time SDE", "ODE".
 
 ### Read-Only
 

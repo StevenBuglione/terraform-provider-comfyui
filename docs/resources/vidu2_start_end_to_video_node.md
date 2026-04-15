@@ -20,10 +20,10 @@ Generate a video from a start frame, an end frame, and a prompt. [api node/video
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 2 to 8. Step: 1.
 - `end_frame` (String) Input: IMAGE. Link input.
 - `first_frame` (String) Input: IMAGE. Link input.
-- `model` (String) Input: COMBO.
-- `movement_amplitude` (String) Input: COMBO. Tooltip: The movement amplitude of objects in the frame.
+- `model` (String) Input: COMBO. Options: "viduq2-pro-fast", "viduq2-pro", "viduq2-turbo".
+- `movement_amplitude` (String) Input: COMBO. Options: "auto", "small", "medium", "large". Tooltip: The movement amplitude of objects in the frame.
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Prompt description (max 2000 characters).
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p".
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 
 ### Read-Only

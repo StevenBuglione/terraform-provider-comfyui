@@ -23,8 +23,8 @@ ComfyUI TripoTextureNode node — Tripo: Texture model [api node/3d/Tripo] Hidde
 
 - `pbr` (Boolean) Input: BOOLEAN. Default: true.
 - `texture` (Boolean) Input: BOOLEAN. Default: true.
-- `texture_alignment` (String) Input: COMBO. Default: "original_image".
-- `texture_quality` (String) Input: COMBO. Default: "standard".
+- `texture_alignment` (String) Input: COMBO. Default: "original_image". Options: "original_image", "geometry".
+- `texture_quality` (String) Input: COMBO. Default: "standard". Options: "standard", "detailed".
 - `texture_seed` (Number) Input: INT. Default: 42.
 
 ### Read-Only

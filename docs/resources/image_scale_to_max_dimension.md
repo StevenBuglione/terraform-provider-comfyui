@@ -19,7 +19,7 @@ ComfyUI ImageScaleToMaxDimension node [image/upscaling] Source: comfy_extras/nod
 
 - `image` (String) Input: IMAGE. Link input.
 - `largest_size` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 1.
-- `upscale_method` (String) Input: COMBO.
+- `upscale_method` (String) Input: COMBO. Options: "area", "lanczos", "bilinear", "nearest-exact", "bilinear", "bicubic".
 
 ### Read-Only
 

@@ -17,11 +17,11 @@ Create or edit images with the latest model from Kling. [api node/image/Kling] H
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO.
-- `model_name` (String) Input: COMBO.
+- `aspect_ratio` (String) Input: COMBO. Options: "16:9", "9:16", "1:1", "4:3", "3:4", "3:2", "2:3", "21:9".
+- `model_name` (String) Input: COMBO. Options: "kling-v3-omni", "kling-image-o1".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A text prompt describing the image content. This can include both positive and negative descriptions.
-- `resolution` (String) Input: COMBO.
-- `series_amount` (String) Input: COMBO. Tooltip: Generate a series of images. Not supported for kling-image-o1.
+- `resolution` (String) Input: COMBO. Options: "1K", "2K", "4K".
+- `series_amount` (String) Input: COMBO. Options: "disabled", "2", "3", "4", "5", "6", "7", "8", "9". Tooltip: Generate a series of images. Not supported for kling-image-o1.
 
 ### Optional
 

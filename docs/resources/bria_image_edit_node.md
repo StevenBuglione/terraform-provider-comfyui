@@ -19,8 +19,8 @@ Edit images using Bria latest model [api node/image/Bria] Hidden runtime inputs:
 
 - `guidance_scale` (Number) Input: FLOAT. Default: 3. Allowed range: 3 to 5. Step: 0.01. Tooltip: Higher value makes the image follow the prompt more closely.
 - `image` (String) Input: IMAGE. Link input.
-- `model` (String) Input: COMBO.
-- `moderation` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings.
+- `model` (String) Input: COMBO. Options: "FIBO".
+- `moderation` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--moderation))
 - `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Instruction to edit image.
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 1 to 2147483647. Step: 1.
@@ -37,3 +37,16 @@ Edit images using Bria latest model [api node/image/Bria] Hidden runtime inputs:
 - `image_output` (String) Output: IMAGE (slot 0).
 - `node_id` (String) ComfyUI node class type.
 - `structured_prompt_output` (String) Output: STRING (slot 1).
+
+<a id="nestedatt--moderation"></a>
+### Nested Schema for `moderation`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `prompt_content_moderation` (Boolean) Input: BOOLEAN. Default: false.
+- `visual_input_moderation` (Boolean) Input: BOOLEAN. Default: false.
+- `visual_output_moderation` (Boolean) Input: BOOLEAN. Default: true.

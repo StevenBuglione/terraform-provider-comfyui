@@ -17,7 +17,7 @@ description: |-
 
 ### Required
 
-- `version` (String) Input: COMBO.
+- `version` (String) Input: COMBO. Options: "regular", "alternative".
 
 ### Read-Only
 

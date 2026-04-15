@@ -17,11 +17,11 @@ Generate video from a prompt or an image [api node/video/Grok] Hidden runtime in
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO. Tooltip: The aspect ratio of the output video.
+- `aspect_ratio` (String) Input: COMBO. Options: "auto", "16:9", "4:3", "3:2", "1:1", "2:3", "3:4", "9:16". Tooltip: The aspect ratio of the output video.
 - `duration` (Number) Input: INT. Default: 6. Allowed range: 1 to 15. Step: 1. Tooltip: The duration of the output video in seconds.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "grok-imagine-video", "grok-imagine-video-beta".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Text description of the desired video.
-- `resolution` (String) Input: COMBO. Tooltip: The resolution of the output video.
+- `resolution` (String) Input: COMBO. Options: "480p", "720p". Tooltip: The resolution of the output video.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional

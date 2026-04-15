@@ -17,10 +17,10 @@ Convert text to speech. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_
 
 ### Required
 
-- `apply_text_normalization` (String) Input: COMBO. Tooltip: Text normalization mode. 'auto' lets the system decide, 'on' always applies normalization, 'off' skips it.
+- `apply_text_normalization` (String) Input: COMBO. Options: "auto", "on", "off". Tooltip: Text normalization mode. 'auto' lets the system decide, 'on' always applies normalization, 'off' skips it.
 - `language_code` (String) Input: STRING. Default: "". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for text-to-speech.
-- `output_format` (String) Input: COMBO. Tooltip: Audio output format.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for text-to-speech. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
+- `output_format` (String) Input: COMBO. Options: "mp3_44100_192", "opus_48000_192". Tooltip: Audio output format.
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Tooltip: Seed for reproducibility (determinism not guaranteed).
 - `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
 - `text` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: The text to convert to speech.
@@ -31,3 +31,17 @@ Convert text to speech. [api node/audio/ElevenLabs] Hidden runtime inputs: auth_
 - `audio_output` (String) Output: AUDIO (slot 0).
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `similarity_boost` (Number) Input: FLOAT. Default: 0.75. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Similarity boost. Higher values make the voice more similar to the original.
+- `speed` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.7 to 1.3. Step: 0.01. Tooltip: Speech speed. 1.0 is normal, <1.0 slower, >1.0 faster.
+- `style` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 0.2. Step: 0.01. Tooltip: Style exaggeration. Higher values increase stylistic expression but may reduce stability.
+- `use_speaker_boost` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Boost similarity to the original speaker voice.

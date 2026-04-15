@@ -39,11 +39,11 @@ omnigen2: qwen vl 2.5 3B [advanced/loaders] Source: nodes.py:976 (v1_core).
 ### Required
 
 - `clip_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
-- `type` (String) Input: COMBO.
+- `type` (String) Input: COMBO. Options: "stable_diffusion", "stable_cascade", "sd3", "stable_audio", "mochi", "ltxv", "pixart", "cosmos", "lumina2", "wan", "hidream", "chroma", "ace", "omnigen2", "qwen_image", "hunyuan_image", "flux2", "ovis", "longcat_image".
 
 ### Optional
 
-- `device` (String) Input: COMBO.
+- `device` (String) Input: COMBO. Options: "default", "cpu".
 
 ### Read-Only
 

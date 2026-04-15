@@ -17,7 +17,7 @@ ComfyUI StringTrim node — Trim [utils/string] Source: comfy_extras/nodes_strin
 
 ### Required
 
-- `mode` (String) Input: COMBO.
+- `mode` (String) Input: COMBO. Options: "Both", "Left", "Right".
 - `string` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only

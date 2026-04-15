@@ -20,7 +20,7 @@ ComfyUI CLIPTextEncodeSD3 node [advanced/conditioning] Source: comfy_extras/node
 - `clip` (String) Input: CLIP. Link input.
 - `clip_g` (String) Input: STRING. Supports multiline text.
 - `clip_l` (String) Input: STRING. Supports multiline text.
-- `empty_padding` (String) Input: COMBO.
+- `empty_padding` (String) Input: COMBO. Options: "none", "empty_prompt".
 - `t5xxl` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only

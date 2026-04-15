@@ -17,17 +17,17 @@ ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo] Hi
 
 ### Required
 
-- `format` (String) Input: COMBO.
+- `format` (String) Input: COMBO. Options: "GLTF", "USDZ", "FBX", "OBJ", "STL", "3MF".
 - `original_model_task_id` (String) Input: MODEL_TASK_ID,RIG_TASK_ID,RETARGET_TASK_ID. Link input.
 
 ### Optional
 
 - `animate_in_place` (Boolean) Input: BOOLEAN. Default: false.
 - `bake` (Boolean) Input: BOOLEAN. Default: false.
-- `export_orientation` (String) Input: COMBO. Default: "default".
+- `export_orientation` (String) Input: COMBO. Default: "default". Options: "align_image", "default".
 - `export_vertex_colors` (Boolean) Input: BOOLEAN. Default: false.
 - `face_limit` (Number) Input: INT. Default: -1. Allowed range: -1 to 2000000.
-- `fbx_preset` (String) Input: COMBO. Default: "blender".
+- `fbx_preset` (String) Input: COMBO. Default: "blender". Options: "blender", "mixamo", "3dsmax".
 - `flatten_bottom` (Boolean) Input: BOOLEAN. Default: false.
 - `flatten_bottom_threshold` (Number) Input: FLOAT. Default: 0.0. Allowed range: 0.0 to 1.0.
 - `force_symmetry` (Boolean) Input: BOOLEAN. Default: false.
@@ -36,7 +36,7 @@ ComfyUI TripoConversionNode node — Tripo: Convert model [api node/3d/Tripo] Hi
 - `pivot_to_center_bottom` (Boolean) Input: BOOLEAN. Default: false.
 - `quad` (Boolean) Input: BOOLEAN. Default: false.
 - `scale_factor` (Number) Input: FLOAT. Default: 1.0. Minimum value: 0.0.
-- `texture_format` (String) Input: COMBO. Default: "JPEG".
+- `texture_format` (String) Input: COMBO. Default: "JPEG". Options: "BMP", "DPX", "HDR", "JPEG", "OPEN_EXR", "PNG", "TARGA", "TIFF", "WEBP".
 - `texture_size` (Number) Input: INT. Default: 4096. Allowed range: 128 to 4096.
 - `with_animation` (Boolean) Input: BOOLEAN. Default: false.
 

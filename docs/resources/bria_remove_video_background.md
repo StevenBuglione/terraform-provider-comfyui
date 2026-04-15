@@ -17,7 +17,7 @@ Remove the background from a video using Bria. [api node/video/Bria] Hidden runt
 
 ### Required
 
-- `background_color` (String) Input: COMBO. Tooltip: Background color for the output video.
+- `background_color` (String) Input: COMBO. Options: "Black", "White", "Gray", "Red", "Green", "Blue", "Yellow", "Cyan", "Magenta", "Orange". Tooltip: Background color for the output video.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 - `video` (String) Input: VIDEO. Link input.
 

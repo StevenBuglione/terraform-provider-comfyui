@@ -18,7 +18,7 @@ Remove the background from an image using Bria RMBG 2.0. [api node/image/Bria] H
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `moderation` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings.
+- `moderation` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--moderation))
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only
@@ -26,3 +26,15 @@ Remove the background from an image using Bria RMBG 2.0. [api node/image/Bria] H
 - `id` (String) Unique identifier for this node instance.
 - `image_output` (String) Output: IMAGE (slot 0).
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--moderation"></a>
+### Nested Schema for `moderation`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `visual_input_moderation` (Boolean) Input: BOOLEAN. Default: false.
+- `visual_output_moderation` (Boolean) Input: BOOLEAN. Default: true.

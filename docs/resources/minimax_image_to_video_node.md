@@ -18,7 +18,7 @@ Generates videos synchronously based on an image and prompt, and optional parame
 ### Required
 
 - `image` (String) Input: IMAGE. Link input. Tooltip: Image to use as first frame of video generation.
-- `model` (String) Input: COMBO. Default: "I2V-01". Tooltip: Model to use for video generation.
+- `model` (String) Input: COMBO. Default: "I2V-01". Options: "I2V-01-Director", "I2V-01", "I2V-01-live". Tooltip: Model to use for video generation.
 - `prompt_text` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt to guide the video generation.
 
 ### Optional

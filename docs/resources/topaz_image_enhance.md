@@ -18,7 +18,7 @@ Industry-standard upscaling and image enhancement. [api node/image/Topaz] Hidden
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "Reimagine".
 
 ### Optional
 
@@ -32,7 +32,7 @@ Industry-standard upscaling and image enhancement. [api node/image/Topaz] Hidden
 - `output_height` (Number) Input: INT. Default: 0. Allowed range: 0 to 32000. Step: 1. Tooltip: Zero value means to output in the same height as original or output width.
 - `output_width` (Number) Input: INT. Default: 0. Allowed range: 0 to 32000. Step: 1. Tooltip: Zero value means to calculate automatically (usually it will be original size or output_height if specified).
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Optional text prompt for creative upscaling guidance.
-- `subject_detection` (String) Input: COMBO.
+- `subject_detection` (String) Input: COMBO. Options: "All", "Foreground", "Background".
 
 ### Read-Only
 

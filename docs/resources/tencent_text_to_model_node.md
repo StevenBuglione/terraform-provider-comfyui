@@ -18,8 +18,8 @@ ComfyUI TencentTextToModelNode node — Hunyuan3D: Text to Model [api node/3d/Te
 ### Required
 
 - `face_count` (Number) Input: INT. Default: 500000. Allowed range: 40000 to 1500000.
-- `generate_type` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
-- `model` (String) Input: COMBO. Tooltip: The LowPoly option is unavailable for the `3.1` model.
+- `generate_type` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--generate_type))
+- `model` (String) Input: COMBO. Options: "3.0", "3.1". Tooltip: The LowPoly option is unavailable for the `3.1` model.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Supports up to 1024 characters.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
@@ -31,3 +31,15 @@ ComfyUI TencentTextToModelNode node — Hunyuan3D: Text to Model [api node/3d/Te
 - `node_id` (String) ComfyUI node class type.
 - `obj_output` (String) Output: FILE_3D_OBJ (slot 2).
 - `texture_image_output` (String) Output: IMAGE (slot 3).
+
+<a id="nestedatt--generate_type"></a>
+### Nested Schema for `generate_type`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `pbr` (Boolean) Input: BOOLEAN. Default: false.
+- `polygon_type` (String) Input: COMBO. Options: "triangle", "quadrilateral".

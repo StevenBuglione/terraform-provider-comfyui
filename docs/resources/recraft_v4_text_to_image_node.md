@@ -17,7 +17,7 @@ Generates images using Recraft V4 or V4 Pro models. [api node/image/Recraft] Hid
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for generation.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 6. Tooltip: The number of images to generate.
 - `negative_prompt` (String) Input: STRING. Supports multiline text. Tooltip: An optional text description of undesired elements on an image.
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Prompt for the image generation. Maximum 10,000 characters.
@@ -32,3 +32,14 @@ Generates images using Recraft V4 or V4 Pro models. [api node/image/Recraft] Hid
 - `id` (String) Unique identifier for this node instance.
 - `image_output` (String) Output: IMAGE (slot 0).
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `size` (String) Input: COMBO. Defaults vary by selection: "1024x1024", "2048x2048". Dynamic options are resolved by ComfyUI at runtime from one of: RECRAFT_V4_SIZES; RECRAFT_V4_PRO_SIZES. Tooltip: The size of the generated image.

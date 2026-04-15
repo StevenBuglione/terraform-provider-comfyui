@@ -60,7 +60,7 @@ type GeneratedNodeSchema struct {
 }
 
 const GeneratedNodeSchemaVersion = "1.0.0"
-const GeneratedNodeSchemaExtractedAt = "2026-04-15T01:52:09.242092+00:00"
+const GeneratedNodeSchemaExtractedAt = "2026-04-15T03:20:06.866092+00:00"
 const GeneratedNodeSchemaComfyUIVersion = "v0.18.5"
 const GeneratedNodeSchemaCount = 645
 

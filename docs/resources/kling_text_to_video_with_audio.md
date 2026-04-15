@@ -17,11 +17,11 @@ ComfyUI TextToVideoWithAudio node — Kling 2.6 Text to Video with Audio [api no
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO.
-- `duration` (String) Input: COMBO.
+- `aspect_ratio` (String) Input: COMBO. Options: "16:9", "9:16", "1:1".
+- `duration` (String) Input: COMBO. Options: "5", "10".
 - `generate_audio` (Boolean) Input: BOOLEAN. Default: true.
-- `mode` (String) Input: COMBO.
-- `model_name` (String) Input: COMBO.
+- `mode` (String) Input: COMBO. Options: "pro".
+- `model_name` (String) Input: COMBO. Options: "kling-v2-6".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.
 
 ### Read-Only

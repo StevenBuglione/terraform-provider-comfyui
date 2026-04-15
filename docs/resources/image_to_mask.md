@@ -17,7 +17,7 @@ ComfyUI ImageToMask node — Convert Image to Mask [mask] Source: comfy_extras/n
 
 ### Required
 
-- `channel` (String) Input: COMBO.
+- `channel` (String) Input: COMBO. Options: "red", "green", "blue", "alpha".
 - `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only

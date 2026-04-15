@@ -18,7 +18,7 @@ description: |-
 ### Required
 
 - `conditioning` (String) Input: CONDITIONING. Link input.
-- `reference_latents_method` (String) Input: COMBO.
+- `reference_latents_method` (String) Input: COMBO. Options: "offset", "index", "uxo/uno", "index_timestep_zero".
 
 ### Read-Only
 

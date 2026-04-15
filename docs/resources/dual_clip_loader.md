@@ -32,11 +32,11 @@ newbie: gemma-3-4b-it, jina clip v2 [advanced/loaders] Source: nodes.py:1003 (v1
 
 - `clip_name1` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
 - `clip_name2` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('text_encoders').
-- `type` (String) Input: COMBO.
+- `type` (String) Input: COMBO. Options: "sdxl", "sd3", "flux", "hunyuan_video", "hidream", "hunyuan_image", "hunyuan_video_15", "kandinsky5", "kandinsky5_image", "ltxv", "newbie", "ace".
 
 ### Optional
 
-- `device` (String) Input: COMBO.
+- `device` (String) Input: COMBO. Options: "default", "cpu".
 
 ### Read-Only
 

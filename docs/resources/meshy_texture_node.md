@@ -19,7 +19,7 @@ ComfyUI MeshyTextureNode node — Meshy: Texture Model [api node/3d/Meshy] Hidde
 
 - `enable_original_uv` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Use the original UV of the model instead of generating new UVs. When enabled, Meshy preserves existing textures from the uploaded model. If the model has no original UV, the quality of the output might not be as good.
 - `meshy_task_id` (String) Input: MESHY_TASK_ID. Link input.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "latest".
 - `pbr` (Boolean) Input: BOOLEAN. Default: false.
 - `text_style_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Describe your desired texture style of the object using text. Maximum 600 characters.Maximum 600 characters. Cannot be used at the same time as 'image_style'.
 

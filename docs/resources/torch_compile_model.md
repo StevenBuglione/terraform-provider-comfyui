@@ -17,7 +17,7 @@ description: |-
 
 ### Required
 
-- `backend` (String) Input: COMBO.
+- `backend` (String) Input: COMBO. Options: "inductor", "cudagraphs".
 - `model` (String) Input: MODEL. Link input.
 
 ### Read-Only

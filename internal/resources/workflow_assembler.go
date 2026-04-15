@@ -99,15 +99,19 @@ func parseConnectionRef(value string) (uuid string, slotIndex int, err error) {
 }
 
 // resolveInputValue converts a raw input value, resolving connection refs to [id, slot] arrays.
-// Returns nil if the value should be skipped (empty string or nil).
+// Returns nil if the top-level value should be skipped (empty string or nil).
 func resolveInputValue(value interface{}, nodeMap map[string]string) (interface{}, error) {
+	return resolveInputValueRecursive(value, nodeMap, false)
+}
+
+func resolveInputValueRecursive(value interface{}, nodeMap map[string]string, nested bool) (interface{}, error) {
 	if value == nil {
 		return nil, nil
 	}
 
 	switch v := value.(type) {
 	case string:
-		if v == "" {
+		if v == "" && !nested {
 			return nil, nil
 		}
 		if isConnectionRef(v) {
@@ -125,6 +129,34 @@ func resolveInputValue(value interface{}, nodeMap map[string]string) (interface{
 
 	case int, int64, float64, bool:
 		return v, nil
+
+	case []interface{}:
+		resolved := make([]interface{}, 0, len(v))
+		for _, elem := range v {
+			next, err := resolveInputValueRecursive(elem, nodeMap, true)
+			if err != nil {
+				return nil, err
+			}
+			if next == nil {
+				continue
+			}
+			resolved = append(resolved, next)
+		}
+		return resolved, nil
+
+	case map[string]interface{}:
+		resolved := make(map[string]interface{}, len(v))
+		for key, elem := range v {
+			next, err := resolveInputValueRecursive(elem, nodeMap, true)
+			if err != nil {
+				return nil, err
+			}
+			if next == nil {
+				continue
+			}
+			resolved[key] = next
+		}
+		return resolved, nil
 
 	case json.Number:
 		if i, err := v.Int64(); err == nil {

@@ -18,7 +18,7 @@ ComfyUI HunyuanImageToVideo node [conditioning/video_models] Source: comfy_extra
 ### Required
 
 - `batch_size` (Number) Input: INT. Default: 1. Allowed range: 1 to 4096.
-- `guidance_type` (String) Input: COMBO.
+- `guidance_type` (String) Input: COMBO. Options: "v1 (concat)", "v2 (replace)", "custom".
 - `height` (Number) Input: INT. Default: 480. Minimum value: 16. Step: 16.
 - `length` (Number) Input: INT. Default: 53. Minimum value: 1. Step: 4.
 - `positive` (String) Input: CONDITIONING. Link input.

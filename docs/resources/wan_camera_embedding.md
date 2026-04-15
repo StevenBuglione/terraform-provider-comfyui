@@ -17,7 +17,7 @@ ComfyUI WanCameraEmbedding node [camera] Source: comfy_extras/nodes_camera_traje
 
 ### Required
 
-- `camera_pose` (String) Input: COMBO. Default: "Static".
+- `camera_pose` (String) Input: COMBO. Default: "Static". Options: "Static", "Pan Up", "Pan Down", "Pan Left", "Pan Right", "Zoom In", "Zoom Out", "Anti Clockwise (ACW)", "ClockWise (CW)".
 - `height` (Number) Input: INT. Default: 480. Minimum value: 16. Step: 16.
 - `length` (Number) Input: INT. Default: 81. Minimum value: 1. Step: 4.
 - `width` (Number) Input: INT. Default: 832. Minimum value: 16. Step: 16.

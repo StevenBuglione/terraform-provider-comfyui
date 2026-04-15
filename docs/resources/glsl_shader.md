@@ -21,7 +21,7 @@ Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always availabl
 - `fragment_shader` (String) Input: STRING. Supports multiline text. Tooltip: GLSL fragment shader source code (GLSL ES 3.00 / WebGL 2.0 compatible).
 - `images` (String) Input: COMFY_AUTOGROW_V3.
 - `ints` (String) Input: COMFY_AUTOGROW_V3.
-- `size_mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Output size: 'from_input' uses first input image dimensions, 'custom' allows manual size.
+- `size_mode` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Output size: 'from_input' uses first input image dimensions, 'custom' allows manual size. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--size_mode))
 
 ### Read-Only
 
@@ -31,3 +31,15 @@ Apply GLSL ES fragment shaders to images. u_resolution (vec2) is always availabl
 - `image2_output` (String) Output: IMAGE (slot 2).
 - `image3_output` (String) Output: IMAGE (slot 3).
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--size_mode"></a>
+### Nested Schema for `size_mode`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `height` (Number) Input: INT. Default: 512. Minimum value: 1.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 1.

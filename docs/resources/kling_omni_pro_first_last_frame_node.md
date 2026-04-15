@@ -19,7 +19,7 @@ Use a start frame, an optional end frame, or reference images with the latest Kl
 
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 15.
 - `first_frame` (String) Input: IMAGE. Link input.
-- `model_name` (String) Input: COMBO.
+- `model_name` (String) Input: COMBO. Options: "kling-v3-omni", "kling-video-o1".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A text prompt describing the video content. This can include both positive and negative descriptions. Ignored when storyboards are enabled.
 
 ### Optional
@@ -27,12 +27,19 @@ Use a start frame, an optional end frame, or reference images with the latest Kl
 - `end_frame` (String) Input: IMAGE. Link input. Tooltip: An optional end frame for the video. This cannot be used simultaneously with 'reference_images'. Does not work with storyboards.
 - `generate_audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Generate audio for the video. Only supported for kling-v3-omni.
 - `reference_images` (String) Input: IMAGE. Link input. Tooltip: Up to 6 additional reference images.
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "1080p", "720p".
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
-- `storyboards` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Only supported for kling-v3-omni.
+- `storyboards` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Only supported for kling-v3-omni. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--storyboards))
 
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--storyboards"></a>
+### Nested Schema for `storyboards`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.

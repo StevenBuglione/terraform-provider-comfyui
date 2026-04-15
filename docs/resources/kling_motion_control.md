@@ -17,11 +17,11 @@ ComfyUI MotionControl node — Kling Motion Control [api node/video/Kling] Hidde
 
 ### Required
 
-- `character_orientation` (String) Input: COMBO. Tooltip: Controls where the character's facing/orientation comes from.
+- `character_orientation` (String) Input: COMBO. Options: "video", "image". Tooltip: Controls where the character's facing/orientation comes from.
 video: movements, expressions, camera moves, and orientation follow the motion reference video (other details via prompt).
 image: movements and expressions still follow the motion reference video, but the character orientation matches the reference image (camera/other details via prompt).
 - `keep_original_sound` (Boolean) Input: BOOLEAN. Default: true.
-- `mode` (String) Input: COMBO.
+- `mode` (String) Input: COMBO. Options: "pro", "std".
 - `prompt` (String) Input: STRING. Supports multiline text.
 - `reference_image` (String) Input: IMAGE. Link input.
 - `reference_video` (String) Input: VIDEO. Link input. Tooltip: Motion reference video used to drive movement/expression.
@@ -31,7 +31,7 @@ Duration limits depend on character_orientation:
 
 ### Optional
 
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "kling-v3", "kling-v2-6".
 
 ### Read-Only
 

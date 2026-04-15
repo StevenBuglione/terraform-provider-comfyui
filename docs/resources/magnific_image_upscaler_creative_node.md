@@ -19,14 +19,14 @@ Prompt‑guided enhancement, stylization, and 2x/4x/8x/16x upscaling. Maximum ou
 
 - `auto_downscale` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Automatically downscale input image if output would exceed maximum pixel limit.
 - `creativity` (Number) Input: INT. Default: 0. Allowed range: -10 to 10.
-- `engine` (String) Input: COMBO.
+- `engine` (String) Input: COMBO. Options: "automatic", "magnific_illusio", "magnific_sharpy", "magnific_sparkle".
 - `fractality` (Number) Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The strength of the prompt and intricacy per square pixel.
 - `hdr` (Number) Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The level of definition and detail.
 - `image` (String) Input: IMAGE. Link input.
-- `optimized_for` (String) Input: COMBO.
+- `optimized_for` (String) Input: COMBO. Options: "standard", "soft_portraits", "hard_portraits", "art_n_illustration", "videogame_assets", "nature_n_landscapes", "films_n_photography", "3d_renders", "science_fiction_n_horror".
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text.
 - `resemblance` (Number) Input: INT. Default: 0. Allowed range: -10 to 10. Tooltip: The level of resemblance to the original image.
-- `scale_factor` (String) Input: COMBO.
+- `scale_factor` (String) Input: COMBO. Options: "2x", "4x", "8x", "16x".
 
 ### Read-Only
 

@@ -28,7 +28,7 @@ Unified text-to-image generation and precise single-sentence editing at up to 4K
 - `image` (String) Input: IMAGE. Link input. Tooltip: Input image(s) for image-to-image generation. Reference image(s) for single or multi-reference generation.
 - `max_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 15. Step: 1. Tooltip: Maximum number of images to generate when sequential_image_generation='auto'. Total images (input + generated) cannot exceed 15.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
-- `sequential_image_generation` (String) Input: COMBO. Tooltip: Group image generation mode. 'disabled' generates a single image. 'auto' lets the model decide whether to generate multiple related images (e.g., story scenes, character variations).
+- `sequential_image_generation` (String) Input: COMBO. Options: "disabled", "auto". Tooltip: Group image generation mode. 'disabled' generates a single image. 'auto' lets the model decide whether to generate multiple related images (e.g., story scenes, character variations).
 - `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an "AI generated" watermark to the image.
 - `width` (Number) Input: INT. Default: 2048. Allowed range: 1024 to 6240. Step: 2. Tooltip: Custom width for image. Value is working only if `size_preset` is set to `Custom`.
 

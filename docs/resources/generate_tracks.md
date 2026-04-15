@@ -21,7 +21,7 @@ ComfyUI GenerateTracks node [conditioning/video_models] Source: comfy_extras/nod
 - `end_x` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized X coordinate (0-1) for end position.
 - `end_y` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized Y coordinate (0-1) for end position.
 - `height` (Number) Input: INT. Default: 480. Allowed range: 16 to 4096. Step: 16.
-- `interpolation` (String) Input: COMBO. Tooltip: Controls the timing/speed of movement along the path.
+- `interpolation` (String) Input: COMBO. Options: "linear", "ease_in", "ease_out", "ease_in_out", "constant". Tooltip: Controls the timing/speed of movement along the path.
 - `mid_x` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized X control point for Bezier curve. Only used when 'bezier' is enabled.
 - `mid_y` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Normalized Y control point for Bezier curve. Only used when 'bezier' is enabled.
 - `num_frames` (Number) Input: INT. Default: 81. Allowed range: 1 to 1024.

@@ -25,7 +25,7 @@ Generates images synchronously via OpenAI's DALL·E 2 endpoint. [api node/image/
 - `mask` (String) Input: MASK. Link input. Tooltip: Optional mask for inpainting (white areas will be replaced).
 - `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1. Tooltip: How many images to generate.
 - `seed` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: not implemented yet in backend.
-- `size` (String) Input: COMBO. Default: "1024x1024". Tooltip: Image size.
+- `size` (String) Input: COMBO. Default: "1024x1024". Options: "256x256", "512x512", "1024x1024". Tooltip: Image size.
 
 ### Read-Only
 

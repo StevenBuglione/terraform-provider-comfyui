@@ -17,13 +17,13 @@ Generate video using prompt and first and last frames. [api node/video/ByteDance
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO. Tooltip: The aspect ratio of the output video.
+- `aspect_ratio` (String) Input: COMBO. Options: "adaptive", "16:9", "4:3", "1:1", "3:4", "9:16", "21:9". Tooltip: The aspect ratio of the output video.
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 12. Step: 1. Tooltip: The duration of the output video in seconds.
 - `first_frame` (String) Input: IMAGE. Link input. Tooltip: First frame to be used for the video.
 - `last_frame` (String) Input: IMAGE. Link input. Tooltip: Last frame to be used for the video.
-- `model` (String) Input: COMBO. Default: "seedance-1-0-lite-i2v-250428".
+- `model` (String) Input: COMBO. Default: "seedance-1-0-lite-i2v-250428". Options: "seedance-1-5-pro-251215", "seedance-1-0-pro-250528", "seedance-1-0-lite-i2v-250428".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the video.
-- `resolution` (String) Input: COMBO. Tooltip: The resolution of the output video.
+- `resolution` (String) Input: COMBO. Options: "480p", "720p", "1080p". Tooltip: The resolution of the output video.
 
 ### Optional
 

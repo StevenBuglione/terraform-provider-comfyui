@@ -17,8 +17,8 @@ Edit a video using text instructions, reference images, or style transfer. [api 
 
 ### Required
 
-- `audio_setting` (String) Input: COMBO. Default: "auto". Tooltip: 'auto': model decides whether to regenerate audio based on the prompt. 'origin': preserve the original audio from the input video.
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `audio_setting` (String) Input: COMBO. Default: "auto". Options: "auto", "origin". Tooltip: 'auto': model decides whether to regenerate audio based on the prompt. 'origin': preserve the original audio from the input video.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
 - `video` (String) Input: VIDEO. Link input. Tooltip: The video to edit.
 - `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
@@ -28,3 +28,18 @@ Edit a video using text instructions, reference images, or style transfer. [api 
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `duration` (String) Input: COMBO. Default: "auto". Options: "auto", "2", "3", "4", "5", "6", "7", "8", "9", "10". Tooltip: Output duration in seconds. 'auto' matches the input video duration. A specific value truncates from the start of the video.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Editing instructions or style transfer requirements.
+- `ratio` (String) Input: COMBO. Options: "16:9", "9:16", "1:1", "4:3", "3:4". Tooltip: Aspect ratio. If not changed, approximates the input video ratio.
+- `reference_images` (String) Input: COMFY_AUTOGROW_V3.
+- `resolution` (String) Input: COMBO. Options: "720P", "1080P".

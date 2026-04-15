@@ -19,7 +19,7 @@ Generate a video from a start frame, an end frame, and a prompt. [api node/video
 
 - `end_frame` (String) Input: IMAGE. Link input.
 - `first_frame` (String) Input: IMAGE. Link input.
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Prompt description (max 2000 characters).
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 
@@ -28,3 +28,16 @@ Generate a video from a start frame, an end frame, and a prompt. [api node/video
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When enabled, outputs video with sound (including dialogue and sound effects).
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 1 to 16. Step: 1. Tooltip: Duration of the output video in seconds.
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p". Tooltip: Resolution of the output video.

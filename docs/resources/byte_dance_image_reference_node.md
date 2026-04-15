@@ -17,12 +17,12 @@ Generate video using prompt and reference images. [api node/video/ByteDance] Hid
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO. Tooltip: The aspect ratio of the output video.
+- `aspect_ratio` (String) Input: COMBO. Options: "adaptive", "16:9", "4:3", "1:1", "3:4", "9:16", "21:9". Tooltip: The aspect ratio of the output video.
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 12. Step: 1. Tooltip: The duration of the output video in seconds.
 - `images` (String) Input: IMAGE. Link input. Tooltip: One to four images.
-- `model` (String) Input: COMBO. Default: "seedance-1-0-lite-i2v-250428".
+- `model` (String) Input: COMBO. Default: "seedance-1-0-lite-i2v-250428". Options: "seedance-1-0-pro-250528", "seedance-1-0-lite-i2v-250428".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the video.
-- `resolution` (String) Input: COMBO. Tooltip: The resolution of the output video.
+- `resolution` (String) Input: COMBO. Options: "480p", "720p". Tooltip: The resolution of the output video.
 
 ### Optional
 

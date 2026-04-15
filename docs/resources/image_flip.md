@@ -17,7 +17,7 @@ ComfyUI ImageFlip node [image/transform] Source: comfy_extras/nodes_images.py:62
 
 ### Required
 
-- `flip_method` (String) Input: COMBO.
+- `flip_method` (String) Input: COMBO. Options: "x-axis: vertically", "y-axis: horizontally".
 - `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only

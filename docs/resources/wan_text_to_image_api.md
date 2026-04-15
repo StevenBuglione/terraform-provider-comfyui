@@ -17,7 +17,7 @@ Generates an image based on a text prompt. [api node/image/Wan] Hidden runtime i
 
 ### Required
 
-- `model` (String) Input: COMBO. Tooltip: Model to use.
+- `model` (String) Input: COMBO. Options: "wan2.5-t2i-preview". Tooltip: Model to use.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.
 
 ### Optional

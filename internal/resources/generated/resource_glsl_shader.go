@@ -86,7 +86,7 @@ func (r *GlslShaderResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"size_mode": schema.SingleNestedAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Output size: 'from_input' uses first input image dimensions, 'custom' allows manual size.",
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Output size: 'from_input' uses first input image dimensions, 'custom' allows manual size. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
 				Attributes: map[string]schema.Attribute{
 					"selection": schema.StringAttribute{
