@@ -507,7 +507,7 @@ def parse_schema_call(call_node: ast.Call, file_path: str,
     inputs = []
     hidden_inputs = []
     if "inputs" in kwargs:
-        inputs_node = resolve_local_reference(kwargs["inputs"], local_assignments)
+        inputs_node = kwargs["inputs"]
         if isinstance(inputs_node, ast.List):
             for elt in inputs_node.elts:
                 parsed = _parse_io_element(elt, "Input", file_path, class_name, local_assignments)
@@ -524,7 +524,7 @@ def parse_schema_call(call_node: ast.Call, file_path: str,
     # Parse outputs list
     outputs = []
     if "outputs" in kwargs:
-        outputs_node = resolve_local_reference(kwargs["outputs"], local_assignments)
+        outputs_node = kwargs["outputs"]
         if isinstance(outputs_node, ast.List):
             for idx, elt in enumerate(outputs_node.elts):
                 parsed = _parse_io_element_output(elt, idx, file_path,

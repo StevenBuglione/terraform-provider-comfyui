@@ -125,6 +125,56 @@ def define_schema():
         self.assertIsNone(parsed)
         self.assertIn("Could not parse dynamic combo option", stderr.getvalue())
 
+    def test_parse_input_call_resolves_local_dynamic_combo_options(self):
+        tree = ast.parse(
+            """
+def define_schema():
+    sampling_options = [
+        io.DynamicCombo.Option("on", [io.Float.Input("temperature", default=0.7)]),
+        io.DynamicCombo.Option("off", []),
+    ]
+    return io.DynamicCombo.Input("sampling_mode", options=sampling_options)
+"""
+        )
+
+        func = tree.body[0]
+        local_assignments = extract_v3_nodes.collect_local_assignments(func.body)
+        call = func.body[-1].value
+
+        parsed = extract_v3_nodes.parse_input_call(call, call.func.value, local_assignments)
+
+        self.assertEqual(parsed["type"], "COMFY_DYNAMICCOMBO_V3")
+        self.assertEqual(parsed["dynamic_options_source"], "sampling_options")
+        self.assertEqual([o["key"] for o in parsed["dynamic_combo_options"]], ["on", "off"])
+        self.assertEqual(
+            [child["name"] for child in parsed["dynamic_combo_options"][0]["inputs"]],
+            ["temperature"],
+        )
+
+    def test_parse_schema_call_does_not_resolve_top_level_local_lists(self):
+        tree = ast.parse(
+            """
+class Demo(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        inputs = [io.Image.Input("images")]
+        outputs = [io.Image.Output(display_name="images")]
+        return io.Schema(node_id="Demo", inputs=inputs, outputs=outputs)
+"""
+        )
+
+        class_node = tree.body[0]
+        func = class_node.body[0]
+        local_assignments = extract_v3_nodes.collect_local_assignments(func.body)
+        schema_call = extract_v3_nodes.find_schema_call(func.body)
+
+        parsed = extract_v3_nodes.parse_schema_call(
+            schema_call, "demo.py", class_node.name, local_assignments
+        )
+
+        self.assertEqual(parsed["inputs"], [])
+        self.assertEqual(parsed["outputs"], [])
+
     @unittest.skipUnless(comfyui_available(), "ComfyUI submodule not initialized")
     def test_produces_nodes(self):
         script = os.path.join(SCRIPT_DIR, 'extract_v3_nodes.py')
@@ -208,6 +258,17 @@ def define_schema():
             ['temperature', 'top_k', 'top_p', 'min_p', 'repetition_penalty', 'seed'],
         )
         self.assertEqual(sampling_mode['dynamic_combo_options'][1]['inputs'], [])
+
+    @unittest.skipUnless(comfyui_available(), "ComfyUI submodule not initialized")
+    def test_base_processing_nodes_do_not_expand_local_schema_lists(self):
+        script = os.path.join(SCRIPT_DIR, 'extract_v3_nodes.py')
+        nodes = run_extractor(script, COMFYUI_ROOT)
+
+        image_processing = next(n for n in nodes if n['node_id'] == 'ImageProcessingNode')
+        text_processing = next(n for n in nodes if n['node_id'] == 'TextProcessingNode')
+
+        self.assertEqual(image_processing['inputs'], [])
+        self.assertEqual(text_processing['inputs'], [])
 
 
 class TestMerge(unittest.TestCase):

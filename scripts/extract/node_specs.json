@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "comfyui_version": "v0.18.5",
-  "extracted_at": "2026-04-15T01:24:40.059122+00:00",
+  "extracted_at": "2026-04-15T01:52:09.242092+00:00",
   "total_nodes": 645,
   "nodes": [
     {
@@ -23523,28 +23523,7 @@
       "is_output_node": false,
       "is_deprecated": false,
       "is_experimental": true,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "required": true,
-          "is_link_type": true,
-          "default": null,
-          "min": null,
-          "max": null,
-          "step": null,
-          "options": null,
-          "multiline": null,
-          "dynamic_options": null,
-          "dynamic_options_source": null,
-          "dynamic_combo_options": null,
-          "tooltip": null,
-          "display_name": null,
-          "validation_kind": "freeform",
-          "inventory_kind": "",
-          "supports_strict_plan_validation": true
-        }
-      ],
+      "inputs": [],
       "hidden_inputs": [],
       "outputs": [
         {
@@ -76529,28 +76508,7 @@
       "is_output_node": false,
       "is_deprecated": false,
       "is_experimental": true,
-      "inputs": [
-        {
-          "name": "texts",
-          "type": "STRING",
-          "required": true,
-          "is_link_type": false,
-          "default": null,
-          "min": null,
-          "max": null,
-          "step": null,
-          "options": null,
-          "multiline": null,
-          "dynamic_options": null,
-          "dynamic_options_source": null,
-          "dynamic_combo_options": null,
-          "tooltip": null,
-          "display_name": null,
-          "validation_kind": "freeform",
-          "inventory_kind": "",
-          "supports_strict_plan_validation": true
-        }
-      ],
+      "inputs": [],
       "hidden_inputs": [],
       "outputs": [
         {
