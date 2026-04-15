@@ -63,6 +63,33 @@ def validate_node(node: dict, index: int) -> list:
     warnings = []
     required_fields = ['node_id', 'class_name', 'category', 'inputs', 'outputs', 'source']
 
+    def validate_input_spec(input_spec: dict, context: str) -> None:
+        if 'name' not in input_spec or 'type' not in input_spec:
+            warnings.append(f"{context} missing required normalized fields")
+        if 'required' not in input_spec:
+            warnings.append(f"{context} missing required flag")
+        if 'is_link_type' not in input_spec:
+            warnings.append(f"{context} missing is_link_type flag")
+        if 'validation_kind' not in input_spec:
+            warnings.append(f"{context} missing validation_kind")
+        if 'inventory_kind' not in input_spec:
+            warnings.append(f"{context} missing inventory_kind")
+        if 'supports_strict_plan_validation' not in input_spec:
+            warnings.append(f"{context} missing supports_strict_plan_validation")
+
+        for option_index, option in enumerate(input_spec.get('dynamic_combo_options') or []):
+            option_context = f"{context} dynamic_combo_options[{option_index}]"
+            if 'key' not in option:
+                warnings.append(f"{option_context} missing key")
+            if 'inputs' not in option:
+                warnings.append(f"{option_context} missing inputs")
+                continue
+            for child_index, child_input in enumerate(option['inputs']):
+                validate_input_spec(
+                    child_input,
+                    f"{option_context} input '{child_input.get('name', child_index)}'",
+                )
+
     for field in required_fields:
         if field not in node:
             warnings.append(f"Node #{index} missing required field '{field}'")
@@ -77,30 +104,10 @@ def validate_node(node: dict, index: int) -> list:
             warnings.append(f"Node '{node.get('node_id', '?')}' missing source.pattern")
 
     for input_index, input_spec in enumerate(node.get('inputs', [])):
-        if 'name' not in input_spec or 'type' not in input_spec:
-            warnings.append(
-                f"Node '{node.get('node_id', '?')}' input #{input_index} missing required normalized fields"
-            )
-        if 'required' not in input_spec:
-            warnings.append(
-                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing required flag"
-            )
-        if 'is_link_type' not in input_spec:
-            warnings.append(
-                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing is_link_type flag"
-            )
-        if 'validation_kind' not in input_spec:
-            warnings.append(
-                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing validation_kind"
-            )
-        if 'inventory_kind' not in input_spec:
-            warnings.append(
-                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing inventory_kind"
-            )
-        if 'supports_strict_plan_validation' not in input_spec:
-            warnings.append(
-                f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}' missing supports_strict_plan_validation"
-            )
+        validate_input_spec(
+            input_spec,
+            f"Node '{node.get('node_id', '?')}' input '{input_spec.get('name', input_index)}'",
+        )
 
     for output_index, output_spec in enumerate(node.get('outputs', [])):
         if 'name' not in output_spec or 'type' not in output_spec or 'slot_index' not in output_spec:
@@ -148,11 +155,17 @@ def classify_validation_kind(input_spec: dict) -> tuple[str, str, bool]:
 
 def annotate_validation_metadata(node: dict) -> None:
     """Add generated validation metadata to extracted inputs."""
-    for input_spec in node.get('inputs', []):
+    def annotate_input(input_spec: dict) -> None:
         validation_kind, inventory_kind, strict = classify_validation_kind(input_spec)
         input_spec['validation_kind'] = validation_kind
         input_spec['inventory_kind'] = inventory_kind
         input_spec['supports_strict_plan_validation'] = strict
+        for option in input_spec.get('dynamic_combo_options') or []:
+            for child_input in option.get('inputs', []):
+                annotate_input(child_input)
+
+    for input_spec in node.get('inputs', []):
+        annotate_input(input_spec)
 
 
 def main():

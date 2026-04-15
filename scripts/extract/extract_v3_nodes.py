@@ -242,7 +242,75 @@ def resolve_type_from_ast(node: ast.AST) -> tuple[str, str | None]:
     return (ast_to_source(node), None)
 
 
-def parse_input_call(call_node: ast.Call, io_prefix_node: ast.AST) -> dict | None:
+def resolve_local_reference(node: ast.AST, local_assignments: dict[str, ast.AST] | None) -> ast.AST:
+    """Resolve a local variable reference to its assigned AST value when available."""
+    if isinstance(node, ast.Name) and local_assignments and node.id in local_assignments:
+        return local_assignments[node.id]
+    return node
+
+
+def parse_dynamic_combo_option(option_node: ast.AST, local_assignments: dict[str, ast.AST] | None) -> dict | None:
+    """Parse an io.DynamicCombo.Option(...) expression."""
+    option_node = resolve_local_reference(option_node, local_assignments)
+    if not isinstance(option_node, ast.Call):
+        return None
+
+    func_name = extract_attribute_chain(option_node.func)
+    if not func_name or not func_name.endswith("DynamicCombo.Option"):
+        return None
+
+    option_kwargs = {}
+    for kw in option_node.keywords:
+        if kw.arg is not None:
+            option_kwargs[kw.arg] = kw.value
+
+    key_node = option_node.args[0] if option_node.args else option_kwargs.get("key")
+    inputs_node = option_node.args[1] if len(option_node.args) > 1 else option_kwargs.get("inputs")
+    if key_node is None or inputs_node is None:
+        return None
+
+    key = extract_constant(key_node)
+    if not isinstance(key, str):
+        key = ast_to_source(key_node)
+
+    inputs_node = resolve_local_reference(inputs_node, local_assignments)
+    inputs = []
+    if isinstance(inputs_node, ast.List):
+        for elt in inputs_node.elts:
+            parsed = _parse_io_element(elt, "Input", "", "", local_assignments)
+            if parsed is not None:
+                inputs.append(parsed)
+    else:
+        for kind, call, prefix in find_input_output_calls(inputs_node):
+            if kind == "Input":
+                parsed = parse_input_call(call, prefix, local_assignments)
+                if parsed is not None:
+                    inputs.append(parsed)
+
+    return {
+        "key": key,
+        "inputs": inputs,
+    }
+
+
+def parse_dynamic_combo_options(options_node: ast.AST, local_assignments: dict[str, ast.AST] | None) -> list[dict] | None:
+    """Parse structured io.DynamicCombo.Option metadata from an options expression."""
+    options_node = resolve_local_reference(options_node, local_assignments)
+    if not isinstance(options_node, ast.List):
+        return None
+
+    parsed_options = []
+    for elt in options_node.elts:
+        parsed = parse_dynamic_combo_option(elt, local_assignments)
+        if parsed is None:
+            warn(f"Could not parse dynamic combo option from {ast_to_source(elt)}")
+            return None
+        parsed_options.append(parsed)
+    return parsed_options
+
+
+def parse_input_call(call_node: ast.Call, io_prefix_node: ast.AST,
+                     local_assignments: dict[str, ast.AST] | None = None) -> dict | None:
     """Parse an io.Type.Input(...) call into an input dict.
 
     call_node: the Call AST node for .Input(...)
@@ -306,11 +374,17 @@ def parse_input_call(call_node: ast.Call, io_prefix_node: ast.AST) -> dict | Non
     options = None
     dynamic_options = None
     dynamic_options_source = None
+    dynamic_combo_options = None
     if "options" in kwargs:
         opt_node = kwargs["options"]
-        const_opts = extract_constant(opt_node)
+        resolved_opt_node = resolve_local_reference(opt_node, local_assignments)
+        const_opts = extract_constant(resolved_opt_node)
         if const_opts is not None and isinstance(const_opts, list):
             options = const_opts
+        elif type_name == "COMFY_DYNAMICCOMBO_V3":
+            dynamic_options = True
+            dynamic_options_source = ast_to_source(opt_node)
+            dynamic_combo_options = parse_dynamic_combo_options(resolved_opt_node, local_assignments)
         else:
             # Dynamic options - variable reference
             dynamic_options = True
@@ -331,6 +405,7 @@ def parse_input_call(call_node: ast.Call, io_prefix_node: ast.AST) -> dict | Non
         "multiline": multiline,
         "dynamic_options": dynamic_options,
         "dynamic_options_source": dynamic_options_source,
+        "dynamic_combo_options": dynamic_combo_options,
         "tooltip": tooltip,
         "display_name": display_name,
     }
@@ -381,7 +456,8 @@ def find_input_output_calls(node: ast.AST):
 
 
 def parse_schema_call(call_node: ast.Call, file_path: str,
-                      class_name: str) -> dict | None:
+                      class_name: str,
+                      local_assignments: dict[str, ast.AST] | None = None) -> dict | None:
     """Parse a Schema(...) call to extract node metadata, inputs, and outputs."""
     kwargs = {}
     for kw in call_node.keywords:
@@ -431,28 +507,28 @@ def parse_schema_call(call_node: ast.Call, file_path: str,
     inputs = []
     hidden_inputs = []
     if "inputs" in kwargs:
-        inputs_node = kwargs["inputs"]
+        inputs_node = resolve_local_reference(kwargs["inputs"], local_assignments)
         if isinstance(inputs_node, ast.List):
             for elt in inputs_node.elts:
-                parsed = _parse_io_element(elt, "Input", file_path, class_name)
+                parsed = _parse_io_element(elt, "Input", file_path, class_name, local_assignments)
                 if parsed is not None:
                     inputs.append(parsed)
         else:
             # Could be a variable reference; walk it for Input calls
             for kind, call, prefix in find_input_output_calls(inputs_node):
                 if kind == "Input":
-                    parsed = parse_input_call(call, prefix)
+                    parsed = parse_input_call(call, prefix, local_assignments)
                     if parsed is not None:
                         inputs.append(parsed)
 
     # Parse outputs list
     outputs = []
     if "outputs" in kwargs:
-        outputs_node = kwargs["outputs"]
+        outputs_node = resolve_local_reference(kwargs["outputs"], local_assignments)
         if isinstance(outputs_node, ast.List):
             for idx, elt in enumerate(outputs_node.elts):
                 parsed = _parse_io_element_output(elt, idx, file_path,
-                                                  class_name)
+                                                  class_name, local_assignments)
                 if parsed is not None:
                     outputs.append(parsed)
         else:
@@ -486,19 +562,21 @@ def parse_schema_call(call_node: ast.Call, file_path: str,
 
 
 def _parse_io_element(elt: ast.AST, kind: str, file_path: str,
-                      class_name: str) -> dict | None:
+                      class_name: str,
+                      local_assignments: dict[str, ast.AST] | None = None) -> dict | None:
     """Parse a single element from the inputs list in Schema."""
+    elt = resolve_local_reference(elt, local_assignments)
     # Direct .Input(...) call: io.Type.Input(...)
     if isinstance(elt, ast.Call):
         func = elt.func
         if isinstance(func, ast.Attribute) and func.attr == "Input":
-            return parse_input_call(elt, func.value)
+            return parse_input_call(elt, func.value, local_assignments)
         # Could be a variable call - try to parse anyway
         # e.g. crop_combo which is defined as io.Combo.Input(...) elsewhere
         # We can't resolve variables, so emit a warning
         func_name = extract_attribute_chain(func) if isinstance(func, (ast.Attribute, ast.Name)) else None
         if func_name and "Input" in func_name:
-            return parse_input_call(elt, func.value)
+            return parse_input_call(elt, func.value, local_assignments)
     # Might be a Name reference to a variable defined outside
     if isinstance(elt, ast.Name):
         return {
@@ -510,14 +588,17 @@ def _parse_io_element(elt: ast.AST, kind: str, file_path: str,
             "options": None, "multiline": None,
             "dynamic_options": None,
             "dynamic_options_source": f"variable:{elt.id}",
+            "dynamic_combo_options": None,
             "tooltip": None, "display_name": None,
         }
     return None
 
 
 def _parse_io_element_output(elt: ast.AST, idx: int, file_path: str,
-                             class_name: str) -> dict | None:
+                             class_name: str,
+                             local_assignments: dict[str, ast.AST] | None = None) -> dict | None:
     """Parse a single element from the outputs list in Schema."""
+    elt = resolve_local_reference(elt, local_assignments)
     if isinstance(elt, ast.Call):
         func = elt.func
         if isinstance(func, ast.Attribute) and func.attr == "Output":
@@ -565,6 +646,23 @@ def find_schema_call(func_body: list[ast.stmt]) -> ast.Call | None:
                 if call is not None:
                     return call
     return None
+
+
+def collect_local_assignments(func_body: list[ast.stmt]) -> dict[str, ast.AST]:
+    """Collect simple local variable assignments from a function body."""
+    assignments = {}
+    for stmt in func_body:
+        if isinstance(stmt, ast.Assign):
+            for target in stmt.targets:
+                if isinstance(target, ast.Name):
+                    assignments[target.id] = stmt.value
+        elif (
+            isinstance(stmt, ast.AnnAssign)
+            and isinstance(stmt.target, ast.Name)
+            and stmt.value is not None
+        ):
+            assignments[stmt.target.id] = stmt.value
+    return assignments
 
 
 def _find_schema_in_expr(node: ast.AST) -> ast.Call | None:
@@ -629,8 +727,9 @@ def extract_nodes_from_file(file_path: str, comfyui_root: str,
             if isinstance(item, ast.FunctionDef) and item.name == "define_schema":
                 schema_call = find_schema_call(item.body)
                 if schema_call is not None:
+                    local_assignments = collect_local_assignments(item.body)
                     schema_data = parse_schema_call(schema_call, file_path,
-                                                    class_name)
+                                                    class_name, local_assignments)
                 break
 
         if schema_data is None:

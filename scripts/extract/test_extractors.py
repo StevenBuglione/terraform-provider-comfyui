@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
 """Tests for node spec extractors and merge pipeline."""
 
+import ast
 import json
+import io
 import os
 import subprocess
 import sys
 import unittest
+from contextlib import redirect_stderr
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.join(SCRIPT_DIR, '..', '..')
 COMFYUI_ROOT = os.path.join(PROJECT_ROOT, 'third_party', 'ComfyUI')
 SPEC_PATH = os.path.join(SCRIPT_DIR, 'node_specs.json')
 UI_HINTS_PATH = os.path.join(SCRIPT_DIR, 'node_ui_hints.json')
+
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, SCRIPT_DIR)
+
+import extract_v3_nodes
 
 
 def comfyui_available():
@@ -85,6 +93,38 @@ class TestV1Extractor(unittest.TestCase):
 class TestV3Extractor(unittest.TestCase):
     """Test V3 node extractor."""
 
+    def test_collect_local_assignments_ignores_bare_annotations(self):
+        tree = ast.parse(
+            """
+def define_schema():
+    options: list[object]
+    resolved = [IO.DynamicCombo.Option("demo", [])]
+"""
+        )
+
+        func = tree.body[0]
+        assignments = extract_v3_nodes.collect_local_assignments(func.body)
+
+        self.assertNotIn("options", assignments)
+        self.assertIn("resolved", assignments)
+
+    def test_parse_dynamic_combo_options_warns_on_unparsed_option(self):
+        options_node = ast.parse(
+            """
+[
+    IO.DynamicCombo.Option("demo", []),
+    not_an_option,
+]
+"""
+        ).body[0].value
+
+        stderr = io.StringIO()
+        with redirect_stderr(stderr):
+            parsed = extract_v3_nodes.parse_dynamic_combo_options(options_node, {})
+
+        self.assertIsNone(parsed)
+        self.assertIn("Could not parse dynamic combo option", stderr.getvalue())
+
     @unittest.skipUnless(comfyui_available(), "ComfyUI submodule not initialized")
     def test_produces_nodes(self):
         script = os.path.join(SCRIPT_DIR, 'extract_v3_nodes.py')
@@ -112,6 +152,62 @@ class TestV3Extractor(unittest.TestCase):
                 node['source']['pattern'], ('v3_extras', 'v3_api'),
                 f"Unexpected V3 pattern for {node['node_id']}: {node['source']['pattern']}"
             )
+
+    @unittest.skipUnless(comfyui_available(), "ComfyUI submodule not initialized")
+    def test_extracts_inline_dynamic_combo_option_inputs_for_wan(self):
+        script = os.path.join(SCRIPT_DIR, 'extract_v3_nodes.py')
+        nodes = run_extractor(script, COMFYUI_ROOT)
+
+        node = next(n for n in nodes if n['node_id'] == 'Wan2ImageToVideoApi')
+        model_input = next(i for i in node['inputs'] if i['name'] == 'model')
+
+        self.assertEqual(model_input['type'], 'COMFY_DYNAMICCOMBO_V3')
+        self.assertIsInstance(model_input['dynamic_options_source'], str)
+        self.assertIn("DynamicCombo.Option", model_input['dynamic_options_source'])
+        self.assertIn("wan2.7-i2v", model_input['dynamic_options_source'])
+        self.assertEqual([option['key'] for option in model_input['dynamic_combo_options']], ['wan2.7-i2v'])
+
+        option_inputs = model_input['dynamic_combo_options'][0]['inputs']
+        self.assertEqual(
+            [child['name'] for child in option_inputs],
+            ['prompt', 'negative_prompt', 'resolution', 'duration'],
+        )
+
+        prompt_input = option_inputs[0]
+        self.assertEqual(prompt_input['type'], 'STRING')
+        self.assertTrue(prompt_input['required'])
+        self.assertTrue(prompt_input['multiline'])
+
+        negative_prompt_input = option_inputs[1]
+        self.assertEqual(negative_prompt_input['type'], 'STRING')
+        self.assertTrue(negative_prompt_input['multiline'])
+
+        resolution_input = option_inputs[2]
+        self.assertEqual(resolution_input['type'], 'COMBO')
+        self.assertEqual(resolution_input['options'], ['720P', '1080P'])
+
+        duration_input = option_inputs[3]
+        self.assertEqual(duration_input['type'], 'INT')
+        self.assertEqual(duration_input['default'], 5)
+        self.assertEqual(duration_input['min'], 2)
+        self.assertEqual(duration_input['max'], 15)
+
+    @unittest.skipUnless(comfyui_available(), "ComfyUI submodule not initialized")
+    def test_extracts_named_dynamic_combo_option_inputs_for_textgen(self):
+        script = os.path.join(SCRIPT_DIR, 'extract_v3_nodes.py')
+        nodes = run_extractor(script, COMFYUI_ROOT)
+
+        node = next(n for n in nodes if n['node_id'] == 'TextGenerate')
+        sampling_mode = next(i for i in node['inputs'] if i['name'] == 'sampling_mode')
+
+        self.assertEqual(sampling_mode['type'], 'COMFY_DYNAMICCOMBO_V3')
+        self.assertEqual(sampling_mode['dynamic_options_source'], 'sampling_options')
+        self.assertEqual([o['key'] for o in sampling_mode['dynamic_combo_options']], ['on', 'off'])
+        self.assertEqual(
+            [child['name'] for child in sampling_mode['dynamic_combo_options'][0]['inputs']],
+            ['temperature', 'top_k', 'top_p', 'min_p', 'repetition_penalty', 'seed'],
+        )
+        self.assertEqual(sampling_mode['dynamic_combo_options'][1]['inputs'], [])
 
 
 class TestMerge(unittest.TestCase):
@@ -258,6 +354,27 @@ class TestSpecValidation(unittest.TestCase):
         self.assertEqual(moderation['validation_kind'], 'dynamic_expression')
         self.assertEqual(moderation['inventory_kind'], '')
         self.assertFalse(moderation['supports_strict_plan_validation'])
+
+    @unittest.skipUnless(os.path.exists(SPEC_PATH), "node_specs.json not found")
+    def test_dynamic_combo_options_are_preserved_in_node_specs(self):
+        with open(SPEC_PATH) as f:
+            spec = json.load(f)
+
+        wan = next(n for n in spec['nodes'] if n['node_id'] == 'Wan2ImageToVideoApi')
+        wan_model = next(i for i in wan['inputs'] if i['name'] == 'model')
+        self.assertEqual([o['key'] for o in wan_model['dynamic_combo_options']], ['wan2.7-i2v'])
+        self.assertEqual(
+            [child['name'] for child in wan_model['dynamic_combo_options'][0]['inputs']],
+            ['prompt', 'negative_prompt', 'resolution', 'duration'],
+        )
+
+        textgen = next(n for n in spec['nodes'] if n['node_id'] == 'TextGenerate')
+        sampling_mode = next(i for i in textgen['inputs'] if i['name'] == 'sampling_mode')
+        self.assertEqual([o['key'] for o in sampling_mode['dynamic_combo_options']], ['on', 'off'])
+        self.assertEqual(
+            [child['name'] for child in sampling_mode['dynamic_combo_options'][0]['inputs']],
+            ['temperature', 'top_k', 'top_p', 'min_p', 'repetition_penalty', 'seed'],
+        )
 
 
 class TestUIHintsValidation(unittest.TestCase):
