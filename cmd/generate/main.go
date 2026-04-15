@@ -639,7 +639,7 @@ const dynamicComboSelectionKey = "selection"
 func buildDynamicComboSelectionAttribute() string {
 	var b strings.Builder
 
-	b.WriteString(fmt.Sprintf("%q: schema.StringAttribute{\n", dynamicComboSelectionKey))
+	fmt.Fprintf(&b, "%q: schema.StringAttribute{\n", dynamicComboSelectionKey)
 	b.WriteString("\t\t\t\tRequired: true,\n")
 	b.WriteString("\t\t\t\tMarkdownDescription: \"Selected DynamicCombo option key.\",\n")
 	b.WriteString("\t\t\t},\n")
