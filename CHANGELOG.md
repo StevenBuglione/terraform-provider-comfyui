@@ -18,7 +18,7 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
-## [0.18.9] - 2026-04-15
+## [0.18.10] - 2026-04-15
 
 Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
 
@@ -143,7 +143,8 @@ Initial release of the `0.18.x` provider compatibility line for ComfyUI `v0.18.5
 * Built with Terraform Plugin Framework (not SDKv2)
 * Generated node resources are virtual/plan-only - execution happens through `comfyui_workflow`
 
-[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.9...HEAD
+[Unreleased]: https://github.com/StevenBuglione/terraform-provider-comfyui/compare/v0.18.10...HEAD
+[0.18.10]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.10
 [0.18.9]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.9
 [0.18.8]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.8
 [0.18.7]: https://github.com/StevenBuglione/terraform-provider-comfyui/releases/tag/v0.18.7
