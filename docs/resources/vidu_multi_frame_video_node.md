@@ -17,9 +17,9 @@ Generate a video with multiple keyframe transitions. [api node/video/Vidu] Hidde
 
 ### Required
 
-- `frames` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of keyframe transitions (2-9).
-- `model` (String) Input: COMBO.
-- `resolution` (String) Input: COMBO.
+- `frames` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of keyframe transitions (2-9). Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--frames))
+- `model` (String) Input: COMBO. Options: "viduq2-pro", "viduq2-turbo".
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p".
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 - `start_image` (String) Input: IMAGE. Link input. Tooltip: The starting frame image. Aspect ratio must be between 1:4 and 4:1.
 
@@ -28,3 +28,10 @@ Generate a video with multiple keyframe transitions. [api node/video/Vidu] Hidde
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--frames"></a>
+### Nested Schema for `frames`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.

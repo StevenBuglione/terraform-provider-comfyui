@@ -81,7 +81,7 @@ func (r *SamplerDpmpp2MSdeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"solver_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"midpoint\", \"heun\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -105,7 +105,7 @@ func (r *SamplerDpmpp2MSdeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"noise_device": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"gpu\", \"cpu\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

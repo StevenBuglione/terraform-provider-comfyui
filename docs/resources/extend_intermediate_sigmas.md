@@ -19,7 +19,7 @@ ComfyUI ExtendIntermediateSigmas node [sampling/custom_sampling/sigmas] Source: 
 
 - `end_at_sigma` (Number) Input: FLOAT. Default: 12.0. Allowed range: 0.0 to 20000.0. Step: 0.01.
 - `sigmas` (String) Input: SIGMAS. Link input.
-- `spacing` (String) Input: COMBO.
+- `spacing` (String) Input: COMBO. Options: "linear", "cosine", "sine".
 - `start_at_sigma` (Number) Input: FLOAT. Default: -1.0. Allowed range: -1.0 to 20000.0. Step: 0.01.
 - `steps` (Number) Input: INT. Default: 2. Allowed range: 1 to 100.
 

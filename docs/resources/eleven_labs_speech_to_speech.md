@@ -18,8 +18,8 @@ Transform speech from one voice to another while preserving the original content
 ### Required
 
 - `audio` (String) Input: AUDIO. Link input. Tooltip: Source audio to transform.
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for speech-to-speech transformation.
-- `output_format` (String) Input: COMBO. Tooltip: Audio output format.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for speech-to-speech transformation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
+- `output_format` (String) Input: COMBO. Options: "mp3_44100_192", "opus_48000_192". Tooltip: Audio output format.
 - `remove_background_noise` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Remove background noise from input audio using audio isolation.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967295. Tooltip: Seed for reproducibility.
 - `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.01. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
@@ -30,3 +30,10 @@ Transform speech from one voice to another while preserving the original content
 - `audio_output` (String) Output: AUDIO (slot 0).
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.

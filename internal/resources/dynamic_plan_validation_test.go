@@ -8,6 +8,11 @@ import (
 	"testing"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/client"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/inventory"
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/nodeschema"
+	"github.com/hashicorp/terraform-plugin-framework/attr"
+	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
@@ -21,6 +26,166 @@ type basicSchedulerTestModel struct {
 	ID        types.String `tfsdk:"id"`
 	NodeID    types.String `tfsdk:"node_id"`
 	Scheduler types.String `tfsdk:"scheduler"`
+}
+
+type dcTestNodeModel struct {
+	ID     types.String `tfsdk:"id"`
+	NodeID types.String `tfsdk:"node_id"`
+	Combo  types.Object `tfsdk:"combo"`
+}
+
+var dcSubcomboAttributeTypes = map[string]attr.Type{
+	"selection": types.StringType,
+	"float_x":   types.Float64Type,
+	"float_y":   types.Float64Type,
+	"mask1":     types.StringType,
+}
+
+var dcComboAttributeTypes = map[string]attr.Type{
+	"selection": types.StringType,
+	"image":     types.StringType,
+	"integer":   types.Int64Type,
+	"string":    types.StringType,
+	"subcombo": types.ObjectType{
+		AttrTypes: dcSubcomboAttributeTypes,
+	},
+}
+
+func TestValidateDynamicInputs_RejectsInvalidDynamicComboSelection(t *testing.T) {
+	model := dcTestNodeModel{
+		Combo: dcComboObject(map[string]attr.Value{
+			"selection": types.StringValue("invalid"),
+		}),
+	}
+
+	diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "DCTestNode", model)
+	if !diags.HasError() {
+		t.Fatal("expected diagnostics for invalid DynamicCombo selection")
+	}
+	if !strings.Contains(diags[0].Summary(), "Invalid DynamicCombo Selection") {
+		t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
+	}
+	assertDiagnosticPath(t, diags[0], path.Root("combo").AtName("selection"))
+}
+
+func TestValidateDynamicInputs_RejectsMissingRequiredNestedDynamicComboChild(t *testing.T) {
+	model := dcTestNodeModel{
+		Combo: dcComboObject(map[string]attr.Value{
+			"selection": types.StringValue("option4"),
+			"subcombo": dcSubcomboObject(map[string]attr.Value{
+				"selection": types.StringValue("opt1"),
+				"float_x":   types.Float64Value(1.5),
+			}),
+		}),
+	}
+
+	diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "DCTestNode", model)
+	if !diags.HasError() {
+		t.Fatal("expected diagnostics for missing nested DynamicCombo field")
+	}
+	if !strings.Contains(diags[0].Summary(), "Missing DynamicCombo Field") {
+		t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
+	}
+	assertDiagnosticPath(t, diags[0], path.Root("combo").AtName("subcombo").AtName("float_y"))
+}
+
+func TestValidateDynamicInputs_RejectsInvalidNestedDynamicComboSelection(t *testing.T) {
+	model := dcTestNodeModel{
+		Combo: dcComboObject(map[string]attr.Value{
+			"selection": types.StringValue("option4"),
+			"subcombo": dcSubcomboObject(map[string]attr.Value{
+				"selection": types.StringValue("invalid"),
+			}),
+		}),
+	}
+
+	diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "DCTestNode", model)
+	if !diags.HasError() {
+		t.Fatal("expected diagnostics for invalid nested DynamicCombo selection")
+	}
+	if !strings.Contains(diags[0].Summary(), "Invalid DynamicCombo Selection") {
+		t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
+	}
+	assertDiagnosticPath(t, diags[0], path.Root("combo").AtName("subcombo").AtName("selection"))
+}
+
+func TestValidateDynamicInputs_AcceptsValidNestedDynamicComboSelection(t *testing.T) {
+	model := dcTestNodeModel{
+		Combo: dcComboObject(map[string]attr.Value{
+			"selection": types.StringValue("option4"),
+			"subcombo": dcSubcomboObject(map[string]attr.Value{
+				"selection": types.StringValue("opt1"),
+				"float_x":   types.Float64Value(1.5),
+				"float_y":   types.Float64Value(2.5),
+			}),
+		}),
+	}
+
+	diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "DCTestNode", model)
+	if diags.HasError() || diags.WarningsCount() != 0 {
+		t.Fatalf("expected no diagnostics, got %v", diags)
+	}
+}
+
+func TestValidateDynamicInputs_RejectsFieldsFromOtherDynamicComboOptions(t *testing.T) {
+	model := dcTestNodeModel{
+		Combo: dcComboObject(map[string]attr.Value{
+			"selection": types.StringValue("option1"),
+			"string":    types.StringValue("hello"),
+			"integer":   types.Int64Value(7),
+		}),
+	}
+
+	diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "DCTestNode", model)
+	if !diags.HasError() {
+		t.Fatal("expected diagnostics for invalid DynamicCombo field")
+	}
+	if !strings.Contains(diags[0].Summary(), "Invalid DynamicCombo Field") {
+		t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
+	}
+	assertDiagnosticPath(t, diags[0], path.Root("combo").AtName("integer"))
+}
+
+func TestValidateGeneratedInput_RejectsMissingRequiredNestedDynamicComboChildInList(t *testing.T) {
+	schema, ok := nodeschema.LookupGeneratedNodeSchema("DCTestNode")
+	if !ok {
+		t.Fatal("expected generated schema for DCTestNode")
+	}
+	input, ok := generatedInputByName(schema.RequiredInputs, "combo")
+	if !ok {
+		t.Fatal("expected generated combo input for DCTestNode")
+	}
+
+	combos := types.ListValueMust(types.ObjectType{AttrTypes: dcComboAttributeTypes}, []attr.Value{
+		dcComboObject(map[string]attr.Value{
+			"selection": types.StringValue("option4"),
+			"subcombo": dcSubcomboObject(map[string]attr.Value{
+				"selection": types.StringValue("opt1"),
+				"float_x":   types.Float64Value(1.5),
+			}),
+		}),
+	})
+
+	var diags diag.Diagnostics
+	validateGeneratedInput(context.Background(), inventory.NewService(&client.Client{}), "error", input, combos, path.Root("combo"), &diags)
+
+	if !diags.HasError() {
+		t.Fatal("expected diagnostics for missing nested DynamicCombo field in list")
+	}
+	assertDiagnosticPath(t, diags[0], path.Root("combo").AtListIndex(0).AtName("subcombo").AtName("float_y"))
+}
+
+func TestValidateDynamicInputs_IgnoresUnknownDynamicComboSelectionAtPlanTime(t *testing.T) {
+	model := dcTestNodeModel{
+		Combo: dcComboObject(map[string]attr.Value{
+			"selection": types.StringUnknown(),
+		}),
+	}
+
+	diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "DCTestNode", model)
+	if diags.HasError() || diags.WarningsCount() != 0 {
+		t.Fatalf("expected no diagnostics, got %v", diags)
+	}
 }
 
 func TestValidateDynamicInputs_AcceptsPresentInventoryValue(t *testing.T) {
@@ -102,4 +267,52 @@ func TestValidateDynamicInputs_IgnoresUnsupportedDynamicExpressionWhenConfigured
 	if diags.HasError() || diags.WarningsCount() != 0 {
 		t.Fatalf("expected no diagnostics, got %v", diags)
 	}
+}
+
+func dcComboObject(overrides map[string]attr.Value) types.Object {
+	attributes := map[string]attr.Value{
+		"selection": types.StringNull(),
+		"image":     types.StringNull(),
+		"integer":   types.Int64Null(),
+		"string":    types.StringNull(),
+		"subcombo":  types.ObjectNull(dcSubcomboAttributeTypes),
+	}
+	for key, value := range overrides {
+		attributes[key] = value
+	}
+	return types.ObjectValueMust(dcComboAttributeTypes, attributes)
+}
+
+func dcSubcomboObject(overrides map[string]attr.Value) types.Object {
+	attributes := map[string]attr.Value{
+		"selection": types.StringNull(),
+		"float_x":   types.Float64Null(),
+		"float_y":   types.Float64Null(),
+		"mask1":     types.StringNull(),
+	}
+	for key, value := range overrides {
+		attributes[key] = value
+	}
+	return types.ObjectValueMust(dcSubcomboAttributeTypes, attributes)
+}
+
+func assertDiagnosticPath(t *testing.T, diagnostic diag.Diagnostic, want path.Path) {
+	t.Helper()
+
+	withPath, ok := diagnostic.(diag.DiagnosticWithPath)
+	if !ok {
+		t.Fatalf("expected diagnostic with path, got %T", diagnostic)
+	}
+	if !withPath.Path().Equal(want) {
+		t.Fatalf("unexpected diagnostic path: got %s want %s", withPath.Path(), want)
+	}
+}
+
+func generatedInputByName(inputs []nodeschema.GeneratedNodeSchemaInput, name string) (nodeschema.GeneratedNodeSchemaInput, bool) {
+	for _, input := range inputs {
+		if input.Name == name {
+			return input, true
+		}
+	}
+	return nodeschema.GeneratedNodeSchemaInput{}, false
 }

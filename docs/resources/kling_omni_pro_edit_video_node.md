@@ -18,14 +18,14 @@ Edit an existing video with the latest model from Kling. [api node/video/Kling] 
 ### Required
 
 - `keep_original_sound` (Boolean) Input: BOOLEAN. Default: true.
-- `model_name` (String) Input: COMBO.
+- `model_name` (String) Input: COMBO. Options: "kling-v3-omni", "kling-video-o1".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A text prompt describing the video content. This can include both positive and negative descriptions.
 - `video` (String) Input: VIDEO. Link input. Tooltip: Video for editing. The output video length will be the same.
 
 ### Optional
 
 - `reference_images` (String) Input: IMAGE. Link input. Tooltip: Up to 4 additional reference images.
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "1080p", "720p".
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Read-Only

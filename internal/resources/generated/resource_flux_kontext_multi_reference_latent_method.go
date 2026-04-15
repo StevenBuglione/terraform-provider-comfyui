@@ -82,7 +82,7 @@ func (r *FluxKontextMultiReferenceLatentMethodResource) Schema(_ context.Context
 				Required:            true,
 			},
 			"reference_latents_method": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"offset\", \"index\", \"uxo/uno\", \"index_timestep_zero\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

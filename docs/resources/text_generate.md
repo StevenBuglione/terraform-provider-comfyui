@@ -20,7 +20,7 @@ ComfyUI TextGenerate node [textgen/] Source: comfy_extras/nodes_textgen.py:4 (v3
 - `clip` (String) Input: CLIP. Link input.
 - `max_length` (Number) Input: INT. Default: 256. Allowed range: 1 to 2048.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text.
-- `sampling_mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Display name: Sampling Mode. Dynamic options are resolved by ComfyUI at runtime from: sampling_options.
+- `sampling_mode` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Display name: Sampling Mode. Dynamic options are resolved by ComfyUI at runtime from: sampling_options. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--sampling_mode))
 
 ### Optional
 
@@ -31,3 +31,19 @@ ComfyUI TextGenerate node [textgen/] Source: comfy_extras/nodes_textgen.py:4 (v3
 - `generated_text_output` (String) Output: STRING (slot 0).
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--sampling_mode"></a>
+### Nested Schema for `sampling_mode`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `min_p` (Number) Input: FLOAT. Default: 0.05. Allowed range: 0.0 to 1.0. Step: 0.01.
+- `repetition_penalty` (Number) Input: FLOAT. Default: 1.05. Allowed range: 0.0 to 5.0. Step: 0.01.
+- `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.
+- `temperature` (Number) Input: FLOAT. Default: 0.7. Allowed range: 0.01 to 2.0. Step: 1e-06.
+- `top_k` (Number) Input: INT. Default: 64. Allowed range: 0 to 1000.
+- `top_p` (Number) Input: FLOAT. Default: 0.95. Allowed range: 0.0 to 1.0. Step: 0.01.

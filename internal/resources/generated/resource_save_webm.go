@@ -89,7 +89,7 @@ func (r *SaveWebmResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 				Required:            true,
 			},
 			"codec": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"vp9\", \"av1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

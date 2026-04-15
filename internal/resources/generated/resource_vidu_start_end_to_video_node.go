@@ -85,7 +85,7 @@ func (r *ViduStartEndToVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Model name.",
+				MarkdownDescription: "Input: COMBO. Options: \"viduq1\". Tooltip: Model name.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -120,7 +120,7 @@ func (r *ViduStartEndToVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Supported values may vary by model & duration.",
+				MarkdownDescription: "Input: COMBO. Options: \"1080p\". Tooltip: Supported values may vary by model & duration.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -129,7 +129,7 @@ func (r *ViduStartEndToVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"movement_amplitude": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The movement amplitude of objects in the frame.",
+				MarkdownDescription: "Input: COMBO. Options: \"auto\", \"small\", \"medium\", \"large\". Tooltip: The movement amplitude of objects in the frame.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

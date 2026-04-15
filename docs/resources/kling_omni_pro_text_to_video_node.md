@@ -17,20 +17,27 @@ Use text prompts to generate videos with the latest Kling model. [api node/video
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO.
+- `aspect_ratio` (String) Input: COMBO. Options: "16:9", "9:16", "1:1".
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 15.
-- `model_name` (String) Input: COMBO.
+- `model_name` (String) Input: COMBO. Options: "kling-v3-omni", "kling-video-o1".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A text prompt describing the video content. This can include both positive and negative descriptions. Ignored when storyboards are enabled.
 
 ### Optional
 
 - `generate_audio` (Boolean) Input: BOOLEAN. Default: false.
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "1080p", "720p".
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
-- `storyboards` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Ignored for o1 model.
+- `storyboards` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Ignored for o1 model. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--storyboards))
 
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--storyboards"></a>
+### Nested Schema for `storyboards`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.

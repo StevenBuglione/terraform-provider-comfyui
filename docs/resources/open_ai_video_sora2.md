@@ -17,10 +17,10 @@ OpenAI video and audio generation. [api node/video/Sora] Hidden runtime inputs: 
 
 ### Required
 
-- `duration` (String) Input: COMBO. Default: 8.
-- `model` (String) Input: COMBO. Default: "sora-2".
+- `duration` (String) Input: COMBO. Default: 8. Options: "4", "8", "12".
+- `model` (String) Input: COMBO. Default: "sora-2". Options: "sora-2", "sora-2-pro".
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Guiding text; may be empty if an input image is present.
-- `size` (String) Input: COMBO. Default: "1280x720".
+- `size` (String) Input: COMBO. Default: "1280x720". Options: "720x1280", "1280x720", "1024x1792", "1792x1024".
 
 ### Optional
 

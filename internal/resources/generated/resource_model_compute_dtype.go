@@ -82,7 +82,7 @@ func (r *ModelComputeDtypeResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"dtype": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"default\", \"fp32\", \"fp16\", \"bf16\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

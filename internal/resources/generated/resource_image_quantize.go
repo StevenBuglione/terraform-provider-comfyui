@@ -91,7 +91,7 @@ func (r *ImageQuantizeResource) Schema(_ context.Context, _ resource.SchemaReque
 				},
 			},
 			"dither": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"none\", \"floyd-steinberg\", \"bayer-2\", \"bayer-4\", \"bayer-8\", \"bayer-16\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

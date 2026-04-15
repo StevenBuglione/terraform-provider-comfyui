@@ -17,7 +17,7 @@ ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling] Source: nodes.p
 
 ### Required
 
-- `add_noise` (String) Input: COMBO.
+- `add_noise` (String) Input: COMBO. Options: "enable", "disable".
 - `cfg` (Number) Input: FLOAT. Default: 8.0. Allowed range: 0.0 to 100.0. Step: 0.1.
 - `end_at_step` (Number) Input: INT. Default: 10000. Allowed range: 0 to 10000.
 - `latent_image` (String) Input: LATENT. Link input.
@@ -25,7 +25,7 @@ ComfyUI KSamplerAdvanced node — KSampler (Advanced) [sampling] Source: nodes.p
 - `negative` (String) Input: CONDITIONING. Link input.
 - `noise_seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.
 - `positive` (String) Input: CONDITIONING. Link input.
-- `return_with_leftover_noise` (String) Input: COMBO.
+- `return_with_leftover_noise` (String) Input: COMBO. Options: "disable", "enable".
 - `sampler_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.KSampler.SAMPLERS.
 - `scheduler` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: comfy.samplers.KSampler.SCHEDULERS.
 - `start_at_step` (Number) Input: INT. Default: 0. Allowed range: 0 to 10000.

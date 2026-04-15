@@ -30,7 +30,7 @@ type BriaRemoveImageBackgroundModel struct {
 	ID          types.String `tfsdk:"id"`
 	NodeID      types.String `tfsdk:"node_id"`
 	Image       types.String `tfsdk:"image"`
-	Moderation  types.String `tfsdk:"moderation"`
+	Moderation  types.Object `tfsdk:"moderation"`
 	Seed        types.Int64  `tfsdk:"seed"`
 	ImageOutput types.String `tfsdk:"image_output"`
 }
@@ -82,9 +82,23 @@ func (r *BriaRemoveImageBackgroundResource) Schema(_ context.Context, _ resource
 				MarkdownDescription: "Input: IMAGE. Link input.",
 				Required:            true,
 			},
-			"moderation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings.",
+			"moderation": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Moderation settings. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"visual_input_moderation": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false.",
+						Optional:            true,
+					},
+					"visual_output_moderation": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: true.",
+						Optional:            true,
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",

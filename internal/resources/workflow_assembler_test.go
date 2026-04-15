@@ -456,6 +456,160 @@ func TestAssembleWorkflow_JSONMatchesAPIFormat(t *testing.T) {
 	}
 }
 
+func TestAssembleWorkflow_ResolvesNestedObjectsAndLists(t *testing.T) {
+	imageID := "11111111-1111-1111-1111-111111111111"
+	maskID := "22222222-2222-2222-2222-222222222222"
+	consumerID := "33333333-3333-3333-3333-333333333333"
+
+	nodes := []NodeState{
+		{
+			ID:        imageID,
+			ClassType: "LoadImage",
+			Inputs: map[string]interface{}{
+				"image": "image.png",
+			},
+		},
+		{
+			ID:        maskID,
+			ClassType: "LoadMask",
+			Inputs: map[string]interface{}{
+				"mask": "mask.png",
+			},
+		},
+		{
+			ID:        consumerID,
+			ClassType: "DynamicComboConsumer",
+			Inputs: map[string]interface{}{
+				"payload": map[string]interface{}{
+					"primary": imageID + ":0",
+					"options": []interface{}{
+						"literal-option",
+						true,
+						map[string]interface{}{
+							"mask":   maskID + ":0",
+							"weight": 0.75,
+						},
+					},
+					"settings": map[string]interface{}{
+						"enabled": true,
+						"label":   "keep-me",
+						"count":   3,
+					},
+				},
+			},
+		},
+	}
+
+	result, err := AssembleWorkflow(nodes)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	inputs := result.Prompt["3"].(map[string]interface{})["inputs"].(map[string]interface{})
+	payload := inputs["payload"].(map[string]interface{})
+
+	primaryRef, ok := payload["primary"].([]interface{})
+	if !ok {
+		t.Fatalf("payload.primary type = %T, want []interface{}", payload["primary"])
+	}
+	if primaryRef[0] != "1" || primaryRef[1] != 0 {
+		t.Fatalf("payload.primary = %#v, want [\"1\", 0]", primaryRef)
+	}
+
+	options, ok := payload["options"].([]interface{})
+	if !ok {
+		t.Fatalf("payload.options type = %T, want []interface{}", payload["options"])
+	}
+	if options[0] != "literal-option" {
+		t.Fatalf("payload.options[0] = %#v, want literal-option", options[0])
+	}
+	if options[1] != true {
+		t.Fatalf("payload.options[1] = %#v, want true", options[1])
+	}
+
+	nestedOption, ok := options[2].(map[string]interface{})
+	if !ok {
+		t.Fatalf("payload.options[2] type = %T, want map[string]interface{}", options[2])
+	}
+	maskRef, ok := nestedOption["mask"].([]interface{})
+	if !ok {
+		t.Fatalf("nested mask type = %T, want []interface{}", nestedOption["mask"])
+	}
+	if maskRef[0] != "2" || maskRef[1] != 0 {
+		t.Fatalf("nested mask = %#v, want [\"2\", 0]", maskRef)
+	}
+	if nestedOption["weight"] != 0.75 {
+		t.Fatalf("nested weight = %#v, want 0.75", nestedOption["weight"])
+	}
+
+	settings, ok := payload["settings"].(map[string]interface{})
+	if !ok {
+		t.Fatalf("payload.settings type = %T, want map[string]interface{}", payload["settings"])
+	}
+	if settings["enabled"] != true || settings["label"] != "keep-me" || settings["count"] != 3 {
+		t.Fatalf("payload.settings = %#v, want preserved scalars", settings)
+	}
+}
+
+func TestAssembleWorkflow_JSONSerializesNestedDynamicComboRefs(t *testing.T) {
+	sourceID := "44444444-4444-4444-4444-444444444444"
+	consumerID := "55555555-5555-5555-5555-555555555555"
+
+	nodes := []NodeState{
+		{
+			ID:        sourceID,
+			ClassType: "LoadImage",
+			Inputs: map[string]interface{}{
+				"image": "image.png",
+			},
+		},
+		{
+			ID:        consumerID,
+			ClassType: "DynamicComboConsumer",
+			Inputs: map[string]interface{}{
+				"payload": map[string]interface{}{
+					"nested_list": []interface{}{
+						map[string]interface{}{
+							"image": sourceID + ":0",
+						},
+					},
+				},
+			},
+		},
+	}
+
+	result, err := AssembleWorkflow(nodes)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var parsed map[string]struct {
+		Inputs map[string]json.RawMessage `json:"inputs"`
+	}
+	if err := json.Unmarshal([]byte(result.JSON), &parsed); err != nil {
+		t.Fatalf("invalid JSON: %v", err)
+	}
+
+	var payload struct {
+		NestedList []struct {
+			Image []interface{} `json:"image"`
+		} `json:"nested_list"`
+	}
+	if err := json.Unmarshal(parsed["2"].Inputs["payload"], &payload); err != nil {
+		t.Fatalf("failed to parse payload JSON: %v", err)
+	}
+
+	if len(payload.NestedList) != 1 {
+		t.Fatalf("nested_list length = %d, want 1", len(payload.NestedList))
+	}
+	if len(payload.NestedList[0].Image) != 2 {
+		t.Fatalf("image ref length = %d, want 2", len(payload.NestedList[0].Image))
+	}
+	if payload.NestedList[0].Image[0] != "1" || payload.NestedList[0].Image[1] != float64(0) {
+		t.Fatalf("image ref = %#v, want [\"1\", 0]", payload.NestedList[0].Image)
+	}
+}
+
 func TestResolveInputValue_Types(t *testing.T) {
 	nodeMap := map[string]string{
 		"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee": "1",

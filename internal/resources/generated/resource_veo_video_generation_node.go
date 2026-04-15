@@ -90,7 +90,7 @@ func (r *VeoVideoGenerationNodeResource) Schema(_ context.Context, _ resource.Sc
 				Required:            true,
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"16:9\". Tooltip: Aspect ratio of the output video.",
+				MarkdownDescription: "Input: COMBO. Default: \"16:9\". Options: \"16:9\", \"9:16\". Tooltip: Aspect ratio of the output video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -115,7 +115,7 @@ func (r *VeoVideoGenerationNodeResource) Schema(_ context.Context, _ resource.Sc
 				Optional:            true,
 			},
 			"person_generation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"ALLOW\". Tooltip: Whether to allow generating people in the video.",
+				MarkdownDescription: "Input: COMBO. Default: \"ALLOW\". Options: \"ALLOW\", \"BLOCK\". Tooltip: Whether to allow generating people in the video.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -136,7 +136,7 @@ func (r *VeoVideoGenerationNodeResource) Schema(_ context.Context, _ resource.Sc
 				Optional:            true,
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"veo-2.0-generate-001\". Tooltip: Veo 2 model to use for video generation.",
+				MarkdownDescription: "Input: COMBO. Default: \"veo-2.0-generate-001\". Options: \"veo-2.0-generate-001\". Tooltip: Veo 2 model to use for video generation.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

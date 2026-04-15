@@ -21,7 +21,7 @@ ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models] Source: comfy_ex
 - `audio_scale` (Number) Input: FLOAT. Default: 1.0. Allowed range: -10.0 to 10.0. Step: 0.01.
 - `height` (Number) Input: INT. Default: 480. Minimum value: 16. Step: 16.
 - `length` (Number) Input: INT. Default: 81. Minimum value: 1. Step: 4.
-- `mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `mode` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--mode))
 - `model` (String) Input: MODEL. Link input.
 - `model_patch` (String) Input: MODEL_PATCH. Link input.
 - `motion_frame_count` (Number) Input: INT. Default: 9. Allowed range: 1 to 33. Step: 1. Tooltip: Number of previous frames to use as motion context.
@@ -45,3 +45,16 @@ ComfyUI WanInfiniteTalkToVideo node [conditioning/video_models] Source: comfy_ex
 - `node_id` (String) ComfyUI node class type.
 - `positive_output` (String) Output: CONDITIONING (slot 1).
 - `trim_image_output` (String) Output: INT (slot 4).
+
+<a id="nestedatt--mode"></a>
+### Nested Schema for `mode`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `audio_encoder_output_2` (String) Input: AUDIO_ENCODER_OUTPUT. Link input.
+- `mask_1` (String) Input: MASK. Link input. Tooltip: Mask for the first speaker, required if using two audio inputs.
+- `mask_2` (String) Input: MASK. Link input. Tooltip: Mask for the second speaker, required if using two audio inputs.

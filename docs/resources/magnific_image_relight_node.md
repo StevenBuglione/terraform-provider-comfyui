@@ -17,14 +17,14 @@ Relight an image with lighting adjustments and optional reference-based light tr
 
 ### Required
 
-- `advanced_settings` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Fine-tuning options for advanced lighting control.
+- `advanced_settings` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Fine-tuning options for advanced lighting control. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--advanced_settings))
 - `change_background` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Modifies background based on prompt/reference.
 - `image` (String) Input: IMAGE. Link input. Tooltip: The image to relight.
 - `interpolate_from_original` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Restricts generation freedom to match original more closely.
 - `light_transfer_strength` (Number) Input: INT. Default: 100. Allowed range: 0 to 100. Tooltip: Intensity of light transfer application.
 - `preserve_details` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Maintains texture and fine details from original.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Descriptive guidance for lighting. Supports emphasis notation (1-1.4).
-- `style` (String) Input: COMBO. Tooltip: Stylistic output preference.
+- `style` (String) Input: COMBO. Options: "standard", "darker_but_realistic", "clean", "smooth", "brighter", "contrasted_n_hdr", "just_composition". Tooltip: Stylistic output preference.
 
 ### Optional
 
@@ -35,3 +35,22 @@ Relight an image with lighting adjustments and optional reference-based light tr
 - `id` (String) Unique identifier for this node instance.
 - `image_output` (String) Output: IMAGE (slot 0).
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--advanced_settings"></a>
+### Nested Schema for `advanced_settings`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `blacks` (Number) Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Adjusts the darkest tones in the image.
+- `brightness` (Number) Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Overall brightness adjustment.
+- `contrast` (Number) Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Contrast adjustment.
+- `engine` (String) Input: COMBO. Options: "automatic", "balanced", "cool", "real", "illusio", "fairy", "colorful_anime", "hard_transform", "softy". Tooltip: Processing engine selection.
+- `fixed_generation` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Ensures consistent output with the same settings.
+- `saturation` (Number) Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Color saturation adjustment.
+- `transfer_light_a` (String) Input: COMBO. Options: "automatic", "low", "medium", "normal", "high", "high_on_faces". Tooltip: The intensity of light transfer.
+- `transfer_light_b` (String) Input: COMBO. Options: "automatic", "composition", "straight", "smooth_in", "smooth_out", "smooth_both", "reverse_both", "soft_in", "soft_out", "soft_mid", "style_shift", "strong_shift". Tooltip: Also modifies light transfer intensity. Can be combined with the previous control for varied effects.
+- `whites` (Number) Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Adjusts the brightest tones in the image.

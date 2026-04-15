@@ -85,7 +85,7 @@ func (r *ModelSamplingContinuousEdmResource) Schema(_ context.Context, _ resourc
 				Required:            true,
 			},
 			"sampling": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"v_prediction\", \"edm\", \"edm_playground_v2.5\", \"eps\", \"cosmos_rflow\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

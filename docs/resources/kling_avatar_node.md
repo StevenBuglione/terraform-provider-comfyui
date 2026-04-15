@@ -18,7 +18,7 @@ Generate broadcast-style digital human videos from a single photo and an audio f
 ### Required
 
 - `image` (String) Input: IMAGE. Link input. Tooltip: Avatar reference image. Width and height must be at least 300px. Aspect ratio must be between 1:2.5 and 2.5:1.
-- `mode` (String) Input: COMBO.
+- `mode` (String) Input: COMBO. Options: "std", "pro".
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 - `sound_file` (String) Input: AUDIO. Link input. Tooltip: Audio input. Must be between 2 and 300 seconds in duration.
 

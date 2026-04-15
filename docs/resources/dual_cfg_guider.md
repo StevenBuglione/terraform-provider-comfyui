@@ -23,7 +23,7 @@ ComfyUI DualCFGGuider node [sampling/custom_sampling/guiders] Source: comfy_extr
 - `cond2` (String) Input: CONDITIONING. Link input.
 - `model` (String) Input: MODEL. Link input.
 - `negative` (String) Input: CONDITIONING. Link input.
-- `style` (String) Input: COMBO.
+- `style` (String) Input: COMBO. Options: "regular", "nested".
 
 ### Read-Only
 

@@ -87,7 +87,7 @@ func (r *AudioMergeResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"merge_method": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The method used to combine the audio waveforms.",
+				MarkdownDescription: "Input: COMBO. Options: \"add\", \"mean\", \"subtract\", \"multiply\". Tooltip: The method used to combine the audio waveforms.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

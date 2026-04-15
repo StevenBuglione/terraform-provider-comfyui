@@ -82,7 +82,7 @@ func (r *ImageFlipResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Required:            true,
 			},
 			"flip_method": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"x-axis: vertically\", \"y-axis: horizontally\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

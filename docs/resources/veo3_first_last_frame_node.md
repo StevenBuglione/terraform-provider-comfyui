@@ -17,15 +17,15 @@ Generate video using prompt and first and last frames. [api node/video/Veo] Hidd
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO. Default: "16:9". Tooltip: Aspect ratio of the output video.
+- `aspect_ratio` (String) Input: COMBO. Default: "16:9". Options: "16:9", "9:16". Tooltip: Aspect ratio of the output video.
 - `duration` (Number) Input: INT. Default: 8. Allowed range: 4 to 8. Step: 2. Tooltip: Duration of the output video in seconds.
 - `first_frame` (String) Input: IMAGE. Link input. Tooltip: Start frame.
 - `generate_audio` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Generate audio for the video.
 - `last_frame` (String) Input: IMAGE. Link input. Tooltip: End frame.
-- `model` (String) Input: COMBO. Default: "veo-3.1-fast-generate".
+- `model` (String) Input: COMBO. Default: "veo-3.1-fast-generate". Options: "veo-3.1-generate", "veo-3.1-fast-generate".
 - `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative text prompt to guide what to avoid in the video.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of the video.
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p".
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Seed for video generation.
 
 ### Read-Only

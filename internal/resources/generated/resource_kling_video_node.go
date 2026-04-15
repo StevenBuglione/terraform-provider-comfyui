@@ -29,9 +29,9 @@ type KlingVideoNodeResource struct {
 type KlingVideoNodeModel struct {
 	ID            types.String `tfsdk:"id"`
 	NodeID        types.String `tfsdk:"node_id"`
-	MultiShot     types.String `tfsdk:"multi_shot"`
+	MultiShot     types.Object `tfsdk:"multi_shot"`
 	GenerateAudio types.Bool   `tfsdk:"generate_audio"`
-	Model         types.String `tfsdk:"model"`
+	Model         types.Object `tfsdk:"model"`
 	Seed          types.Int64  `tfsdk:"seed"`
 	StartFrame    types.String `tfsdk:"start_frame"`
 	VideoOutput   types.String `tfsdk:"video_output"`
@@ -80,17 +80,49 @@ func (r *KlingVideoNodeResource) Schema(_ context.Context, _ resource.SchemaRequ
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"multi_shot": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations.",
+			"multi_shot": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 5. Allowed range: 3 to 15.",
+						Optional:            true,
+					},
+					"negative_prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text.",
+						Optional:            true,
+					},
+					"prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text.",
+						Optional:            true,
+					},
+				},
 			},
 			"generate_audio": schema.BoolAttribute{
 				MarkdownDescription: "Input: BOOLEAN. Default: true.",
 				Required:            true,
 			},
-			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model and generation settings.",
+			"model": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model and generation settings. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"aspect_ratio": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\". Tooltip: Ignored in image-to-video mode.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"1080p\", \"720p\".",
+						Optional:            true,
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.",

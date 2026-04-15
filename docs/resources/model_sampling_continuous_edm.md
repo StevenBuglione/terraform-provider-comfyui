@@ -18,7 +18,7 @@ ComfyUI ModelSamplingContinuousEDM node — ModelSamplingContinuousEDM [advanced
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `sampling` (String) Input: COMBO.
+- `sampling` (String) Input: COMBO. Options: "v_prediction", "edm", "edm_playground_v2.5", "eps", "cosmos_rflow".
 - `sigma_max` (Number) Input: FLOAT. Default: 120.0. Allowed range: 0.0 to 1000.0. Step: 0.001.
 - `sigma_min` (Number) Input: FLOAT. Default: 0.002. Allowed range: 0.0 to 1000.0. Step: 0.001.
 

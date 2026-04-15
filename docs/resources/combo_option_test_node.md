@@ -17,8 +17,8 @@ ComfyUI ComboOutputTestNode node — ComboOptionTest [logic] Source: comfy_extra
 
 ### Required
 
-- `combo` (String) Input: COMBO.
-- `combo2` (String) Input: COMBO.
+- `combo` (String) Input: COMBO. Options: "option1", "option2", "option3".
+- `combo2` (String) Input: COMBO. Options: "option4", "option5", "option6".
 
 ### Read-Only
 

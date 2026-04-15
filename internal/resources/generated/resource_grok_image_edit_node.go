@@ -84,7 +84,7 @@ func (r *GrokImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"grok-imagine-image-pro\", \"grok-imagine-image\", \"grok-imagine-image-beta\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -103,7 +103,7 @@ func (r *GrokImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"1K\", \"2K\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -127,7 +127,7 @@ func (r *GrokImageEditNodeResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Only allowed when multiple images are connected to the image input.",
+				MarkdownDescription: "Input: COMBO. Options: \"auto\", \"1:1\", \"2:3\", \"3:2\", \"3:4\", \"4:3\", \"9:16\", \"16:9\", \"9:19.5\", \"19.5:9\", \"9:20\", \"20:9\", \"1:2\", \"2:1\". Tooltip: Only allowed when multiple images are connected to the image input.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

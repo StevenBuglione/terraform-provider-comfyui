@@ -86,7 +86,7 @@ func (r *WanReferenceVideoAPIResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"wan2.6-r2v\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -107,7 +107,7 @@ func (r *WanReferenceVideoAPIResource) Schema(_ context.Context, _ resource.Sche
 				Required:            true,
 			},
 			"size": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"720p: 1:1 (960x960)\", \"720p: 16:9 (1280x720)\", \"720p: 9:16 (720x1280)\", \"720p: 4:3 (1088x832)\", \"720p: 3:4 (832x1088)\", \"1080p: 1:1 (1440x1440)\", \"1080p: 16:9 (1920x1080)\", \"1080p: 9:16 (1080x1920)\", \"1080p: 4:3 (1632x1248)\", \"1080p: 3:4 (1248x1632)\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -139,7 +139,7 @@ func (r *WanReferenceVideoAPIResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"shot_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts.",
+				MarkdownDescription: "Input: COMBO. Options: \"single\", \"multi\". Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

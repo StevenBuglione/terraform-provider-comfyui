@@ -87,7 +87,7 @@ func (r *LatentConcatResource) Schema(_ context.Context, _ resource.SchemaReques
 				Required:            true,
 			},
 			"dim": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"x\", \"-x\", \"y\", \"-y\", \"t\", \"-t\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

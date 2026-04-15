@@ -97,7 +97,7 @@ func (r *CLIPTextEncodeSd3Resource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"empty_padding": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"none\", \"empty_prompt\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

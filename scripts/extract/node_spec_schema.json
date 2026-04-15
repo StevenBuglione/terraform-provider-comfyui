@@ -150,6 +150,11 @@
           "type": ["string", "null"],
           "description": "Python expression that generates dynamic options (for documentation)"
         },
+        "dynamic_combo_options": {
+          "type": ["array", "null"],
+          "items": { "$ref": "#/definitions/DynamicComboOptionSpec" },
+          "description": "Structured IO.DynamicCombo options with nested child inputs when available"
+        },
         "validation_kind": {
           "type": "string",
           "enum": ["static_enum", "dynamic_inventory", "dynamic_expression", "freeform"],
@@ -170,6 +175,21 @@
         "display_name": {
           "type": ["string", "null"],
           "description": "Human-readable input label if different from name"
+        }
+      }
+    },
+    "DynamicComboOptionSpec": {
+      "type": "object",
+      "required": ["key", "inputs"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "DynamicCombo option key"
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/InputSpec" },
+          "description": "Nested inputs enabled by this DynamicCombo option"
         }
       }
     },

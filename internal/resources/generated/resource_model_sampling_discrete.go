@@ -83,7 +83,7 @@ func (r *ModelSamplingDiscreteResource) Schema(_ context.Context, _ resource.Sch
 				Required:            true,
 			},
 			"sampling": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"eps\", \"v_prediction\", \"lcm\", \"x0\", \"img_to_img\", \"img_to_img_flow\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -28,7 +28,7 @@ type GlslShaderModel struct {
 	ID             types.String `tfsdk:"id"`
 	NodeID         types.String `tfsdk:"node_id"`
 	FragmentShader types.String `tfsdk:"fragment_shader"`
-	SizeMode       types.String `tfsdk:"size_mode"`
+	SizeMode       types.Object `tfsdk:"size_mode"`
 	Images         types.String `tfsdk:"images"`
 	Floats         types.String `tfsdk:"floats"`
 	Ints           types.String `tfsdk:"ints"`
@@ -85,9 +85,23 @@ func (r *GlslShaderResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: GLSL fragment shader source code (GLSL ES 3.00 / WebGL 2.0 compatible).",
 				Required:            true,
 			},
-			"size_mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Output size: 'from_input' uses first input image dimensions, 'custom' allows manual size.",
+			"size_mode": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Output size: 'from_input' uses first input image dimensions, 'custom' allows manual size. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"height": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 512. Minimum value: 1.",
+						Optional:            true,
+					},
+					"width": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 512. Minimum value: 1.",
+						Optional:            true,
+					},
+				},
 			},
 			"images": schema.StringAttribute{
 				MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",

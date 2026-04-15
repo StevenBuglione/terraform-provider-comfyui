@@ -17,7 +17,7 @@ Generate text responses with Google's Gemini AI model. You can provide multiple 
 
 ### Required
 
-- `model` (String) Input: COMBO. Default: "gemini-3-1-pro". Tooltip: The Gemini model to use for generating responses.
+- `model` (String) Input: COMBO. Default: "gemini-3-1-pro". Options: "gemini-2.5-pro-preview-05-06", "gemini-2.5-flash-preview-04-17", "gemini-2.5-pro", "gemini-2.5-flash", "gemini-3-pro-preview", "gemini-3-1-pro", "gemini-3-1-flash-lite". Tooltip: The Gemini model to use for generating responses.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text inputs to the model, used to generate a response. You can include detailed instructions, questions, or context for the model.
 - `seed` (Number) Input: INT. Default: 42. Allowed range: 0 to 18446744073709551615. Tooltip: When seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.
 

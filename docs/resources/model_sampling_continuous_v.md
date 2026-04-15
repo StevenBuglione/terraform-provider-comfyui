@@ -18,7 +18,7 @@ ComfyUI ModelSamplingContinuousV node — ModelSamplingContinuousV [advanced/mod
 ### Required
 
 - `model` (String) Input: MODEL. Link input.
-- `sampling` (String) Input: COMBO.
+- `sampling` (String) Input: COMBO. Options: "v_prediction".
 - `sigma_max` (Number) Input: FLOAT. Default: 500.0. Allowed range: 0.0 to 1000.0. Step: 0.001.
 - `sigma_min` (Number) Input: FLOAT. Default: 0.03. Allowed range: 0.0 to 1000.0. Step: 0.001.
 

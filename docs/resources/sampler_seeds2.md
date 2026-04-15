@@ -35,7 +35,7 @@ exp_heun_2_x0_sde
 - `eta` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01. Tooltip: Stochastic strength.
 - `r` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.01 to 1.0. Step: 0.01. Tooltip: Relative step size for the intermediate stage (c2 node).
 - `s_noise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 100.0. Step: 0.01. Tooltip: SDE noise multiplier.
-- `solver_type` (String) Input: COMBO.
+- `solver_type` (String) Input: COMBO. Options: "phi_1", "phi_2".
 
 ### Read-Only
 

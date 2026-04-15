@@ -18,15 +18,15 @@ Modify an existing image based on a text prompt [api node/image/Grok] Hidden run
 ### Required
 
 - `image` (String) Input: IMAGE. Display name: images. Link input.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "grok-imagine-image-pro", "grok-imagine-image", "grok-imagine-image-beta".
 - `number_of_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 10. Step: 1. Tooltip: Number of edited images to generate.
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the image.
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "1K", "2K".
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
 ### Optional
 
-- `aspect_ratio` (String) Input: COMBO. Tooltip: Only allowed when multiple images are connected to the image input.
+- `aspect_ratio` (String) Input: COMBO. Options: "auto", "1:1", "2:3", "3:2", "3:4", "4:3", "9:16", "16:9", "9:19.5", "19.5:9", "9:20", "20:9", "1:2", "2:1". Tooltip: Only allowed when multiple images are connected to the image input.
 
 ### Read-Only
 

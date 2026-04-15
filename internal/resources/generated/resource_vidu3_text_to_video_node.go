@@ -29,7 +29,7 @@ type Vidu3TextToVideoNodeResource struct {
 type Vidu3TextToVideoNodeModel struct {
 	ID          types.String `tfsdk:"id"`
 	NodeID      types.String `tfsdk:"node_id"`
-	Model       types.String `tfsdk:"model"`
+	Model       types.Object `tfsdk:"model"`
 	Prompt      types.String `tfsdk:"prompt"`
 	Seed        types.Int64  `tfsdk:"seed"`
 	VideoOutput types.String `tfsdk:"video_output"`
@@ -78,9 +78,31 @@ func (r *Vidu3TextToVideoNodeResource) Schema(_ context.Context, _ resource.Sche
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation.",
+			"model": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"aspect_ratio": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"3:4\", \"4:3\", \"1:1\". Tooltip: The aspect ratio of the output video.",
+						Optional:            true,
+					},
+					"audio": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: When enabled, outputs video with sound (including dialogue and sound effects).",
+						Optional:            true,
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 5. Allowed range: 1 to 16. Step: 1. Tooltip: Duration of the output video in seconds.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\". Tooltip: Resolution of the output video.",
+						Optional:            true,
+					},
+				},
 			},
 			"prompt": schema.StringAttribute{
 				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: A textual description for video generation, with a maximum length of 2000 characters.",

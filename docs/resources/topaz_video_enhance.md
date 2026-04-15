@@ -19,19 +19,19 @@ Breathe new life into video with powerful upscaling and recovery technology. [ap
 
 - `upscaler_enabled` (Boolean) Input: BOOLEAN. Default: true.
 - `upscaler_model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(UPSCALER_MODELS_MAP.keys()).
-- `upscaler_resolution` (String) Input: COMBO.
+- `upscaler_resolution` (String) Input: COMBO. Options: "FullHD (1080p)", "4K (2160p)".
 - `video` (String) Input: VIDEO. Link input.
 
 ### Optional
 
-- `dynamic_compression_level` (String) Input: COMBO. Default: "Low". Tooltip: CQP level.
+- `dynamic_compression_level` (String) Input: COMBO. Default: "Low". Options: "Low", "Mid", "High". Tooltip: CQP level.
 - `interpolation_duplicate` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Analyze the input for duplicate frames and remove them.
 - `interpolation_duplicate_threshold` (Number) Input: FLOAT. Default: 0.01. Allowed range: 0.001 to 0.1. Step: 0.001. Tooltip: Detection sensitivity for duplicate frames.
 - `interpolation_enabled` (Boolean) Input: BOOLEAN. Default: false.
 - `interpolation_frame_rate` (Number) Input: INT. Default: 60. Allowed range: 15 to 240. Tooltip: Output frame rate.
-- `interpolation_model` (String) Input: COMBO. Default: "apo-8".
+- `interpolation_model` (String) Input: COMBO. Default: "apo-8". Options: "apo-8".
 - `interpolation_slowmo` (Number) Input: INT. Default: 1. Allowed range: 1 to 16. Tooltip: Slow-motion factor applied to the input video. For example, 2 makes the output twice as slow and doubles the duration.
-- `upscaler_creativity` (String) Input: COMBO. Default: "low". Tooltip: Creativity level (applies only to Starlight (Astra) Creative).
+- `upscaler_creativity` (String) Input: COMBO. Default: "low". Options: "low", "middle", "high". Tooltip: Creativity level (applies only to Starlight (Astra) Creative).
 
 ### Read-Only
 

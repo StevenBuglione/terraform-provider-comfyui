@@ -18,9 +18,9 @@ ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/
 ### Required
 
 - `face_count` (Number) Input: INT. Default: 500000. Allowed range: 40000 to 1500000.
-- `generate_type` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `generate_type` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--generate_type))
 - `image` (String) Input: IMAGE. Link input.
-- `model` (String) Input: COMBO. Tooltip: The LowPoly option is unavailable for the `3.1` model.
+- `model` (String) Input: COMBO. Options: "3.0", "3.1". Tooltip: The LowPoly option is unavailable for the `3.1` model.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Optional
@@ -40,3 +40,15 @@ ComfyUI TencentImageToModelNode node — Hunyuan3D: Image(s) to Model [api node/
 - `optional_normal_output` (String) Output: IMAGE (slot 5).
 - `optional_roughness_output` (String) Output: IMAGE (slot 6).
 - `texture_image_output` (String) Output: IMAGE (slot 3).
+
+<a id="nestedatt--generate_type"></a>
+### Nested Schema for `generate_type`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `pbr` (Boolean) Input: BOOLEAN. Default: false.
+- `polygon_type` (String) Input: COMBO. Options: "triangle", "quadrilateral".

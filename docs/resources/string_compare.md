@@ -18,7 +18,7 @@ ComfyUI StringCompare node — Compare [utils/string] Source: comfy_extras/nodes
 ### Required
 
 - `case_sensitive` (Boolean) Input: BOOLEAN. Default: true.
-- `mode` (String) Input: COMBO.
+- `mode` (String) Input: COMBO. Options: "Starts With", "Ends With", "Equal".
 - `string_a` (String) Input: STRING. Supports multiline text.
 - `string_b` (String) Input: STRING. Supports multiline text.
 

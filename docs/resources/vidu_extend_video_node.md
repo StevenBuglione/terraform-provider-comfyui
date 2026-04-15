@@ -17,7 +17,7 @@ Extend an existing video by generating additional frames. [api node/video/Vidu] 
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video extension.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video extension. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: An optional text prompt for the extended video (max 2000 characters).
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 - `video` (String) Input: VIDEO. Link input. Tooltip: The source video to extend.
@@ -31,3 +31,15 @@ Extend an existing video by generating additional frames. [api node/video/Vidu] 
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `duration` (Number) Input: INT. Default: 4. Allowed range: 1 to 7. Step: 1. Tooltip: Duration of the extended video in seconds.
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p". Tooltip: Resolution of the output video.

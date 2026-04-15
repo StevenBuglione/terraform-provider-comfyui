@@ -17,7 +17,7 @@ Generates videos synchronously based on an image and prompt, and optional parame
 
 ### Required
 
-- `model` (String) Input: COMBO. Default: "S2V-01". Tooltip: Model to use for video generation.
+- `model` (String) Input: COMBO. Default: "S2V-01". Options: "S2V-01". Tooltip: Model to use for video generation.
 - `prompt_text` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt to guide the video generation.
 - `subject` (String) Input: IMAGE. Link input. Tooltip: Image of subject to reference for video generation.
 

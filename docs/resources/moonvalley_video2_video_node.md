@@ -25,7 +25,7 @@ ComfyUI MoonvalleyVideo2VideoNode node — Moonvalley Marey Video to Video [api 
 
 ### Optional
 
-- `control_type` (String) Input: COMBO. Default: "Motion Transfer".
+- `control_type` (String) Input: COMBO. Default: "Motion Transfer". Options: "Motion Transfer", "Pose Transfer".
 - `motion_intensity` (Number) Input: INT. Default: 100. Allowed range: 0 to 100. Step: 1. Tooltip: Only used if control_type is 'Motion Transfer'.
 
 ### Read-Only

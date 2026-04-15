@@ -87,7 +87,7 @@ func (r *AudioConcatResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Required:            true,
 			},
 			"direction": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"after\". Tooltip: Whether to append audio2 after or before audio1.",
+				MarkdownDescription: "Input: COMBO. Default: \"after\". Options: \"after\", \"before\". Tooltip: Whether to append audio2 after or before audio1.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

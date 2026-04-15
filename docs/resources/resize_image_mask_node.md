@@ -18,7 +18,7 @@ Resize an image or mask using various scaling methods. [transform] Source: comfy
 ### Required
 
 - `input` (String) Input: COMFY_MATCHTYPE_V3.
-- `resize_type` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Select how to resize: by exact dimensions, scale factor, matching another image, etc.
+- `resize_type` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Select how to resize: by exact dimensions, scale factor, matching another image, etc. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--resize_type))
 - `scale_method` (String) Input: COMBO. Default: "area". Dynamic options are resolved by ComfyUI at runtime from: cls.scale_methods. Tooltip: Interpolation algorithm. 'area' is best for downscaling, 'lanczos' for upscaling, 'nearest-exact' for pixel art.
 
 ### Read-Only
@@ -26,3 +26,22 @@ Resize an image or mask using various scaling methods. [transform] Source: comfy
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `resized_output` (String) Output: COMFY_MATCHTYPE_V3 (slot 0).
+
+<a id="nestedatt--resize_type"></a>
+### Nested Schema for `resize_type`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `crop` (String) Input: COMBO. Default: "center". Dynamic options are resolved by ComfyUI at runtime from one of: cls.crop_methods. Tooltip: How to handle aspect ratio mismatch: 'disabled' stretches to fit, 'center' crops to maintain aspect ratio.
+- `height` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 1. Tooltip: Target height in pixels. Set to 0 to auto-calculate from width while preserving aspect ratio.
+- `longer_size` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 1. Tooltip: The longer edge will be resized to this value. Aspect ratio is preserved.
+- `match` (String) Input: COMFY_MULTITYPED_V3. Tooltip: Resize input to match the dimensions of this reference image or mask.
+- `megapixels` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.01 to 16.0. Step: 0.01. Tooltip: Target total megapixels (e.g., 1.0 ≈ 1024×1024). Aspect ratio is preserved.
+- `multiple` (Number) Input: INT. Default: 8. Minimum value: 1. Step: 1. Tooltip: Resize so width and height are divisible by this number. Useful for latent alignment (e.g., 8 or 64).
+- `multiplier` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.01 to 8.0. Step: 0.01. Tooltip: Scale factor (e.g., 2.0 doubles size, 0.5 halves size).
+- `shorter_size` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 1. Tooltip: The shorter edge will be resized to this value. Aspect ratio is preserved.
+- `width` (Number) Input: INT. Default: 512. Minimum value: 0. Step: 1. Tooltip: Target width in pixels. Set to 0 to auto-calculate from height while preserving aspect ratio.

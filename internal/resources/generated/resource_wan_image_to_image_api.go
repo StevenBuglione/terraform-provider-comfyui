@@ -83,7 +83,7 @@ func (r *WanImageToImageAPIResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"wan2.5-i2i-preview\". Tooltip: Model to use.",
+				MarkdownDescription: "Input: COMBO. Default: \"wan2.5-i2i-preview\". Options: \"wan2.5-i2i-preview\". Tooltip: Model to use.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

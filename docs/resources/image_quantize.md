@@ -18,7 +18,7 @@ ComfyUI Quantize node [image/postprocessing] Source: comfy_extras/nodes_post_pro
 ### Required
 
 - `colors` (Number) Input: INT. Default: 256. Allowed range: 1 to 256. Step: 1.
-- `dither` (String) Input: COMBO.
+- `dither` (String) Input: COMBO. Options: "none", "floyd-steinberg", "bayer-2", "bayer-4", "bayer-8", "bayer-16".
 - `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only

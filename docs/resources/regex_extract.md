@@ -20,7 +20,7 @@ ComfyUI RegexExtract node — Regex Extract [utils/string] Source: comfy_extras/
 - `case_insensitive` (Boolean) Input: BOOLEAN. Default: true.
 - `dotall` (Boolean) Input: BOOLEAN. Default: false.
 - `group_index` (Number) Input: INT. Default: 1. Allowed range: 0 to 100.
-- `mode` (String) Input: COMBO.
+- `mode` (String) Input: COMBO. Options: "First Match", "All Matches", "First Group", "All Groups".
 - `multiline` (Boolean) Input: BOOLEAN. Default: false.
 - `regex_pattern` (String) Input: STRING. Supports multiline text.
 - `string` (String) Input: STRING. Supports multiline text.

@@ -17,7 +17,7 @@ Extend an existing video with a seamless continuation based on a text prompt. [a
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for video extension.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for video extension. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Text description of what should happen next in the video.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 - `video` (String) Input: VIDEO. Link input. Tooltip: Source video to extend. MP4 format, 2-15 seconds.
@@ -27,3 +27,14 @@ Extend an existing video with a seamless continuation based on a text prompt. [a
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `duration` (Number) Input: INT. Default: 8. Allowed range: 2 to 10. Step: 1. Tooltip: Length of the extension in seconds.

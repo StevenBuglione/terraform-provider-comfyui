@@ -95,7 +95,7 @@ func (r *KsamplerAdvancedResource) Schema(_ context.Context, _ resource.SchemaRe
 				Required:            true,
 			},
 			"add_noise": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"enable\", \"disable\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -160,7 +160,7 @@ func (r *KsamplerAdvancedResource) Schema(_ context.Context, _ resource.SchemaRe
 				},
 			},
 			"return_with_leftover_noise": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"disable\", \"enable\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -17,7 +17,7 @@ ComfyUI VoxelToMesh node [3d] Source: comfy_extras/nodes_hunyuan3d.py:451 (v3_ex
 
 ### Required
 
-- `algorithm` (String) Input: COMBO.
+- `algorithm` (String) Input: COMBO. Options: "surface net", "basic".
 - `threshold` (Number) Input: FLOAT. Default: 0.6. Allowed range: -1.0 to 1.0. Step: 0.01.
 - `voxel` (String) Input: VOXEL. Link input.
 

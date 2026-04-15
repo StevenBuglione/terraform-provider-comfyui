@@ -84,7 +84,7 @@ func (r *LatentCutResource) Schema(_ context.Context, _ resource.SchemaRequest, 
 				Required:            true,
 			},
 			"dim": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"x\", \"y\", \"t\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

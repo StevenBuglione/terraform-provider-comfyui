@@ -22,7 +22,7 @@ ComfyUI TripoTextToModelNode node — Tripo: Text to Model [api node/3d/Tripo] H
 ### Optional
 
 - `face_limit` (Number) Input: INT. Default: -1. Allowed range: -1 to 2000000.
-- `geometry_quality` (String) Input: COMBO. Default: "standard".
+- `geometry_quality` (String) Input: COMBO. Default: "standard". Options: "standard", "detailed".
 - `image_seed` (Number) Input: INT. Default: 42.
 - `model_seed` (Number) Input: INT. Default: 42.
 - `model_version` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: TripoModelVersion.
@@ -31,7 +31,7 @@ ComfyUI TripoTextToModelNode node — Tripo: Text to Model [api node/3d/Tripo] H
 - `quad` (Boolean) Input: BOOLEAN. Default: false.
 - `style` (String) Input: COMBO. Default: "None". Dynamic options are resolved by ComfyUI at runtime from: TripoStyle.
 - `texture` (Boolean) Input: BOOLEAN. Default: true.
-- `texture_quality` (String) Input: COMBO. Default: "standard".
+- `texture_quality` (String) Input: COMBO. Default: "standard". Options: "standard", "detailed".
 - `texture_seed` (Number) Input: INT. Default: 42.
 
 ### Read-Only

@@ -18,7 +18,7 @@ ComfyUI UNETLoader node — Load Diffusion Model [advanced/loaders] Source: node
 ### Required
 
 - `unet_name` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: folder_paths.get_filename_list('diffusion_models').
-- `weight_dtype` (String) Input: COMBO.
+- `weight_dtype` (String) Input: COMBO. Options: "default", "fp8_e4m3fn", "fp8_e4m3fn_fast", "fp8_e5m2".
 
 ### Read-Only
 

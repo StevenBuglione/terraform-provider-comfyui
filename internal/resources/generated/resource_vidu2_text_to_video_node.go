@@ -84,7 +84,7 @@ func (r *Vidu2TextToVideoNodeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"viduq2\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -111,7 +111,7 @@ func (r *Vidu2TextToVideoNodeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"3:4\", \"4:3\", \"1:1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -124,7 +124,7 @@ func (r *Vidu2TextToVideoNodeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

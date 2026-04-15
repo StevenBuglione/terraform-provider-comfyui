@@ -29,7 +29,7 @@ type Vidu3ImageToVideoNodeResource struct {
 type Vidu3ImageToVideoNodeModel struct {
 	ID          types.String `tfsdk:"id"`
 	NodeID      types.String `tfsdk:"node_id"`
-	Model       types.String `tfsdk:"model"`
+	Model       types.Object `tfsdk:"model"`
 	Image       types.String `tfsdk:"image"`
 	Prompt      types.String `tfsdk:"prompt"`
 	Seed        types.Int64  `tfsdk:"seed"`
@@ -79,9 +79,27 @@ func (r *Vidu3ImageToVideoNodeResource) Schema(_ context.Context, _ resource.Sch
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation.",
+			"model": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"audio": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: When enabled, outputs video with sound (including dialogue and sound effects).",
+						Optional:            true,
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 5. Allowed range: 1 to 16. Step: 1. Tooltip: Duration of the output video in seconds.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\", \"2K\". Tooltip: Resolution of the output video.",
+						Optional:            true,
+					},
+				},
 			},
 			"image": schema.StringAttribute{
 				MarkdownDescription: "Input: IMAGE. Link input. Tooltip: An image to be used as the start frame of the generated video.",

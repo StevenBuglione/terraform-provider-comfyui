@@ -17,10 +17,10 @@ ComfyUI ImageToVideoWithAudio node — Kling 2.6 Image(First Frame) to Video wit
 
 ### Required
 
-- `duration` (String) Input: COMBO.
+- `duration` (String) Input: COMBO. Options: "5", "10".
 - `generate_audio` (Boolean) Input: BOOLEAN. Default: true.
-- `mode` (String) Input: COMBO.
-- `model_name` (String) Input: COMBO.
+- `mode` (String) Input: COMBO. Options: "pro".
+- `model_name` (String) Input: COMBO. Options: "kling-v2-6".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: Positive text prompt.
 - `start_frame` (String) Input: IMAGE. Link input.
 

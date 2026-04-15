@@ -85,7 +85,7 @@ func (r *ModelSamplingContinuousVResource) Schema(_ context.Context, _ resource.
 				Required:            true,
 			},
 			"sampling": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"v_prediction\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

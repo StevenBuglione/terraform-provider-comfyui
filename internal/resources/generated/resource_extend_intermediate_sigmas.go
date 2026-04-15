@@ -108,7 +108,7 @@ func (r *ExtendIntermediateSigmasResource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"spacing": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"linear\", \"cosine\", \"sine\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

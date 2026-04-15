@@ -18,6 +18,18 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
+### BREAKING CHANGES
+
+* Generated DynamicCombo node inputs that were previously authored as plain strings are now nested objects with a required `selection` field plus typed child inputs where ComfyUI exposes them. Existing configs must move the prior string value into `<input>.selection`.
+
+### DOCUMENTATION
+
+* Regenerate provider docs for nested DynamicCombo schemas and add migration guidance that steers users toward typed generated resources plus `comfyui_workflow.node_ids` instead of raw `workflow_json` escape hatches
+
+### BUG FIXES
+
+* Reject DynamicCombo child fields that are not valid for the selected option during plan-time validation instead of silently passing them through to assembled workflows
+
 ## [0.18.8] - 2026-04-13
 
 ### BUG FIXES

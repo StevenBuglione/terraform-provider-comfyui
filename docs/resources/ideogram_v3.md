@@ -25,10 +25,10 @@ Generates images using the Ideogram V3 model. Supports both regular image genera
 - `character_image` (String) Input: IMAGE. Link input. Tooltip: Image to use as character reference.
 - `character_mask` (String) Input: MASK. Link input. Tooltip: Optional mask for character reference image.
 - `image` (String) Input: IMAGE. Link input. Tooltip: Optional reference image for image editing.
-- `magic_prompt_option` (String) Input: COMBO. Default: "AUTO". Tooltip: Determine if MagicPrompt should be used in generation.
+- `magic_prompt_option` (String) Input: COMBO. Default: "AUTO". Options: "AUTO", "ON", "OFF". Tooltip: Determine if MagicPrompt should be used in generation.
 - `mask` (String) Input: MASK. Link input. Tooltip: Optional mask for inpainting (white areas will be replaced).
 - `num_images` (Number) Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1.
-- `rendering_speed` (String) Input: COMBO. Default: "DEFAULT". Tooltip: Controls the trade-off between generation speed and quality.
+- `rendering_speed` (String) Input: COMBO. Default: "DEFAULT". Options: "DEFAULT", "TURBO", "QUALITY". Tooltip: Controls the trade-off between generation speed and quality.
 - `resolution` (String) Input: COMBO. Default: "Auto". Dynamic options are resolved by ComfyUI at runtime from: V3_RESOLUTIONS. Tooltip: The resolution for image generation. If not set to Auto, this overrides the aspect_ratio setting.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1.
 

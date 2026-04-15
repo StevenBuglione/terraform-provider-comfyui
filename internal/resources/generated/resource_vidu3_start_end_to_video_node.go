@@ -29,7 +29,7 @@ type Vidu3StartEndToVideoNodeResource struct {
 type Vidu3StartEndToVideoNodeModel struct {
 	ID          types.String `tfsdk:"id"`
 	NodeID      types.String `tfsdk:"node_id"`
-	Model       types.String `tfsdk:"model"`
+	Model       types.Object `tfsdk:"model"`
 	FirstFrame  types.String `tfsdk:"first_frame"`
 	EndFrame    types.String `tfsdk:"end_frame"`
 	Prompt      types.String `tfsdk:"prompt"`
@@ -80,9 +80,27 @@ func (r *Vidu3StartEndToVideoNodeResource) Schema(_ context.Context, _ resource.
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation.",
+			"model": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"audio": schema.BoolAttribute{
+						MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: When enabled, outputs video with sound (including dialogue and sound effects).",
+						Optional:            true,
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 5. Allowed range: 1 to 16. Step: 1. Tooltip: Duration of the output video in seconds.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\". Tooltip: Resolution of the output video.",
+						Optional:            true,
+					},
+				},
 			},
 			"first_frame": schema.StringAttribute{
 				MarkdownDescription: "Input: IMAGE. Link input.",

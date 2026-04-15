@@ -82,7 +82,7 @@ func (r *ImageToMaskResource) Schema(_ context.Context, _ resource.SchemaRequest
 				Required:            true,
 			},
 			"channel": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"red\", \"green\", \"blue\", \"alpha\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

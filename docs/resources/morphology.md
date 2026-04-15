@@ -19,7 +19,7 @@ ComfyUI Morphology node — ImageMorphology [image/postprocessing] Source: comfy
 
 - `image` (String) Input: IMAGE. Link input.
 - `kernel_size` (Number) Input: INT. Default: 3. Allowed range: 3 to 999. Step: 1.
-- `operation` (String) Input: COMBO.
+- `operation` (String) Input: COMBO. Options: "erode", "dilate", "open", "close", "gradient", "bottom_hat", "top_hat".
 
 ### Read-Only
 

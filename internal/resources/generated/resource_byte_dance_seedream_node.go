@@ -118,7 +118,7 @@ func (r *ByteDanceSeedreamNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"sequential_image_generation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Group image generation mode. 'disabled' generates a single image. 'auto' lets the model decide whether to generate multiple related images (e.g., story scenes, character variations).",
+				MarkdownDescription: "Input: COMBO. Options: \"disabled\", \"auto\". Tooltip: Group image generation mode. 'disabled' generates a single image. 'auto' lets the model decide whether to generate multiple related images (e.g., story scenes, character variations).",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

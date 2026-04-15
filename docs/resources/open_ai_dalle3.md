@@ -21,10 +21,10 @@ Generates images synchronously via OpenAI's DALL·E 3 endpoint. [api node/image/
 
 ### Optional
 
-- `quality` (String) Input: COMBO. Default: "standard". Tooltip: Image quality.
+- `quality` (String) Input: COMBO. Default: "standard". Options: "standard", "hd". Tooltip: Image quality.
 - `seed` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: not implemented yet in backend.
-- `size` (String) Input: COMBO. Default: "1024x1024". Tooltip: Image size.
-- `style` (String) Input: COMBO. Default: "natural". Tooltip: Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images.
+- `size` (String) Input: COMBO. Default: "1024x1024". Options: "1024x1024", "1024x1792", "1792x1024". Tooltip: Image size.
+- `style` (String) Input: COMBO. Default: "natural". Options: "natural", "vivid". Tooltip: Vivid causes the model to lean towards generating hyper-real and dramatic images. Natural causes the model to produce more natural, less hyper-real looking images.
 
 ### Read-Only
 

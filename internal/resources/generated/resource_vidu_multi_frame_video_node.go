@@ -34,7 +34,7 @@ type ViduMultiFrameVideoNodeModel struct {
 	StartImage  types.String `tfsdk:"start_image"`
 	Seed        types.Int64  `tfsdk:"seed"`
 	Resolution  types.String `tfsdk:"resolution"`
-	Frames      types.String `tfsdk:"frames"`
+	Frames      types.Object `tfsdk:"frames"`
 	VideoOutput types.String `tfsdk:"video_output"`
 }
 
@@ -82,7 +82,7 @@ func (r *ViduMultiFrameVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"viduq2-pro\", \"viduq2-turbo\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -103,7 +103,7 @@ func (r *ViduMultiFrameVideoNodeResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -112,9 +112,15 @@ func (r *ViduMultiFrameVideoNodeResource) Schema(_ context.Context, _ resource.S
 					),
 				},
 			},
-			"frames": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of keyframe transitions (2-9).",
+			"frames": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of keyframe transitions (2-9). Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+				},
 			},
 			"video_output": schema.StringAttribute{
 				MarkdownDescription: "Output: VIDEO (slot 0).",

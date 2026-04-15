@@ -25,6 +25,35 @@ This provider is generated from the ComfyUI version pinned in this repo and curr
 - Expose normalized execution state through `comfyui_workflow`, `comfyui_job`, `comfyui_jobs`, `comfyui_queue`, and `comfyui_workflow_history`.
 - Manage uploaded inputs, local prompt/workspace/subgraph artifacts, and downloaded outputs through Terraform-managed resources.
 
+## DynamicCombo Schema Migration
+
+Some generated nodes now expose `COMFY_DYNAMICCOMBO_V3` inputs as nested objects instead of opaque strings. The required field is `selection`; any option-specific child inputs now live inside that same object and are documented in the generated resource page.
+
+Prefer this typed resource path with `comfyui_workflow.node_ids`. Keep raw `workflow_json` for importing existing prompt artifacts or for edge cases the generated schema still cannot model cleanly.
+
+The nested fields shown under a DynamicCombo input are a union across its options. The provider validates which child fields are required and allowed for the selected option and rejects fields from unselected options.
+
+WAN2-style migration example:
+
+```hcl
+resource "comfyui_wan2_text_to_video_api" "clip" {
+  model = {
+    selection       = "wan2.7-t2v"
+    prompt          = "cinematic storm over the ocean"
+    negative_prompt = ""
+    resolution      = "720P"
+    ratio           = "16:9"
+    duration        = 5
+  }
+
+  prompt_extend = true
+  seed          = 42
+  watermark     = false
+}
+```
+
+If you previously set `model = "wan2.7-t2v"`, move that value to `model.selection` and then populate the child fields required for that selection. Execute the node through `comfyui_workflow.node_ids` as the typed path; keep raw `workflow_json` for imports and true schema edge cases only.
+
 ## Provider Surface at a Glance
 
 | Surface | What it covers |

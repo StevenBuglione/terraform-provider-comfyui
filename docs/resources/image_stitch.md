@@ -21,10 +21,10 @@ Optional spacing can be added between images. [image/transform] Source: comfy_ex
 
 ### Required
 
-- `direction` (String) Input: COMBO. Default: "right".
+- `direction` (String) Input: COMBO. Default: "right". Options: "right", "down", "left", "up".
 - `image1` (String) Input: IMAGE. Link input.
 - `match_image_size` (Boolean) Input: BOOLEAN. Default: true.
-- `spacing_color` (String) Input: COMBO. Default: "white".
+- `spacing_color` (String) Input: COMBO. Default: "white". Options: "white", "black", "red", "green", "blue".
 - `spacing_width` (Number) Input: INT. Default: 0. Allowed range: 0 to 1024. Step: 2.
 
 ### Optional

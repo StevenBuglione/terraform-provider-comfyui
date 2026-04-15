@@ -17,7 +17,7 @@ ComfyUI StabilityTextToAudio node — Stability AI Text To Audio [api node/audio
 
 ### Required
 
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "stable-audio-2.5".
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text.
 
 ### Optional

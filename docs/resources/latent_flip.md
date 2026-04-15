@@ -17,7 +17,7 @@ ComfyUI LatentFlip node — Flip Latent [latent/transform] Source: nodes.py:1380
 
 ### Required
 
-- `flip_method` (String) Input: COMBO.
+- `flip_method` (String) Input: COMBO. Options: "x-axis: vertically", "y-axis: horizontally".
 - `samples` (String) Input: LATENT. Link input.
 
 ### Read-Only

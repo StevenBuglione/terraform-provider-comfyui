@@ -96,7 +96,7 @@ func (r *IdeogramV1Resource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Optional:            true,
 			},
 			"magic_prompt_option": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"AUTO\". Tooltip: Determine if MagicPrompt should be used in generation.",
+				MarkdownDescription: "Input: COMBO. Default: \"AUTO\". Options: \"AUTO\", \"ON\", \"OFF\". Tooltip: Determine if MagicPrompt should be used in generation.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

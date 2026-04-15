@@ -92,7 +92,7 @@ func (r *MoonvalleyTxt2VideoNodeResource) Schema(_ context.Context, _ resource.S
 				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"16:9 (1920 x 1080)\". Tooltip: Resolution of the output video.",
+				MarkdownDescription: "Input: COMBO. Default: \"16:9 (1920 x 1080)\". Options: \"16:9 (1920 x 1080)\", \"9:16 (1080 x 1920)\", \"1:1 (1152 x 1152)\", \"4:3 (1536 x 1152)\", \"3:4 (1152 x 1536)\", \"21:9 (2560 x 1080)\". Tooltip: Resolution of the output video.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

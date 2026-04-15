@@ -18,8 +18,8 @@ Boost image resolution and quality, upscaling photos to 4K or 8K for sharp, deta
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `model` (String) Input: COMBO.
-- `target_resolution` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "SeedVR2", "Ultimate".
+- `target_resolution` (String) Input: COMBO. Options: "2K", "4K", "8K".
 
 ### Read-Only
 

@@ -126,7 +126,7 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"timesignature": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"2\", \"3\", \"4\", \"6\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -138,7 +138,7 @@ func (r *TextEncodeAceStepAudio15Resource) Schema(_ context.Context, _ resource.
 				},
 			},
 			"language": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"en\", \"ja\", \"zh\", \"es\", \"de\", \"fr\", \"pt\", \"ru\", \"it\", \"nl\", \"pl\", \"tr\", \"vi\", \"cs\", \"fa\", \"id\", \"ko\", \"uk\", \"hu\", \"ar\", \"sv\", \"ro\", \"el\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -21,14 +21,14 @@ Generates images synchronously via OpenAI's GPT Image endpoint. [api node/image/
 
 ### Optional
 
-- `background` (String) Input: COMBO. Default: "auto". Tooltip: Return image with or without background.
+- `background` (String) Input: COMBO. Default: "auto". Options: "auto", "opaque", "transparent". Tooltip: Return image with or without background.
 - `image` (String) Input: IMAGE. Link input. Tooltip: Optional reference image for image editing.
 - `mask` (String) Input: MASK. Link input. Tooltip: Optional mask for inpainting (white areas will be replaced).
-- `model` (String) Input: COMBO. Default: "gpt-image-1.5".
+- `model` (String) Input: COMBO. Default: "gpt-image-1.5". Options: "gpt-image-1", "gpt-image-1.5".
 - `n` (Number) Input: INT. Default: 1. Allowed range: 1 to 8. Step: 1. Tooltip: How many images to generate.
-- `quality` (String) Input: COMBO. Default: "low". Tooltip: Image quality, affects cost and generation time.
+- `quality` (String) Input: COMBO. Default: "low". Options: "low", "medium", "high". Tooltip: Image quality, affects cost and generation time.
 - `seed` (Number) Input: INT. Default: 0. Minimum value: 0. Step: 1. Tooltip: not implemented yet in backend.
-- `size` (String) Input: COMBO. Default: "auto". Tooltip: Image size.
+- `size` (String) Input: COMBO. Default: "auto". Options: "auto", "1024x1024", "1024x1536", "1536x1024". Tooltip: Image size.
 
 ### Read-Only
 

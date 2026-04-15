@@ -17,7 +17,7 @@ Generates a video based on a text prompt. [api node/video/Wan] Hidden runtime in
 
 ### Required
 
-- `model` (String) Input: COMBO. Default: "wan2.6-t2v". Tooltip: Model to use.
+- `model` (String) Input: COMBO. Default: "wan2.6-t2v". Options: "wan2.5-t2v-preview", "wan2.6-t2v". Tooltip: Model to use.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.
 
 ### Optional
@@ -28,8 +28,8 @@ Generates a video based on a text prompt. [api node/video/Wan] Hidden runtime in
 - `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative prompt describing what to avoid.
 - `prompt_extend` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.
-- `shot_type` (String) Input: COMBO. Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts. This parameter takes effect only when prompt_extend is True.
-- `size` (String) Input: COMBO. Default: "720p: 1:1 (960x960)".
+- `shot_type` (String) Input: COMBO. Options: "single", "multi". Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts. This parameter takes effect only when prompt_extend is True.
+- `size` (String) Input: COMBO. Default: "720p: 1:1 (960x960)". Options: "480p: 1:1 (624x624)", "480p: 16:9 (832x480)", "480p: 9:16 (480x832)", "720p: 1:1 (960x960)", "720p: 16:9 (1280x720)", "720p: 9:16 (720x1280)", "720p: 4:3 (1088x832)", "720p: 3:4 (832x1088)", "1080p: 1:1 (1440x1440)", "1080p: 16:9 (1920x1080)", "1080p: 9:16 (1080x1920)", "1080p: 4:3 (1632x1248)", "1080p: 3:4 (1248x1632)".
 - `watermark` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add an AI-generated watermark to the result.
 
 ### Read-Only

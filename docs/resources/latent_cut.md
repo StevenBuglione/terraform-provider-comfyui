@@ -18,7 +18,7 @@ ComfyUI LatentCut node [latent/advanced] Source: comfy_extras/nodes_latent.py:17
 ### Required
 
 - `amount` (Number) Input: INT. Default: 1. Minimum value: 1. Step: 1.
-- `dim` (String) Input: COMBO.
+- `dim` (String) Input: COMBO. Options: "x", "y", "t".
 - `index` (Number) Input: INT. Default: 0. Step: 1.
 - `samples` (String) Input: LATENT. Link input.
 

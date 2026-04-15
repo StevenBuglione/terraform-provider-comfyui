@@ -84,7 +84,7 @@ func (r *KlingOmniProImageNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"model_name": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"kling-v3-omni\", \"kling-image-o1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -98,7 +98,7 @@ func (r *KlingOmniProImageNodeResource) Schema(_ context.Context, _ resource.Sch
 				Required:            true,
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"1K\", \"2K\", \"4K\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -109,7 +109,7 @@ func (r *KlingOmniProImageNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\", \"4:3\", \"3:4\", \"3:2\", \"2:3\", \"21:9\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -125,7 +125,7 @@ func (r *KlingOmniProImageNodeResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"series_amount": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Generate a series of images. Not supported for kling-image-o1.",
+				MarkdownDescription: "Input: COMBO. Options: \"disabled\", \"2\", \"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\". Tooltip: Generate a series of images. Not supported for kling-image-o1.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

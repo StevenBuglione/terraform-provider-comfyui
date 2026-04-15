@@ -113,7 +113,7 @@ func (r *HunyuanImageToVideoResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"guidance_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"v1 (concat)\", \"v2 (replace)\", \"custom\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

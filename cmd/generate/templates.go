@@ -267,6 +267,7 @@ package nodeschema
 type GeneratedNodeSchemaInput struct {
 	Name                 string
 	Type                 string
+	Required             bool
 	IsLinkType           bool
 	ValidationKind       string
 	InventoryKind        string
@@ -283,8 +284,14 @@ type GeneratedNodeSchemaInput struct {
 	Multiline            bool
 	DynamicOptions       bool
 	DynamicOptionsSource string
+	DynamicComboOptions  []GeneratedDynamicComboOption
 	Tooltip              string
 	DisplayName          string
+}
+
+type GeneratedDynamicComboOption struct {
+	Key    string
+	Inputs []GeneratedNodeSchemaInput
 }
 
 type GeneratedNodeSchemaHiddenInput struct {
@@ -319,6 +326,52 @@ const GeneratedNodeSchemaExtractedAt = "{{ .ExtractedAt }}"
 const GeneratedNodeSchemaComfyUIVersion = "{{ .ComfyUIVersion }}"
 const GeneratedNodeSchemaCount = {{ .TotalNodes }}
 
+{{- define "renderInput" }}
+			{
+				Name: "{{ .Name }}",
+				Type: "{{ .Type }}",
+				Required: {{ .Required }},
+				IsLinkType: {{ .IsLinkType }},
+				ValidationKind: {{ printf "%q" .ValidationKind }},
+				InventoryKind: {{ printf "%q" .InventoryKind }},
+				SupportsStrictPlanValidation: {{ .SupportsStrictPlanValidation }},
+				DefaultValue: {{ printf "%q" .DefaultValue }},
+				HasDefaultValue: {{ .HasDefaultValue }},
+				MinValue: {{ printf "%q" .MinValue }},
+				HasMinValue: {{ .HasMinValue }},
+				MaxValue: {{ printf "%q" .MaxValue }},
+				HasMaxValue: {{ .HasMaxValue }},
+				StepValue: {{ printf "%q" .StepValue }},
+				HasStepValue: {{ .HasStepValue }},
+				EnumValues: []string{
+{{- range .EnumValues }}
+					{{ printf "%q" . }},
+{{- end }}
+				},
+				Multiline: {{ .Multiline }},
+				DynamicOptions: {{ .DynamicOptions }},
+				DynamicOptionsSource: {{ printf "%q" .DynamicOptionsSource }},
+				DynamicComboOptions: []GeneratedDynamicComboOption{
+{{- range .DynamicComboOptions }}
+{{ template "renderDynamicComboOption" . }}
+{{- end }}
+				},
+				Tooltip: {{ printf "%q" .Tooltip }},
+				DisplayName: {{ printf "%q" .DisplayName }},
+			},
+{{- end }}
+
+{{- define "renderDynamicComboOption" }}
+					{
+						Key: {{ printf "%q" .Key }},
+						Inputs: []GeneratedNodeSchemaInput{
+{{- range .Inputs }}
+{{ template "renderInput" . }}
+{{- end }}
+						},
+					},
+{{- end }}
+
 var generatedNodeSchemas = map[string]GeneratedNodeSchema{
 {{- range .Nodes }}
 	"{{ .NodeType }}": {
@@ -332,62 +385,12 @@ var generatedNodeSchemas = map[string]GeneratedNodeSchema{
 		Experimental: {{ .Experimental }},
 		RequiredInputs: []GeneratedNodeSchemaInput{
 {{- range .RequiredInputs }}
-			{
-				Name: "{{ .Name }}",
-				Type: "{{ .Type }}",
-				IsLinkType: {{ .IsLinkType }},
-				ValidationKind: {{ printf "%q" .ValidationKind }},
-				InventoryKind: {{ printf "%q" .InventoryKind }},
-				SupportsStrictPlanValidation: {{ .SupportsStrictPlanValidation }},
-				DefaultValue: {{ printf "%q" .DefaultValue }},
-				HasDefaultValue: {{ .HasDefaultValue }},
-				MinValue: {{ printf "%q" .MinValue }},
-				HasMinValue: {{ .HasMinValue }},
-				MaxValue: {{ printf "%q" .MaxValue }},
-				HasMaxValue: {{ .HasMaxValue }},
-				StepValue: {{ printf "%q" .StepValue }},
-				HasStepValue: {{ .HasStepValue }},
-				EnumValues: []string{
-{{- range .EnumValues }}
-					{{ printf "%q" . }},
-{{- end }}
-				},
-				Multiline: {{ .Multiline }},
-				DynamicOptions: {{ .DynamicOptions }},
-				DynamicOptionsSource: {{ printf "%q" .DynamicOptionsSource }},
-				Tooltip: {{ printf "%q" .Tooltip }},
-				DisplayName: {{ printf "%q" .DisplayName }},
-			},
+{{ template "renderInput" . }}
 {{- end }}
 		},
 		OptionalInputs: []GeneratedNodeSchemaInput{
 {{- range .OptionalInputs }}
-			{
-				Name: "{{ .Name }}",
-				Type: "{{ .Type }}",
-				IsLinkType: {{ .IsLinkType }},
-				ValidationKind: {{ printf "%q" .ValidationKind }},
-				InventoryKind: {{ printf "%q" .InventoryKind }},
-				SupportsStrictPlanValidation: {{ .SupportsStrictPlanValidation }},
-				DefaultValue: {{ printf "%q" .DefaultValue }},
-				HasDefaultValue: {{ .HasDefaultValue }},
-				MinValue: {{ printf "%q" .MinValue }},
-				HasMinValue: {{ .HasMinValue }},
-				MaxValue: {{ printf "%q" .MaxValue }},
-				HasMaxValue: {{ .HasMaxValue }},
-				StepValue: {{ printf "%q" .StepValue }},
-				HasStepValue: {{ .HasStepValue }},
-				EnumValues: []string{
-{{- range .EnumValues }}
-					{{ printf "%q" . }},
-{{- end }}
-				},
-				Multiline: {{ .Multiline }},
-				DynamicOptions: {{ .DynamicOptions }},
-				DynamicOptionsSource: {{ printf "%q" .DynamicOptionsSource }},
-				Tooltip: {{ printf "%q" .Tooltip }},
-				DisplayName: {{ printf "%q" .DisplayName }},
-			},
+{{ template "renderInput" . }}
 {{- end }}
 		},
 		HiddenInputs: []GeneratedNodeSchemaHiddenInput{

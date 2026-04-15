@@ -17,7 +17,7 @@ Generates videos from text prompts using Google's Veo 2 API [api node/video/Veo]
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO. Default: "16:9". Tooltip: Aspect ratio of the output video.
+- `aspect_ratio` (String) Input: COMBO. Default: "16:9". Options: "16:9", "9:16". Tooltip: Aspect ratio of the output video.
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of the video.
 
 ### Optional
@@ -25,9 +25,9 @@ Generates videos from text prompts using Google's Veo 2 API [api node/video/Veo]
 - `duration_seconds` (Number) Input: INT. Default: 5. Allowed range: 5 to 8. Step: 1. Tooltip: Duration of the output video in seconds.
 - `enhance_prompt` (Boolean) Input: BOOLEAN. Default: true. Tooltip: Whether to enhance the prompt with AI assistance.
 - `image` (String) Input: IMAGE. Link input. Tooltip: Optional reference image to guide video generation.
-- `model` (String) Input: COMBO. Default: "veo-2.0-generate-001". Tooltip: Veo 2 model to use for video generation.
+- `model` (String) Input: COMBO. Default: "veo-2.0-generate-001". Options: "veo-2.0-generate-001". Tooltip: Veo 2 model to use for video generation.
 - `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Negative text prompt to guide what to avoid in the video.
-- `person_generation` (String) Input: COMBO. Default: "ALLOW". Tooltip: Whether to allow generating people in the video.
+- `person_generation` (String) Input: COMBO. Default: "ALLOW". Options: "ALLOW", "BLOCK". Tooltip: Whether to allow generating people in the video.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 4294967295. Step: 1. Tooltip: Seed for video generation (0 for random).
 
 ### Read-Only

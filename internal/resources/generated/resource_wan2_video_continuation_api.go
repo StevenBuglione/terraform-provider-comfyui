@@ -29,7 +29,7 @@ type Wan2VideoContinuationAPIResource struct {
 type Wan2VideoContinuationAPIModel struct {
 	ID           types.String `tfsdk:"id"`
 	NodeID       types.String `tfsdk:"node_id"`
-	Model        types.String `tfsdk:"model"`
+	Model        types.Object `tfsdk:"model"`
 	FirstCLIP    types.String `tfsdk:"first_clip"`
 	LastFrame    types.String `tfsdk:"last_frame"`
 	Seed         types.Int64  `tfsdk:"seed"`
@@ -81,9 +81,31 @@ func (r *Wan2VideoContinuationAPIResource) Schema(_ context.Context, _ resource.
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+			"model": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 5. Allowed range: 2 to 15. Step: 1. Tooltip: Total output duration in seconds. The model generates continuation to fill the remaining time after the input clip.",
+						Optional:            true,
+					},
+					"negative_prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Negative prompt describing what to avoid.",
+						Optional:            true,
+					},
+					"prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Prompt describing the elements and visual features. Supports English and Chinese.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"720P\", \"1080P\".",
+						Optional:            true,
+					},
+				},
 			},
 			"first_clip": schema.StringAttribute{
 				MarkdownDescription: "Input: VIDEO. Link input. Tooltip: Input video to continue from. Duration: 2s-10s. The output aspect ratio is derived from this video.",

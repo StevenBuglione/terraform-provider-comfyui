@@ -30,7 +30,7 @@ type GrokVideoReferenceNodeModel struct {
 	ID          types.String `tfsdk:"id"`
 	NodeID      types.String `tfsdk:"node_id"`
 	Prompt      types.String `tfsdk:"prompt"`
-	Model       types.String `tfsdk:"model"`
+	Model       types.Object `tfsdk:"model"`
 	Seed        types.Int64  `tfsdk:"seed"`
 	VideoOutput types.String `tfsdk:"video_output"`
 }
@@ -82,9 +82,31 @@ func (r *GrokVideoReferenceNodeResource) Schema(_ context.Context, _ resource.Sc
 				MarkdownDescription: "Input: STRING. Supports multiline text. Tooltip: Text description of the desired video.",
 				Required:            true,
 			},
-			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for video generation.",
+			"model": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: The model to use for video generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"aspect_ratio": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"4:3\", \"3:2\", \"1:1\", \"2:3\", \"3:4\", \"9:16\". Tooltip: The aspect ratio of the output video.",
+						Optional:            true,
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 6. Allowed range: 2 to 10. Step: 1. Tooltip: The duration of the output video in seconds.",
+						Optional:            true,
+					},
+					"reference_images": schema.StringAttribute{
+						MarkdownDescription: "Input: COMFY_AUTOGROW_V3. Tooltip: Up to 7 reference images to guide the video generation.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"480p\", \"720p\". Tooltip: The resolution of the output video.",
+						Optional:            true,
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.",

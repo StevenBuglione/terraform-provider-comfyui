@@ -101,7 +101,7 @@ func (r *StyleModelApplyResource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"strength_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"multiply\", \"attn_bias\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -17,7 +17,7 @@ ComfyUI ModelComputeDtype node — ModelComputeDtype [advanced/debug/model] Sour
 
 ### Required
 
-- `dtype` (String) Input: COMBO.
+- `dtype` (String) Input: COMBO. Options: "default", "fp32", "fp16", "bf16".
 - `model` (String) Input: MODEL. Link input.
 
 ### Read-Only

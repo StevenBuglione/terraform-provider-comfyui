@@ -18,7 +18,7 @@ ComfyUI AlignYourStepsScheduler node [sampling/custom_sampling/schedulers] Sourc
 ### Required
 
 - `denoise` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 1.0. Step: 0.01.
-- `model_type` (String) Input: COMBO.
+- `model_type` (String) Input: COMBO. Options: "SD1", "SDXL", "SVD".
 - `steps` (Number) Input: INT. Default: 10. Allowed range: 1 to 10000.
 
 ### Read-Only

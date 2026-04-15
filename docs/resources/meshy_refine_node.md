@@ -19,7 +19,7 @@ Refine a previously created draft model. [api node/3d/Meshy] Hidden runtime inpu
 
 - `enable_pbr` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Generate PBR Maps (metallic, roughness, normal) in addition to the base color. Note: this should be set to false when using Sculpture style, as Sculpture style generates its own set of PBR maps.
 - `meshy_task_id` (String) Input: MESHY_TASK_ID. Link input.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "latest".
 - `texture_prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Provide a text prompt to guide the texturing process. Maximum 600 characters. Cannot be used at the same time as 'texture_image'.
 
 ### Optional

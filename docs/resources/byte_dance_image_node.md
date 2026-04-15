@@ -18,7 +18,7 @@ description: |-
 ### Required
 
 - `height` (Number) Input: INT. Default: 1024. Allowed range: 512 to 2048. Step: 64. Tooltip: Custom height for image. Value is working only if `size_preset` is set to `Custom`.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "seedream-3-0-t2i-250415".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: The text prompt used to generate the image.
 - `size_preset` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Pick a recommended size. Select Custom to use the width and height below.
 - `width` (Number) Input: INT. Default: 1024. Allowed range: 512 to 2048. Step: 64. Tooltip: Custom width for image. Value is working only if `size_preset` is set to `Custom`.

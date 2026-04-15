@@ -18,7 +18,7 @@ ComfyUI StabilityAudioInpaint node — Stability AI Audio Inpaint [api node/audi
 ### Required
 
 - `audio` (String) Input: AUDIO. Link input. Tooltip: Audio must be between 6 and 190 seconds long.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "stable-audio-2.5".
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text.
 
 ### Optional

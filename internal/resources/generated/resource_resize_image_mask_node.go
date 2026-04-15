@@ -28,7 +28,7 @@ type ResizeImageMaskNodeModel struct {
 	ID            types.String `tfsdk:"id"`
 	NodeID        types.String `tfsdk:"node_id"`
 	Input         types.String `tfsdk:"input"`
-	ResizeType    types.String `tfsdk:"resize_type"`
+	ResizeType    types.Object `tfsdk:"resize_type"`
 	ScaleMethod   types.String `tfsdk:"scale_method"`
 	ResizedOutput types.String `tfsdk:"resized_output"`
 }
@@ -80,9 +80,51 @@ func (r *ResizeImageMaskNodeResource) Schema(_ context.Context, _ resource.Schem
 				MarkdownDescription: "Input: COMFY_MATCHTYPE_V3.",
 				Required:            true,
 			},
-			"resize_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Select how to resize: by exact dimensions, scale factor, matching another image, etc.",
+			"resize_type": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Select how to resize: by exact dimensions, scale factor, matching another image, etc. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"crop": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Default: \"center\". Dynamic options are resolved by ComfyUI at runtime from one of: cls.crop_methods. Tooltip: How to handle aspect ratio mismatch: 'disabled' stretches to fit, 'center' crops to maintain aspect ratio.",
+						Optional:            true,
+					},
+					"height": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 512. Minimum value: 0. Step: 1. Tooltip: Target height in pixels. Set to 0 to auto-calculate from width while preserving aspect ratio.",
+						Optional:            true,
+					},
+					"longer_size": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 512. Minimum value: 0. Step: 1. Tooltip: The longer edge will be resized to this value. Aspect ratio is preserved.",
+						Optional:            true,
+					},
+					"match": schema.StringAttribute{
+						MarkdownDescription: "Input: COMFY_MULTITYPED_V3. Tooltip: Resize input to match the dimensions of this reference image or mask.",
+						Optional:            true,
+					},
+					"megapixels": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.01 to 16.0. Step: 0.01. Tooltip: Target total megapixels (e.g., 1.0 ≈ 1024×1024). Aspect ratio is preserved.",
+						Optional:            true,
+					},
+					"multiple": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 8. Minimum value: 1. Step: 1. Tooltip: Resize so width and height are divisible by this number. Useful for latent alignment (e.g., 8 or 64).",
+						Optional:            true,
+					},
+					"multiplier": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 1.0. Allowed range: 0.01 to 8.0. Step: 0.01. Tooltip: Scale factor (e.g., 2.0 doubles size, 0.5 halves size).",
+						Optional:            true,
+					},
+					"shorter_size": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 512. Minimum value: 0. Step: 1. Tooltip: The shorter edge will be resized to this value. Aspect ratio is preserved.",
+						Optional:            true,
+					},
+					"width": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 512. Minimum value: 0. Step: 1. Tooltip: Target width in pixels. Set to 0 to auto-calculate from height while preserving aspect ratio.",
+						Optional:            true,
+					},
+				},
 			},
 			"scale_method": schema.StringAttribute{
 				MarkdownDescription: "Input: COMBO. Default: \"area\". Dynamic options are resolved by ComfyUI at runtime from: cls.scale_methods. Tooltip: Interpolation algorithm. 'area' is best for downscaling, 'lanczos' for upscaling, 'nearest-exact' for pixel art.",

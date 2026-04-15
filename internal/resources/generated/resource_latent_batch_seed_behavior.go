@@ -82,7 +82,7 @@ func (r *LatentBatchSeedBehaviorResource) Schema(_ context.Context, _ resource.S
 				Required:            true,
 			},
 			"seed_behavior": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"fixed\".",
+				MarkdownDescription: "Input: COMBO. Default: \"fixed\". Options: \"random\", \"fixed\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

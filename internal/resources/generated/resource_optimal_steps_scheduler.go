@@ -81,7 +81,7 @@ func (r *OptimalStepsSchedulerResource) Schema(_ context.Context, _ resource.Sch
 				},
 			},
 			"model_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"FLUX\", \"Wan\", \"Chroma\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

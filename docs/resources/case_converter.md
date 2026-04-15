@@ -17,7 +17,7 @@ ComfyUI CaseConverter node — Case Converter [utils/string] Source: comfy_extra
 
 ### Required
 
-- `mode` (String) Input: COMBO.
+- `mode` (String) Input: COMBO. Options: "UPPERCASE", "lowercase", "Capitalize", "Title Case".
 - `string` (String) Input: STRING. Supports multiline text.
 
 ### Read-Only

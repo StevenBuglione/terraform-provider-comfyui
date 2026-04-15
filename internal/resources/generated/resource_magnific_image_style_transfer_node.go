@@ -37,7 +37,7 @@ type MagnificImageStyleTransferNodeModel struct {
 	StructureStrength types.Int64  `tfsdk:"structure_strength"`
 	Flavor            types.String `tfsdk:"flavor"`
 	Engine            types.String `tfsdk:"engine"`
-	PortraitMode      types.String `tfsdk:"portrait_mode"`
+	PortraitMode      types.Object `tfsdk:"portrait_mode"`
 	FixedGeneration   types.Bool   `tfsdk:"fixed_generation"`
 	ImageOutput       types.String `tfsdk:"image_output"`
 }
@@ -112,7 +112,7 @@ func (r *MagnificImageStyleTransferNodeResource) Schema(_ context.Context, _ res
 				},
 			},
 			"flavor": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Style transfer flavor.",
+				MarkdownDescription: "Input: COMBO. Options: \"faithful\", \"gen_z\", \"psychedelia\", \"detaily\", \"clear\", \"donotstyle\", \"donotstyle_sharp\". Tooltip: Style transfer flavor.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -127,7 +127,7 @@ func (r *MagnificImageStyleTransferNodeResource) Schema(_ context.Context, _ res
 				},
 			},
 			"engine": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Processing engine selection.",
+				MarkdownDescription: "Input: COMBO. Options: \"balanced\", \"definio\", \"illusio\", \"3d_cartoon\", \"colorful_anime\", \"caricature\", \"real\", \"super_real\", \"softy\". Tooltip: Processing engine selection.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -143,9 +143,23 @@ func (r *MagnificImageStyleTransferNodeResource) Schema(_ context.Context, _ res
 					),
 				},
 			},
-			"portrait_mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Enable portrait mode for facial enhancements.",
+			"portrait_mode": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Enable portrait mode for facial enhancements. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"portrait_beautifier": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"none\", \"beautify_face\", \"beautify_face_max\". Tooltip: Facial beautification intensity on portraits.",
+						Optional:            true,
+					},
+					"portrait_style": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"standard\", \"pop\", \"super_pop\". Tooltip: Visual style applied to portrait images.",
+						Optional:            true,
+					},
+				},
 			},
 			"fixed_generation": schema.BoolAttribute{
 				MarkdownDescription: "Input: BOOLEAN. Default: true. Tooltip: When disabled, expect each generation to introduce a degree of randomness, leading to more diverse outcomes.",

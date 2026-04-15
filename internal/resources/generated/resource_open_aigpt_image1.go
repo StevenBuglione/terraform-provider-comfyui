@@ -94,7 +94,7 @@ func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaReq
 				Optional:            true,
 			},
 			"quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"low\". Tooltip: Image quality, affects cost and generation time.",
+				MarkdownDescription: "Input: COMBO. Default: \"low\". Options: \"low\", \"medium\", \"high\". Tooltip: Image quality, affects cost and generation time.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -105,7 +105,7 @@ func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"background": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: Return image with or without background.",
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Options: \"auto\", \"opaque\", \"transparent\". Tooltip: Return image with or without background.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -116,7 +116,7 @@ func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"size": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: Image size.",
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Options: \"auto\", \"1024x1024\", \"1024x1536\", \"1536x1024\". Tooltip: Image size.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -143,7 +143,7 @@ func (r *OpenAigptImage1Resource) Schema(_ context.Context, _ resource.SchemaReq
 				Optional:            true,
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"gpt-image-1.5\".",
+				MarkdownDescription: "Input: COMBO. Default: \"gpt-image-1.5\". Options: \"gpt-image-1\", \"gpt-image-1.5\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

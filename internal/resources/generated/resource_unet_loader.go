@@ -82,7 +82,7 @@ func (r *UnetLoaderResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"weight_dtype": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"default\", \"fp8_e4m3fn\", \"fp8_e4m3fn_fast\", \"fp8_e5m2\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

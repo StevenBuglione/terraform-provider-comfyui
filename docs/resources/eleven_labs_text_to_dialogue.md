@@ -17,11 +17,11 @@ Generate multi-speaker dialogue from text. Each dialogue entry has its own text 
 
 ### Required
 
-- `apply_text_normalization` (String) Input: COMBO. Tooltip: Text normalization mode. 'auto' lets the system decide, 'on' always applies normalization, 'off' skips it.
-- `inputs` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of dialogue entries.
+- `apply_text_normalization` (String) Input: COMBO. Options: "auto", "on", "off". Tooltip: Text normalization mode. 'auto' lets the system decide, 'on' always applies normalization, 'off' skips it.
+- `inputs` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Number of dialogue entries. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--inputs))
 - `language_code` (String) Input: STRING. Default: "". Tooltip: ISO-639-1 or ISO-639-3 language code (e.g., 'en', 'es', 'fra'). Leave empty for automatic detection.
-- `model` (String) Input: COMBO. Tooltip: Model to use for dialogue generation.
-- `output_format` (String) Input: COMBO. Tooltip: Audio output format.
+- `model` (String) Input: COMBO. Options: "eleven_v3". Tooltip: Model to use for dialogue generation.
+- `output_format` (String) Input: COMBO. Options: "mp3_44100_192", "opus_48000_192". Tooltip: Audio output format.
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 4294967295. Tooltip: Seed for reproducibility.
 - `stability` (Number) Input: FLOAT. Default: 0.5. Allowed range: 0.0 to 1.0. Step: 0.5. Tooltip: Voice stability. Lower values give broader emotional range, higher values produce more consistent but potentially monotonous speech.
 
@@ -30,3 +30,10 @@ Generate multi-speaker dialogue from text. Each dialogue entry has its own text 
 - `audio_output` (String) Output: AUDIO (slot 0).
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--inputs"></a>
+### Nested Schema for `inputs`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.

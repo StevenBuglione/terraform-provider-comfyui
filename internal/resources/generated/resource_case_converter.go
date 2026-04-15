@@ -82,7 +82,7 @@ func (r *CaseConverterResource) Schema(_ context.Context, _ resource.SchemaReque
 				Required:            true,
 			},
 			"mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"UPPERCASE\", \"lowercase\", \"Capitalize\", \"Title Case\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

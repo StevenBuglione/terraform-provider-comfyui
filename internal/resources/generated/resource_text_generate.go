@@ -33,7 +33,7 @@ type TextGenerateModel struct {
 	Prompt              types.String `tfsdk:"prompt"`
 	Image               types.String `tfsdk:"image"`
 	MaxLength           types.Int64  `tfsdk:"max_length"`
-	SamplingMode        types.String `tfsdk:"sampling_mode"`
+	SamplingMode        types.Object `tfsdk:"sampling_mode"`
 	GeneratedTextOutput types.String `tfsdk:"generated_text_output"`
 }
 
@@ -99,9 +99,39 @@ func (r *TextGenerateResource) Schema(_ context.Context, _ resource.SchemaReques
 					int64validator.Between(1, 2048),
 				},
 			},
-			"sampling_mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Display name: Sampling Mode. Dynamic options are resolved by ComfyUI at runtime from: sampling_options.",
+			"sampling_mode": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Display name: Sampling Mode. Dynamic options are resolved by ComfyUI at runtime from: sampling_options. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"min_p": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.05. Allowed range: 0.0 to 1.0. Step: 0.01.",
+						Optional:            true,
+					},
+					"repetition_penalty": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 1.05. Allowed range: 0.0 to 5.0. Step: 0.01.",
+						Optional:            true,
+					},
+					"seed": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 18446744073709551615.",
+						Optional:            true,
+					},
+					"temperature": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.7. Allowed range: 0.01 to 2.0. Step: 1e-06.",
+						Optional:            true,
+					},
+					"top_k": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 64. Allowed range: 0 to 1000.",
+						Optional:            true,
+					},
+					"top_p": schema.Float64Attribute{
+						MarkdownDescription: "Input: FLOAT. Default: 0.95. Allowed range: 0.0 to 1.0. Step: 0.01.",
+						Optional:            true,
+					},
+				},
 			},
 			"generated_text_output": schema.StringAttribute{
 				MarkdownDescription: "Output: STRING (slot 0).",

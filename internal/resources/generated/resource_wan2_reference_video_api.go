@@ -29,7 +29,7 @@ type Wan2ReferenceVideoAPIResource struct {
 type Wan2ReferenceVideoAPIModel struct {
 	ID          types.String `tfsdk:"id"`
 	NodeID      types.String `tfsdk:"node_id"`
-	Model       types.String `tfsdk:"model"`
+	Model       types.Object `tfsdk:"model"`
 	Seed        types.Int64  `tfsdk:"seed"`
 	Watermark   types.Bool   `tfsdk:"watermark"`
 	VideoOutput types.String `tfsdk:"video_output"`
@@ -78,9 +78,43 @@ func (r *Wan2ReferenceVideoAPIResource) Schema(_ context.Context, _ resource.Sch
 					stringplanmodifier.UseStateForUnknown(),
 				},
 			},
-			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.",
+			"model": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"duration": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 5. Allowed range: 2 to 10. Step: 1.",
+						Optional:            true,
+					},
+					"negative_prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Negative prompt describing what to avoid.",
+						Optional:            true,
+					},
+					"prompt": schema.StringAttribute{
+						MarkdownDescription: "Input: STRING. Default: \"\". Supports multiline text. Tooltip: Prompt describing the video. Use identifiers such as 'character1' and 'character2' to refer to the reference characters.",
+						Optional:            true,
+					},
+					"ratio": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\", \"4:3\", \"3:4\".",
+						Optional:            true,
+					},
+					"reference_images": schema.StringAttribute{
+						MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+						Optional:            true,
+					},
+					"reference_videos": schema.StringAttribute{
+						MarkdownDescription: "Input: COMFY_AUTOGROW_V3.",
+						Optional:            true,
+					},
+					"resolution": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"720P\", \"1080P\".",
+						Optional:            true,
+					},
+				},
 			},
 			"seed": schema.Int64Attribute{
 				MarkdownDescription: "Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed to use for generation.",

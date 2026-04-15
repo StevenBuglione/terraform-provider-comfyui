@@ -18,7 +18,7 @@ Skin enhancement for portraits with multiple processing modes. [api node/image/M
 ### Required
 
 - `image` (String) Input: IMAGE. Link input. Tooltip: The portrait image to enhance.
-- `mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Processing mode: creative for artistic enhancement, faithful for preserving original appearance, flexible for targeted optimization.
+- `mode` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Processing mode: creative for artistic enhancement, faithful for preserving original appearance, flexible for targeted optimization. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--mode))
 - `sharpen` (Number) Input: INT. Default: 0. Allowed range: 0 to 100. Tooltip: Sharpening intensity level.
 - `smart_grain` (Number) Input: INT. Default: 2. Allowed range: 0 to 100. Tooltip: Smart grain intensity level.
 
@@ -27,3 +27,15 @@ Skin enhancement for portraits with multiple processing modes. [api node/image/M
 - `id` (String) Unique identifier for this node instance.
 - `image_output` (String) Output: IMAGE (slot 0).
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--mode"></a>
+### Nested Schema for `mode`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `optimized_for` (String) Input: COMBO. Options: "enhance_skin", "improve_lighting", "enhance_everything", "transform_to_real", "no_make_up". Tooltip: Enhancement optimization target.
+- `skin_detail` (Number) Input: INT. Default: 80. Allowed range: 0 to 100. Tooltip: Skin detail enhancement level.

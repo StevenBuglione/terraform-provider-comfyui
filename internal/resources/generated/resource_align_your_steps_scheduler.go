@@ -81,7 +81,7 @@ func (r *AlignYourStepsSchedulerResource) Schema(_ context.Context, _ resource.S
 				},
 			},
 			"model_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"SD1\", \"SDXL\", \"SVD\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

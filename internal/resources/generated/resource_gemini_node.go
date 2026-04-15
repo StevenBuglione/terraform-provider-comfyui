@@ -89,7 +89,7 @@ func (r *GeminiNodeResource) Schema(_ context.Context, _ resource.SchemaRequest,
 				Required:            true,
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"gemini-3-1-pro\". Tooltip: The Gemini model to use for generating responses.",
+				MarkdownDescription: "Input: COMBO. Default: \"gemini-3-1-pro\". Options: \"gemini-2.5-pro-preview-05-06\", \"gemini-2.5-flash-preview-04-17\", \"gemini-2.5-pro\", \"gemini-2.5-flash\", \"gemini-3-pro-preview\", \"gemini-3-1-pro\", \"gemini-3-1-flash-lite\". Tooltip: The Gemini model to use for generating responses.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -86,7 +86,7 @@ func (r *SaveAudioOpusResource) Schema(_ context.Context, _ resource.SchemaReque
 				Required:            true,
 			},
 			"quality": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"128k\".",
+				MarkdownDescription: "Input: COMBO. Default: \"128k\". Options: \"64k\", \"96k\", \"128k\", \"192k\", \"320k\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

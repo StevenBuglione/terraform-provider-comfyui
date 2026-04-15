@@ -79,7 +79,7 @@ func (r *WavespeedImageUpscaleNodeResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"SeedVR2\", \"Ultimate\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -93,7 +93,7 @@ func (r *WavespeedImageUpscaleNodeResource) Schema(_ context.Context, _ resource
 				Required:            true,
 			},
 			"target_resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"2K\", \"4K\", \"8K\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

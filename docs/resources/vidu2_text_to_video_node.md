@@ -17,12 +17,12 @@ Generate video from a text prompt [api node/video/Vidu] Hidden runtime inputs: a
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO.
+- `aspect_ratio` (String) Input: COMBO. Options: "16:9", "9:16", "3:4", "4:3", "1:1".
 - `background_music` (Boolean) Input: BOOLEAN. Default: false. Tooltip: Whether to add background music to the generated video.
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 1 to 10. Step: 1.
-- `model` (String) Input: COMBO.
+- `model` (String) Input: COMBO. Options: "viduq2".
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A textual description for video generation, with a maximum length of 2000 characters.
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p".
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 
 ### Read-Only

@@ -37,7 +37,7 @@ type KlingOmniProFirstLastFrameNodeModel struct {
 	EndFrame        types.String `tfsdk:"end_frame"`
 	ReferenceImages types.String `tfsdk:"reference_images"`
 	Resolution      types.String `tfsdk:"resolution"`
-	Storyboards     types.String `tfsdk:"storyboards"`
+	Storyboards     types.Object `tfsdk:"storyboards"`
 	GenerateAudio   types.Bool   `tfsdk:"generate_audio"`
 	Seed            types.Int64  `tfsdk:"seed"`
 	VideoOutput     types.String `tfsdk:"video_output"`
@@ -87,7 +87,7 @@ func (r *KlingOmniProFirstLastFrameNodeResource) Schema(_ context.Context, _ res
 				},
 			},
 			"model_name": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"kling-v3-omni\", \"kling-video-o1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -120,7 +120,7 @@ func (r *KlingOmniProFirstLastFrameNodeResource) Schema(_ context.Context, _ res
 				Optional:            true,
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"1080p\", \"720p\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -129,9 +129,15 @@ func (r *KlingOmniProFirstLastFrameNodeResource) Schema(_ context.Context, _ res
 					),
 				},
 			},
-			"storyboards": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Only supported for kling-v3-omni.",
+			"storyboards": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Only supported for kling-v3-omni. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Optional:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+				},
 			},
 			"generate_audio": schema.BoolAttribute{
 				MarkdownDescription: "Input: BOOLEAN. Default: false. Tooltip: Generate audio for the video. Only supported for kling-v3-omni.",

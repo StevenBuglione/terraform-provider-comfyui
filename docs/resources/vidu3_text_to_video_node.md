@@ -17,7 +17,7 @@ Generate video from a text prompt. [api node/video/Vidu] Hidden runtime inputs: 
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for video generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A textual description for video generation, with a maximum length of 2000 characters.
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 
@@ -26,3 +26,17 @@ Generate video from a text prompt. [api node/video/Vidu] Hidden runtime inputs: 
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `aspect_ratio` (String) Input: COMBO. Options: "16:9", "9:16", "3:4", "4:3", "1:1". Tooltip: The aspect ratio of the output video.
+- `audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When enabled, outputs video with sound (including dialogue and sound effects).
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 1 to 16. Step: 1. Tooltip: Duration of the output video in seconds.
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p". Tooltip: Resolution of the output video.

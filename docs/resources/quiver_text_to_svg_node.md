@@ -17,7 +17,7 @@ Generate an SVG from a text prompt using Quiver AI. [api node/image/Quiver] Hidd
 
 ### Required
 
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for SVG generation.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model to use for SVG generation. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text description of the desired SVG output.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed to determine if node should re-run; actual results are nondeterministic regardless of seed.
 
@@ -31,3 +31,16 @@ Generate an SVG from a text prompt using Quiver AI. [api node/image/Quiver] Hidd
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `svg_output` (String) Output: SVG (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `presence_penalty` (Number) Input: FLOAT. Default: 0.0. Allowed range: -2.0 to 2.0. Step: 0.1. Tooltip: Token presence penalty.
+- `temperature` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 2.0. Step: 0.1. Tooltip: Randomness control. Higher values increase randomness.
+- `top_p` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.05 to 1.0. Step: 0.05. Tooltip: Nucleus sampling parameter.

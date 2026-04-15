@@ -20,7 +20,7 @@ ComfyUI StyleModelApply node — Apply Style Model [conditioning/style_model] So
 - `clip_vision_output` (String) Input: CLIP_VISION_OUTPUT. Link input.
 - `conditioning` (String) Input: CONDITIONING. Link input.
 - `strength` (Number) Input: FLOAT. Default: 1.0. Allowed range: 0.0 to 10.0. Step: 0.001.
-- `strength_type` (String) Input: COMBO.
+- `strength_type` (String) Input: COMBO. Options: "multiply", "attn_bias".
 - `style_model` (String) Input: STYLE_MODEL. Link input.
 
 ### Read-Only

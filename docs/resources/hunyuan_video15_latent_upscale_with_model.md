@@ -17,11 +17,11 @@ ComfyUI HunyuanVideo15LatentUpscaleWithModel node — Hunyuan Video 15 Latent Up
 
 ### Required
 
-- `crop` (String) Input: COMBO.
+- `crop` (String) Input: COMBO. Options: "disabled", "center".
 - `height` (Number) Input: INT. Default: 720. Allowed range: 0 to 16384. Step: 8.
 - `model` (String) Input: LATENT_UPSCALE_MODEL. Link input.
 - `samples` (String) Input: LATENT. Link input.
-- `upscale_method` (String) Input: COMBO. Default: "bilinear".
+- `upscale_method` (String) Input: COMBO. Default: "bilinear". Options: "nearest-exact", "bilinear", "area", "bicubic", "bislerp".
 - `width` (Number) Input: INT. Default: 1280. Allowed range: 0 to 16384. Step: 8.
 
 ### Read-Only

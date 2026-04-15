@@ -18,7 +18,7 @@ ComfyUI ImageRotate node — Image Rotate [image/transform] Source: comfy_extras
 ### Required
 
 - `image` (String) Input: IMAGE. Link input.
-- `rotation` (String) Input: COMBO.
+- `rotation` (String) Input: COMBO. Options: "none", "90 degrees", "180 degrees", "270 degrees".
 
 ### Read-Only
 

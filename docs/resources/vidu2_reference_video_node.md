@@ -17,13 +17,13 @@ Generate a video from multiple reference images and a prompt. [api node/video/Vi
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO.
+- `aspect_ratio` (String) Input: COMBO. Options: "16:9", "9:16", "4:3", "3:4", "1:1".
 - `audio` (Boolean) Input: BOOLEAN. Default: false. Tooltip: When enabled video will contain generated speech and background music based on the prompt.
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 1 to 10. Step: 1.
-- `model` (String) Input: COMBO.
-- `movement_amplitude` (String) Input: COMBO. Tooltip: The movement amplitude of objects in the frame.
+- `model` (String) Input: COMBO. Options: "viduq2".
+- `movement_amplitude` (String) Input: COMBO. Options: "auto", "small", "medium", "large". Tooltip: The movement amplitude of objects in the frame.
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: When enabled, the video will include generated speech and background music based on the prompt.
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "720p", "1080p".
 - `seed` (Number) Input: INT. Default: 1. Allowed range: 0 to 2147483647. Step: 1.
 - `subjects` (String) Input: COMFY_AUTOGROW_V3. Tooltip: For each subject, provide up to 3 reference images (7 images total across all subjects). Reference them in prompts via @subject{subject_id}.
 

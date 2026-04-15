@@ -109,7 +109,7 @@ func (r *GeminiImageNodeResource) Schema(_ context.Context, _ resource.SchemaReq
 				Optional:            true,
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"auto\". Tooltip: Defaults to matching the output image size to that of your input image, or otherwise generates 1:1 squares.",
+				MarkdownDescription: "Input: COMBO. Default: \"auto\". Options: \"auto\", \"1:1\", \"2:3\", \"3:2\", \"3:4\", \"4:3\", \"4:5\", \"5:4\", \"9:16\", \"16:9\", \"21:9\". Tooltip: Defaults to matching the output image size to that of your input image, or otherwise generates 1:1 squares.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -128,7 +128,7 @@ func (r *GeminiImageNodeResource) Schema(_ context.Context, _ resource.SchemaReq
 				},
 			},
 			"response_modalities": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.",
+				MarkdownDescription: "Input: COMBO. Options: \"IMAGE+TEXT\", \"IMAGE\". Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

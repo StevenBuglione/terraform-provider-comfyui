@@ -85,7 +85,7 @@ func (r *WanTextToImageAPIResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Model to use.",
+				MarkdownDescription: "Input: COMBO. Options: \"wan2.5-t2i-preview\". Tooltip: Model to use.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -18,7 +18,7 @@ ComfyUI LatentBatchSeedBehavior node [latent/advanced] Source: comfy_extras/node
 ### Required
 
 - `samples` (String) Input: LATENT. Link input.
-- `seed_behavior` (String) Input: COMBO. Default: "fixed".
+- `seed_behavior` (String) Input: COMBO. Default: "fixed". Options: "random", "fixed".
 
 ### Read-Only
 

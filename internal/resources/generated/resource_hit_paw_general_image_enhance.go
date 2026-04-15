@@ -80,7 +80,7 @@ func (r *HitPawGeneralImageEnhanceResource) Schema(_ context.Context, _ resource
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"generative_portrait\", \"generative\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -94,7 +94,7 @@ func (r *HitPawGeneralImageEnhanceResource) Schema(_ context.Context, _ resource
 				Required:            true,
 			},
 			"upscale_factor": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"1\", \"2\", \"4\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

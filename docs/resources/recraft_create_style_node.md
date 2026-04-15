@@ -18,7 +18,7 @@ Create a custom style from reference images. Upload 1-5 images to use as style r
 ### Required
 
 - `images` (String) Input: COMFY_AUTOGROW_V3.
-- `style` (String) Input: COMBO. Tooltip: The base style of the generated images.
+- `style` (String) Input: COMBO. Options: "realistic_image", "digital_illustration". Tooltip: The base style of the generated images.
 
 ### Read-Only
 

@@ -17,12 +17,12 @@ Professional-quality videos with customizable duration and resolution based on s
 
 ### Required
 
-- `duration` (String) Input: COMBO. Default: 8.
-- `fps` (String) Input: COMBO. Default: 25.
+- `duration` (String) Input: COMBO. Default: 8. Options: "6", "8", "10", "12", "14", "16", "18", "20".
+- `fps` (String) Input: COMBO. Default: 25. Options: "25", "50".
 - `image` (String) Input: IMAGE. Link input. Tooltip: First frame to be used for the video.
 - `model` (String) Input: COMBO. Dynamic options are resolved by ComfyUI at runtime from: list(MODELS_MAP.keys()).
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text.
-- `resolution` (String) Input: COMBO.
+- `resolution` (String) Input: COMBO. Options: "1920x1080", "2560x1440", "3840x2160".
 
 ### Optional
 

@@ -82,7 +82,7 @@ func (r *WavespeedFlashVsrNodeResource) Schema(_ context.Context, _ resource.Sch
 				Required:            true,
 			},
 			"target_resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"720p\", \"1080p\", \"2K\", \"4K\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -83,7 +83,7 @@ func (r *ImageScaleToMaxDimensionResource) Schema(_ context.Context, _ resource.
 				Required:            true,
 			},
 			"upscale_method": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"area\", \"lanczos\", \"bilinear\", \"nearest-exact\", \"bilinear\", \"bicubic\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

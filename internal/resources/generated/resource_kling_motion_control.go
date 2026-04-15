@@ -99,7 +99,7 @@ func (r *KlingMotionControlResource) Schema(_ context.Context, _ resource.Schema
 				Required:            true,
 			},
 			"character_orientation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Controls where the character's facing/orientation comes from.\nvideo: movements, expressions, camera moves, and orientation follow the motion reference video (other details via prompt).\nimage: movements and expressions still follow the motion reference video, but the character orientation matches the reference image (camera/other details via prompt).",
+				MarkdownDescription: "Input: COMBO. Options: \"video\", \"image\". Tooltip: Controls where the character's facing/orientation comes from.\nvideo: movements, expressions, camera moves, and orientation follow the motion reference video (other details via prompt).\nimage: movements and expressions still follow the motion reference video, but the character orientation matches the reference image (camera/other details via prompt).",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -109,7 +109,7 @@ func (r *KlingMotionControlResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"pro\", \"std\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -119,7 +119,7 @@ func (r *KlingMotionControlResource) Schema(_ context.Context, _ resource.Schema
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"kling-v3\", \"kling-v2-6\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -33,7 +33,7 @@ type MeshyTextToModelNodeModel struct {
 	Model             types.String `tfsdk:"model"`
 	Prompt            types.String `tfsdk:"prompt"`
 	Style             types.String `tfsdk:"style"`
-	ShouldRemesh      types.String `tfsdk:"should_remesh"`
+	ShouldRemesh      types.Object `tfsdk:"should_remesh"`
 	SymmetryMode      types.String `tfsdk:"symmetry_mode"`
 	PoseMode          types.String `tfsdk:"pose_mode"`
 	Seed              types.Int64  `tfsdk:"seed"`
@@ -87,7 +87,7 @@ func (r *MeshyTextToModelNodeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"latest\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -100,7 +100,7 @@ func (r *MeshyTextToModelNodeResource) Schema(_ context.Context, _ resource.Sche
 				Required:            true,
 			},
 			"style": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"realistic\", \"sculpture\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -109,12 +109,26 @@ func (r *MeshyTextToModelNodeResource) Schema(_ context.Context, _ resource.Sche
 					),
 				},
 			},
-			"should_remesh": schema.StringAttribute{
-				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: When set to false, returns an unprocessed triangular mesh.",
+			"should_remesh": schema.SingleNestedAttribute{
+				MarkdownDescription: "Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: When set to false, returns an unprocessed triangular mesh. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option.",
 				Required:            true,
+				Attributes: map[string]schema.Attribute{
+					"selection": schema.StringAttribute{
+						Required:            true,
+						MarkdownDescription: "Selected DynamicCombo option key.",
+					},
+					"target_polycount": schema.Int64Attribute{
+						MarkdownDescription: "Input: INT. Default: 300000. Allowed range: 100 to 300000.",
+						Optional:            true,
+					},
+					"topology": schema.StringAttribute{
+						MarkdownDescription: "Input: COMBO. Options: \"triangle\", \"quad\".",
+						Optional:            true,
+					},
+				},
 			},
 			"symmetry_mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"auto\", \"on\", \"off\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -125,7 +139,7 @@ func (r *MeshyTextToModelNodeResource) Schema(_ context.Context, _ resource.Sche
 				},
 			},
 			"pose_mode": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Specify the pose mode for the generated model.",
+				MarkdownDescription: "Input: COMBO. Options: \"\", \"A-pose\", \"T-pose\". Tooltip: Specify the pose mode for the generated model.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

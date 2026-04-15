@@ -18,7 +18,7 @@ ComfyUI CLIPVisionEncode node — CLIP Vision Encode [conditioning] Source: node
 ### Required
 
 - `clip_vision` (String) Input: CLIP_VISION. Link input.
-- `crop` (String) Input: COMBO.
+- `crop` (String) Input: COMBO. Options: "center", "none".
 - `image` (String) Input: IMAGE. Link input.
 
 ### Read-Only

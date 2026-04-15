@@ -17,11 +17,11 @@ Transfer the style from a reference image to your input image. [api node/image/M
 
 ### Required
 
-- `engine` (String) Input: COMBO. Tooltip: Processing engine selection.
+- `engine` (String) Input: COMBO. Options: "balanced", "definio", "illusio", "3d_cartoon", "colorful_anime", "caricature", "real", "super_real", "softy". Tooltip: Processing engine selection.
 - `fixed_generation` (Boolean) Input: BOOLEAN. Default: true. Tooltip: When disabled, expect each generation to introduce a degree of randomness, leading to more diverse outcomes.
-- `flavor` (String) Input: COMBO. Tooltip: Style transfer flavor.
+- `flavor` (String) Input: COMBO. Options: "faithful", "gen_z", "psychedelia", "detaily", "clear", "donotstyle", "donotstyle_sharp". Tooltip: Style transfer flavor.
 - `image` (String) Input: IMAGE. Link input. Tooltip: The image to apply style transfer to.
-- `portrait_mode` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Enable portrait mode for facial enhancements.
+- `portrait_mode` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Enable portrait mode for facial enhancements. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--portrait_mode))
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text.
 - `reference_image` (String) Input: IMAGE. Link input. Tooltip: The reference image to extract style from.
 - `structure_strength` (Number) Input: INT. Default: 50. Allowed range: 0 to 100. Tooltip: Maintains the structure of the original image.
@@ -32,3 +32,15 @@ Transfer the style from a reference image to your input image. [api node/image/M
 - `id` (String) Unique identifier for this node instance.
 - `image_output` (String) Output: IMAGE (slot 0).
 - `node_id` (String) ComfyUI node class type.
+
+<a id="nestedatt--portrait_mode"></a>
+### Nested Schema for `portrait_mode`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `portrait_beautifier` (String) Input: COMBO. Options: "none", "beautify_face", "beautify_face_max". Tooltip: Facial beautification intensity on portraits.
+- `portrait_style` (String) Input: COMBO. Options: "standard", "pop", "super_pop". Tooltip: Visual style applied to portrait images.

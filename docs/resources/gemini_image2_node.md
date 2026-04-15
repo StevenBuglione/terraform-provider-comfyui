@@ -17,11 +17,11 @@ Generate or edit images synchronously via Google Vertex API. [api node/image/Gem
 
 ### Required
 
-- `aspect_ratio` (String) Input: COMBO. Default: "auto". Tooltip: If set to 'auto', matches your input image's aspect ratio; if no image is provided, a 16:9 square is usually generated.
-- `model` (String) Input: COMBO.
+- `aspect_ratio` (String) Input: COMBO. Default: "auto". Options: "auto", "1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9". Tooltip: If set to 'auto', matches your input image's aspect ratio; if no image is provided, a 16:9 square is usually generated.
+- `model` (String) Input: COMBO. Options: "gemini-3-pro-image-preview", "Nano Banana 2 (Gemini 3.1 Flash Image)".
 - `prompt` (String) Input: STRING. Default: "". Supports multiline text. Tooltip: Text prompt describing the image to generate or the edits to apply. Include any constraints, styles, or details the model should follow.
-- `resolution` (String) Input: COMBO. Tooltip: Target output resolution. For 2K/4K the native Gemini upscaler is used.
-- `response_modalities` (String) Input: COMBO. Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.
+- `resolution` (String) Input: COMBO. Options: "1K", "2K", "4K". Tooltip: Target output resolution. For 2K/4K the native Gemini upscaler is used.
+- `response_modalities` (String) Input: COMBO. Options: "IMAGE+TEXT", "IMAGE". Tooltip: Choose 'IMAGE' for image-only output, or 'IMAGE+TEXT' to return both the generated image and a text response.
 - `seed` (Number) Input: INT. Default: 42. Allowed range: 0 to 18446744073709551615. Tooltip: When the seed is fixed to a specific value, the model makes a best effort to provide the same response for repeated requests. Deterministic output isn't guaranteed. Also, changing the model or parameter settings, such as the temperature, can cause variations in the response even when you use the same seed value. By default, a random seed value is used.
 
 ### Optional

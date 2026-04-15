@@ -88,7 +88,7 @@ func (r *WanTextToVideoAPIResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"wan2.6-t2v\". Tooltip: Model to use.",
+				MarkdownDescription: "Input: COMBO. Default: \"wan2.6-t2v\". Options: \"wan2.5-t2v-preview\", \"wan2.6-t2v\". Tooltip: Model to use.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -106,7 +106,7 @@ func (r *WanTextToVideoAPIResource) Schema(_ context.Context, _ resource.SchemaR
 				Optional:            true,
 			},
 			"size": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"720p: 1:1 (960x960)\".",
+				MarkdownDescription: "Input: COMBO. Default: \"720p: 1:1 (960x960)\". Options: \"480p: 1:1 (624x624)\", \"480p: 16:9 (832x480)\", \"480p: 9:16 (480x832)\", \"720p: 1:1 (960x960)\", \"720p: 16:9 (1280x720)\", \"720p: 9:16 (720x1280)\", \"720p: 4:3 (1088x832)\", \"720p: 3:4 (832x1088)\", \"1080p: 1:1 (1440x1440)\", \"1080p: 16:9 (1920x1080)\", \"1080p: 9:16 (1080x1920)\", \"1080p: 4:3 (1632x1248)\", \"1080p: 3:4 (1248x1632)\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -157,7 +157,7 @@ func (r *WanTextToVideoAPIResource) Schema(_ context.Context, _ resource.SchemaR
 				Optional:            true,
 			},
 			"shot_type": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts. This parameter takes effect only when prompt_extend is True.",
+				MarkdownDescription: "Input: COMBO. Options: \"single\", \"multi\". Tooltip: Specifies the shot type for the generated video, that is, whether the video is a single continuous shot or multiple shots with cuts. This parameter takes effect only when prompt_extend is True.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

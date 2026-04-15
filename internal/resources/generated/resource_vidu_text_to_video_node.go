@@ -84,7 +84,7 @@ func (r *ViduTextToVideoNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"model": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Model name.",
+				MarkdownDescription: "Input: COMBO. Options: \"viduq1\". Tooltip: Model name.",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -111,7 +111,7 @@ func (r *ViduTextToVideoNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The aspect ratio of the output video.",
+				MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\". Tooltip: The aspect ratio of the output video.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -122,7 +122,7 @@ func (r *ViduTextToVideoNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: Supported values may vary by model & duration.",
+				MarkdownDescription: "Input: COMBO. Options: \"1080p\". Tooltip: Supported values may vary by model & duration.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -131,7 +131,7 @@ func (r *ViduTextToVideoNodeResource) Schema(_ context.Context, _ resource.Schem
 				},
 			},
 			"movement_amplitude": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Tooltip: The movement amplitude of objects in the frame.",
+				MarkdownDescription: "Input: COMBO. Options: \"auto\", \"small\", \"medium\", \"large\". Tooltip: The movement amplitude of objects in the frame.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

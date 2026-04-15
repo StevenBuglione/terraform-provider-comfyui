@@ -17,10 +17,37 @@ ComfyUI DCTestNode node — DCTest [logic] Source: comfy_extras/nodes_logic.py:1
 
 ### Required
 
-- `combo` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime.
+- `combo` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--combo))
 
 ### Read-Only
 
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `unnamed_output` (String) Output: * (slot 0).
+
+<a id="nestedatt--combo"></a>
+### Nested Schema for `combo`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `image` (String) Input: IMAGE. Link input.
+- `integer` (Number) Input: INT.
+- `string` (String) Input: STRING.
+- `subcombo` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--combo--subcombo))
+
+<a id="nestedatt--combo--subcombo"></a>
+### Nested Schema for `combo.subcombo`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `float_x` (Number) Input: FLOAT.
+- `float_y` (Number) Input: FLOAT.
+- `mask1` (String) Input: MASK. Link input.

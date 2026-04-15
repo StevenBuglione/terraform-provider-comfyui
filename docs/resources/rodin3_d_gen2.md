@@ -22,8 +22,8 @@ ComfyUI Rodin3D_Gen2 node — Rodin 3D Generate - Gen-2 Generate [api node/3d/Ro
 
 ### Optional
 
-- `material_type` (String) Input: COMBO. Default: "PBR".
-- `polygon_count` (String) Input: COMBO. Default: "500K-Triangle".
+- `material_type` (String) Input: COMBO. Default: "PBR". Options: "PBR", "Shaded".
+- `polygon_count` (String) Input: COMBO. Default: "500K-Triangle". Options: "4K-Quad", "8K-Quad", "18K-Quad", "50K-Quad", "2K-Triangle", "20K-Triangle", "150K-Triangle", "500K-Triangle".
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 65535.
 
 ### Read-Only

@@ -19,14 +19,14 @@ Generate a video from start and end frames and a prompt [api node/video/Vidu] Hi
 
 - `end_frame` (String) Input: IMAGE. Link input. Tooltip: End frame.
 - `first_frame` (String) Input: IMAGE. Link input. Tooltip: Start frame.
-- `model` (String) Input: COMBO. Tooltip: Model name.
+- `model` (String) Input: COMBO. Options: "viduq1". Tooltip: Model name.
 
 ### Optional
 
 - `duration` (Number) Input: INT. Default: 5. Allowed range: 5 to 5. Step: 1. Tooltip: Duration of the output video in seconds.
-- `movement_amplitude` (String) Input: COMBO. Tooltip: The movement amplitude of objects in the frame.
+- `movement_amplitude` (String) Input: COMBO. Options: "auto", "small", "medium", "large". Tooltip: The movement amplitude of objects in the frame.
 - `prompt` (String) Input: STRING. Supports multiline text. Tooltip: A textual description for video generation.
-- `resolution` (String) Input: COMBO. Tooltip: Supported values may vary by model & duration.
+- `resolution` (String) Input: COMBO. Options: "1080p". Tooltip: Supported values may vary by model & duration.
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Step: 1. Tooltip: Seed for video generation (0 for random).
 
 ### Read-Only

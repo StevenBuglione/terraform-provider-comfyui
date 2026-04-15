@@ -91,7 +91,7 @@ func (r *OpenAiDalle2Resource) Schema(_ context.Context, _ resource.SchemaReques
 				Optional:            true,
 			},
 			"size": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO. Default: \"1024x1024\". Tooltip: Image size.",
+				MarkdownDescription: "Input: COMBO. Default: \"1024x1024\". Options: \"256x256\", \"512x512\", \"1024x1024\". Tooltip: Image size.",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

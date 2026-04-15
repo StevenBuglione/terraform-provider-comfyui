@@ -93,7 +93,7 @@ func (r *ResizeAndPadImageResource) Schema(_ context.Context, _ resource.SchemaR
 				Required:            true,
 			},
 			"padding_color": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"white\", \"black\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -103,7 +103,7 @@ func (r *ResizeAndPadImageResource) Schema(_ context.Context, _ resource.SchemaR
 				},
 			},
 			"interpolation": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"area\", \"bicubic\", \"nearest-exact\", \"bilinear\", \"lanczos\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

@@ -86,7 +86,7 @@ func (r *KlingOmniProVideoToVideoNodeResource) Schema(_ context.Context, _ resou
 				},
 			},
 			"model_name": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"kling-v3-omni\", \"kling-video-o1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -100,7 +100,7 @@ func (r *KlingOmniProVideoToVideoNodeResource) Schema(_ context.Context, _ resou
 				Required:            true,
 			},
 			"aspect_ratio": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"16:9\", \"9:16\", \"1:1\".",
 				Required:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(
@@ -130,7 +130,7 @@ func (r *KlingOmniProVideoToVideoNodeResource) Schema(_ context.Context, _ resou
 				Optional:            true,
 			},
 			"resolution": schema.StringAttribute{
-				MarkdownDescription: "Input: COMBO.",
+				MarkdownDescription: "Input: COMBO. Options: \"1080p\", \"720p\".",
 				Optional:            true,
 				Validators: []validator.String{
 					stringvalidator.OneOf(

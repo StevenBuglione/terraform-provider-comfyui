@@ -18,8 +18,8 @@ Generate videos with Kling V3. Supports text-to-video and image-to-video with op
 ### Required
 
 - `generate_audio` (Boolean) Input: BOOLEAN. Default: true.
-- `model` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model and generation settings.
-- `multi_shot` (String) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations.
+- `model` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Model and generation settings. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--model))
+- `multi_shot` (Attributes) Input: COMFY_DYNAMICCOMBO_V3. Dynamic options are resolved by ComfyUI at runtime. Tooltip: Generate a series of video segments with individual prompts and durations. Set `selection` to choose the active option. The nested fields below are a union across all options; the provider validates which child fields are required and allowed for the selected option. (see [below for nested schema](#nestedatt--multi_shot))
 - `seed` (Number) Input: INT. Default: 0. Allowed range: 0 to 2147483647. Tooltip: Seed controls whether the node should re-run; results are non-deterministic regardless of seed.
 
 ### Optional
@@ -31,3 +31,29 @@ Generate videos with Kling V3. Supports text-to-video and image-to-video with op
 - `id` (String) Unique identifier for this node instance.
 - `node_id` (String) ComfyUI node class type.
 - `video_output` (String) Output: VIDEO (slot 0).
+
+<a id="nestedatt--model"></a>
+### Nested Schema for `model`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `aspect_ratio` (String) Input: COMBO. Options: "16:9", "9:16", "1:1". Tooltip: Ignored in image-to-video mode.
+- `resolution` (String) Input: COMBO. Options: "1080p", "720p".
+
+
+<a id="nestedatt--multi_shot"></a>
+### Nested Schema for `multi_shot`
+
+Required:
+
+- `selection` (String) Selected DynamicCombo option key.
+
+Optional:
+
+- `duration` (Number) Input: INT. Default: 5. Allowed range: 3 to 15.
+- `negative_prompt` (String) Input: STRING. Default: "". Supports multiline text.
+- `prompt` (String) Input: STRING. Default: "". Supports multiline text.
