@@ -118,12 +118,13 @@ func extractInputsFromModel(classType string, model any) (map[string]interface{}
 			return nil, fmt.Errorf("field %q: %w", attrName, err)
 		}
 		if ok {
-			// If this input is a DynamicCombo, flatten the nested map to dotted keys.
-			if m, isMap := converted.(map[string]interface{}); isMap && isDynamicComboInput(classType, attrName) {
-				flattenDynamicComboInto(attrName, m, inputs)
-			} else {
-				inputs[attrName] = converted
+			if m, isMap := converted.(map[string]interface{}); isMap {
+				if parentInput, isDC := lookupDynamicComboInput(classType, attrName); isDC {
+					flattenDynamicComboInto(attrName, m, parentInput, inputs)
+					continue
+				}
 			}
+			inputs[attrName] = converted
 		}
 	}
 
@@ -229,29 +230,72 @@ func listValueToStrings(ctx context.Context, list basetypes.ListValue) ([]string
 	return ids, diags
 }
 
-// isDynamicComboInput reports whether the named input of classType is a DynamicCombo input.
-func isDynamicComboInput(classType, inputName string) bool {
+// lookupDynamicComboInput returns the GeneratedNodeSchemaInput for the named input of
+// classType if it is a COMFY_DYNAMICCOMBO_V3 input; returns false otherwise.
+func lookupDynamicComboInput(classType, inputName string) (nodeschema.GeneratedNodeSchemaInput, bool) {
 	schema, ok := nodeschema.LookupGeneratedNodeSchema(classType)
 	if !ok {
-		return false
+		return nodeschema.GeneratedNodeSchemaInput{}, false
 	}
 	for _, inp := range schema.RequiredInputs {
 		if inp.Name == inputName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
-			return true
+			return inp, true
 		}
 	}
 	for _, inp := range schema.OptionalInputs {
 		if inp.Name == inputName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
-			return true
+			return inp, true
 		}
 	}
-	return false
+	return nodeschema.GeneratedNodeSchemaInput{}, false
+}
+
+// isDynamicComboInput reports whether the named input of classType is a DynamicCombo input.
+func isDynamicComboInput(classType, inputName string) bool {
+	_, ok := lookupDynamicComboInput(classType, inputName)
+	return ok
+}
+
+// collectDynamicComboInputs returns a map of input name → GeneratedNodeSchemaInput for all
+// COMFY_DYNAMICCOMBO_V3 inputs of classType. Used to avoid repeated schema lookups in hot paths.
+func collectDynamicComboInputs(classType string) map[string]nodeschema.GeneratedNodeSchemaInput {
+	schema, ok := nodeschema.LookupGeneratedNodeSchema(classType)
+	if !ok {
+		return nil
+	}
+	result := make(map[string]nodeschema.GeneratedNodeSchemaInput)
+	for _, inp := range schema.RequiredInputs {
+		if inp.Type == "COMFY_DYNAMICCOMBO_V3" {
+			result[inp.Name] = inp
+		}
+	}
+	for _, inp := range schema.OptionalInputs {
+		if inp.Type == "COMFY_DYNAMICCOMBO_V3" {
+			result[inp.Name] = inp
+		}
+	}
+	return result
+}
+
+// findNestedDynamicComboInput searches the DynamicComboOptions of parent for a child input
+// named childName whose type is COMFY_DYNAMICCOMBO_V3. Returns the child input and true if found.
+func findNestedDynamicComboInput(parent nodeschema.GeneratedNodeSchemaInput, childName string) (nodeschema.GeneratedNodeSchemaInput, bool) {
+	for _, option := range parent.DynamicComboOptions {
+		for _, inp := range option.Inputs {
+			if inp.Name == childName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
+				return inp, true
+			}
+		}
+	}
+	return nodeschema.GeneratedNodeSchemaInput{}, false
 }
 
 // flattenDynamicComboInto expands a DynamicCombo map into target using dotted keys.
 // The "selection" key becomes target[inputName]; all other keys become target[inputName.childKey].
-// Returns the list of child keys (excluding the selection key) that were added.
-func flattenDynamicComboInto(inputName string, value map[string]interface{}, target map[string]interface{}) []string {
+// Nested DynamicCombo children (identified via parentInput's DynamicComboOptions) are
+// recursively flattened so every leaf maps to a fully-dotted prompt key.
+// Returns the list of all child keys (excluding the selection) that were added.
+func flattenDynamicComboInto(inputName string, value map[string]interface{}, parentInput nodeschema.GeneratedNodeSchemaInput, target map[string]interface{}) []string {
 	var childKeys []string
 	if selection, ok := value["selection"]; ok {
 		target[inputName] = selection
@@ -261,6 +305,16 @@ func flattenDynamicComboInto(inputName string, value map[string]interface{}, tar
 			continue
 		}
 		dotKey := inputName + "." + k
+		if childMap, isMap := v.(map[string]interface{}); isMap {
+			if childInput, isDC := findNestedDynamicComboInput(parentInput, k); isDC {
+				// Include the nested DC's own key (its selection is stored at dotKey)
+				// so callers can track it as a DynamicCombo child.
+				childKeys = append(childKeys, dotKey)
+				nested := flattenDynamicComboInto(dotKey, childMap, childInput, target)
+				childKeys = append(childKeys, nested...)
+				continue
+			}
+		}
 		target[dotKey] = v
 		childKeys = append(childKeys, dotKey)
 	}

@@ -3,6 +3,7 @@ package resources
 import (
 	"testing"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/nodeschema"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
@@ -196,5 +197,205 @@ func TestRegisterNodeStateFromModel_Wan2DynamicComboModelFlattensToPromptKeys(t 
 	}
 	if got.Inputs["model.duration"] != int64(5) {
 		t.Errorf("inputs[model.duration] = %#v, want int64(5)", got.Inputs["model.duration"])
+	}
+}
+
+// dcTestNodeComboAttrTypes matches the schema of DCTestNode.combo: the union of all
+// option children (string, integer, image, subcombo) plus the selection key.
+var dcTestNodeComboAttrTypes = map[string]attr.Type{
+	"selection": types.StringType,
+	"string":    types.StringType,
+	"integer":   types.Int64Type,
+	"image":     types.StringType,
+	"subcombo": types.ObjectType{
+		AttrTypes: map[string]attr.Type{
+			"selection": types.StringType,
+			"float_x":   types.Float64Type,
+			"float_y":   types.Float64Type,
+			"mask1":     types.StringType,
+		},
+	},
+}
+
+// dcTestNodeSubcomboAttrTypes are the attribute types for the subcombo nested object.
+var dcTestNodeSubcomboAttrTypes = map[string]attr.Type{
+	"selection": types.StringType,
+	"float_x":   types.Float64Type,
+	"float_y":   types.Float64Type,
+	"mask1":     types.StringType,
+}
+
+// TestFlattenDynamicComboInto_NestedDynamicComboFlattensRecursively proves that
+// flattenDynamicComboInto recursively expands a nested DynamicCombo child
+// (combo.subcombo) into dotted prompt keys (combo.subcombo, combo.subcombo.float_x, …)
+// rather than leaving the child value as a nested map.
+func TestFlattenDynamicComboInto_NestedDynamicComboFlattensRecursively(t *testing.T) {
+	comboInput, ok := nodeschema.LookupGeneratedNodeSchema("DCTestNode")
+	if !ok {
+		t.Fatal("expected generated schema for DCTestNode")
+	}
+	var parentInput nodeschema.GeneratedNodeSchemaInput
+	for _, inp := range comboInput.RequiredInputs {
+		if inp.Name == "combo" {
+			parentInput = inp
+			break
+		}
+	}
+	if parentInput.Name == "" {
+		t.Fatal("could not find 'combo' input in DCTestNode schema")
+	}
+
+	value := map[string]interface{}{
+		"selection": "option4",
+		"subcombo": map[string]interface{}{
+			"selection": "opt1",
+			"float_x":   float64(1.5),
+			"float_y":   float64(2.5),
+		},
+	}
+
+	target := make(map[string]interface{})
+	childKeys := flattenDynamicComboInto("combo", value, parentInput, target)
+
+	// "combo" must be the selection, not a nested map.
+	if target["combo"] != "option4" {
+		t.Errorf("target[combo] = %#v, want \"option4\"", target["combo"])
+	}
+	if _, isMap := target["combo"].(map[string]interface{}); isMap {
+		t.Error("target[combo] must not be a nested map")
+	}
+
+	// "combo.subcombo" must be the sub-selection, not a nested map.
+	if target["combo.subcombo"] != "opt1" {
+		t.Errorf("target[combo.subcombo] = %#v, want \"opt1\"", target["combo.subcombo"])
+	}
+	if _, isMap := target["combo.subcombo"].(map[string]interface{}); isMap {
+		t.Error("target[combo.subcombo] must not be a nested map; subcombo must also be flattened")
+	}
+
+	// Leaf fields of the nested DynamicCombo must be dotted keys.
+	if target["combo.subcombo.float_x"] != float64(1.5) {
+		t.Errorf("target[combo.subcombo.float_x] = %#v, want 1.5", target["combo.subcombo.float_x"])
+	}
+	if target["combo.subcombo.float_y"] != float64(2.5) {
+		t.Errorf("target[combo.subcombo.float_y] = %#v, want 2.5", target["combo.subcombo.float_y"])
+	}
+
+	// childKeys must include the nested leaf keys (not the nested map itself).
+	wantKeys := map[string]bool{
+		"combo.subcombo":         true,
+		"combo.subcombo.float_x": true,
+		"combo.subcombo.float_y": true,
+	}
+	for _, k := range childKeys {
+		if k == "combo.subcombo" && target["combo.subcombo"] != "opt1" {
+			t.Errorf("childKey combo.subcombo is present but target value is not the selection")
+		}
+	}
+	for want := range wantKeys {
+		found := false
+		for _, k := range childKeys {
+			if k == want {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("childKeys missing expected key %q; got %v", want, childKeys)
+		}
+	}
+}
+
+// TestRegisterNodeStateFromModel_DCTestNodeNestedDynamicComboFlattens exercises the
+// full registration path for DCTestNode with option4 selected (which contains a nested
+// COMFY_DYNAMICCOMBO_V3 child "subcombo").  All nested values must be fully flattened
+// into dotted prompt keys.
+func TestRegisterNodeStateFromModel_DCTestNodeNestedDynamicComboFlattens(t *testing.T) {
+	resetNodeStateRegistry()
+
+	const nodeID = "eeeeeeee-0000-0000-0000-000000000000"
+
+	subcomboObj := types.ObjectValueMust(dcTestNodeSubcomboAttrTypes, map[string]attr.Value{
+		"selection": types.StringValue("opt1"),
+		"float_x":   types.Float64Value(1.5),
+		"float_y":   types.Float64Value(2.5),
+		"mask1":     types.StringNull(),
+	})
+
+	comboObj := types.ObjectValueMust(dcTestNodeComboAttrTypes, map[string]attr.Value{
+		"selection": types.StringValue("option4"),
+		"string":    types.StringNull(),
+		"integer":   types.Int64Null(),
+		"image":     types.StringNull(),
+		"subcombo":  subcomboObj,
+	})
+
+	model := struct {
+		ID            types.String `tfsdk:"id"`
+		NodeID        types.String `tfsdk:"node_id"`
+		Combo         types.Object `tfsdk:"combo"`
+		UnnamedOutput types.String `tfsdk:"unnamed_output"`
+	}{
+		ID:            types.StringValue(nodeID),
+		NodeID:        types.StringValue("DCTestNode"),
+		Combo:         comboObj,
+		UnnamedOutput: types.StringValue(nodeID + ":0"),
+	}
+
+	if err := RegisterNodeStateFromModel(nodeID, "DCTestNode", model); err != nil {
+		t.Fatalf("RegisterNodeStateFromModel returned error: %v", err)
+	}
+
+	got, ok := LookupNodeState(nodeID)
+	if !ok {
+		t.Fatal("expected registered node state")
+	}
+
+	if got.Inputs["combo"] != "option4" {
+		t.Errorf("inputs[combo] = %#v, want \"option4\"", got.Inputs["combo"])
+	}
+	if _, isMap := got.Inputs["combo.subcombo"].(map[string]interface{}); isMap {
+		t.Error("inputs[combo.subcombo] must not be a nested map; nested DynamicCombo must be flattened")
+	}
+	if got.Inputs["combo.subcombo"] != "opt1" {
+		t.Errorf("inputs[combo.subcombo] = %#v, want \"opt1\"", got.Inputs["combo.subcombo"])
+	}
+	if got.Inputs["combo.subcombo.float_x"] != float64(1.5) {
+		t.Errorf("inputs[combo.subcombo.float_x] = %#v, want 1.5", got.Inputs["combo.subcombo.float_x"])
+	}
+	if got.Inputs["combo.subcombo.float_y"] != float64(2.5) {
+		t.Errorf("inputs[combo.subcombo.float_y] = %#v, want 2.5", got.Inputs["combo.subcombo.float_y"])
+	}
+}
+
+// TestFlattenDynamicComboInto_NonDynamicComboMapChildNotFlattened verifies that a
+// map-typed child that is NOT a DynamicCombo input (no schema entry) is stored as-is,
+// preserving existing behavior for non-DynamicCombo nested payloads.
+func TestFlattenDynamicComboInto_NonDynamicComboMapChildNotFlattened(t *testing.T) {
+	// Use a parent input with no DynamicComboOptions children (e.g. option1 which has STRING).
+	comboSchema, ok := nodeschema.LookupGeneratedNodeSchema("DCTestNode")
+	if !ok {
+		t.Fatal("expected generated schema for DCTestNode")
+	}
+	var parentInput nodeschema.GeneratedNodeSchemaInput
+	for _, inp := range comboSchema.RequiredInputs {
+		if inp.Name == "combo" {
+			parentInput = inp
+			break
+		}
+	}
+
+	// The value contains a plain map under key "extra_data" — not a DynamicCombo child.
+	// flattenDynamicComboInto must store it as-is, not attempt to recurse.
+	value := map[string]interface{}{
+		"selection":  "option1",
+		"extra_data": map[string]interface{}{"foo": "bar"},
+	}
+
+	target := make(map[string]interface{})
+	flattenDynamicComboInto("combo", value, parentInput, target)
+
+	if _, isMap := target["combo.extra_data"].(map[string]interface{}); !isMap {
+		t.Errorf("non-DynamicCombo map child must remain as nested map, got %T", target["combo.extra_data"])
 	}
 }

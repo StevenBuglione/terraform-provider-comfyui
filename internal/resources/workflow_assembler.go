@@ -48,29 +48,35 @@ func AssembleWorkflow(nodes []NodeState) (*AssembledWorkflow, error) {
 	for _, node := range nodes {
 		numericID := nodeMap[node.ID]
 
+		// Build a map of DynamicCombo input name → schema input once per node to avoid
+		// repeated linear schema lookups in the hot path below.
+		dcInputs := collectDynamicComboInputs(node.ClassType)
+
 		// Expand DynamicCombo nested maps to dotted keys before connection resolution.
 		// Track which keys came from DynamicCombo flattening so we can resolve their
 		// child values as nested (preserving empty strings required by ComfyUI).
 		flatInputs := make(map[string]interface{}, len(node.Inputs))
 		dynamicComboChildKeys := make(map[string]bool)
 		for key, value := range node.Inputs {
-			if m, isMap := value.(map[string]interface{}); isMap && isDynamicComboInput(node.ClassType, key) {
-				// Nested map: registry did not pre-flatten; expand here.
-				childKeys := flattenDynamicComboInto(key, m, flatInputs)
-				for _, ck := range childKeys {
-					dynamicComboChildKeys[ck] = true
-				}
-			} else {
-				flatInputs[key] = value
-				// Detect already-flattened DynamicCombo child keys produced by
-				// node_registry.go.  A dotted key like "model.negative_prompt" is a
-				// DynamicCombo child when the prefix ("model") is a DynamicCombo input
-				// for this class type.  These must be resolved as nested so that empty
-				// strings required by ComfyUI are preserved.
-				if dotIdx := strings.Index(key, "."); dotIdx > 0 {
-					if isDynamicComboInput(node.ClassType, key[:dotIdx]) {
-						dynamicComboChildKeys[key] = true
+			if m, isMap := value.(map[string]interface{}); isMap {
+				if parentInput, isDC := dcInputs[key]; isDC {
+					// Nested map: registry did not pre-flatten; expand here recursively.
+					childKeys := flattenDynamicComboInto(key, m, parentInput, flatInputs)
+					for _, ck := range childKeys {
+						dynamicComboChildKeys[ck] = true
 					}
+					continue
+				}
+			}
+			flatInputs[key] = value
+			// Detect already-flattened DynamicCombo child keys produced by
+			// node_registry.go.  A dotted key like "model.negative_prompt" is a
+			// DynamicCombo child when the prefix ("model") is a DynamicCombo input
+			// for this class type.  These must be resolved as nested so that empty
+			// strings required by ComfyUI are preserved.
+			if dotIdx := strings.Index(key, "."); dotIdx > 0 {
+				if _, isDC := dcInputs[key[:dotIdx]]; isDC {
+					dynamicComboChildKeys[key] = true
 				}
 			}
 		}
