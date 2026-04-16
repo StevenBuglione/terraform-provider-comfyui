@@ -18,6 +18,21 @@ Provider versions follow the **ComfyUI compatibility line** model:
 
 ## [Unreleased]
 
+## [0.18.11] - 2026-04-16
+
+Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
+
+### BUG FIXES
+
+* **Runtime-only DynamicCombo validation:** Honor `supports_strict_plan_validation` for generated DynamicCombo parents so Terraform plan no longer tries to prove WAN2-style runtime-only child inputs before execution
+* **DynamicCombo prompt serialization:** Flatten generated DynamicCombo objects into the dotted ComfyUI prompt keys expected by V3 API nodes, including nested combos, empty-string child values, and connection references
+
+### NOTES
+
+* Maintains ComfyUI `v0.18.5` compatibility
+* No new provider schema changes beyond the DynamicCombo object model introduced in `0.18.10`
+* Generated WAN2 resources no longer require the raw `workflow_json` workaround for this prompt-shape bug
+
 ## [0.18.10] - 2026-04-15
 
 Provider-only patch release for the ComfyUI `v0.18.5` compatibility line.
