@@ -755,3 +755,98 @@ func TestAssembleWorkflow_Wan2DynamicComboInputsAreFlattened(t *testing.T) {
 		t.Errorf("inputs[model.duration] = %#v, want int64(5)", wan2Inputs["model.duration"])
 	}
 }
+
+// TestAssembleWorkflow_PreFlattenedDynamicComboChildEmptyStringPreserved covers the
+// production path where node_registry.go has already flattened a DynamicCombo input
+// into dotted keys before AssembleWorkflow is called.  Empty-string child values
+// (e.g. model.negative_prompt = "") must survive assembly unchanged; they must NOT be
+// dropped by the top-level empty-string filter.
+//
+// This is distinct from TestAssembleWorkflow_Wan2DynamicComboInputsAreFlattened which
+// exercises the assembler receiving a still-nested map[string]interface{} DynamicCombo
+// value — the legacy / fallback path.
+func TestAssembleWorkflow_PreFlattenedDynamicComboChildEmptyStringPreserved(t *testing.T) {
+	imageLoaderID := "ffff0000-0000-0000-0000-000000000001"
+	wan2NodeID := "ffff0000-0000-0000-0000-000000000002"
+
+	// Inputs as produced by RegisterNodeStateFromModel after registry-time flattening:
+	// the DynamicCombo "model" input has already been expanded to dotted keys.
+	nodes := []NodeState{
+		{
+			ID:        imageLoaderID,
+			ClassType: "LoadImage",
+			Inputs: map[string]interface{}{
+				"image": "cat.jpg",
+			},
+		},
+		{
+			ID:        wan2NodeID,
+			ClassType: "Wan2ImageToVideoApi",
+			Inputs: map[string]interface{}{
+				// Pre-flattened DynamicCombo keys — output of node_registry.go
+				"model":                 "wan2.7-i2v",
+				"model.prompt":          "a cat running in slow motion",
+				"model.negative_prompt": "", // empty string must be preserved
+				"model.resolution":      "720P",
+				"model.duration":        int64(5),
+				// Connection ref to image loader
+				"first_frame": imageLoaderID + ":0",
+				"seed":        int64(42),
+			},
+		},
+	}
+
+	result, err := AssembleWorkflow(nodes)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var wan2Inputs map[string]interface{}
+	for _, entry := range result.Prompt {
+		node, ok := entry.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if node["class_type"] == "Wan2ImageToVideoApi" {
+			wan2Inputs, ok = node["inputs"].(map[string]interface{})
+			if !ok {
+				t.Fatal("expected wan2 inputs to be a map")
+			}
+			break
+		}
+	}
+	if wan2Inputs == nil {
+		t.Fatal("expected Wan2ImageToVideoApi node in assembled prompt")
+	}
+
+	// Selection key must be the bare string.
+	if wan2Inputs["model"] != "wan2.7-i2v" {
+		t.Errorf("inputs[model] = %#v, want \"wan2.7-i2v\"", wan2Inputs["model"])
+	}
+
+	// Child fields must be present as dotted-key entries.
+	if wan2Inputs["model.prompt"] != "a cat running in slow motion" {
+		t.Errorf("inputs[model.prompt] = %#v, want \"a cat running in slow motion\"", wan2Inputs["model.prompt"])
+	}
+
+	// Empty-string child value must NOT be dropped.
+	negPrompt, exists := wan2Inputs["model.negative_prompt"]
+	if !exists {
+		t.Error("inputs[model.negative_prompt] must be present (empty string must be preserved for DynamicCombo child)")
+	} else if negPrompt != "" {
+		t.Errorf("inputs[model.negative_prompt] = %#v, want \"\"", negPrompt)
+	}
+
+	if wan2Inputs["model.resolution"] != "720P" {
+		t.Errorf("inputs[model.resolution] = %#v, want \"720P\"", wan2Inputs["model.resolution"])
+	}
+	if wan2Inputs["model.duration"] != int64(5) {
+		t.Errorf("inputs[model.duration] = %#v, want int64(5)", wan2Inputs["model.duration"])
+	}
+
+	// Connection ref must resolve to [numericID, slotIndex].
+	firstFrame, ok := wan2Inputs["first_frame"].([]interface{})
+	if !ok || len(firstFrame) != 2 {
+		t.Fatalf("inputs[first_frame] = %#v, want [numericID, slotIndex]", wan2Inputs["first_frame"])
+	}
+}

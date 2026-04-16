@@ -55,12 +55,23 @@ func AssembleWorkflow(nodes []NodeState) (*AssembledWorkflow, error) {
 		dynamicComboChildKeys := make(map[string]bool)
 		for key, value := range node.Inputs {
 			if m, isMap := value.(map[string]interface{}); isMap && isDynamicComboInput(node.ClassType, key) {
+				// Nested map: registry did not pre-flatten; expand here.
 				childKeys := flattenDynamicComboInto(key, m, flatInputs)
 				for _, ck := range childKeys {
 					dynamicComboChildKeys[ck] = true
 				}
 			} else {
 				flatInputs[key] = value
+				// Detect already-flattened DynamicCombo child keys produced by
+				// node_registry.go.  A dotted key like "model.negative_prompt" is a
+				// DynamicCombo child when the prefix ("model") is a DynamicCombo input
+				// for this class type.  These must be resolved as nested so that empty
+				// strings required by ComfyUI are preserved.
+				if dotIdx := strings.Index(key, "."); dotIdx > 0 {
+					if isDynamicComboInput(node.ClassType, key[:dotIdx]) {
+						dynamicComboChildKeys[key] = true
+					}
+				}
 			}
 		}
 
