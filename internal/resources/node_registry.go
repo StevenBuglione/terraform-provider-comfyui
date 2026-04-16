@@ -250,12 +250,6 @@ func lookupDynamicComboInput(classType, inputName string) (nodeschema.GeneratedN
 	return nodeschema.GeneratedNodeSchemaInput{}, false
 }
 
-// isDynamicComboInput reports whether the named input of classType is a DynamicCombo input.
-func isDynamicComboInput(classType, inputName string) bool {
-	_, ok := lookupDynamicComboInput(classType, inputName)
-	return ok
-}
-
 // collectDynamicComboInputs returns a map of input name → GeneratedNodeSchemaInput for all
 // COMFY_DYNAMICCOMBO_V3 inputs of classType. Used to avoid repeated schema lookups in hot paths.
 func collectDynamicComboInputs(classType string) map[string]nodeschema.GeneratedNodeSchemaInput {
