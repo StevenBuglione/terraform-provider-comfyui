@@ -747,3 +747,88 @@ func TestAssembleWorkflow_PreFlattenedDynamicComboChildEmptyStringPreserved(t *t
 		t.Fatalf("inputs[first_frame] = %#v, want [numericID, slotIndex]", wan2Inputs["first_frame"])
 	}
 }
+
+// TestAssembleWorkflow_ConnectionRefInsideFlattenedDynamicComboChild proves that a
+// connection reference stored under a dotted DynamicCombo child key (e.g. "model.image")
+// is resolved to the [numericID, slotIndex] ComfyUI format, not kept as a raw UUID string.
+//
+// This covers the code path where dynamicComboChildKeys[key] == true and the value is a
+// connection ref — ensuring resolveInputValueRecursive handles both cases (empty strings
+// preserved AND connection refs resolved) for DynamicCombo children.
+func TestAssembleWorkflow_ConnectionRefInsideFlattenedDynamicComboChild(t *testing.T) {
+	imageLoaderID := "aaaa0001-0000-0000-0000-000000000001"
+	wan2NodeID := "aaaa0002-0000-0000-0000-000000000002"
+
+	nodes := []NodeState{
+		{
+			ID:        imageLoaderID,
+			ClassType: "LoadImage",
+			Inputs: map[string]interface{}{
+				"image": "frame.png",
+			},
+		},
+		{
+			ID:        wan2NodeID,
+			ClassType: "Wan2ImageToVideoApi",
+			Inputs: map[string]interface{}{
+				// Pre-flattened DynamicCombo: "model" selection + dotted children.
+				// model.image is a connection reference — not a plain string.
+				"model":                 "wan2.7-i2v",
+				"model.image":           imageLoaderID + ":0", // connection ref inside a DC child key
+				"model.prompt":          "a cat leaping",
+				"model.negative_prompt": "",
+				"model.resolution":      "720P",
+				"model.duration":        int64(5),
+				"seed":                  int64(1),
+			},
+		},
+	}
+
+	result, err := AssembleWorkflow(nodes)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var wan2Inputs map[string]interface{}
+	for _, entry := range result.Prompt {
+		node, ok := entry.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if node["class_type"] == "Wan2ImageToVideoApi" {
+			wan2Inputs, ok = node["inputs"].(map[string]interface{})
+			if !ok {
+				t.Fatal("expected wan2 inputs to be a map")
+			}
+			break
+		}
+	}
+	if wan2Inputs == nil {
+		t.Fatal("expected Wan2ImageToVideoApi node in assembled prompt")
+	}
+
+	// Selection must remain as a plain string.
+	if wan2Inputs["model"] != "wan2.7-i2v" {
+		t.Errorf("inputs[model] = %#v, want \"wan2.7-i2v\"", wan2Inputs["model"])
+	}
+
+	// Connection ref inside DynamicCombo child must resolve to [numericID, slotIndex].
+	imageRef, ok := wan2Inputs["model.image"].([]interface{})
+	if !ok || len(imageRef) != 2 {
+		t.Fatalf("inputs[model.image] = %#v, want [numericID, slotIndex] (connection ref inside DC child must resolve)", wan2Inputs["model.image"])
+	}
+	if imageRef[0] != "1" {
+		t.Errorf("inputs[model.image][0] = %#v, want \"1\" (numeric ID of LoadImage)", imageRef[0])
+	}
+	if imageRef[1] != 0 {
+		t.Errorf("inputs[model.image][1] = %#v, want 0 (slot index)", imageRef[1])
+	}
+
+	// Empty-string child must still be preserved.
+	negPrompt, exists := wan2Inputs["model.negative_prompt"]
+	if !exists {
+		t.Error("inputs[model.negative_prompt] must be present even when empty string (DC child invariant)")
+	} else if negPrompt != "" {
+		t.Errorf("inputs[model.negative_prompt] = %#v, want \"\"", negPrompt)
+	}
+}

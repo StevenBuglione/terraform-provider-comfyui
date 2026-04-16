@@ -326,6 +326,105 @@ func dcSubcomboObject(overrides map[string]attr.Value) types.Object {
 	return types.ObjectValueMust(dcSubcomboAttributeTypes, attributes)
 }
 
+// TestValidateDynamicInputs_StrictParentEnforcesRequiredChildren is the positive
+// counterpart to TestValidateDynamicInputs_DoesNotEnforceChildrenWhenParentStrictPlanValidationDisabled.
+// When a DynamicCombo input has SupportsStrictPlanValidation == true, missing required
+// children MUST produce a plan-time error so users get early feedback.
+//
+// No production node currently exposes strict+children in the generated schema, so
+// this test calls validateGeneratedInput directly with a hand-crafted input.
+func TestValidateDynamicInputs_StrictParentEnforcesRequiredChildren(t *testing.T) {
+	strictInput := nodeschema.GeneratedNodeSchemaInput{
+		Name:                         "model",
+		Type:                         "COMFY_DYNAMICCOMBO_V3",
+		Required:                     true,
+		SupportsStrictPlanValidation: true, // strict: missing children MUST error at plan time
+		DynamicComboOptions: []nodeschema.GeneratedDynamicComboOption{
+			{
+				Key: "option_a",
+				Inputs: []nodeschema.GeneratedNodeSchemaInput{
+					{
+						Name:                         "required_field",
+						Type:                         "STRING",
+						Required:                     true,
+						SupportsStrictPlanValidation: true,
+						ValidationKind:               "freeform",
+					},
+				},
+			},
+		},
+	}
+
+	// Object with selection "option_a" but no required_field value.
+	attrTypes := map[string]attr.Type{
+		"selection":      types.StringType,
+		"required_field": types.StringType,
+	}
+	value := types.ObjectValueMust(attrTypes, map[string]attr.Value{
+		"selection":      types.StringValue("option_a"),
+		"required_field": types.StringNull(), // missing required child
+	})
+
+	var diags diag.Diagnostics
+	validateGeneratedInput(context.Background(), nil, "error", strictInput, value, path.Root("model"), &diags)
+
+	if !diags.HasError() {
+		t.Fatal("expected a Missing DynamicCombo Field error for strict parent with missing required child, got no diagnostics")
+	}
+
+	found := false
+	for _, d := range diags {
+		if d.Summary() == "Missing DynamicCombo Field" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Fatalf("expected 'Missing DynamicCombo Field' diagnostic, got: %v", diags)
+	}
+}
+
+// TestValidateDynamicInputs_StrictParentAcceptsAllRequiredChildren verifies that a strict
+// DynamicCombo parent does NOT error when all required children are present.
+func TestValidateDynamicInputs_StrictParentAcceptsAllRequiredChildren(t *testing.T) {
+	strictInput := nodeschema.GeneratedNodeSchemaInput{
+		Name:                         "model",
+		Type:                         "COMFY_DYNAMICCOMBO_V3",
+		Required:                     true,
+		SupportsStrictPlanValidation: true,
+		DynamicComboOptions: []nodeschema.GeneratedDynamicComboOption{
+			{
+				Key: "option_a",
+				Inputs: []nodeschema.GeneratedNodeSchemaInput{
+					{
+						Name:                         "required_field",
+						Type:                         "STRING",
+						Required:                     true,
+						SupportsStrictPlanValidation: true,
+						ValidationKind:               "freeform",
+					},
+				},
+			},
+		},
+	}
+
+	attrTypes := map[string]attr.Type{
+		"selection":      types.StringType,
+		"required_field": types.StringType,
+	}
+	value := types.ObjectValueMust(attrTypes, map[string]attr.Value{
+		"selection":      types.StringValue("option_a"),
+		"required_field": types.StringValue("my value"), // present
+	})
+
+	var diags diag.Diagnostics
+	validateGeneratedInput(context.Background(), nil, "error", strictInput, value, path.Root("model"), &diags)
+
+	if diags.HasError() {
+		t.Fatalf("expected no diagnostics when all required children are present, got: %v", diags)
+	}
+}
+
 func assertDiagnosticPath(t *testing.T, diagnostic diag.Diagnostic, want path.Path) {
 	t.Helper()
 

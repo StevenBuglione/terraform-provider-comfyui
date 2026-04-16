@@ -1,6 +1,7 @@
 package resources
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/nodeschema"
@@ -397,5 +398,90 @@ func TestFlattenDynamicComboInto_NonDynamicComboMapChildNotFlattened(t *testing.
 
 	if _, isMap := target["combo.extra_data"].(map[string]interface{}); !isMap {
 		t.Errorf("non-DynamicCombo map child must remain as nested map, got %T", target["combo.extra_data"])
+	}
+}
+
+// TestFlattenDynamicComboInto_NullSelectionOmitsParentKey documents the invariant that
+// when the "selection" key is absent from the DynamicCombo map (because the user left
+// it null and terraformValueToNative skipped it), flattenDynamicComboInto must NOT add
+// any entry for the parent input key.  Terraform schema guarantees selection is required
+// for strict nodes; for non-strict nodes the entire object will typically be null and
+// extractInputsFromModel skips it entirely before flattenDynamicComboInto is called.
+//
+// This test documents the current invariant so that future refactors don't silently
+// regress to writing an empty-string or nil entry for the parent key.
+func TestFlattenDynamicComboInto_NullSelectionOmitsParentKey(t *testing.T) {
+	comboSchema, ok := nodeschema.LookupGeneratedNodeSchema("DCTestNode")
+	if !ok {
+		t.Fatal("expected generated schema for DCTestNode")
+	}
+	var parentInput nodeschema.GeneratedNodeSchemaInput
+	for _, inp := range comboSchema.RequiredInputs {
+		if inp.Name == "combo" {
+			parentInput = inp
+			break
+		}
+	}
+
+	// terraformValueToNative skips null attributes, so "selection" is absent.
+	value := map[string]interface{}{
+		"string": "hello", // child present but no selection
+	}
+
+	target := make(map[string]interface{})
+	flattenDynamicComboInto("combo", value, parentInput, target)
+
+	if _, exists := target["combo"]; exists {
+		t.Errorf("parent key \"combo\" must not be written when selection is absent, got %#v", target["combo"])
+	}
+	// The child key is still written with a dotted path.
+	if target["combo.string"] != "hello" {
+		t.Errorf("combo.string = %#v, want \"hello\"", target["combo.string"])
+	}
+}
+
+// TestRegisterNodeStateFromModel_Wan2DynamicCombo_NullObjectSkipped documents that when
+// the entire DynamicCombo Object field is null (not just individual children), the
+// extractInputsFromModel path omits it entirely — the inputs map must not contain the
+// parent key or any dotted child key for that field.
+func TestRegisterNodeStateFromModel_Wan2DynamicCombo_NullObjectSkipped(t *testing.T) {
+	model := struct {
+		ID           types.String `tfsdk:"id"`
+		NodeID       types.String `tfsdk:"node_id"`
+		Model        types.Object `tfsdk:"model"`
+		FirstFrame   types.String `tfsdk:"first_frame"`
+		LastFrame    types.String `tfsdk:"last_frame"`
+		Audio        types.String `tfsdk:"audio"`
+		Seed         types.Int64  `tfsdk:"seed"`
+		PromptExtend types.Bool   `tfsdk:"prompt_extend"`
+		Watermark    types.Bool   `tfsdk:"watermark"`
+		VideoOutput  types.String `tfsdk:"video_output"`
+	}{
+		Model: types.ObjectNull(map[string]attr.Type{
+			"selection":       types.StringType,
+			"prompt":          types.StringType,
+			"negative_prompt": types.StringType,
+			"resolution":      types.StringType,
+			"duration":        types.Int64Type,
+		}),
+		FirstFrame:   types.StringValue("bbbbbbbb-0000-0000-0000-000000000000:0"),
+		Seed:         types.Int64Value(42),
+		PromptExtend: types.BoolValue(false),
+		Watermark:    types.BoolValue(false),
+	}
+
+	inputs, err := extractInputsFromModel("Wan2ImageToVideoApi", model)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	for key := range inputs {
+		if key == "model" || strings.HasPrefix(key, "model.") {
+			t.Errorf("null DynamicCombo object must not produce any model/* keys in inputs, found %q", key)
+		}
+	}
+
+	if inputs["first_frame"] != "bbbbbbbb-0000-0000-0000-000000000000:0" {
+		t.Errorf("first_frame = %#v, want connection ref string", inputs["first_frame"])
 	}
 }
