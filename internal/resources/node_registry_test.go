@@ -71,6 +71,7 @@ func TestLookupDynamicComboInput_SanitizedNameMatchesRawName(t *testing.T) {
 			{Name: "my combo input", Type: "COMFY_DYNAMICCOMBO_V3"},
 		},
 	})
+	t.Cleanup(func() { nodeschema.DeleteForTest(testNodeType) })
 
 	// "my combo input" sanitizes to "my_combo_input".
 	got, ok := lookupDynamicComboInput(testNodeType, "my_combo_input")
@@ -96,6 +97,7 @@ func TestCollectDynamicComboInputs_KeyedBySanitizedName(t *testing.T) {
 			{Name: "1st optional combo", Type: "COMFY_DYNAMICCOMBO_V3"},
 		},
 	})
+	t.Cleanup(func() { nodeschema.DeleteForTest(testNodeType) })
 
 	dcMap := collectDynamicComboInputs(testNodeType)
 

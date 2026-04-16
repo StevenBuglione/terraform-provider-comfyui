@@ -8,8 +8,6 @@ import (
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources"
 	"github.com/StevenBuglione/terraform-provider-comfyui/internal/resources/generated"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
-	"github.com/hashicorp/terraform-plugin-framework/diag"
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	frameworkresource "github.com/hashicorp/terraform-plugin-framework/resource"
 	resourceschema "github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -155,20 +153,4 @@ func TestWan2ImageToVideoAPIValidation_AcceptsSelectionOnlyWhenStrictPlanValidat
 	if diags.HasError() {
 		t.Fatalf("expected no diagnostics when parent SupportsStrictPlanValidation is false, got: %v", diags)
 	}
-}
-
-func assertDiagnosticPathPresent(t *testing.T, diags diag.Diagnostics, want path.Path) {
-	t.Helper()
-
-	for _, diagnostic := range diags {
-		withPath, ok := diagnostic.(diag.DiagnosticWithPath)
-		if !ok {
-			continue
-		}
-		if withPath.Path().Equal(want) {
-			return
-		}
-	}
-
-	t.Fatalf("expected diagnostic for path %s, got %v", want, diags)
 }
