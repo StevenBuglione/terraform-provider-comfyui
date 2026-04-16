@@ -269,6 +269,32 @@ func TestValidateDynamicInputs_IgnoresUnsupportedDynamicExpressionWhenConfigured
 	}
 }
 
+// TestValidateDynamicInputs_DoesNotEnforceChildrenWhenParentStrictPlanValidationDisabled
+// documents the regression: when a DynamicCombo parent input has
+// SupportsStrictPlanValidation == false, required child fields must NOT be enforced
+// at plan time, because their values are only resolved at runtime.
+//
+// DCTestNode.combo already has SupportsStrictPlanValidation: false in the generated schema,
+// so this test exercises the same code path as the WAN2 nodes.
+//
+// This test FAILS before the fix: the validator currently checks required children
+// regardless of the parent's SupportsStrictPlanValidation flag.
+func TestValidateDynamicInputs_DoesNotEnforceChildrenWhenParentStrictPlanValidationDisabled(t *testing.T) {
+	// option1 requires the "string" child field, but since the parent combo has
+	// SupportsStrictPlanValidation == false, omitting it should produce no errors.
+	model := dcTestNodeModel{
+		Combo: dcComboObject(map[string]attr.Value{
+			"selection": types.StringValue("option1"),
+			// "string" is intentionally omitted (null)
+		}),
+	}
+
+	diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "DCTestNode", model)
+	if diags.HasError() {
+		t.Fatalf("expected no diagnostics when parent SupportsStrictPlanValidation is false, got: %v", diags)
+	}
+}
+
 func dcComboObject(overrides map[string]attr.Value) types.Object {
 	attributes := map[string]attr.Value{
 		"selection": types.StringNull(),

@@ -24,6 +24,14 @@ var wan2TextToVideoModelAttributeTypes = map[string]attr.Type{
 	"duration":        types.Int64Type,
 }
 
+var wan2ImageToVideoModelAttributeTypes = map[string]attr.Type{
+	"selection":       types.StringType,
+	"prompt":          types.StringType,
+	"negative_prompt": types.StringType,
+	"resolution":      types.StringType,
+	"duration":        types.Int64Type,
+}
+
 func TestWan2TextToVideoAPIResourceSchema_ModelUsesNestedDynamicCombo(t *testing.T) {
 	r := generated.NewWan2TextToVideoAPIResource()
 
@@ -109,6 +117,46 @@ func wan2TextToVideoModelObject(overrides map[string]attr.Value) types.Object {
 		attributes[key] = value
 	}
 	return types.ObjectValueMust(wan2TextToVideoModelAttributeTypes, attributes)
+}
+
+func wan2ImageToVideoModelObject(overrides map[string]attr.Value) types.Object {
+	attributes := map[string]attr.Value{
+		"selection":       types.StringNull(),
+		"prompt":          types.StringNull(),
+		"negative_prompt": types.StringNull(),
+		"resolution":      types.StringNull(),
+		"duration":        types.Int64Null(),
+	}
+	for key, value := range overrides {
+		attributes[key] = value
+	}
+	return types.ObjectValueMust(wan2ImageToVideoModelAttributeTypes, attributes)
+}
+
+// TestWan2ImageToVideoAPIValidation_AcceptsSelectionOnlyWhenStrictPlanValidationDisabled
+// documents the regression: model.supports_strict_plan_validation == false means child
+// fields that are only resolved at runtime should NOT trigger plan-time "Missing
+// DynamicCombo Field" errors when they are omitted.
+//
+// This test FAILS before the fix: the validator currently enforces required children
+// regardless of the parent's SupportsStrictPlanValidation flag.
+func TestWan2ImageToVideoAPIValidation_AcceptsSelectionOnlyWhenStrictPlanValidationDisabled(t *testing.T) {
+	// Only selection is provided; all runtime-only child fields are null.
+	// Because model.supports_strict_plan_validation == false, no errors should be raised.
+	model := generated.Wan2ImageToVideoAPIModel{
+		Model: wan2ImageToVideoModelObject(map[string]attr.Value{
+			"selection": types.StringValue("wan2.7-i2v"),
+		}),
+		FirstFrame:   types.StringValue("bbbbbbbb-0000-0000-0000-000000000000:0"),
+		Seed:         types.Int64Value(42),
+		PromptExtend: types.BoolValue(true),
+		Watermark:    types.BoolValue(false),
+	}
+
+	diags := resources.ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "Wan2ImageToVideoApi", model)
+	if diags.HasError() {
+		t.Fatalf("expected no diagnostics when parent SupportsStrictPlanValidation is false, got: %v", diags)
+	}
 }
 
 func assertDiagnosticPathPresent(t *testing.T, diags diag.Diagnostics, want path.Path) {

@@ -457,6 +457,10 @@ func TestAssembleWorkflow_JSONMatchesAPIFormat(t *testing.T) {
 }
 
 func TestAssembleWorkflow_ResolvesNestedObjectsAndLists(t *testing.T) {
+	// This test covers nodes that genuinely accept nested JSON payloads as inputs
+	// (e.g., a node whose "payload" field takes an arbitrary nested object).
+	// This is distinct from generated DynamicCombo widget inputs, which ComfyUI
+	// represents as flattened dotted-key prompt entries rather than nested objects.
 	imageID := "11111111-1111-1111-1111-111111111111"
 	maskID := "22222222-2222-2222-2222-222222222222"
 	consumerID := "33333333-3333-3333-3333-333333333333"
@@ -650,5 +654,101 @@ func TestResolveInputValue_Types(t *testing.T) {
 				t.Errorf("type = %s, want %s", gotType, tt.wantType)
 			}
 		})
+	}
+}
+
+// TestAssembleWorkflow_Wan2DynamicComboInputsAreFlattened documents the regression:
+// a WAN2 DynamicCombo "model" input registered as a nested map by the current
+// RegisterNodeStateFromModel must be expanded into flat dotted-key prompt entries
+// in the assembled JSON.
+//
+// ComfyUI rebuilds the DynamicCombo widget from these flat entries during execution:
+//
+//	"model"                → "wan2.7-i2v"      (the selection/model name)
+//	"model.prompt"         → "a cat ..."
+//	"model.negative_prompt"→ ""
+//	"model.resolution"     → "720P"
+//	"model.duration"       → 5
+//
+// This test FAILS before the fix: the assembler currently passes the nested
+// map through as-is, producing "model": {"selection": ..., "prompt": ...}
+// in the prompt JSON instead of the required flat keys.
+func TestAssembleWorkflow_Wan2DynamicComboInputsAreFlattened(t *testing.T) {
+	imageLoaderID := "eeeeeeee-0000-0000-0000-000000000001"
+	wan2NodeID := "eeeeeeee-0000-0000-0000-000000000002"
+
+	// This is the nested map that RegisterNodeStateFromModel currently stores for
+	// a types.Object DynamicCombo field — i.e., the current (broken) registry output.
+	nodes := []NodeState{
+		{
+			ID:        imageLoaderID,
+			ClassType: "LoadImage",
+			Inputs: map[string]interface{}{
+				"image": "cat.jpg",
+			},
+		},
+		{
+			ID:        wan2NodeID,
+			ClassType: "Wan2ImageToVideoApi",
+			Inputs: map[string]interface{}{
+				// Nested map — current (wrong) output of RegisterNodeStateFromModel
+				// for a types.Object DynamicCombo field.
+				"model": map[string]interface{}{
+					"selection":       "wan2.7-i2v",
+					"prompt":          "a cat running in slow motion",
+					"negative_prompt": "",
+					"resolution":      "720P",
+					"duration":        int64(5),
+				},
+				"first_frame":   imageLoaderID + ":0",
+				"seed":          int64(42),
+				"prompt_extend": true,
+				"watermark":     false,
+			},
+		},
+	}
+
+	result, err := AssembleWorkflow(nodes)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Find the Wan2ImageToVideoApi node in the assembled prompt.
+	var wan2Inputs map[string]interface{}
+	for _, entry := range result.Prompt {
+		node, ok := entry.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		if node["class_type"] == "Wan2ImageToVideoApi" {
+			wan2Inputs, ok = node["inputs"].(map[string]interface{})
+			if !ok {
+				t.Fatal("expected wan2 inputs to be a map")
+			}
+			break
+		}
+	}
+	if wan2Inputs == nil {
+		t.Fatal("expected Wan2ImageToVideoApi node in assembled prompt")
+	}
+
+	// "model" must be the bare selection string, not a nested object.
+	if wan2Inputs["model"] != "wan2.7-i2v" {
+		t.Errorf("inputs[model] = %#v, want \"wan2.7-i2v\"", wan2Inputs["model"])
+	}
+	if _, isMap := wan2Inputs["model"].(map[string]interface{}); isMap {
+		t.Error("inputs[model] must not be a nested map; DynamicCombo must be flattened")
+	}
+
+	// Child fields must be top-level dotted-key entries in the assembled JSON.
+	if wan2Inputs["model.prompt"] != "a cat running in slow motion" {
+		t.Errorf("inputs[model.prompt] = %#v, want \"a cat running in slow motion\"", wan2Inputs["model.prompt"])
+	}
+	if wan2Inputs["model.resolution"] != "720P" {
+		t.Errorf("inputs[model.resolution] = %#v, want \"720P\"", wan2Inputs["model.resolution"])
+	}
+	// duration is int64 in native Go; JSON round-trips to float64 but we check the in-memory map.
+	if wan2Inputs["model.duration"] != int64(5) {
+		t.Errorf("inputs[model.duration] = %#v, want int64(5)", wan2Inputs["model.duration"])
 	}
 }
