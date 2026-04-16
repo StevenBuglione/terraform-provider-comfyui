@@ -7,6 +7,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/StevenBuglione/terraform-provider-comfyui/internal/nodeschema"
 	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/types/basetypes"
@@ -33,7 +34,7 @@ func RegisterNodeStateFromModel(id, classType string, model any) error {
 		return fmt.Errorf("cannot register node state with empty class type")
 	}
 
-	inputs, err := extractInputsFromModel(model)
+	inputs, err := extractInputsFromModel(classType, model)
 	if err != nil {
 		return err
 	}
@@ -92,7 +93,7 @@ func AssembleWorkflowFromNodeIDs(ids []string) (*AssembledWorkflow, error) {
 	return AssembleWorkflow(nodes)
 }
 
-func extractInputsFromModel(model any) (map[string]interface{}, error) {
+func extractInputsFromModel(classType string, model any) (map[string]interface{}, error) {
 	value := reflect.ValueOf(model)
 	if value.Kind() == reflect.Pointer {
 		value = value.Elem()
@@ -117,7 +118,12 @@ func extractInputsFromModel(model any) (map[string]interface{}, error) {
 			return nil, fmt.Errorf("field %q: %w", attrName, err)
 		}
 		if ok {
-			inputs[attrName] = converted
+			// If this input is a DynamicCombo, flatten the nested map to dotted keys.
+			if m, isMap := converted.(map[string]interface{}); isMap && isDynamicComboInput(classType, attrName) {
+				flattenDynamicComboInto(attrName, m, inputs)
+			} else {
+				inputs[attrName] = converted
+			}
 		}
 	}
 
@@ -221,4 +227,42 @@ func listValueToStrings(ctx context.Context, list basetypes.ListValue) ([]string
 	var ids []string
 	diags := list.ElementsAs(ctx, &ids, false)
 	return ids, diags
+}
+
+// isDynamicComboInput reports whether the named input of classType is a DynamicCombo input.
+func isDynamicComboInput(classType, inputName string) bool {
+	schema, ok := nodeschema.LookupGeneratedNodeSchema(classType)
+	if !ok {
+		return false
+	}
+	for _, inp := range schema.RequiredInputs {
+		if inp.Name == inputName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
+			return true
+		}
+	}
+	for _, inp := range schema.OptionalInputs {
+		if inp.Name == inputName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
+			return true
+		}
+	}
+	return false
+}
+
+// flattenDynamicComboInto expands a DynamicCombo map into target using dotted keys.
+// The "selection" key becomes target[inputName]; all other keys become target[inputName.childKey].
+// Returns the list of child keys (excluding the selection key) that were added.
+func flattenDynamicComboInto(inputName string, value map[string]interface{}, target map[string]interface{}) []string {
+	var childKeys []string
+	if selection, ok := value["selection"]; ok {
+		target[inputName] = selection
+	}
+	for k, v := range value {
+		if k == "selection" {
+			continue
+		}
+		dotKey := inputName + "." + k
+		target[dotKey] = v
+		childKeys = append(childKeys, dotKey)
+	}
+	return childKeys
 }

@@ -48,9 +48,32 @@ func AssembleWorkflow(nodes []NodeState) (*AssembledWorkflow, error) {
 	for _, node := range nodes {
 		numericID := nodeMap[node.ID]
 
-		processedInputs := make(map[string]interface{})
+		// Expand DynamicCombo nested maps to dotted keys before connection resolution.
+		// Track which keys came from DynamicCombo flattening so we can resolve their
+		// child values as nested (preserving empty strings required by ComfyUI).
+		flatInputs := make(map[string]interface{}, len(node.Inputs))
+		dynamicComboChildKeys := make(map[string]bool)
 		for key, value := range node.Inputs {
-			resolved, err := resolveInputValue(value, nodeMap)
+			if m, isMap := value.(map[string]interface{}); isMap && isDynamicComboInput(node.ClassType, key) {
+				childKeys := flattenDynamicComboInto(key, m, flatInputs)
+				for _, ck := range childKeys {
+					dynamicComboChildKeys[ck] = true
+				}
+			} else {
+				flatInputs[key] = value
+			}
+		}
+
+		processedInputs := make(map[string]interface{})
+		for key, value := range flatInputs {
+			var resolved interface{}
+			var err error
+			if dynamicComboChildKeys[key] {
+				// Child values are resolved as nested so empty strings are preserved.
+				resolved, err = resolveInputValueRecursive(value, nodeMap, true)
+			} else {
+				resolved, err = resolveInputValue(value, nodeMap)
+			}
 			if err != nil {
 				return nil, fmt.Errorf("node %q input %q: %w", node.ID, key, err)
 			}
