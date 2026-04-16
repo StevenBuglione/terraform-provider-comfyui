@@ -744,6 +744,9 @@ func TestAssembleWorkflow_Wan2DynamicComboInputsAreFlattened(t *testing.T) {
 	if wan2Inputs["model.prompt"] != "a cat running in slow motion" {
 		t.Errorf("inputs[model.prompt] = %#v, want \"a cat running in slow motion\"", wan2Inputs["model.prompt"])
 	}
+	if wan2Inputs["model.negative_prompt"] != "" {
+		t.Errorf("inputs[model.negative_prompt] = %#v, want \"\"", wan2Inputs["model.negative_prompt"])
+	}
 	if wan2Inputs["model.resolution"] != "720P" {
 		t.Errorf("inputs[model.resolution] = %#v, want \"720P\"", wan2Inputs["model.resolution"])
 	}

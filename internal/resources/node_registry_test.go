@@ -191,6 +191,9 @@ func TestRegisterNodeStateFromModel_Wan2DynamicComboModelFlattensToPromptKeys(t 
 	if got.Inputs["model.resolution"] != "720P" {
 		t.Errorf("inputs[model.resolution] = %#v, want \"720P\"", got.Inputs["model.resolution"])
 	}
+	if got.Inputs["model.negative_prompt"] != "" {
+		t.Errorf("inputs[model.negative_prompt] = %#v, want \"\"", got.Inputs["model.negative_prompt"])
+	}
 	if got.Inputs["model.duration"] != int64(5) {
 		t.Errorf("inputs[model.duration] = %#v, want int64(5)", got.Inputs["model.duration"])
 	}
