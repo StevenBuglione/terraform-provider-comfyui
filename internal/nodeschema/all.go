@@ -7,3 +7,9 @@ func All() []GeneratedNodeSchema {
 	}
 	return result
 }
+
+// RegisterForTest inserts schema into generatedNodeSchemas under key.
+// Intended for use in tests only; do not call from production code.
+func RegisterForTest(key string, schema GeneratedNodeSchema) {
+	generatedNodeSchemas[key] = schema
+}

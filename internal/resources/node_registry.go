@@ -232,26 +232,29 @@ func listValueToStrings(ctx context.Context, list basetypes.ListValue) ([]string
 
 // lookupDynamicComboInput returns the GeneratedNodeSchemaInput for the named input of
 // classType if it is a COMFY_DYNAMICCOMBO_V3 input; returns false otherwise.
+// inputName is compared against the Terraform-sanitized form of each schema input name
+// so that raw names with spaces or punctuation match their sanitized attribute names.
 func lookupDynamicComboInput(classType, inputName string) (nodeschema.GeneratedNodeSchemaInput, bool) {
 	schema, ok := nodeschema.LookupGeneratedNodeSchema(classType)
 	if !ok {
 		return nodeschema.GeneratedNodeSchemaInput{}, false
 	}
 	for _, inp := range schema.RequiredInputs {
-		if inp.Name == inputName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
+		if sanitizeGeneratedName(inp.Name) == inputName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
 			return inp, true
 		}
 	}
 	for _, inp := range schema.OptionalInputs {
-		if inp.Name == inputName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
+		if sanitizeGeneratedName(inp.Name) == inputName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
 			return inp, true
 		}
 	}
 	return nodeschema.GeneratedNodeSchemaInput{}, false
 }
 
-// collectDynamicComboInputs returns a map of input name → GeneratedNodeSchemaInput for all
+// collectDynamicComboInputs returns a map of Terraform-sanitized input name → GeneratedNodeSchemaInput for all
 // COMFY_DYNAMICCOMBO_V3 inputs of classType. Used to avoid repeated schema lookups in hot paths.
+// Keys are the sanitized Terraform attribute names so they match dotted keys in node.Inputs.
 func collectDynamicComboInputs(classType string) map[string]nodeschema.GeneratedNodeSchemaInput {
 	schema, ok := nodeschema.LookupGeneratedNodeSchema(classType)
 	if !ok {
@@ -260,12 +263,12 @@ func collectDynamicComboInputs(classType string) map[string]nodeschema.Generated
 	result := make(map[string]nodeschema.GeneratedNodeSchemaInput)
 	for _, inp := range schema.RequiredInputs {
 		if inp.Type == "COMFY_DYNAMICCOMBO_V3" {
-			result[inp.Name] = inp
+			result[sanitizeGeneratedName(inp.Name)] = inp
 		}
 	}
 	for _, inp := range schema.OptionalInputs {
 		if inp.Type == "COMFY_DYNAMICCOMBO_V3" {
-			result[inp.Name] = inp
+			result[sanitizeGeneratedName(inp.Name)] = inp
 		}
 	}
 	return result
@@ -273,10 +276,12 @@ func collectDynamicComboInputs(classType string) map[string]nodeschema.Generated
 
 // findNestedDynamicComboInput searches the DynamicComboOptions of parent for a child input
 // named childName whose type is COMFY_DYNAMICCOMBO_V3. Returns the child input and true if found.
+// childName is compared against the Terraform-sanitized form of each child's raw schema name
+// so that raw names with spaces or punctuation match their sanitized attribute names.
 func findNestedDynamicComboInput(parent nodeschema.GeneratedNodeSchemaInput, childName string) (nodeschema.GeneratedNodeSchemaInput, bool) {
 	for _, option := range parent.DynamicComboOptions {
 		for _, inp := range option.Inputs {
-			if inp.Name == childName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
+			if sanitizeGeneratedName(inp.Name) == childName && inp.Type == "COMFY_DYNAMICCOMBO_V3" {
 				return inp, true
 			}
 		}

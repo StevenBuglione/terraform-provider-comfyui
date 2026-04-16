@@ -9,6 +9,116 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 )
 
+// TestFindNestedDynamicComboInput_SanitizedNameMatchesRawName verifies that
+// findNestedDynamicComboInput locates a child whose raw schema name contains spaces
+// when the caller passes the sanitized Terraform attribute name.
+func TestFindNestedDynamicComboInput_SanitizedNameMatchesRawName(t *testing.T) {
+	parent := nodeschema.GeneratedNodeSchemaInput{
+		Name: "parent",
+		Type: "COMFY_DYNAMICCOMBO_V3",
+		DynamicComboOptions: []nodeschema.GeneratedDynamicComboOption{
+			{
+				Key: "opt",
+				Inputs: []nodeschema.GeneratedNodeSchemaInput{
+					{Name: "my nested combo", Type: "COMFY_DYNAMICCOMBO_V3"},
+				},
+			},
+		},
+	}
+
+	// The Terraform attribute name is the sanitized form of "my nested combo".
+	got, ok := findNestedDynamicComboInput(parent, "my_nested_combo")
+	if !ok {
+		t.Fatal("expected findNestedDynamicComboInput to match via sanitized name; got false")
+	}
+	if got.Name != "my nested combo" {
+		t.Errorf("got.Name = %q, want %q", got.Name, "my nested combo")
+	}
+}
+
+// TestFindNestedDynamicComboInput_RawNameDoesNotMatchSanitized confirms that passing the
+// raw (unsanitized) name does NOT match when the raw name differs from its sanitized form,
+// ensuring the lookup enforces the Terraform-name contract.
+func TestFindNestedDynamicComboInput_RawNameDoesNotMatchSanitized(t *testing.T) {
+	parent := nodeschema.GeneratedNodeSchemaInput{
+		Name: "parent",
+		Type: "COMFY_DYNAMICCOMBO_V3",
+		DynamicComboOptions: []nodeschema.GeneratedDynamicComboOption{
+			{
+				Key: "opt",
+				Inputs: []nodeschema.GeneratedNodeSchemaInput{
+					{Name: "my nested combo", Type: "COMFY_DYNAMICCOMBO_V3"},
+				},
+			},
+		},
+	}
+
+	// The raw name "my nested combo" must NOT match because callers always pass sanitized names.
+	_, ok := findNestedDynamicComboInput(parent, "my nested combo")
+	if ok {
+		t.Error("expected findNestedDynamicComboInput to NOT match the raw (unsanitized) name")
+	}
+}
+
+// TestLookupDynamicComboInput_SanitizedNameMatchesRawName verifies that
+// lookupDynamicComboInput finds a DynamicCombo input whose raw schema name
+// contains punctuation, using the sanitized Terraform attribute name.
+func TestLookupDynamicComboInput_SanitizedNameMatchesRawName(t *testing.T) {
+	const testNodeType = "__test_sanitize_lookup__"
+	nodeschema.RegisterForTest(testNodeType, nodeschema.GeneratedNodeSchema{
+		NodeType: testNodeType,
+		RequiredInputs: []nodeschema.GeneratedNodeSchemaInput{
+			{Name: "my combo input", Type: "COMFY_DYNAMICCOMBO_V3"},
+		},
+	})
+
+	// "my combo input" sanitizes to "my_combo_input".
+	got, ok := lookupDynamicComboInput(testNodeType, "my_combo_input")
+	if !ok {
+		t.Fatal("expected lookupDynamicComboInput to match via sanitized name; got false")
+	}
+	if got.Name != "my combo input" {
+		t.Errorf("got.Name = %q, want %q", got.Name, "my combo input")
+	}
+}
+
+// TestCollectDynamicComboInputs_KeyedBySanitizedName verifies that
+// collectDynamicComboInputs keys the returned map by the Terraform-sanitized name,
+// not the raw schema name, so dotted-key lookups in the assembler work correctly.
+func TestCollectDynamicComboInputs_KeyedBySanitizedName(t *testing.T) {
+	const testNodeType = "__test_sanitize_collect__"
+	nodeschema.RegisterForTest(testNodeType, nodeschema.GeneratedNodeSchema{
+		NodeType: testNodeType,
+		RequiredInputs: []nodeschema.GeneratedNodeSchemaInput{
+			{Name: "My Combo", Type: "COMFY_DYNAMICCOMBO_V3"},
+		},
+		OptionalInputs: []nodeschema.GeneratedNodeSchemaInput{
+			{Name: "1st optional combo", Type: "COMFY_DYNAMICCOMBO_V3"},
+		},
+	})
+
+	dcMap := collectDynamicComboInputs(testNodeType)
+
+	// Raw name "My Combo" sanitizes to "my_combo".
+	if inp, ok := dcMap["my_combo"]; !ok {
+		t.Error("expected map to have key \"my_combo\" (sanitized from \"My Combo\")")
+	} else if inp.Name != "My Combo" {
+		t.Errorf("inp.Name = %q, want %q", inp.Name, "My Combo")
+	}
+
+	// Leading digit: "1st optional combo" sanitizes to "_1st_optional_combo".
+	if inp, ok := dcMap["_1st_optional_combo"]; !ok {
+		t.Error("expected map to have key \"_1st_optional_combo\" (sanitized from \"1st optional combo\")")
+	} else if inp.Name != "1st optional combo" {
+		t.Errorf("inp.Name = %q, want %q", inp.Name, "1st optional combo")
+	}
+
+	// Raw names must NOT be present as keys.
+	if _, ok := dcMap["My Combo"]; ok {
+		t.Error("raw name \"My Combo\" must not be a key in the collected map; expected sanitized key only")
+	}
+}
+
 func TestRegisterNodeStateFromModel_StoresInputsOnly(t *testing.T) {
 	resetNodeStateRegistry()
 
