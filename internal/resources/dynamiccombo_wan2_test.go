@@ -61,10 +61,14 @@ func TestWan2TextToVideoAPIResourceSchema_ModelUsesNestedDynamicCombo(t *testing
 	}
 }
 
-func TestWan2TextToVideoAPIValidation_RequiresSelectedModelChildren(t *testing.T) {
+// TestWan2TextToVideoAPIValidation_AcceptsSelectionOnlyWhenStrictPlanValidationDisabled mirrors
+// the I2V equivalent: Wan2TextToVideoApi.model also has SupportsStrictPlanValidation=false, so
+// providing only a selection without child fields must not produce plan-time errors.
+func TestWan2TextToVideoAPIValidation_AcceptsSelectionOnlyWhenStrictPlanValidationDisabled(t *testing.T) {
 	model := generated.Wan2TextToVideoAPIModel{
 		Model: wan2TextToVideoModelObject(map[string]attr.Value{
 			"selection": types.StringValue("wan2.7-t2v"),
+			// children intentionally omitted: model has SupportsStrictPlanValidation: false
 		}),
 		Seed:         types.Int64Value(42),
 		PromptExtend: types.BoolValue(true),
@@ -72,15 +76,9 @@ func TestWan2TextToVideoAPIValidation_RequiresSelectedModelChildren(t *testing.T
 	}
 
 	diags := resources.ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "Wan2TextToVideoApi", model)
-	if !diags.HasError() {
-		t.Fatal("expected diagnostics for missing WAN2 DynamicCombo child fields")
+	if diags.HasError() {
+		t.Fatalf("expected no diagnostics when parent SupportsStrictPlanValidation is false, got: %v", diags)
 	}
-
-	assertDiagnosticPathPresent(t, diags, path.Root("model").AtName("prompt"))
-	assertDiagnosticPathPresent(t, diags, path.Root("model").AtName("negative_prompt"))
-	assertDiagnosticPathPresent(t, diags, path.Root("model").AtName("resolution"))
-	assertDiagnosticPathPresent(t, diags, path.Root("model").AtName("ratio"))
-	assertDiagnosticPathPresent(t, diags, path.Root("model").AtName("duration"))
 }
 
 func TestWan2TextToVideoAPIValidation_AcceptsCompleteModelSelection(t *testing.T) {

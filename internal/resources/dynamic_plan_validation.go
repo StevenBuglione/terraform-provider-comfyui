@@ -149,7 +149,10 @@ func validateDynamicComboObject(ctx context.Context, service *inventory.Service,
 		childValue, exists := attributes[childName]
 
 		if !exists || attrValueIsNull(childValue) {
-			if childInput.Required {
+			// When the parent DynamicCombo is marked as runtime-only (SupportsStrictPlanValidation
+			// == false), the provider cannot prove child presence at plan time — skip the
+			// required-field check explicitly because the schema marks it runtime-only.
+			if childInput.Required && input.SupportsStrictPlanValidation {
 				diags.AddAttributeError(
 					childPath,
 					"Missing DynamicCombo Field",

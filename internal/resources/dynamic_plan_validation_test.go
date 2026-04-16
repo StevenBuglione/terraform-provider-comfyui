@@ -68,25 +68,26 @@ func TestValidateDynamicInputs_RejectsInvalidDynamicComboSelection(t *testing.T)
 	assertDiagnosticPath(t, diags[0], path.Root("combo").AtName("selection"))
 }
 
-func TestValidateDynamicInputs_RejectsMissingRequiredNestedDynamicComboChild(t *testing.T) {
+// TestValidateDynamicInputs_DoesNotEnforceChildrenOfNonStrictNestedDynamicCombo checks that a
+// nested DynamicCombo with SupportsStrictPlanValidation == false also does not enforce its required
+// children at plan time.  DCTestNode.combo.option4.subcombo has SupportsStrictPlanValidation:false,
+// so float_y must not be required even though the user explicitly set float_x.
+func TestValidateDynamicInputs_DoesNotEnforceChildrenOfNonStrictNestedDynamicCombo(t *testing.T) {
 	model := dcTestNodeModel{
 		Combo: dcComboObject(map[string]attr.Value{
 			"selection": types.StringValue("option4"),
 			"subcombo": dcSubcomboObject(map[string]attr.Value{
 				"selection": types.StringValue("opt1"),
 				"float_x":   types.Float64Value(1.5),
+				// float_y intentionally omitted: subcombo has SupportsStrictPlanValidation: false
 			}),
 		}),
 	}
 
 	diags := ValidateDynamicInputsForTest(context.Background(), &client.Client{}, "DCTestNode", model)
-	if !diags.HasError() {
-		t.Fatal("expected diagnostics for missing nested DynamicCombo field")
+	if diags.HasError() {
+		t.Fatalf("expected no diagnostics for nested non-strict DynamicCombo with missing child, got: %v", diags)
 	}
-	if !strings.Contains(diags[0].Summary(), "Missing DynamicCombo Field") {
-		t.Fatalf("unexpected diagnostic summary: %s", diags[0].Summary())
-	}
-	assertDiagnosticPath(t, diags[0], path.Root("combo").AtName("subcombo").AtName("float_y"))
 }
 
 func TestValidateDynamicInputs_RejectsInvalidNestedDynamicComboSelection(t *testing.T) {
@@ -146,7 +147,10 @@ func TestValidateDynamicInputs_RejectsFieldsFromOtherDynamicComboOptions(t *test
 	assertDiagnosticPath(t, diags[0], path.Root("combo").AtName("integer"))
 }
 
-func TestValidateGeneratedInput_RejectsMissingRequiredNestedDynamicComboChildInList(t *testing.T) {
+// TestValidateGeneratedInput_DoesNotEnforceChildrenOfNonStrictDynamicComboInList checks the
+// list variant: a DynamicCombo with SupportsStrictPlanValidation==false inside a list also does
+// not enforce required children at plan time.
+func TestValidateGeneratedInput_DoesNotEnforceChildrenOfNonStrictDynamicComboInList(t *testing.T) {
 	schema, ok := nodeschema.LookupGeneratedNodeSchema("DCTestNode")
 	if !ok {
 		t.Fatal("expected generated schema for DCTestNode")
@@ -162,6 +166,7 @@ func TestValidateGeneratedInput_RejectsMissingRequiredNestedDynamicComboChildInL
 			"subcombo": dcSubcomboObject(map[string]attr.Value{
 				"selection": types.StringValue("opt1"),
 				"float_x":   types.Float64Value(1.5),
+				// float_y omitted: subcombo has SupportsStrictPlanValidation: false
 			}),
 		}),
 	})
@@ -169,10 +174,9 @@ func TestValidateGeneratedInput_RejectsMissingRequiredNestedDynamicComboChildInL
 	var diags diag.Diagnostics
 	validateGeneratedInput(context.Background(), inventory.NewService(&client.Client{}), "error", input, combos, path.Root("combo"), &diags)
 
-	if !diags.HasError() {
-		t.Fatal("expected diagnostics for missing nested DynamicCombo field in list")
+	if diags.HasError() {
+		t.Fatalf("expected no diagnostics for non-strict nested DynamicCombo in list, got: %v", diags)
 	}
-	assertDiagnosticPath(t, diags[0], path.Root("combo").AtListIndex(0).AtName("subcombo").AtName("float_y"))
 }
 
 func TestValidateDynamicInputs_IgnoresUnknownDynamicComboSelectionAtPlanTime(t *testing.T) {
