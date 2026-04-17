@@ -97,7 +97,7 @@ jobs:
           cache: true
       - run: go mod download
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
       - run: chmod +x scripts/synthesis-e2e/run.sh
       - run: make synthesis-e2e
 
