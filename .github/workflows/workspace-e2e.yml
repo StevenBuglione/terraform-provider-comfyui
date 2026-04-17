@@ -46,7 +46,7 @@ jobs:
 
       - name: Upload workspace evidence artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: workspace-e2e-artifacts
           path: |
